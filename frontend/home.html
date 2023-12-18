@@ -1,0 +1,215 @@
+<html>
+    <head>
+        <!-- 기본 문구-->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KBBJFD6G2R"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-KBBJFD6G2R');
+        </script>
+        <!-- MS clarity -->
+        <script type="text/javascript">
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "gjb3mp0s7m");
+        </script>
+        <!-- 페이지 이름 -->
+        <title>Head-UP 대학교</title>
+        <!-- icon -->
+        <link rel="icon" href="./static/img/logo_icon.png" sizes="16x16" />
+        <!-- Bootstrap CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+        />
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"
+        ></script>
+        <!-- 글꼴 설정 -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="/static/css/main.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+        .modal_1 {
+            display: none;
+            position: fixed;
+            bottom: 110px; 
+            left: 50%;/* 100px (fixed-div bottom) + 20px + 20px (modal padding) */
+            transform: translateX(-50%);
+            z-index: 2;
+            width: 240px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 0;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 100%;
+        }
+        .fixed-div {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            border: none;
+            border-radius: 16px;
+            background: royalblue;
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            box-shadow: 0px 5px 15px gray;
+            cursor: pointer;
+        }
+    </style>
+    </head>
+    <body>
+        <!-- 데스크탑 html-->
+        <div style="width:100%;
+                    height:100px;
+                    background:pink;
+                    line-height:25px;
+                    position: relative;
+                    text-align:center;
+                        ">
+            <h1 style="font-size: 50px;
+                       position: relative;
+                       top:20px;
+                       align:center;" >
+                 경력공유 (로그인)
+            </h1>
+        </div>
+        <div style="width:100%;
+                    height:80px;
+                    background:grey;
+                    line-height:25px;
+                    position: relative;
+                    text-align:center;
+                        ">
+            <table>
+                <button 
+                    style="margin:20px;"
+                    class="favorite styled"
+                    type="button"
+                    onclick="location.href='/'">
+                홈
+            </button>
+            <button style="margin:20px;"
+                    class="favorite styled"
+                    type="button"
+                    onclick="location.href='/write/'">
+                경력입력
+            </button>
+            <button style="margin:20px;"
+                    class="favorite styled"
+                    type="button"
+                    onclick="location.href='/mybook/'">
+                내 경력
+            </button>
+            <button style="margin:20px;"
+                    class="favorite styled"
+                    type="button"
+                    onclick="location.href='/bookmark/'">
+                북마크
+            </button>
+            <button style="margin:20px;"
+                    class="favorite styled"
+                    type="button"
+                    onclick="location.href='/account/'">
+                마이페이지
+            </button>
+            <button style="margin:20px;"
+                    class="favorite styled"
+                    type="button"
+                    onclick="location.href='/logout/'">
+                로그아웃
+            </button>
+            </table>
+        </div>
+        <div id="myModal_a" class="fixed-div">
+            <button id="openModalBtn">출석체크</button>
+        </div>
+        <div id="myModal" class="modal_1">
+            <div id="myModal_b" class="modal-content">
+                <h2 style="font-size:10px;">{{info.nickname}}의 등급</h2>
+                <p>{{point.tier}}</p>
+                <p>출석 포인트 : {{point.point}}</p>
+                <p>상위 퍼센트 : 준비중</p>
+                <button id="att_botton" >출석첵</button>
+                <script>
+                function submitForm(){
+                    fetch(`/attention/$'{{info.u_cose}}'`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.duplicate == true) {
+                                location.reload();
+                            } 
+                        });
+                }
+                const button = document.getElementById("att_botton");  
+                button.addEventListener("click", submitForm);
+                </script>
+            </div>
+        </div>
+        <script>
+            function isToday(dateString) {
+            const inputDate = new Date(dateString);
+            const today = new Date();
+
+            return inputDate.getDate() === today.getDate() &&
+                   inputDate.getMonth() === today.getMonth() &&
+                   inputDate.getFullYear() === today.getFullYear();
+            }
+
+            const dateString = "{{point.time}}";
+            const isDateToday = isToday(dateString);
+            const att_botton = document.getElementById("att_botton");
+            if (isDateToday){
+                att_botton.innerText = "오늘 출석완료";
+                att_botton.disabled = true;
+            }
+            else{
+                att_botton.innerText = "출석체크";
+            }
+            
+            const openModalBtn = document.getElementById("openModalBtn");
+            const modal_a = document.getElementById("myModal");
+            const modal_b = document.getElementById("myModal_a");
+            const modal_c = document.getElementById("myModal_b");
+
+            // 모달을 연다.
+            openModalBtn.addEventListener("click", function () {
+                if (modal_a.style.display == "block"){
+                    modal_a.style.display = "none";
+                    
+                }
+                else{
+                    modal_a.style.display = "block";
+                }
+            });
+            // 모달 외부를 클릭했을 때 모달을 닫는다.
+            window.addEventListener("click", function(event) {
+                if (event.target != modal_a && event.target != modal_b && event.target != openModalBtn && event.target != modal_c) {
+                    modal_a.style.display = "none";
+                }
+            });
+        </script>
+    </body>
+</html>
