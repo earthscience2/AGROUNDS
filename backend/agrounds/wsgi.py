@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'agrounds.prod_setting.prod')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'agrounds.settings')
 
 application = get_wsgi_application()
