@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1/dist/confetti.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>새해 카운트다운</title>
+    <link rel="stylesheet" href="static/style.css"> <!-- CSS 파일 경로 -->
+</head>
+<body>
+    <h1>2023년 수고했어요!</h1>
+    <h2>
+        AGOUNDS 파이팅!!
+    </h2>
+    <div class="countdown-container">
+        <div class="countdown" id="seoul">
+            <h2>서울</h2>
+            <div id="time-seoul">00d 00h 00m 00s</div>
+        </div>
+        <div class="countdown" id="malaysia">
+            <h2>말레이시아</h2>
+            <div id="time-malaysia">00d 00h 00m 00s</div>
+        </div>
+        <div class="countdown" id="turkey">
+            <h2>터키</h2>
+            <div id="time-turkey">00d 00h 00m 00s</div>
+        </div>
+        <div class="countdown" id="uk">
+            <h2>영국</h2>
+            <div id="time-uk">00d 00h 00m 00s</div>
+        </div>
+    </div>
+    <script>
+    function updateCountdown(targetDate, elementId, completionMessage) {
+    const now = new Date();
+    const diff = targetDate - now;
+        
+    if (diff <= 0) {
+        document.getElementById(elementId).innerText = completionMessage;
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById(elementId).innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+function startCountdown() {
+    const seoulTime = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0);
+    seoulTime.setHours(seoulTime.getHours() - 8784); // 서울 시간대
+    
+    const malaysiaTime = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0);
+    malaysiaTime.setHours(malaysiaTime.getHours() + 1 - 8784); // 말레이시아 시간대
+
+    const turkeyTime = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0);
+    turkeyTime.setHours(turkeyTime.getHours() + 6 - 8784); // 터키 시간대
+
+    const ukTime = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0); 
+    ukTime.setHours(ukTime.getHours() + 9 - 8784); //영국 시간대는 GMT
+
+    setInterval(() => {
+        updateCountdown(seoulTime, 'time-seoul', '2024년도 잘 부탁드립니다!');
+        updateCountdown(malaysiaTime, 'time-malaysia', '소원님 잘 부탁드립니다!');
+        updateCountdown(turkeyTime, 'time-turkey', '자유님, 소영님 잘 부탁드립니다!');
+        updateCountdown(ukTime, 'time-uk', '의찬님 잘 부탁드립니다!');
+    }, 1000);
+}
+
+window.onload = startCountdown;
+
+    </script>
+</body>
+</html>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+    padding: 10px;
+}
+
+    h1 {
+    color: #007bff;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+    
+.countdown-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.countdown {
+    background-color: #fff;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width: 200px;
+}
+
+.countdown h2 {
+    color: #007bff;
+}
+
+@media (max-width: 600px) {
+    .countdown {
+        width: 100%;
+    }
+}
+</style>
+
