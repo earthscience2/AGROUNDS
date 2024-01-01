@@ -1,4 +1,4 @@
 from .base import *
 
-ALLOWED_HOSTS = ['43.203.84.35', 'agrounds.com']
+ALLOWED_HOSTS = ['.agrounds.com', '43.203.84.35']
 DEBUG = False
