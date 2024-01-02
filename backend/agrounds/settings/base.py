@@ -156,7 +156,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '../frontend/public/static'),  # 리액트 앱 빌드 디렉토리
+#STATIC_ROOT = os.path.join(BASE_DIR, '../backend/staticfiles')
+STATICFILES_DIRS = [ # 리액트 앱 빌드 디렉토리
+    os.path.join(BASE_DIR, '../backend/staticfiles'),  
 ]
