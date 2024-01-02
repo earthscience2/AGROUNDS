@@ -15,8 +15,9 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include, path
 from django.views.generic import TemplateView
+import assist.views
 import home.views
 import DB.views
 
@@ -25,9 +26,11 @@ urlpatterns = [
     #주요 path
     path('admin/', admin.site.urls),
     
-    #api path
+    #백엔드 path
     path('api/', include('home.urls')),
+    path('api/assist/', include('assist.urls')),
     
-    #react path
+    
+    #프론트엔드 path
     path('', TemplateView.as_view(template_name='test.html')),  # 리액트 앱 라우팅
 ]

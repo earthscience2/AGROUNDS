@@ -1,6 +1,5 @@
-# backend/post/urls.py
+#필수
 from django.urls import path
-
 from . import views
 
 urlpatterns = [
