@@ -29,8 +29,5 @@ urlpatterns = [
     #백엔드 path
     path('api/', include('home.urls')),
     path('api/assist/', include('assist.urls')),
-    
-    
-    #프론트엔드 path
-    path('', TemplateView.as_view(template_name='index.js')),  # 리액트 앱 라우팅
+
 ]
