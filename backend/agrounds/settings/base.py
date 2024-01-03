@@ -75,7 +75,7 @@ ROOT_URLCONF = 'agrounds.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '../frontend/public')],
+        'DIRS': [os.path.join(BASE_DIR, '../frontend/pages')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

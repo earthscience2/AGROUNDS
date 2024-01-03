@@ -32,5 +32,5 @@ urlpatterns = [
     
     
     #프론트엔드 path
-    path('', TemplateView.as_view(template_name='test.html')),  # 리액트 앱 라우팅
+    path('', TemplateView.as_view(template_name='index.js')),  # 리액트 앱 라우팅
 ]
