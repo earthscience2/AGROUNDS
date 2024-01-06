@@ -3,7 +3,7 @@ import React from 'react';
 const IndexPage = () => {
   return (
     <div>
-      <h1>Welcome to Next.js!</h1>
+      <h1>AGROUNDS</h1>
     </div>
   );
 };
