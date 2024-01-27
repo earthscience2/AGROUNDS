@@ -1,71 +1,44 @@
 {
   "polyfillFiles": [
-    "static/chunks/polyfills.js"
+    "static/chunks/polyfills-c67a75d1b6f99dc8.js"
   ],
-  "devFiles": [
-    "static/chunks/react-refresh.js"
-  ],
+  "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/development/_buildManifest.js",
-    "static/development/_ssgManifest.js"
+    "static/O6a2tmGKnXlowGe8CjEhC/_buildManifest.js",
+    "static/O6a2tmGKnXlowGe8CjEhC/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
     "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
+      "static/chunks/webpack-4e7214a60fad8e88.js",
+      "static/chunks/framework-9165d4e4539d633b.js",
+      "static/chunks/main-abc5fdba892c28e0.js",
+      "static/chunks/pages/index-ca501f566a8e4ff7.js"
     ],
     "/_app": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/_app.js"
+      "static/chunks/webpack-4e7214a60fad8e88.js",
+      "static/chunks/framework-9165d4e4539d633b.js",
+      "static/chunks/main-abc5fdba892c28e0.js",
+      "static/chunks/pages/_app-a3f0dee1d78bc15f.js"
     ],
     "/_error": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/_error.js"
+      "static/chunks/webpack-4e7214a60fad8e88.js",
+      "static/chunks/framework-9165d4e4539d633b.js",
+      "static/chunks/main-abc5fdba892c28e0.js",
+      "static/chunks/pages/_error-2afa8b7423c17645.js"
     ],
-    "/coaches": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/coaches.js"
+    "/about": [
+      "static/chunks/webpack-4e7214a60fad8e88.js",
+      "static/chunks/framework-9165d4e4539d633b.js",
+      "static/chunks/main-abc5fdba892c28e0.js",
+      "static/chunks/pages/about-e3a3a6b957fbee0f.js"
     ],
-    "/device": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/device.js"
-    ],
-    "/leagues": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/leagues.js"
-    ],
-    "/login": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/login.js"
-    ],
-    "/matches": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/matches.js"
-    ],
-    "/players": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/players.js"
-    ],
-    "/signup": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/signup.js"
-    ],
-    "/teams": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/teams.js"
+    "/about/more": [
+      "static/chunks/webpack-4e7214a60fad8e88.js",
+      "static/chunks/framework-9165d4e4539d633b.js",
+      "static/chunks/main-abc5fdba892c28e0.js",
+      "static/chunks/pages/about/more-0193dbcace88d7dd.js"
     ]
   },
   "ampFirstPages": []
