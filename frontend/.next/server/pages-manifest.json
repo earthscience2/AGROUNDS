@@ -1,1 +1,14 @@
-{"/about":"pages/about.html","/about/more":"pages/about/more.html","/":"pages/index.html","/_app":"pages/_app.js","/_error":"pages/_error.js","/_document":"pages/_document.js","/404":"pages/404.html"}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/": "pages/index.js",
+  "/leagues": "pages/leagues.js",
+  "/matches": "pages/matches.js",
+  "/teams": "pages/teams.js",
+  "/players": "pages/players.js",
+  "/coaches": "pages/coaches.js",
+  "/device": "pages/device.js",
+  "/login": "pages/login.js",
+  "/signup": "pages/signup.js"
+}

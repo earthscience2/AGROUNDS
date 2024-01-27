@@ -18,8 +18,8 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 import assist.views
-import home.views
 import DB.views
+import login.views
 
 
 urlpatterns = [
@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     #백엔드 path
-    path('api/', include('home.urls')),
     path('api/assist/', include('assist.urls')),
+    path('api/login/', include('login.urls')),
 
 ]

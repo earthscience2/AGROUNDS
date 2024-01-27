@@ -35,7 +35,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     #Local apps 
     'assist',
-    'home',
+    'login',
     'DB',
     
     #Third party apps
