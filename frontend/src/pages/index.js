@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '../styles/home.module.css';
+import styles from '@/styles/home.module.css';
 import { useState } from 'react';
 
 export default function Home() {
