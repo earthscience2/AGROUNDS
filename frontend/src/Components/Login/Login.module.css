@@ -1,0 +1,124 @@
+@import "../../../src/assets/font/font.css";
+
+.login{
+    width: 54vh;
+    height: 65.1vh;
+    border-radius: 3vh;
+    margin-top: 24vh;
+    box-shadow: 1vh 1vh 3vh #979797;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10vh;
+}
+.logo{
+    font-size: 3.2vh;
+    color: #055540;
+    font-family: "Inter Semi Bold";
+    margin-top: 4.8vh;
+    font-weight: 700;
+    
+}
+.idbox{
+    width: 49.4vh;
+    height: 5.4vh;
+    margin-top: 5vh;
+    border-bottom: .1vh solid #979797;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.id{
+    width: 45.4vh;
+    height: 4vh;
+    border: none;
+    outline: none;
+    font-size: 2vh;
+    font-family: "Inter Semi Bold";
+    font-weight: 500;
+}
+.id::placeholder{
+    color: #979797;
+    font-family: "Inter Semi Bold";
+    font-size: 2vh;
+    font-weight: 500;
+}
+
+.pwbox{
+    width: 49.4vh;
+    height: 5.4vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    border-bottom: .1vh solid #979797;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pw{
+    width: 45.4vh;
+    height: 4vh;
+    outline: none;
+    border: none;
+    font-size: 2vh;
+    font-family: "Inter Semi Bold";
+    font-weight: 500;
+}
+.pw::placeholder{
+    color: #979797;
+    font-family: "Inter Semi Bold";
+    font-size: 2vh;
+    font-weight: 500;
+}
+.ggback{
+    border-radius: 1vh;
+    width: 49.4vh;
+    height: 6.6vh;
+    border: 1px solid black;
+    margin-top: 1vh;
+}
+.signin{
+    font-size: 2vh;
+    font-family: "Inter Semi Bold";
+    color: #CDCDCD;
+    margin-right: 18vh;
+    cursor: pointer;
+    transition: color .2s ease-in-out;
+}
+.signin:hover{
+    color:black;
+    font-weight: 500;
+}
+.find{
+    margin-top: 2vh;
+    display: flex;
+    margin-bottom: 7.2vh;
+}
+.fline{
+    height: 2vh;
+    width: .2vh;
+    background-color: #CDCDCD;
+}
+.fid{
+    font-size: 2vh;
+    font-family: "Inter Semi Bold";
+    color: #CDCDCD;
+    margin-right: 1vh;
+    cursor: pointer;
+    transition: color .2s ease-in-out;
+}
+.fid:hover{
+    color:black;
+    font-weight: 500;
+}
+.fpw{
+    font-size: 2vh;
+    font-family: "Inter Semi Bold";
+    color: #CDCDCD;
+    margin-left: 1vh;
+    cursor: pointer;
+    transition: color .2s ease-in-out;
+}
+.fpw:hover{
+    color:black;
+    font-weight: 500;
+}

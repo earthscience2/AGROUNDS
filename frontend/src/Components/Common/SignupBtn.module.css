@@ -1,0 +1,31 @@
+@import "../../../src/assets/font/font.css";
+.button{
+    border-radius: 2.3vh;
+    width: 43.8vh;
+    height: 8.6vh;
+    font-size: 2.2vh;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    font-family: "Inter Semi Bold";
+    cursor: pointer;
+    font-weight: 600;
+    opacity: 1;
+    margin-bottom: 2vh;
+}
+.text{
+    margin-left: 3vh;
+    width: 68%;
+}
+.imgbox{
+    display: flex;
+    justify-content: right;
+    margin-left: 2vh;
+    
+}
+.img{
+     width: 5vh;
+     height: 5.2vh;
+     margin-left: 1vh;
+    cursor: pointer;
+}

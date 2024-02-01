@@ -1,0 +1,434 @@
+@import "@/assets/font/font.css";
+/* desctop */
+    /* Large 1920 x 1000 */
+    @media (min-width: 1920px){
+        .Back{
+            position:fixed;
+            display: flex;
+            width: 100%;
+            height: 11.25vh;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            margin-top: -1vh;
+            border-bottom: .3vh solid #A7A9AC;
+            
+        }
+        .Logo{
+            width: 7.9vh;
+            height: 7.8vh;
+            margin-right: 5vh;
+        }
+        .NavBar{
+            display: flex;
+            justify-content: center;
+            margin-right: 20%;
+        }
+        .tag{
+            font-size: 2vh;
+            width: 11.1vh;
+            height:9vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 2.4vh;
+            padding-right: 2.4vh; 
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            
+        }
+        .tag:hover{
+            background-color:#245441;
+            color: white;
+            cursor: pointer;
+        }
+
+        .Login{
+            font-size: 2vh;
+            text-align: center;
+            cursor: pointer;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            margin-right: 2vh;
+            transition: color .3s ease-in-out;
+            writing-mode: horizontal-tb;
+        }
+        .Login:hover{
+            color: #A7A9AC;
+            cursor: pointer;
+            
+        }
+        .line{
+            height: 3vh;
+            width: .3vh;
+            background-color: rgb(124, 124, 124);
+        }
+        .Signin{
+            font-size: 2vh;
+            text-align: center;
+            margin-left: 2vh;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            transition: color .3s ease-in-out;
+            writing-mode: horizontal-tb
+        }
+        .Signin:hover{
+            cursor: pointer;
+            color: #A7A9AC;
+        }
+        .box2{
+            display: flex;
+            align-items: center;
+        }
+    }
+/* Medium 1440px ~ 1919px */
+@media (min-width:1440px) and (max-width: 1919px){
+    .Back{
+        position:fixed;
+        display: flex;
+        width: 100%;
+        height: 11.25vh;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        margin-top: -1vh;
+        border-bottom: .3vh solid #A7A9AC;
+        
+    }
+    .Logo{
+        width: 7.9vh;
+        height: 7.8vh;
+        margin-right: 5vh;
+    }
+    .NavBar{
+        display: flex;
+        justify-content: center;
+        margin-right: 10%;
+    }
+    .tag{
+        font-size: 2vh;
+        width: 9.1vh;
+        height:9vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 2vh;
+        padding-right: 2vh; 
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        writing-mode: horizontal-tb;
+        
+    }
+    .tag:hover{
+        background-color:#245441;
+        color: white;
+        cursor: pointer;
+    }
+
+    .Login{
+        font-size: 2vh;
+        text-align: center;
+        cursor: pointer;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        margin-right: 2vh;
+        transition: color .3s ease-in-out;
+        writing-mode: horizontal-tb;
+    }
+    .Login:hover{
+        color: #A7A9AC;
+        cursor: pointer;
+        
+    }
+    .line{
+        height: 3vh;
+        width: .2vh;
+        background-color: rgb(124, 124, 124);
+    }
+    .Signin{
+        font-size: 2vh;
+        text-align: center;
+        margin-left: 2vh;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        transition: color .3s ease-in-out;
+        writing-mode: horizontal-tb;
+    }
+    .Signin:hover{
+        cursor: pointer;
+        color: #A7A9AC;
+    }
+    .box2{
+        display: flex;
+        height: 3vh;
+        align-items: center;
+        
+    }
+}
+/* Small 1280px ~ 1439px */
+@media (min-width: 1280px) and (max-width:1439px){
+    .Back{
+        position:fixed;
+        display: flex;
+        width: 100%;
+        height: 11.25vh;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        margin-top: -1vh;
+        border-bottom: .3vh solid #A7A9AC;
+        
+    }
+    .Logo{
+        width: 7.9vh;
+        height: 7.8vh;
+        margin-right: 5vh;
+    }
+    .NavBar{
+        display: flex;
+        justify-content: center;
+        margin-right: 10%;
+    }
+    .tag{
+        font-size: 2vh;
+        width: 9.1vh;
+        height:9vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 2.4vh;
+        padding-right: 2.4vh; 
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        writing-mode: horizontal-tb;
+        
+    }
+    .tag:hover{
+        background-color:#245441;
+        color: white;
+        cursor: pointer;
+    }
+
+    .Login{
+        font-size: 2vh;
+        text-align: center;
+        cursor: pointer;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        margin-right: 2vh;
+        transition: color .3s ease-in-out;
+        writing-mode: horizontal-tb;
+    }
+    .Login:hover{
+        color: #A7A9AC;
+        cursor: pointer;
+        
+    }
+    .line{
+        height: 3vh;
+        width: .3vh;
+        background-color: rgb(124, 124, 124);
+    }
+    .Signin{
+        font-size: 2vh;
+        text-align: center;
+        margin-left: 2vh;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        transition: color .3s ease-in-out;
+        writing-mode: horizontal-tb;
+    }
+    .Signin:hover{
+        cursor: pointer;
+        color: #A7A9AC;
+    }
+    .box2{
+        display: flex;
+        height: 3vh;
+        align-items: center;
+        
+    }
+
+}
+
+/* Tablets */
+    /* Portrait: 768px - 1023px */
+    @media (min-width: 768px) and (max-width:1023px){
+        .Back{
+            position:fixed;
+            display: flex;
+            width: 100%;
+            height: 15.25vh;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            margin-top: -1vh;
+            border-bottom: .3vh solid #A7A9AC;
+            
+        }
+        .Logo{
+            width: 7.9vh;
+            height: 7.8vh;
+            margin-right: 5vh;
+        }
+        .NavBar{
+            display: flex;
+            justify-content: center;
+            margin-right: 10%;
+        }
+        .tag{
+            font-size: 2.8vh;
+            width: 15.1vh;
+            height:11vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 2.2vh;
+            padding-right: 2.2vh; 
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            writing-mode: horizontal-tb;
+            
+        }
+        .tag:hover{
+            background-color:#245441;
+            color: white;
+            cursor: pointer;
+        }
+    
+        .Login{
+            font-size: 2.8vh;
+            text-align: center;
+            cursor: pointer;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            margin-right: 2vh;
+            transition: color .3s ease-in-out;
+            writing-mode: horizontal-tb;
+        }
+        .Login:hover{
+            color: #A7A9AC;
+            cursor: pointer;
+            
+        }
+        .line{
+            height: 3vh;
+            width: .3vh;
+            background-color: rgb(124, 124, 124);
+        }
+        .Signin{
+            font-size: 2.8vh;
+            text-align: center;
+            margin-left: 2vh;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            transition: color .3s ease-in-out;
+            writing-mode: horizontal-tb;
+        }
+        .Signin:hover{
+            cursor: pointer;
+            color: #A7A9AC;
+        }
+        .box2{
+            display: flex;
+            height: 3vh;
+            align-items: center;
+            
+        }
+    
+    }
+    /* Landscape: 1024px - 1279px */
+    @media (min-width: 1024px) and (max-width:1279px){
+        .Back{
+            position:fixed;
+            display: flex;
+            width: 100%;
+            height: 9.25vh;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            margin-top: -1vh;
+            border-bottom: .3vh solid #A7A9AC;
+            
+        }
+        .Logo{
+            width: 7.9vh;
+            height: 7.8vh;
+            margin-right: 7vh;
+        }
+        .NavBar{
+            display: flex;
+            justify-content: center;
+            margin-right: 5%;
+        }
+        .tag{
+            font-size: 1.8vh;
+            width: 9.1vh;
+            height:9vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 2.4vh;
+            padding-right: 2.4vh; 
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            writing-mode: horizontal-tb;
+            
+        }
+        .tag:hover{
+            background-color:#245441;
+            color: white;
+            cursor: pointer;
+        }
+    
+        .Login{
+            font-size: 2vh;
+            text-align: center;
+            cursor: pointer;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            margin-right: 2vh;
+            transition: color .3s ease-in-out;
+            writing-mode: horizontal-tb;
+        }
+        .Login:hover{
+            color: #A7A9AC;
+            cursor: pointer;
+            
+        }
+        .line{
+            height: 3vh;
+            width: .2vh;
+            background-color: rgb(124, 124, 124);
+        }
+        .Signin{
+            font-size: 2vh;
+            text-align: center;
+            margin-left: 2vh;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            transition: color .3s ease-in-out;
+            writing-mode: horizontal-tb;
+        }
+        .Signin:hover{
+            cursor: pointer;
+            color: #A7A9AC;
+        }
+        .box2{
+            display: flex;
+            height: 3vh;
+            align-items: center;
+            
+        }
+    
+    }
+    /* Mobile Device */
+    /* Medium 321px ~ 767px */
+    @media (min-width: 321px) and (max-width: 767px){
+
+    }
+    /* Medium under 320px */
+    @media (max-width: 320px){
+        
+    }

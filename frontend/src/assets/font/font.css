@@ -1,0 +1,64 @@
+/* outfit */
+@font-face {
+    font-family: 'Outfit Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Outfit Regular'), url('./OutfitRegular.woff') format('woff');
+    }
+    
+
+    @font-face {
+    font-family: 'Outfit Medium';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Outfit Medium'), url('./OutfitMedium.woff') format('woff');
+    }
+    
+
+    @font-face {
+    font-family: 'Outfit SemiBold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Outfit SemiBold'), url('./OutfitSemiBold.woff') format('woff');
+    }
+    
+
+    @font-face {
+    font-family: 'Outfit Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Outfit Bold'), url('./OutfitBold.woff') format('woff');
+    }
+/* inter */
+@font-face {
+    font-family: 'Inter Semi Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Inter Semi Bold'), url('./Inter-SemiBold.woff') format('woff');
+}
+@font-face {
+    font-family: 'Inter Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Inter Regular'), url('./Inter-Regular.woff') format('woff');
+}    
+@font-face {
+    font-family: 'Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Inter Bold'), url('./Inter-Bold.ttf') format('woff');
+}
+@font-face {
+    font-family: 'Inter Medium';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Inter Medium'), url('./Inter-Medium.ttf') format('woff');
+}    
+    
+@font-face {
+    font-family: 'Inter Extra Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Inter Extra Bold'), url('./Inter-ExtraBold.ttf') format('woff');
+}    
+    

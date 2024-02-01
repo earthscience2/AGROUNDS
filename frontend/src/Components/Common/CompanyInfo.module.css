@@ -1,0 +1,291 @@
+@import "../../assets/font/font.css";
+/* desctop */
+    /* Large 1920 x 1000 */
+    @media (min-width: 1920px){
+        .back{
+            width: 100%;
+            height: 32vh;
+            background-color: #055540;
+            display: flex;
+            border-top: .5vh solid black;
+            justify-content: center;
+            align-items: center;
+        }
+        .write{
+            width: 100vh;
+        }
+        .box{
+            display: flex;
+            margin-bottom: 2vh;
+        }
+        .click1{
+            color: white;
+            font-family: "Inter Semi Bold";
+            font-size: 1.5vh;
+            margin-right: 3vh;
+            transition: color .3s ease-in-out;
+            font-weight: 500;
+        }
+        .click1:hover{
+            color: #ced0d3;
+            cursor: pointer;
+        }
+        .write2{
+            color: white;
+            font-family: "Inter Regular";
+            font-size: 2vh;
+            margin-bottom: 1vh;
+            font-weight: 600;
+        }
+        .write3{
+            color: white;
+            font-size: 1.2vh;
+            margin-top: .7vh;
+        }
+        .write3:last-child{
+            color: #A7A9AC;
+            font-size: 1vh;
+            margin-top: 3vh;
+        }
+        
+        .logo1{
+            width: 20vh;
+            height: 20vh;
+        }
+    
+    }
+
+
+    /* Medium 1440px ~ 1919px */
+    @media (min-width:1440px) and (max-width: 1919px){
+        .back{
+            width: 100%;
+            height: 32vh;
+            background-color: #055540;
+            display: flex;
+            border-top: .5vh solid black;
+            justify-content: center;
+            align-items: center;
+        }
+        .write{
+            width: 80vh;
+        }
+        .box{
+            display: flex;
+            margin-bottom: 2vh;
+        }
+        .click1{
+            color: white;
+            font-family: "Inter Semi Bold";
+            font-size: 2vh;
+            margin-right: 3vh;
+            transition: color .3s ease-in-out;
+            font-weight: 500;
+        }
+        .click1:hover{
+            color: #ced0d3;
+            cursor: pointer;
+        }
+        .write2{
+            color: white;
+            font-family: "Inter Regular";
+            font-size: 2.4vh;
+            margin-bottom: 1vh;
+            font-weight: 600;
+        }
+        .write3{
+            color: white;
+            font-size: 1.4vh;
+            margin-top: .7vh;
+        }
+        .write3:last-child{
+            color: #A7A9AC;
+            font-size: 1.2vh;
+            margin-top: 3vh;
+        }
+        
+        .logo1{
+            width: 20vh;
+            height: 20vh;
+        }
+        
+    }
+    /* Small 1280px ~ 1439px */
+    @media (min-width: 1280px) and (max-width:1439px){
+        .back{
+            width: 100%;
+            height: 32vh;
+            background-color: #055540;
+            display: flex;
+            border-top: .5vh solid black;
+            justify-content: center;
+            align-items: center;
+        }
+        .write{
+            width: 80vh;
+        }
+        .box{
+            display: flex;
+            margin-bottom: 2vh;
+        }
+        .click1{
+            color: white;
+            font-family: "Inter Semi Bold";
+            font-size: 2vh;
+            margin-right: 3vh;
+            transition: color .3s ease-in-out;
+            font-weight: 500;
+        }
+        .click1:hover{
+            color: #ced0d3;
+            cursor: pointer;
+        }
+        .write2{
+            color: white;
+            font-family: "Inter Regular";
+            font-size: 2.4vh;
+            margin-bottom: 1vh;
+            font-weight: 600;
+        }
+        .write3{
+            color: white;
+            font-size: 1.4vh;
+            margin-top: .7vh;
+        }
+        .write3:last-child{
+            color: #A7A9AC;
+            font-size: 1.2vh;
+            margin-top: 3vh;
+        }
+        
+        .logo1{
+            width: 20vh;
+            height: 20vh;
+        }
+    }
+/* Tablets */
+    /* Portrait: 768px - 1023px */
+    @media (min-width: 768px) and (max-width:1023px){
+        .back{
+            width: 249%;
+            height: 50vh;
+            background-color: #055540;
+            display: flex;
+            border-top: .5vh solid black;
+            justify-content: center;
+            align-items: center;
+        }
+        .write{
+            width: 100vh;
+        }
+        .box{
+            display: flex;
+            margin-bottom: 2vh;
+        }
+        .click1{
+            color: white;
+            font-family: "Inter Semi Bold";
+            font-size: 3vh;
+            margin-right: 3vh;
+            transition: color .3s ease-in-out;
+            font-weight: 500;
+        }
+        .click1:hover{
+            color: #ced0d3;
+            cursor: pointer;
+        }
+        .write2{
+            color: white;
+            font-family: "Inter Regular";
+            font-size: 4vh;
+            margin-bottom: 1vh;
+            font-weight: 600;
+        }
+        .write3{
+            color: white;
+            font-size: 2.5vh;
+            margin-top: .7vh;
+        }
+        .write3:last-child{
+            color: #A7A9AC;
+            font-size: 2vh;
+            margin-top: 3vh;
+        }
+        
+        .logo1{
+            width: 30vh;
+            height: 30vh;
+        }
+        
+    }
+    /* Landscape: 1024px - 1279px */
+    @media (min-width: 1024px) and (max-width:1279px){
+        .back{
+            width: 100%;
+            height: 32vh;
+            background-color: #055540;
+            display: flex;
+            border-top: .5vh solid black;
+            justify-content: center;
+            align-items: center;
+        }
+        .write{
+            width: 100vh;
+        }
+        .box{
+            display: flex;
+            margin-bottom: 2vh;
+        }
+        .click1{
+            color: white;
+            font-family: "Inter Semi Bold";
+            font-size: 1.5vh;
+            margin-right: 3vh;
+            transition: color .3s ease-in-out;
+            font-weight: 500;
+        }
+        .click1:hover{
+            color: #ced0d3;
+            cursor: pointer;
+        }
+        .write2{
+            color: white;
+            font-family: "Inter Regular";
+            font-size: 2vh;
+            margin-bottom: 1vh;
+            font-weight: 600;
+        }
+        .write3{
+            color: white;
+            font-size: 1.2vh;
+            margin-top: .7vh;
+        }
+        .write3:last-child{
+            color: #A7A9AC;
+            font-size: 1vh;
+            margin-top: 3vh;
+        }
+        
+        .logo1{
+            width: 20vh;
+            height: 20vh;
+        }
+        
+    }
+    /* Mobile Device */
+    /* Medium 321px ~ 767px */
+    @media (min-width: 321px) and (max-width: 767px){
+        .BackGround{
+            width: 100%;
+            height: 300vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+    }
+    /* Medium under 320px */
+    @media (max-width: 320px){
+        
+    }
