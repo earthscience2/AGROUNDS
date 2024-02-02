@@ -1,0 +1,30 @@
+.block2{
+    display: flex;
+    width: 49.2vh;
+    height: 5.5vh;
+    border-bottom: .15vh solid #CDCDCD;
+    align-items: center;
+    margin-top: 3vh;
+}
+
+.name{
+    font-family: "Inter Semi Bold";
+    font-size: 2vh;
+    font-weight: 600;
+    color: #979797;
+    margin-left: 2vh;
+}
+.input{
+    border: none;
+    outline: none;
+    margin-left: 3vh;
+    font-size: 2vh;
+    font-family: "Inter Semi Bold";
+    font-weight: 500;
+}
+.input::placeholder{
+    font-family: "Inter Semi Bold";
+    font-size: 2vh;
+    font-weight: 600;
+    color: #CDCDCD;
+}

@@ -1,0 +1,29 @@
+.gender-button{
+    width: 19.9vh;
+    height: 6.2vh;
+    border: .1vh solid #979797;
+    background-color: white;
+    font-family: "Inter Semi Bold";
+    font-size: 2vh;
+    font-weight: 700;
+    color: #979797;
+}
+.gender-button:first-child{
+    margin-left: 4vh;
+}
+.active{
+    color: white;
+}
+
+.block4{
+    display: flex;
+    width: 49.2vh;
+    height: 5.5vh;
+    justify-content: center;
+    align-items: center;
+    font-family: "Inter Semi Bold";
+    font-size: 2vh;
+    font-weight: 600;
+    color: #979797;
+    margin-top: 3vh;
+}

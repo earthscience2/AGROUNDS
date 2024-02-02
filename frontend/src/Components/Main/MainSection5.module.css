@@ -1,0 +1,301 @@
+@import "@/assets/font/font.css";
+/* desctop */
+    /* Large 1920 x 1000 */
+    @media (min-width: 1920px){
+        .MainSection5{
+            display: flex;
+            background-color: #D7E19D;
+            width: 100%;
+            height: 80vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .img{
+            width: 54vh;
+            height: 54vh;
+            box-shadow: 0vh 1vh 1vh#adadad;
+            background-color:white;
+            border-radius: 3vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-left: 8vh;
+            margin-right: -15vh;
+        }
+        .textgroup{
+            margin-right: 8vh;
+            text-align: right;
+        }
+        .text1{
+            font-size: 2.4vh;
+            font-family: 'Inter Bold';
+            font-weight: 800;
+            color: #055540;
+            margin:0
+        }
+        .text2{
+            font-size: 3vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            margin:0 0 1vh 0;
+            line-height: 1.3;
+        }
+        .text3{
+            font-size: 2vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #8F9194;
+            margin:0 0 4vh 0;
+            line-height: 1.5;
+        }
+        .conf{
+            font-size: 1.5vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #055540;
+            margin:0
+        }
+        
+        
+    }
+    @media (min-width:1440px) and (max-width: 1919px){
+        .MainSection5{
+            display: flex;
+            background-color: #D7E19D;
+            width: 100%;
+            height: 80vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .img{
+            width: 54vh;
+            height: 54vh;
+            box-shadow: 0vh 1vh 1vh#adadad;
+            background-color:white;
+            border-radius: 3vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-left: 8vh;
+            margin-right: -15vh;
+        }
+        .textgroup{
+            margin-right: 5vh;
+            text-align: right;
+        }
+        .text1{
+            font-size: 2.8vh;
+            font-family: 'Inter Bold';
+            font-weight: 800;
+            color: #055540;
+            margin:0
+        }
+        .text2{
+            font-size: 3.4vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            margin:0 0 1vh 0;
+            line-height: 1.3;
+        }
+        .text3{
+            font-size: 2.2vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #8F9194;
+            margin:0 0 4vh 0;
+            line-height: 1.5;
+        }
+        .conf{
+            font-size: 2vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #055540;
+            margin:0
+        }
+        
+    }
+    /* Small 1280px ~ 1439px */
+    @media (min-width: 1280px) and (max-width:1439px){
+        .MainSection5{
+            display: flex;
+            background-color: #D7E19D;
+            width: 100%;
+            height: 80vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .img{
+            width: 54vh;
+            height: 54vh;
+            box-shadow: 0vh 1vh 1vh#adadad;
+            background-color:white;
+            border-radius: 3vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-left: 8vh;
+            margin-right: -10vh;
+        }
+        .textgroup{
+            margin-right: 5vh;
+            text-align: right;
+        }
+        .text1{
+            font-size: 2.8vh;
+            font-family: 'Inter Bold';
+            font-weight: 800;
+            color: #055540;
+            margin:0
+        }
+        .text2{
+            font-size: 3.4vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            margin:0 0 1vh 0;
+            line-height: 1.3;
+        }
+        .text3{
+            font-size: 2.2vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #8F9194;
+            margin:0 0 4vh 0;
+            line-height: 1.5;
+        }
+        .conf{
+            font-size: 2vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #055540;
+            margin:0
+        }
+    }
+
+/* Tablets */
+    /* Portrait: 768px - 1023px */
+    @media (min-width: 768px) and (max-width:1023px){
+        .MainSection5{
+            display: flex;
+            background-color: #D7E19D;
+            width: 100%;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .img{
+            width: 74vh;
+            height: 74vh;
+            box-shadow: 0vh 1vh 1vh#adadad;
+            background-color:white;
+            border-radius: 3vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-left: 8vh;
+            margin-right: -7vh;
+        }
+        .textgroup{
+            margin-right: 8vh;
+            text-align: right;
+        }
+        .text1{
+            font-size: 5vh;
+            font-family: 'Inter Bold';
+            font-weight: 800;
+            color: #055540;
+            margin:0
+        }
+        .text2{
+            font-size: 7vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            margin:0 0 1vh 0;
+            line-height: 1.3;
+        }
+        .text3{
+            font-size: 3vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #8F9194;
+            margin:0 0 4vh 0;
+            line-height: 1.5;
+        }
+        .conf{
+            font-size: 3vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #055540;
+            margin:0
+        }
+        
+    }
+    /* Landscape: 1024px - 1279px */
+    @media (min-width: 1024px) and (max-width:1279px){
+        .MainSection5{
+            display: flex;
+            background-color: #D7E19D;
+            width: 100%;
+            height: 80vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .img{
+            width: 48vh;
+            height: 48vh;
+            box-shadow: 0vh 1vh 1vh#adadad;
+            background-color:white;
+            border-radius: 3vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-left: 8vh;
+            margin-right: -10vh;
+        }
+        .textgroup{
+            margin-right: 8vh;
+            text-align: right;
+        }
+        .text1{
+            font-size: 2.4vh;
+            font-family: 'Inter Bold';
+            font-weight: 800;
+            color: #055540;
+            margin:0
+        }
+        .text2{
+            font-size: 3vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            margin:0 0 1vh 0;
+            line-height: 1.3;
+        }
+        .text3{
+            font-size: 2vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #8F9194;
+            margin:0 0 4vh 0;
+            line-height: 1.5;
+        }
+        .conf{
+            font-size: 1.5vh;
+            font-family: 'Inter Bold';
+            font-weight: 700;
+            color: #055540;
+            margin:0
+        }
+    }
+    /* Mobile Device */
+    /* Medium 321px ~ 767px */
+    @media (min-width: 321px) and (max-width: 767px){
+
+    }
+    /* Medium under 320px */
+    @media (max-width: 320px){
+        
+    }

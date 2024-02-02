@@ -1,0 +1,74 @@
+
+@import "../../assets/font/font.css";
+/* desctop */
+    /* Large 1920 x 1000 */
+    @media (min-width: 1920px){
+        .Login{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+    
+    }
+
+
+    /* Medium 1440px ~ 1919px */
+    @media (min-width:1440px) and (max-width: 1919px){
+        .Login{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+    }
+    /* Small 1280px ~ 1439px */
+    @media (min-width: 1280px) and (max-width:1439px){
+        .Login{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+    }
+/* Tablets */
+    /* Portrait: 768px - 1023px */
+    @media (min-width: 768px) and (max-width:1023px){
+        .Login{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+    }
+    /* Landscape: 1024px - 1279px */
+    @media (min-width: 1024px) and (max-width:1279px){
+        .Login{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+    }
+    /* Mobile Device */
+    /* Medium 321px ~ 767px */
+    @media (min-width: 321px) and (max-width: 767px){
+        .Login{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+    }
+    /* Medium under 320px */
+    @media (max-width: 320px){
+        .Login{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+    }
