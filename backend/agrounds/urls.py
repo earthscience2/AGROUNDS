@@ -29,5 +29,4 @@ urlpatterns = [
     #백엔드 path
     path('api/assist/', include('assist.urls')),
     path('api/login/', include('login.urls')),
-
 ]
