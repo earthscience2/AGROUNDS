@@ -79,3 +79,6 @@ class kakaoView(APIView):
     def get(self, request):
         0
 
+class google(APIView):
+    def get(self,request):
+        return redirect("http://127.0.0.1:8000/api/login/allauth/google/login/")
