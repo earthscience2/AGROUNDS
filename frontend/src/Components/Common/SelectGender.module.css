@@ -1,5 +1,5 @@
 .gender-button{
-    width: 19.9vh;
+    width: 15vh;
     height: 6.2vh;
     border: .1vh solid #979797;
     background-color: white;
@@ -9,7 +9,7 @@
     color: #979797;
 }
 .gender-button:first-child{
-    margin-left: 4vh;
+    margin-left: 7.5vh;
 }
 .active{
     color: white;
@@ -17,7 +17,7 @@
 
 .block4{
     display: flex;
-    width: 49.2vh;
+    width: 49vh;
     height: 5.5vh;
     justify-content: center;
     align-items: center;
@@ -26,4 +26,6 @@
     font-weight: 600;
     color: #979797;
     margin-top: 3vh;
+    position: relative;
+    right:1.8vh;
 }

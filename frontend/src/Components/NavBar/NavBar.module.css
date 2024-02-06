@@ -1,51 +1,273 @@
 @import "@/assets/font/font.css";
 /* desctop */
     /* Large 1920 x 1000 */
-    @media (min-width: 1920px){
+    .popupOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .popup {
+        width: 30vh;
+        height: 25vh;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .popupContent {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* 버튼 사이의 간격 */
+    }
+    
+    .closePopup {
+        margin-top: auto;
+        cursor: pointer;
+    }
+    .ggback{
+      border-radius: 1vh;
+      width: 30vh;
+      height: 6.6vh;
+      border: 1px solid rgb(104, 99, 99);
+      margin-top: 0vh;
+    }
+
+    @media screen and (min-width: 1920px){
         .Back{
-            position:fixed;
+            position: fixed;
             display: flex;
+            justify-content: space-between; /* 이 부분을 추가합니다 */
             width: 100%;
             height: 11.25vh;
             align-items: center;
-            justify-content: center;
             background-color: #ffffff;
             margin-top: -1vh;
             border-bottom: .3vh solid #A7A9AC;
-            
+            z-index: 1;
         }
         .Logo{
             width: 7.9vh;
             height: 7.8vh;
             margin-right: 5vh;
+            margin-left: 5vh;
+            margin-top: .3vh;
+            cursor: pointer;
         }
         .NavBar{
             display: flex;
-            justify-content: center;
-            margin-right: 20%;
+            align-items: center; 
         }
-        .tag{
+        .tag1 {
             font-size: 2vh;
             width: 11.1vh;
-            height:9vh;
-            display: flex;
+            height: 2vh;
+            margin-right: 2vh; 
             align-items: center;
             justify-content: center;
-            padding-left: 2.4vh;
-            padding-right: 2.4vh; 
             writing-mode: horizontal-tb;
             font-family: 'Inter Extra Bold';
             font-weight: 700;
-            
-        }
-        .tag:hover{
-            background-color:#245441;
-            color: white;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+          }
+          .tag1:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+          .tag1:hover:after { 
+            width: 100%; 
+            left: 0; 
+          }
+
+        .tag2 {
+            font-size: 2vh;
+            width: 11.1vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            margin-right: -0.7vh; 
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
             cursor: pointer;
         }
+        .tag2:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+        .tag2:hover:after { 
+            width: 50%; 
+            left: 26.5%; 
+          }
+
+        .tag3 {
+            font-size: 2vh;
+            width: 11.1vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            margin-right: -0.7vh; 
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .tag3:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+        .tag3:hover:after { 
+            width: 30%; 
+            left: 36%; 
+          }
+
+        .tag4 {
+            font-size: 2vh;
+            width: 11.1vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5vh; 
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .tag4:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+        .tag4:hover:after { 
+            width: 50%; 
+            left: 26.5%; 
+            color: #245441;
+          }
+
+        .tag5 {
+            font-size: 2vh;
+            width: 11.1vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            margin-right: 2.3vh; 
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .tag5:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+        .tag5:hover:after { 
+            width: 50%; 
+            left: 26.5%; 
+            color: #245441;
+          }
+
+        .tag6 {
+            font-size: 2vh;
+            width: 11.1vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .tag6:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+          .tag6:hover:after { 
+            width: 100%; 
+            left: 0; 
+          }
 
         .Login{
-            font-size: 2vh;
+            width: 7;
+            font-size: 1.5vh;
             text-align: center;
             cursor: pointer;
             font-family: 'Inter Extra Bold';
@@ -57,77 +279,263 @@
         .Login:hover{
             color: #A7A9AC;
             cursor: pointer;
-            
         }
         .line{
-            height: 3vh;
+            height: 2vh;
             width: .3vh;
             background-color: rgb(124, 124, 124);
         }
         .Signin{
-            font-size: 2vh;
+            font-size: 1.5vh;
             text-align: center;
             margin-left: 2vh;
             font-family: 'Inter Extra Bold';
             font-weight: 700;
             transition: color .3s ease-in-out;
-            writing-mode: horizontal-tb
+            writing-mode: horizontal-tb;
         }
         .Signin:hover{
             cursor: pointer;
             color: #A7A9AC;
         }
+        .box1{
+            display: flex; 
+        }
         .box2{
-            display: flex;
+            margin-right: 8vh;
+            display: flex; 
             align-items: center;
         }
     }
-/* Medium 1440px ~ 1919px */
-@media (min-width:1440px) and (max-width: 1919px){
-    .Back{
-        position:fixed;
+
+    @media (min-width:1440px) and (max-width: 1919px){
+      .Back{
+        position: fixed;
         display: flex;
+        justify-content: space-between; /* 이 부분을 추가합니다 */
         width: 100%;
         height: 11.25vh;
         align-items: center;
-        justify-content: center;
         background-color: #ffffff;
         margin-top: -1vh;
         border-bottom: .3vh solid #A7A9AC;
-        
+        z-index: 1;
     }
     .Logo{
-        width: 7.9vh;
-        height: 7.8vh;
-        margin-right: 5vh;
-    }
+      width: 7.9vh;
+      height: 7.8vh;
+      margin-right: 5vh;
+      margin-left: 5vh;
+      margin-top: .3vh;
+      cursor: pointer;
+  }
+
     .NavBar{
         display: flex;
-        justify-content: center;
-        margin-right: 10%;
-    }
-    .tag{
+        align-items: center; 
+    } 
+    .tag1 {
         font-size: 2vh;
-        width: 9.1vh;
-        height:9vh;
-        display: flex;
+        width: 11.1vh;
+        height: 2vh;
+        margin-right: 2vh; 
         align-items: center;
         justify-content: center;
-        padding-left: 2vh;
-        padding-right: 2vh; 
+        writing-mode: horizontal-tb;
         font-family: 'Inter Extra Bold';
         font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+      }
+      .tag1:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+      .tag1:hover:after { 
+        width: 100%; 
+        left: 0; 
+      }
+
+    .tag2 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: -0.7vh; 
         writing-mode: horizontal-tb;
-        
-    }
-    .tag:hover{
-        background-color:#245441;
-        color: white;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
         cursor: pointer;
     }
+    .tag2:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .tag2:hover:after { 
+        width: 50%; 
+        left: 26.5%; 
+      }
+
+    .tag3 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: -0.7vh; 
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+    }
+    .tag3:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .tag3:hover:after { 
+        width: 30%; 
+        left: 36%; 
+      }
+
+    .tag4 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.5vh; 
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+    }
+    .tag4:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .tag4:hover:after { 
+        width: 50%; 
+        left: 26.5%; 
+        color: #245441;
+      }
+
+    .tag5 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: 2.3vh; 
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+    }
+    .tag5:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .tag5:hover:after { 
+        width: 50%; 
+        left: 26.5%; 
+        color: #245441;
+      }
+
+    .tag6 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+    }
+    .tag6:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+      .tag6:hover:after { 
+        width: 100%; 
+        left: 0; 
+      }
 
     .Login{
-        font-size: 2vh;
+        width: 7;
+        font-size: 1.5vh;
         text-align: center;
         cursor: pointer;
         font-family: 'Inter Extra Bold';
@@ -139,99 +547,14 @@
     .Login:hover{
         color: #A7A9AC;
         cursor: pointer;
-        
     }
     .line{
-        height: 3vh;
-        width: .2vh;
-        background-color: rgb(124, 124, 124);
-    }
-    .Signin{
-        font-size: 2vh;
-        text-align: center;
-        margin-left: 2vh;
-        font-family: 'Inter Extra Bold';
-        font-weight: 700;
-        transition: color .3s ease-in-out;
-        writing-mode: horizontal-tb;
-    }
-    .Signin:hover{
-        cursor: pointer;
-        color: #A7A9AC;
-    }
-    .box2{
-        display: flex;
-        height: 3vh;
-        align-items: center;
-        
-    }
-}
-/* Small 1280px ~ 1439px */
-@media (min-width: 1280px) and (max-width:1439px){
-    .Back{
-        position:fixed;
-        display: flex;
-        width: 100%;
-        height: 11.25vh;
-        align-items: center;
-        justify-content: center;
-        background-color: #ffffff;
-        margin-top: -1vh;
-        border-bottom: .3vh solid #A7A9AC;
-        
-    }
-    .Logo{
-        width: 7.9vh;
-        height: 7.8vh;
-        margin-right: 5vh;
-    }
-    .NavBar{
-        display: flex;
-        justify-content: center;
-        margin-right: 10%;
-    }
-    .tag{
-        font-size: 2vh;
-        width: 9.1vh;
-        height:9vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-left: 2.4vh;
-        padding-right: 2.4vh; 
-        font-family: 'Inter Extra Bold';
-        font-weight: 700;
-        writing-mode: horizontal-tb;
-        
-    }
-    .tag:hover{
-        background-color:#245441;
-        color: white;
-        cursor: pointer;
-    }
-
-    .Login{
-        font-size: 2vh;
-        text-align: center;
-        cursor: pointer;
-        font-family: 'Inter Extra Bold';
-        font-weight: 700;
-        margin-right: 2vh;
-        transition: color .3s ease-in-out;
-        writing-mode: horizontal-tb;
-    }
-    .Login:hover{
-        color: #A7A9AC;
-        cursor: pointer;
-        
-    }
-    .line{
-        height: 3vh;
+        height: 2vh;
         width: .3vh;
         background-color: rgb(124, 124, 124);
     }
     .Signin{
-        font-size: 2vh;
+        font-size: 1.5vh;
         text-align: center;
         margin-left: 2vh;
         font-family: 'Inter Extra Bold';
@@ -243,169 +566,810 @@
         cursor: pointer;
         color: #A7A9AC;
     }
+    .box1{
+        display: flex; 
+    }
     .box2{
-        display: flex;
-        height: 3vh;
+        margin-right: 8vh;
+        display: flex; 
         align-items: center;
-        
+    }
+    .ggback{
+      border-radius: 1vh;
+      width: 30vh;
+      height: 6.6vh;
+      border: 1px solid rgb(104, 99, 99);
+      margin-top: 1vh;
+  }
+  }
+
+  @media (min-width: 1280px) and (max-width:1439px){
+    .Back{
+      position: fixed;
+      display: flex;
+      justify-content: space-between; /* 이 부분을 추가합니다 */
+      width: 100%;
+      height: 11.25vh;
+      align-items: center;
+      background-color: #ffffff;
+      margin-top: -1vh;
+      border-bottom: .3vh solid #A7A9AC;
+      z-index: 1;
+  }
+  .Logo{
+      width: 7.9vh;
+      height: 7.8vh;
+      margin-right: 2vh;
+      margin-left: 2vh;
+      margin-top: .3vh;
+      cursor: pointer;
+  }
+  .NavBar{
+      display: flex;
+      align-items: center; 
+  }
+  .tag1 {
+      font-size: 2vh;
+      width: 11.1vh;
+      height: 2vh;
+      margin-right: 1vh; 
+      align-items: center;
+      justify-content: center;
+      writing-mode: horizontal-tb;
+      font-family: 'Inter Extra Bold';
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      padding: 15px 0;
+      position: relative;
+      cursor: pointer;
+    }
+    .tag1:after {    
+      background: none repeat scroll 0 0 transparent;
+      bottom: 0;
+      content: "";
+      display: flex;
+      height: 4px;
+      left: 50%;
+      position: absolute;
+      background: #245441;
+      transition: width 0.3s ease 0s, left 0.3s ease 0s;
+      width: 0;
+    }
+    .tag1:hover:after { 
+      width: 100%; 
+      left: 0; 
     }
 
+  .tag2 {
+      font-size: 2vh;
+      width: 11.1vh;
+      height: 2vh;
+      align-items: center;
+      justify-content: center;
+      margin-right: -1.2vh; 
+      writing-mode: horizontal-tb;
+      font-family: 'Inter Extra Bold';
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      padding: 15px 0;
+      position: relative;
+      cursor: pointer;
+  }
+  .tag2:after {    
+      background: none repeat scroll 0 0 transparent;
+      bottom: 0;
+      content: "";
+      display: flex;
+      height: 4px;
+      left: 50%;
+      position: absolute;
+      background: #245441;
+      transition: width 0.3s ease 0s, left 0.3s ease 0s;
+      width: 0;
+    }
+  .tag2:hover:after { 
+      width: 50%; 
+      left: 26.5%; 
+    }
+
+  .tag3 {
+      font-size: 2vh;
+      width: 11.1vh;
+      height: 2vh;
+      align-items: center;
+      justify-content: center;
+      margin-right: -1.2vh; 
+      writing-mode: horizontal-tb;
+      font-family: 'Inter Extra Bold';
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      padding: 15px 0;
+      position: relative;
+      cursor: pointer;
+  }
+  .tag3:after {    
+      background: none repeat scroll 0 0 transparent;
+      bottom: 0;
+      content: "";
+      display: flex;
+      height: 4px;
+      left: 50%;
+      position: absolute;
+      background: #245441;
+      transition: width 0.3s ease 0s, left 0.3s ease 0s;
+      width: 0;
+    }
+  .tag3:hover:after { 
+      width: 30%; 
+      left: 36%; 
+    }
+
+  .tag4 {
+      font-size: 2vh;
+      width: 11.1vh;
+      height: 2vh;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0vh; 
+      writing-mode: horizontal-tb;
+      font-family: 'Inter Extra Bold';
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      padding: 15px 0;
+      position: relative;
+      cursor: pointer;
+  }
+  .tag4:after {    
+      background: none repeat scroll 0 0 transparent;
+      bottom: 0;
+      content: "";
+      display: flex;
+      height: 4px;
+      left: 50%;
+      position: absolute;
+      background: #245441;
+      transition: width 0.3s ease 0s, left 0.3s ease 0s;
+      width: 0;
+    }
+  .tag4:hover:after { 
+      width: 50%; 
+      left: 26.5%; 
+      color: #245441;
+    }
+
+  .tag5 {
+      font-size: 2vh;
+      width: 11.1vh;
+      height: 2vh;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1.8vh; 
+      writing-mode: horizontal-tb;
+      font-family: 'Inter Extra Bold';
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      padding: 15px 0;
+      position: relative;
+      cursor: pointer;
+  }
+  .tag5:after {    
+      background: none repeat scroll 0 0 transparent;
+      bottom: 0;
+      content: "";
+      display: flex;
+      height: 4px;
+      left: 50%;
+      position: absolute;
+      background: #245441;
+      transition: width 0.3s ease 0s, left 0.3s ease 0s;
+      width: 0;
+    }
+  .tag5:hover:after { 
+      width: 50%; 
+      left: 26.5%; 
+      color: #245441;
+    }
+
+  .tag6 {
+      font-size: 2vh;
+      width: 11.1vh;
+      height: 2vh;
+      align-items: center;
+      justify-content: center;
+      writing-mode: horizontal-tb;
+      font-family: 'Inter Extra Bold';
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      padding: 15px 0;
+      position: relative;
+      cursor: pointer;
+  }
+  .tag6:after {    
+      background: none repeat scroll 0 0 transparent;
+      bottom: 0;
+      content: "";
+      display: flex;
+      height: 4px;
+      left: 50%;
+      position: absolute;
+      background: #245441;
+      transition: width 0.3s ease 0s, left 0.3s ease 0s;
+      width: 0;
+    }
+    .tag6:hover:after { 
+      width: 100%; 
+      left: 0; 
+    }
+
+  .Login{
+      width: 7;
+      font-size: 1.5vh;
+      text-align: center;
+      cursor: pointer;
+      font-family: 'Inter Extra Bold';
+      font-weight: 700;
+      margin-right: 2vh;
+      transition: color .3s ease-in-out;
+      writing-mode: horizontal-tb;
+  }
+  .Login:hover{
+      color: #A7A9AC;
+      cursor: pointer;
+  }
+  .line{
+      height: 2vh;
+      width: .3vh;
+      background-color: rgb(124, 124, 124);
+  }
+  .Signin{
+      font-size: 1.5vh;
+      text-align: center;
+      margin-left: 2vh;
+      font-family: 'Inter Extra Bold';
+      font-weight: 700;
+      transition: color .3s ease-in-out;
+      writing-mode: horizontal-tb;
+  }
+  .Signin:hover{
+      cursor: pointer;
+      color: #A7A9AC;
+  }
+  .box1{
+      display: flex; 
+  }
+  .box2{
+      margin-right: 8vh;
+      display: flex; 
+      align-items: center;
+  }
+}
+
+@media (min-width: 1024px) and (max-width:1279px){
+  .Back{
+    position: fixed;
+    display: flex;
+    justify-content: space-between; /* 이 부분을 추가합니다 */
+    width: 100%;
+    height: 11.25vh;
+    align-items: center;
+    background-color: #ffffff;
+    margin-top: -1vh;
+    border-bottom: .3vh solid #A7A9AC;
+    z-index: 1;
+}
+.Logo{
+    width: 7.9vh;
+    height: 7.8vh;
+    margin-right: 2vh;
+    margin-left: 2vh;
+    margin-top: .3vh;
+    cursor: pointer;
+    display: none;
+}
+.NavBar{
+    display: flex;
+    align-items: center; 
+}
+.tag1 {
+  font-size: 2vh;
+  width: 11.1vh;
+  height: 2vh;
+  margin-left: 2vh; 
+  margin-right: 1vh; 
+  align-items: center;
+  justify-content: center;
+  writing-mode: horizontal-tb;
+  font-family: 'Inter Extra Bold';
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  padding: 15px 0;
+  position: relative;
+  cursor: pointer;
+}
+.tag1:after {    
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: flex;
+  height: 4px;
+  left: 50%;
+  position: absolute;
+  background: #245441;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+.tag1:hover:after { 
+  width: 100%; 
+  left: 0; 
+}
+.tag2 {
+    font-size: 2vh;
+    width: 11.1vh;
+    height: 2vh;
+    align-items: center;
+    justify-content: center;
+    margin-right: -2.2vh; 
+    writing-mode: horizontal-tb;
+    font-family: 'Inter Extra Bold';
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    padding: 15px 0;
+    position: relative;
+    cursor: pointer;
+}
+.tag2:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: flex;
+    height: 4px;
+    left: 50%;
+    position: absolute;
+    background: #245441;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+  }
+.tag2:hover:after { 
+    width: 50%; 
+    left: 26.5%; 
+  }
+
+.tag3 {
+    font-size: 2vh;
+    width: 11.1vh;
+    height: 2vh;
+    align-items: center;
+    justify-content: center;
+    margin-right: -2.2vh; 
+    writing-mode: horizontal-tb;
+    font-family: 'Inter Extra Bold';
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    padding: 15px 0;
+    position: relative;
+    cursor: pointer;
+}
+.tag3:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: flex;
+    height: 4px;
+    left: 50%;
+    position: absolute;
+    background: #245441;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+  }
+.tag3:hover:after { 
+    width: 30%; 
+    left: 36%; 
+  }
+
+.tag4 {
+    font-size: 2vh;
+    width: 11.1vh;
+    height: 2vh;
+    align-items: center;
+    justify-content: center;
+    margin-right: -1vh; 
+    writing-mode: horizontal-tb;
+    font-family: 'Inter Extra Bold';
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    padding: 15px 0;
+    position: relative;
+    cursor: pointer;
+}
+.tag4:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: flex;
+    height: 4px;
+    left: 50%;
+    position: absolute;
+    background: #245441;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+  }
+.tag4:hover:after { 
+    width: 50%; 
+    left: 26.5%; 
+    color: #245441;
+  }
+
+.tag5 {
+    font-size: 2vh;
+    width: 11.1vh;
+    height: 2vh;
+    align-items: center;
+    justify-content: center;
+    margin-right: .8vh; 
+    writing-mode: horizontal-tb;
+    font-family: 'Inter Extra Bold';
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    padding: 15px 0;
+    position: relative;
+    cursor: pointer;
+}
+.tag5:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: flex;
+    height: 4px;
+    left: 50%;
+    position: absolute;
+    background: #245441;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+  }
+.tag5:hover:after { 
+    width: 50%; 
+    left: 26.5%; 
+    color: #245441;
+  }
+
+.tag6 {
+    font-size: 2vh;
+    width: 11.1vh;
+    height: 2vh;
+    align-items: center;
+    justify-content: center;
+    writing-mode: horizontal-tb;
+    font-family: 'Inter Extra Bold';
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    padding: 15px 0;
+    position: relative;
+    cursor: pointer;
+}
+.tag6:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: flex;
+    height: 4px;
+    left: 50%;
+    position: absolute;
+    background: #245441;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+  }
+  .tag6:hover:after { 
+    width: 100%; 
+    left: 0; 
+  }
+
+.Login{
+    width: 7vh;
+    font-size: 1.3vh;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Inter Extra Bold';
+    font-weight: 700;
+    margin-right: -0.5vh;
+    transition: color .3s ease-in-out;
+    writing-mode: horizontal-tb;
+}
+.Login:hover{
+    color: #A7A9AC;
+    cursor: pointer;
+}
+.line{
+    height: 2vh;
+    width: .2vh;
+    background-color: rgb(124, 124, 124);
+}
+.Signin{
+    font-size: 1.3vh;
+    text-align: center;
+    margin-left: 1vh;
+    font-family: 'Inter Extra Bold';
+    font-weight: 700;
+    transition: color .3s ease-in-out;
+    writing-mode: horizontal-tb;
+}
+.Signin:hover{
+    cursor: pointer;
+    color: #A7A9AC;
+}
+.box1{
+    display: flex; 
+}
+.box2{
+    margin-right: 3vh;
+    display: flex; 
+    align-items: center;
+}
 }
 
 /* Tablets */
     /* Portrait: 768px - 1023px */
     @media (min-width: 768px) and (max-width:1023px){
         .Back{
-            position:fixed;
+            position: fixed;
             display: flex;
+            justify-content: space-between; /* 이 부분을 추가합니다 */
             width: 100%;
-            height: 15.25vh;
+            height: 11.25vh;
             align-items: center;
-            justify-content: center;
             background-color: #ffffff;
             margin-top: -1vh;
             border-bottom: .3vh solid #A7A9AC;
-            
+            z-index: 1;
         }
         .Logo{
             width: 7.9vh;
             height: 7.8vh;
             margin-right: 5vh;
+            margin-left: 5vh;
+            margin-top: .3vh;
+            cursor: pointer;
+            display: none;
         }
         .NavBar{
             display: flex;
-            justify-content: center;
-            margin-right: 10%;
+            align-items: center; 
         }
-        .tag{
-            font-size: 2.8vh;
-            width: 15.1vh;
-            height:11vh;
-            display: flex;
+        .tag1 {
+            font-size: 1.5vh;
+            width: 7vh;
+            height: 2vh;
+            margin-left: 2vh; 
+            margin-right: 2vh; 
             align-items: center;
             justify-content: center;
-            padding-left: 2.2vh;
-            padding-right: 2.2vh; 
+            writing-mode: horizontal-tb;
             font-family: 'Inter Extra Bold';
             font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+          }
+          .tag1:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+          .tag1:hover:after { 
+            width: 100%; 
+            left: 0; 
+          }
+
+        .tag2 {
+           font-size: 1.5vh;
+           width: 7vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            margin-right: -0.7vh; 
             writing-mode: horizontal-tb;
-            
-        }
-        .tag:hover{
-            background-color:#245441;
-            color: white;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
             cursor: pointer;
         }
-    
+        .tag2:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+        .tag2:hover:after { 
+            width: 50%; 
+            left: 26.5%; 
+          }
+
+        .tag3 {
+            font-size: 1.5vh;
+            width: 7vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            margin-right: -0.7vh; 
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .tag3:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+        .tag3:hover:after { 
+            width: 30%; 
+            left: 36%; 
+          }
+
+        .tag4 {
+            font-size: 1.5vh;
+            width: 7vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5vh; 
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .tag4:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+        .tag4:hover:after { 
+            width: 50%; 
+            left: 26.5%; 
+            color: #245441;
+          }
+
+        .tag5 {
+            font-size: 1.5vh;
+            width: 7vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            margin-right: 2.3vh; 
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .tag5:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+        .tag5:hover:after { 
+            width: 50%; 
+            left: 26.5%; 
+            color: #245441;
+          }
+
+        .tag6 {
+            font-size: 1.5vh;
+            width: 7vh;
+            height: 2vh;
+            align-items: center;
+            justify-content: center;
+            writing-mode: horizontal-tb;
+            font-family: 'Inter Extra Bold';
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            padding: 15px 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .tag6:after {    
+            background: none repeat scroll 0 0 transparent;
+            bottom: 0;
+            content: "";
+            display: flex;
+            height: 4px;
+            left: 50%;
+            position: absolute;
+            background: #245441;
+            transition: width 0.3s ease 0s, left 0.3s ease 0s;
+            width: 0;
+          }
+          .tag6:hover:after { 
+            width: 100%; 
+            left: 0; 
+          }
+
         .Login{
-            font-size: 2.8vh;
+            width: 7vh;
+            font-size: 1vh;
             text-align: center;
             cursor: pointer;
             font-family: 'Inter Extra Bold';
             font-weight: 700;
-            margin-right: 2vh;
+            margin-right: -0.8vh;
             transition: color .3s ease-in-out;
             writing-mode: horizontal-tb;
         }
         .Login:hover{
             color: #A7A9AC;
             cursor: pointer;
-            
         }
         .line{
-            height: 3vh;
-            width: .3vh;
-            background-color: rgb(124, 124, 124);
-        }
-        .Signin{
-            font-size: 2.8vh;
-            text-align: center;
-            margin-left: 2vh;
-            font-family: 'Inter Extra Bold';
-            font-weight: 700;
-            transition: color .3s ease-in-out;
-            writing-mode: horizontal-tb;
-        }
-        .Signin:hover{
-            cursor: pointer;
-            color: #A7A9AC;
-        }
-        .box2{
-            display: flex;
-            height: 3vh;
-            align-items: center;
-            
-        }
-    
-    }
-    /* Landscape: 1024px - 1279px */
-    @media (min-width: 1024px) and (max-width:1279px){
-        .Back{
-            position:fixed;
-            display: flex;
-            width: 100%;
-            height: 9.25vh;
-            align-items: center;
-            justify-content: center;
-            background-color: #ffffff;
-            margin-top: -1vh;
-            border-bottom: .3vh solid #A7A9AC;
-            
-        }
-        .Logo{
-            width: 7.9vh;
-            height: 7.8vh;
-            margin-right: 7vh;
-        }
-        .NavBar{
-            display: flex;
-            justify-content: center;
-            margin-right: 5%;
-        }
-        .tag{
-            font-size: 1.8vh;
-            width: 9.1vh;
-            height:9vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-left: 2.4vh;
-            padding-right: 2.4vh; 
-            font-family: 'Inter Extra Bold';
-            font-weight: 700;
-            writing-mode: horizontal-tb;
-            
-        }
-        .tag:hover{
-            background-color:#245441;
-            color: white;
-            cursor: pointer;
-        }
-    
-        .Login{
-            font-size: 2vh;
-            text-align: center;
-            cursor: pointer;
-            font-family: 'Inter Extra Bold';
-            font-weight: 700;
-            margin-right: 2vh;
-            transition: color .3s ease-in-out;
-            writing-mode: horizontal-tb;
-        }
-        .Login:hover{
-            color: #A7A9AC;
-            cursor: pointer;
-            
-        }
-        .line{
-            height: 3vh;
+            height: 2vh;
             width: .2vh;
             background-color: rgb(124, 124, 124);
         }
         .Signin{
-            font-size: 2vh;
+            font-size: 1vh;
             text-align: center;
-            margin-left: 2vh;
+            margin-left: 1vh;
             font-family: 'Inter Extra Bold';
             font-weight: 700;
             transition: color .3s ease-in-out;
@@ -415,20 +1379,314 @@
             cursor: pointer;
             color: #A7A9AC;
         }
-        .box2{
-            display: flex;
-            height: 3vh;
-            align-items: center;
-            
+        .box1{
+            display: flex; 
         }
-    
+        .box2{
+            margin-right: 4vh;
+            display: flex; 
+            align-items: center;
+        }
     }
     /* Mobile Device */
     /* Medium 321px ~ 767px */
-    @media (min-width: 321px) and (max-width: 767px){
+    @media (max-width: 767px){
+      .Back{
+        position: fixed;
+        display: flex;
+        justify-content: space-between; /* 이 부분을 추가합니다 */
+        width: 100%;
+        height: 11.25vh;
+        align-items: center;
+        background-color: #ffffff;
+        margin-top: -1vh;
+        border-bottom: .3vh solid #A7A9AC;
+        z-index: 1;
+    }
+    .Logo{
+        width: 7.9vh;
+        height: 7.8vh;
+        margin-right: 5vh;
+        margin-left: 5vh;
+        margin-top: .3vh;
+        cursor: pointer;
+    }
+    .NavBar{
+        display: flex;
+        align-items: center; 
+    }
+    .tag1{
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 9vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0vh; 
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        display: inline-block; /* 또는 필요에 따라 flex 등을 사용 */
+        position: relative;
+        overflow: hidden; /* 밑줄 애니메이션을 위한 설정 */
+        cursor: pointer;
+        text-decoration: none; /* 기본 밑줄 제거 */
+    }
+    .tag1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%; /* 시작 위치를 중앙으로 설정 */
+        width: 0; /* 초기 상태에서는 밑줄의 너비를 0으로 설정 */
+        height: 2px; /* 밑줄의 두께 */
+        background-color: #245441; /* 밑줄 색상 */
+        transition: all 0.3s ease; /* 애니메이션 효과 */
+    }
+    
+    .tag1::after:hover::after {
+        width: 100%; /* 호버 시 밑줄을 전체 너비로 확장 */
+        left: 0; /* 밑줄의 시작 위치를 왼쪽 끝으로 이동 */
+    }
 
+    .tag1 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        margin-right: 2vh; 
+        align-items: center;
+        justify-content: center;
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+      }
+      .tag1:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+      .tag1:hover:after { 
+        width: 100%; 
+        left: 0; 
+      }
+
+    .tag2 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: -0.7vh; 
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
     }
-    /* Medium under 320px */
-    @media (max-width: 320px){
-        
+    .tag2:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .tag2:hover:after { 
+        width: 50%; 
+        left: 26.5%; 
+      }
+
+    .tag3 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: -0.7vh; 
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
     }
+    .tag3:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .tag3:hover:after { 
+        width: 30%; 
+        left: 36%; 
+      }
+
+    .tag4 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.5vh; 
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+    }
+    .tag4:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .tag4:hover:after { 
+        width: 50%; 
+        left: 26.5%; 
+        color: #245441;
+      }
+
+    .tag5 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        margin-right: 2.3vh; 
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+    }
+    .tag5:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .tag5:hover:after { 
+        width: 50%; 
+        left: 26.5%; 
+        color: #245441;
+      }
+
+    .tag6 {
+        font-size: 2vh;
+        width: 11.1vh;
+        height: 2vh;
+        align-items: center;
+        justify-content: center;
+        writing-mode: horizontal-tb;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        text-decoration: none;
+        display: flex;
+        padding: 15px 0;
+        position: relative;
+        cursor: pointer;
+    }
+    .tag6:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: flex;
+        height: 4px;
+        left: 50%;
+        position: absolute;
+        background: #245441;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+      .tag6:hover:after { 
+        width: 100%; 
+        left: 0; 
+      }
+
+    .Login{
+        width: 7;
+        font-size: 1.5vh;
+        text-align: center;
+        cursor: pointer;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        margin-right: 2vh;
+        transition: color .3s ease-in-out;
+        writing-mode: horizontal-tb;
+    }
+    .Login:hover{
+        color: #A7A9AC;
+        cursor: pointer;
+    }
+    .line{
+        height: 2vh;
+        width: .1vh;
+        background-color: rgb(124, 124, 124);
+    }
+    .Signin{
+        font-size: 1.5vh;
+        text-align: center;
+        margin-left: 2vh;
+        font-family: 'Inter Extra Bold';
+        font-weight: 700;
+        transition: color .3s ease-in-out;
+        writing-mode: horizontal-tb;
+    }
+    .Signin:hover{
+        cursor: pointer;
+        color: #A7A9AC;
+    }
+    .box1{
+        display: flex; 
+    }
+    .box2{
+        margin-right: 5vh;
+        display: flex; 
+        align-items: center;
+    }
+}
+
+    

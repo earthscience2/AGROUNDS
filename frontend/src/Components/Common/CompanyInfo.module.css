@@ -131,7 +131,7 @@
         .click1{
             color: white;
             font-family: "Inter Semi Bold";
-            font-size: 2vh;
+            font-size: 1.5vh;
             margin-right: 3vh;
             transition: color .3s ease-in-out;
             font-weight: 500;
@@ -159,67 +159,12 @@
         }
         
         .logo1{
-            width: 20vh;
-            height: 20vh;
+            width: 18vh;
+            height: 18vh;
         }
     }
-/* Tablets */
-    /* Portrait: 768px - 1023px */
-    @media (min-width: 768px) and (max-width:1023px){
-        .back{
-            width: 249%;
-            height: 50vh;
-            background-color: #055540;
-            display: flex;
-            border-top: .5vh solid black;
-            justify-content: center;
-            align-items: center;
-        }
-        .write{
-            width: 100vh;
-        }
-        .box{
-            display: flex;
-            margin-bottom: 2vh;
-        }
-        .click1{
-            color: white;
-            font-family: "Inter Semi Bold";
-            font-size: 3vh;
-            margin-right: 3vh;
-            transition: color .3s ease-in-out;
-            font-weight: 500;
-        }
-        .click1:hover{
-            color: #ced0d3;
-            cursor: pointer;
-        }
-        .write2{
-            color: white;
-            font-family: "Inter Regular";
-            font-size: 4vh;
-            margin-bottom: 1vh;
-            font-weight: 600;
-        }
-        .write3{
-            color: white;
-            font-size: 2.5vh;
-            margin-top: .7vh;
-        }
-        .write3:last-child{
-            color: #A7A9AC;
-            font-size: 2vh;
-            margin-top: 3vh;
-        }
-        
-        .logo1{
-            width: 30vh;
-            height: 30vh;
-        }
-        
-    }
-    /* Landscape: 1024px - 1279px */
-    @media (min-width: 1024px) and (max-width:1279px){
+     /* Landscape: 1024px - 1279px */
+     @media (min-width: 1024px) and (max-width:1279px){
         .back{
             width: 100%;
             height: 32vh;
@@ -230,7 +175,7 @@
             align-items: center;
         }
         .write{
-            width: 100vh;
+            width: 60vh;
         }
         .box{
             display: flex;
@@ -267,8 +212,62 @@
         }
         
         .logo1{
-            width: 20vh;
-            height: 20vh;
+            width: 15vh;
+            height: 15vh;
+        }
+        
+    }
+/* Tablets */
+    /* Portrait: 768px - 1023px */
+    @media (min-width: 768px) and (max-width:1023px){
+        .back{
+            width: 100%;
+            height: 25vh;
+            background-color: #055540;
+            display: flex;
+            border-top: .5vh solid black;
+            justify-content: center;
+            align-items: center;
+        }
+        .write{
+            width: 40vh;
+        }
+        .box{
+            display: flex;
+            margin-bottom: 2vh;
+        }
+        .click1{
+            color: white;
+            font-family: "Inter Semi Bold";
+            font-size: 1vh;
+            margin-right: 3vh;
+            transition: color .3s ease-in-out;
+            font-weight: 500;
+        }
+        .click1:hover{
+            color: #ced0d3;
+            cursor: pointer;
+        }
+        .write2{
+            color: white;
+            font-family: "Inter Regular";
+            font-size: 1.5vh;
+            margin-bottom: 1vh;
+            font-weight: 600;
+        }
+        .write3{
+            color: white;
+            font-size: 1vh;
+            margin-top: .7vh;
+        }
+        .write3:last-child{
+            color: #A7A9AC;
+            font-size: 1vh;
+            margin-top: 3vh;
+        }
+        .logo1{
+            width: 10vh;
+            height: 10vh;
         }
         
     }

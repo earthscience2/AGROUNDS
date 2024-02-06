@@ -9,11 +9,10 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow-x: hidden;
         }
     
     }
-
-
     /* Medium 1440px ~ 1919px */
     @media (min-width:1440px) and (max-width: 1919px){
         .BackGround{
@@ -23,6 +22,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow-x: hidden;
         }
         
     }
@@ -30,35 +30,38 @@
     @media (min-width: 1280px) and (max-width:1439px){
         .BackGround{
             width: 100%;
-            height: 400.5vh;
+            height: 380vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow-x: hidden;
         }
     }
-/* Tablets */
-    /* Portrait: 768px - 1023px */
-    @media (min-width: 768px) and (max-width:1023px){
-        .BackGround{
-            width: 250%;
-            height: 510vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-    }
+    /* Tablets */
     /* Landscape: 1024px - 1279px */
     @media (min-width: 1024px) and (max-width:1279px){
         .BackGround{
             width: 100%;
-            height: 430vh;
+            height: 300vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow-x: hidden;
+        }
+        
+    }
+    /* Portrait: 768px - 1023px */
+    @media (min-width: 768px) and (max-width:1023px){
+        .BackGround{
+            width: 100%;
+            height: 250vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
         }
         
     }
@@ -67,7 +70,7 @@
     @media (min-width: 321px) and (max-width: 767px){
         .BackGround{
             width: 100%;
-            height: 300vh;
+            height: 250vh;
             display: flex;
             flex-direction: column;
             justify-content: center;

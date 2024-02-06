@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 12vh;
+    margin-left: 0vh;
     margin-top: 3.9vh;
 }
 .agreeAll{
@@ -11,14 +11,14 @@
     font-family: "Inter Semi Bold";
     font-weight: 600;
     color: #979797;
-    margin: 0 0 0 1vh;
-
-    
+    position:relative;
+    bottom:0.8vh;
+    left:0.8vh;
 }
 .accept{
     display: flex;
     justify-content: center;
-    margin-top: 5vh;
+    margin-top: 3vh;
 }
 .block3{
     display: flex;
@@ -28,7 +28,8 @@
 
 }
 .block6{
-    margin-right: 6vh;
+    width: 30vh;
+    margin-right: 5.5vh;
     display: flex;
     flex-direction: column;
 }
@@ -38,21 +39,18 @@
     font-weight: 600;
     color: #979797;
     margin: .8vh 0 .8vh 1.3vh;
+    position:relative;
+    bottom:1vh;
     
 }
 .look{
-    font-size: 1.6vh;
+    font-size: 1.2vh;
     font-family: "Inter Semi Bold";
     font-weight: 500;
     color: #979797;
     margin: .8vh 0 .8vh 0
     
 }
-.input[type="radio"] {
-    padding: 5px;
-    border: 10px solid #ccc;
-    cursor: pointer;
-  }
 .submit{
     border: none;
     width: 19.6vh;
@@ -76,8 +74,17 @@
     appearance: none;
     width: 2.5vh;
     height: 2.5vh;
-    border: .1vh solid rgb(0, 0, 0);
+    border: .2vh solid rgb(0, 0, 0);
     border-radius: 2vh;
+    
+}
+.input1[type="checkbox"]{
+    appearance: none;
+    width: 1.5vh;
+    height: 1.5vh;
+    border: .2vh solid rgb(0, 0, 0);
+    border-radius: 1vh;
+    margin-bottom: 1vh;
     
 }
 

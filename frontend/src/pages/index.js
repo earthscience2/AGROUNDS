@@ -16,7 +16,6 @@ function MainPage(){
             <MainSection3 />
             <MainSection4 />
             <MainSection5 />
-            
         </div>
         <CompanyInfo/>
         </>

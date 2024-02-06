@@ -7,7 +7,7 @@
 }
 .back{
     width:54vh;
-    height: 79vh;
+    height: 105vh;
     margin-top: 20vh;
     border-radius: 3vh;
     box-shadow: 1vh 1vh 3vh #979797;
@@ -41,36 +41,43 @@
 
 .name{
     font-family: "Inter Semi Bold";
-    font-size: 2vh;
+    font-size: 1.7vh;
     font-weight: 600;
     color: #979797;
     margin-left: 2vh;
+    width: 22vh;
 }
 .input{
     border: none;
     outline: none;
-    margin-left: 3vh;
+    margin-right: 1.5.vh;
     font-size: 2vh;
     font-family: "Inter Semi Bold";
-    font-weight: 500;
+    font-weight: 600;
+    width: 20vh;
 }
 .input::placeholder{
     font-family: "Inter Semi Bold";
-    font-size: 2vh;
+    font-size: 1.7vh;
     font-weight: 600;
     color: #CDCDCD;
 }
 .checkdup{
-    width: 13.1vh;
+    width: 20vh;
     height: 4.4vh;
     text-align: center;
     line-height: 4.5vh;
     border-radius: 1vh;
+    padding-top: 0.1vh;
+    color: white;
+    background-color: rgb(71, 121, 71);
     font-family: "Inter Semi Bold";
-    font-size: 2vh;
-    font-weight: 600;
-    color: #979797;
-    margin-left: 1vh;
+    font-size: 1.6vh;
+    font-weight: 500;
+    margin-left: 0vh;
+    position:relative;
+    bottom:0.5vh;
+    cursor: pointer;
 }
 .genderBtn{
     border: none;
@@ -155,3 +162,34 @@
 .a{
     text-decoration: none;
 }
+.errorMessage {
+    position: relative;
+    left:6.5vh;
+    top: 0.5vh;
+    color: red;
+    font-size: 1.2vh;
+    animation: shake 0.2s ease-in-out;
+    height: 0vh;
+  }
+  
+  .normalMessage {
+    position: relative;
+    right: 1.4vh;
+    top: 0.5vh;
+    color: green;
+    font-size: 1.2vh;
+    height: 0vh;
+  }
+
+@keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-5px);
+    }
+    75% {
+      transform: translateX(5px);
+    }
+  }
+  

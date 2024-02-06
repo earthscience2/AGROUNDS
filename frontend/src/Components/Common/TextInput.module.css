@@ -9,22 +9,23 @@
 
 .name{
     font-family: "Inter Semi Bold";
-    font-size: 2vh;
+    font-size: 1.7vh;
     font-weight: 600;
     color: #979797;
     margin-left: 2vh;
+    width: 11vh;;
 }
 .input{
     border: none;
     outline: none;
     margin-left: 3vh;
-    font-size: 2vh;
+    font-size: 1.7vh;
     font-family: "Inter Semi Bold";
     font-weight: 500;
 }
 .input::placeholder{
     font-family: "Inter Semi Bold";
-    font-size: 2vh;
+    font-size: 1.7vh;
     font-weight: 600;
     color: #CDCDCD;
 }

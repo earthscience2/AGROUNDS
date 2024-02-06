@@ -26,9 +26,9 @@ function MainSection2(){
                 <p className={styles.text7}><span className={styles.text9}>A</span>mateur</p>
                 <p className={styles.text7}><span className={styles.text9}>A</span>ssist</p>
                 <p className={styles.text7}><span className={styles.text9}>A</span>class</p>
-                <p className={styles.text8}>AGROUNDS는 아마추어(Amateur)들을<br/>
+                <p className={styles.text8}>AGROUNDS는 아마추어(Amateur)를<br/>
                 어시스트(Assist)하여 실력을 한 단계<br/>
-                성장(Aclass)시키기 위한 플랫폼입니다.</p>
+                성장(A-class)시키기 위한 플랫폼입니다.</p>
             </div>
             <Image className={styles.logo} src={logo}/>
         </div>
