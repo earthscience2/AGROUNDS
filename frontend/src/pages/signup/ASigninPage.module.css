@@ -1,12 +1,14 @@
 @import "../../assets/font/font.css";
-.backg{
+
+.backg {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
 }
-.back{
-    width:54vh;
+
+.back {
+    width: 54vh;
     height: 105vh;
     margin-top: 20vh;
     border-radius: 3vh;
@@ -16,7 +18,8 @@
     align-items: center;
     margin-bottom: 10vh;
 }
-.block1{
+
+.block1 {
     font-size: 2.4vh;
     font-family: "Inter Bold";
     font-weight: 700;
@@ -25,12 +28,14 @@
     margin-top: 4vh;
     margin-bottom: 1vh;
 }
-.icon{
+
+.icon {
     width: 6vh;
     height: 6.5vh;
     margin-right: 2.5vh;
 }
-.block2{
+
+.block2 {
     display: flex;
     width: 49.2vh;
     height: 5.5vh;
@@ -39,7 +44,7 @@
     margin-top: 3vh;
 }
 
-.name{
+.name {
     font-family: "Inter Semi Bold";
     font-size: 1.7vh;
     font-weight: 600;
@@ -47,7 +52,8 @@
     margin-left: 2vh;
     width: 22vh;
 }
-.input{
+
+.input {
     border: none;
     outline: none;
     margin-right: 1.5.vh;
@@ -56,13 +62,15 @@
     font-weight: 600;
     width: 20vh;
 }
-.input::placeholder{
+
+.input::placeholder {
     font-family: "Inter Semi Bold";
     font-size: 1.7vh;
     font-weight: 600;
     color: #CDCDCD;
 }
-.checkdup{
+
+.checkdup {
     width: 20vh;
     height: 4.4vh;
     text-align: center;
@@ -75,16 +83,18 @@
     font-size: 1.6vh;
     font-weight: 500;
     margin-left: 0vh;
-    position:relative;
-    bottom:0.5vh;
+    position: relative;
+    bottom: 0.5vh;
     cursor: pointer;
 }
-.genderBtn{
+
+.genderBtn {
     border: none;
     width: 19.9vh;
     height: 6.2vh;
 }
-.block4{
+
+.block4 {
     display: flex;
     width: 49.2vh;
     height: 5.5vh;
@@ -95,59 +105,68 @@
     font-weight: 600;
     color: #979797;
 }
-.block3{
+
+.block3 {
     display: flex;
     flex-direction: column;
     margin-top: 1vh;
     margin-left: 2vh;
 
 }
-.block5{
+
+.block5 {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-left: 12vh;
     margin-top: 3.5vh;
 }
-.agreeAll{
+
+.agreeAll {
     font-size: 1.8vh;
     font-family: "Inter Semi Bold";
     font-weight: 500;
     color: #979797;
     width: 1vh;
     height: 1vh;
-    
+
 }
-.block6{
+
+.block6 {
     margin-right: 13vh;
 }
-.accept{
+
+.accept {
     display: flex;
     justify-content: center;
     margin-top: 5vh;
 }
-.text{
+
+.text {
     font-size: 1.6vh;
     font-family: "Inter Semi Bold";
     font-weight: 500;
     color: #979797;
     margin-top: 1vh;
-    
+
 }
-.look{
+
+.look {
     font-size: 1.6vh;
     font-family: "Inter Semi Bold";
     font-weight: 500;
     color: #979797;
     margin-top: 1vh;
-    
+
 }
+
 .input[type="radio"] {
     padding: 5px;
     border: 10px solid #ccc;
     cursor: pointer;
-  }
-.submit{
+}
+
+.submit {
     border: none;
     width: 19.6vh;
     height: 6.6vh;
@@ -159,37 +178,42 @@
     margin-top: 4vh;
     cursor: pointer;
 }
-.a{
+
+.a {
     text-decoration: none;
 }
+
 .errorMessage {
     position: relative;
-    left:6.5vh;
+    left: 6.5vh;
     top: 0.5vh;
     color: red;
     font-size: 1.2vh;
     animation: shake 0.2s ease-in-out;
     height: 0vh;
-  }
-  
-  .normalMessage {
+}
+
+.normalMessage {
     position: relative;
     right: 1.4vh;
     top: 0.5vh;
     color: green;
     font-size: 1.2vh;
     height: 0vh;
-  }
+}
 
 @keyframes shake {
-    0%, 100% {
-      transform: translateX(0);
+
+    0%,
+    100% {
+        transform: translateX(0);
     }
+
     25% {
-      transform: translateX(-5px);
+        transform: translateX(-5px);
     }
+
     75% {
-      transform: translateX(5px);
+        transform: translateX(5px);
     }
-  }
-  
+}

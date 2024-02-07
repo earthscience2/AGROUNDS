@@ -8,15 +8,16 @@ import SignupModal from "../Signin/SignupModal";
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-function Login(props){
+function Login(props) {
     const [userid, setUserid] = useState('');
     const [userpw, setUserpw] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    const [loginError, setLoginError] = useState('');
     const navigate = useRouter();
-    const ModalOpen=()=>{
+    const ModalOpen = () => {
         navigate.push("/signup")
     }
-    const ModalClose =() =>{
+    const ModalClose = () => {
         setIsOpen(false);
     }
     const handleIdChange = (e) => {
@@ -32,7 +33,7 @@ function Login(props){
 
         // 로그인 API 호출
         try {
-            const response = await fetch('https://agrounds.com/api/login/', {
+            const response = await fetch('https://agrounds.com/api/login/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,29 +53,29 @@ function Login(props){
             }
         } catch (error) {
             console.error('로그인 요청 실패:', error);
-            //setLoginError('로그인 요청 중 오류가 발생했습니다.');
+            setLoginError('로그인 요청 중 오류가 발생했습니다.');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            {isOpen &&(<div className={styles.compbox}><SignupModal ModalClose = {ModalClose}/></div>)}
+            {isOpen && (<div className={styles.compbox}><SignupModal ModalClose={ModalClose} /></div>)}
             <div className={styles.login}>
                 <div className={styles.logo}>AGROUNDS</div>
-                <div className={styles.idbox}><input onChange={handleIdChange} placeholder="아이디"className={styles.id} type="text"></input></div>
-                <div className={styles.pwbox}><input onChange={handlePwChange} placeholder="비밀번호"className={styles.pw} type="text"></input></div>
+                <div className={styles.idbox}><input onChange={handleIdChange} placeholder="아이디" className={styles.id} type="text"></input></div>
+                <div className={styles.pwbox}><input onChange={handlePwChange} placeholder="비밀번호" className={styles.pw} type="password"></input></div>
 
-                <Button onClick={handleSubmit} type="submit"color="#FFFFFF"backcolor="#055540" text="로그인" logoimg={logo5}/>
-                
+                <Button onClick={handleSubmit} type="submit" color="#FFFFFF" backcolor="#055540" text="로그인" logoimg={logo5} />
+
                 <div className={styles.find}>
                     <div className={styles.signin} onClick={ModalOpen}>회원가입</div>
-                    
+
                     <div className={styles.fid}>아이디 찾기</div>
                     <div className={styles.fline}></div>
                     <div className={styles.fpw}>비밀번호 찾기</div>
                 </div>
-                <Button logoimg={Kakao} color="black"backcolor="#FEE502" text="카카오톡으로 로그인"/>
-                <div className={styles.ggback}><Button logoimg={Google} color="black"backcolor="#FFFFFF" text="구글로 로그인"/></div>
+                <Button logoimg={Kakao} color="black" backcolor="#FEE502" text="카카오톡으로 로그인" />
+                <div className={styles.ggback}><Button logoimg={Google} color="black" backcolor="#FFFFFF" text="구글로 로그인" /></div>
             </div>
         </form>
     )

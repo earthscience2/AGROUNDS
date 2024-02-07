@@ -3,7 +3,7 @@
     font-family: 'Outfit Regular';
     font-style: normal;
     font-weight: normal;
-    src: local('Outfit Regular'), url('./OutfitRegular.woff') format('woff');
+    src: local('Outfit Regular'), url('./Outfit-Regular.ttf') format('truetype');
     }
     
 
@@ -11,7 +11,7 @@
     font-family: 'Outfit Medium';
     font-style: normal;
     font-weight: normal;
-    src: local('Outfit Medium'), url('./OutfitMedium.woff') format('woff');
+    src: local('Outfit Medium'), url('./Outfit-Medium.ttf') format('truetype');
     }
     
 
@@ -19,7 +19,7 @@
     font-family: 'Outfit SemiBold';
     font-style: normal;
     font-weight: normal;
-    src: local('Outfit SemiBold'), url('./OutfitSemiBold.woff') format('woff');
+    src: local('Outfit SemiBold'), url('./Outfit-SemiBold.ttf') format('truetype');
     }
     
 
@@ -27,20 +27,20 @@
     font-family: 'Outfit Bold';
     font-style: normal;
     font-weight: normal;
-    src: local('Outfit Bold'), url('./OutfitBold.woff') format('woff');
+    src: local('Outfit Bold'), url('./Outfit-Bold.ttf') format('truetype');
     }
 /* inter */
 @font-face {
     font-family: 'Inter Semi Bold';
     font-style: normal;
     font-weight: normal;
-    src: local('Inter Semi Bold'), url('./Inter-SemiBold.woff') format('woff');
+    src: local('Inter Semi Bold'), url('./Inter-SemiBold.woff') format('truetype');
 }
 @font-face {
     font-family: 'Inter Regular';
     font-style: normal;
     font-weight: normal;
-    src: local('Inter Regular'), url('./Inter-Regular.woff') format('woff');
+    src: local('Inter Regular'), url('./Inter-Regular.woff') format('truetype');
 }    
 @font-face {
     font-family: 'Bold';

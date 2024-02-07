@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 # Create your models here.
 class ARank(models.Model):
@@ -9,8 +10,9 @@ class ARank(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'a_rank'
-        
+        db_table = "a_rank"
+
+
 class AnalGame(models.Model):
     anal_code = models.CharField(primary_key=True, max_length=45)
     anal_game_code = models.CharField(max_length=45)
@@ -20,8 +22,9 @@ class AnalGame(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'anal_game'
-        
+        db_table = "anal_game"
+
+
 class AnalPlayer(models.Model):
     anal_code = models.CharField(primary_key=True, max_length=45)
     anal_gps_code = models.CharField(max_length=45)
@@ -30,8 +33,9 @@ class AnalPlayer(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'anal_player'
-        
+        db_table = "anal_player"
+
+
 class GameGps(models.Model):
     gps_code = models.CharField(primary_key=True, max_length=45)
     gps_game_code = models.CharField(max_length=45)
@@ -44,8 +48,9 @@ class GameGps(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'game_gps'
-        
+        db_table = "game_gps"
+
+
 class GameInfo(models.Model):
     game_code = models.IntegerField(primary_key=True)
     game_home_team = models.CharField(max_length=45)
@@ -60,8 +65,9 @@ class GameInfo(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'game_info'
-        
+        db_table = "game_info"
+
+
 class TeamInfo(models.Model):
     team_code = models.CharField(primary_key=True, max_length=45)
     team_name = models.CharField(max_length=45)
@@ -69,8 +75,9 @@ class TeamInfo(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'team_info'
-        
+        db_table = "team_info"
+
+
 class UserInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     user_id = models.CharField(max_length=45)
@@ -83,4 +90,4 @@ class UserInfo(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'user_info'
+        db_table = "user_info"

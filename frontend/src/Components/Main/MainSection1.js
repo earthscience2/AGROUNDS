@@ -3,23 +3,23 @@ import styles from "./MainSection1.module.css";
 import { useRouter } from 'next/router';
 import MainSection from "../../assets/MainSection1.png";
 
-function MainSection1(){
+function MainSection1() {
     const navigate = useRouter();
-    
+
     const Subscribe = () => {
         navigate("/MainPage")
     }
     const rankpage = () => {
         navigate.push("/login")
     }
-    return(
+    return (
         <div className={styles.Block1}>
             <div className={styles.textgroup}>
                 <p className={styles.text1}>AGROUNDS</p>
                 <p className={styles.text2}>당신이 원한</p>
                 <p className={styles.text3}><span className={styles.text7}>아마추어</span> 축구 플랫폼</p>
-                <p className={styles.text4}>전술과 리그를 한 곳에 모은<br/>
-                오직 아마추어 축구인을 위한 플랫폼</p>
+                <p className={styles.text4}>전술과 리그를 한 곳에 모은<br />
+                    오직 아마추어 축구인을 위한 플랫폼</p>
             </div>
             <div className={styles.rankgroup} onClick={rankpage}>
                 <p className={styles.text5}>LIVE</p>
