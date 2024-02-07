@@ -1,4 +1,13 @@
 @import "@/assets/font/font.css";
+.BackGround1{
+    width: 100%;
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
 /* desctop */
     /* Large 1920 x 1000 */
     @media (min-width: 1920px){

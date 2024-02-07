@@ -11,7 +11,7 @@ function MainPage(){
         <>
         <NavBar/>
         <div className={styles.BackGround1}>
-        <h1>분석장비 페이지</h1>
+        <h1>리그 페이지</h1>
         </div>
         <CompanyInfo/>
         </>

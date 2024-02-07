@@ -8,7 +8,7 @@ import Google from "../../../src/assets/Google.png";
 import Kakao from "../../../src/assets/Kakao.png";
 import logo5 from "../../assets/logo5.png";
 
-function NavBar(){
+function NavBar() {
     const navigate = useRouter();
     const [showPopup, setShowPopup] = useState(false);
     const moveMain = () => {
@@ -36,15 +36,15 @@ function NavBar(){
         navigate.push("/coach")
     }
     const DoDivice = () => {
-        navigate.push("/divice")
+        navigate.push("/device")
     }
     const togglePopup = () => {
         setShowPopup(!showPopup);
     };
-    return(
+    return (
         <div className={styles.Back}>
             <div className={styles.box1}>
-                <Image onClick={moveMain}className={styles.Logo} src={Logo1} alt="Logo1"/>
+                <Image onClick={moveMain} className={styles.Logo} src={Logo1} alt="Logo1" />
                 <div className={styles.NavBar}>
                     <p className={styles.tag1} onClick={DoLeague}>리그 & 컵</p>
                     <p className={styles.tag2} onClick={DoMatch}>경기</p>
@@ -56,17 +56,17 @@ function NavBar(){
             </div>
             <div className={styles.box2}>
                 <div className={styles.Login} onClick={DoLogin}>로그인</div>
-                <div className={styles.line}/>
+                <div className={styles.line} />
                 <div className={styles.Signin} onClick={togglePopup}>회원가입</div>
 
                 {showPopup && (
                     <div className={styles.popupOverlay}>
                         <div className={styles.popup}>
                             <div className={styles.popupContent}>
-                                <Button_signup logoimg={logo5} color="FFFFFF"backcolor="#055540" onClick={() => navigate.push('/signup/')} text="AGROUNDS로 회원가입"/>
-                                <Button_signup logoimg={Kakao} color="black"backcolor="#FEE502" onClick={() => navigate.push('/signup/kakao')} text="카카오톡으로 회원가입"/>
-                                <div className={styles.ggback}><Button_signup logoimg={Google} color="black"backcolor="#FFFFFF" onClick={() => navigate.push('/signup/google')} text="구글로 회원가입"/></div>
-                                
+                                <Button_signup logoimg={logo5} color="FFFFFF" backcolor="#055540" onClick={() => navigate.push('/signup/')} text="AGROUNDS로 회원가입" />
+                                <Button_signup logoimg={Kakao} color="black" backcolor="#FEE502" onClick={() => navigate.push('/signup/kakao')} text="카카오톡으로 회원가입" />
+                                <div className={styles.ggback}><Button_signup logoimg={Google} color="black" backcolor="#FFFFFF" onClick={() => navigate.push('/signup/google')} text="구글로 회원가입" /></div>
+
                             </div>
                             <div className={styles.closePopup} onClick={togglePopup}>닫기</div>
                         </div>
@@ -74,7 +74,7 @@ function NavBar(){
                 )}
 
             </div>
-            
+
         </div>
     )
 }
