@@ -6,12 +6,16 @@ import random
 # pip3 install requests
 import requests
 
+import json
+from django.http import JsonResponse
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User_info
 from .serializers import User_info_Serializer
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 
 # 닉네임 중복확인
 class nickname(APIView):
@@ -65,9 +69,47 @@ class login(APIView):
         else:
             # 인증 실패: 사용자가 존재하지 않거나 비밀번호가 일치하지 않는 경우
             return Response({'loginSuccess': False}, status=status.HTTP_401_UNAUTHORIZED)
-    
         
-        
+# 회원가입
+class signup(APIView):
+    """
+    json 형식
+    'user_id' : {String}
+    'user_pw' : {String}
+    'user_birth' : {String}
+    'user_name' : {String}
+    'user_gender' : {String}
+    'user_nickname' : {String}
+    """
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            user_pw = data.get('user_pw')
+            user_birth = data.get('user_birth')
+            user_name = data.get('user_name')
+            user_gender = data.get('user_gender')
+            user_nickname = data.get('user_nickname')
+            
+
+            # 간단한 유효성 검사
+            if not user_id or not user_pw or not user_birth or not user_name or not user_gender or not user_nickname:
+                return JsonResponse({'error': '모든 필드는 필수입니다.'}, status=400)
+            
+            # password hashing
+            user_pw = make_password(user_pw)
+
+            # 사용자 생성
+            user = User_info.objects.create(user_code = 0, user_id=user_id, user_pw=user_pw, user_birth=user_birth,
+                                            user_name=user_name, user_gender=user_gender, user_nickname=user_nickname)
+
+            return JsonResponse({'message': '회원가입이 성공적으로 완료되었습니다.'}, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '유효한 JSON 형식이 아닙니다.'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
 class kakao(APIView):
     def get(self, request):
         redirect_uri = "http://localhost:3000/kakao"
