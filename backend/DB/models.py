@@ -78,8 +78,8 @@ class UserInfo(models.Model):
     user_birth = models.CharField(max_length=45)
     user_name = models.CharField(max_length=45)
     user_gender = models.CharField(max_length=45)
-    user_email = models.CharField(max_length=45)
-    user_team = models.CharField(max_length=45)
+    user_nickname = models.CharField(max_length=45)
+    marketing_agree = models.BooleanField()
 
     class Meta:
         managed = False

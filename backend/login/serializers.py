@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User_info
+from DB.models import UserInfo
 
 class User_info_Serializer(serializers.ModelSerializer):
     class Meta:
@@ -13,4 +13,4 @@ class User_info_Serializer(serializers.ModelSerializer):
             'user_nickname',
             
         )
-        model = User_info
+        model = UserInfo

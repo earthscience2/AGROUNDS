@@ -12,7 +12,8 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import User_info
+# from .models import User_info
+from DB.models import UserInfo
 from .serializers import User_info_Serializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
@@ -24,13 +25,13 @@ class nickname(APIView):
         try:
             if nickname is None:
                  return Response({'isAvailable': False})
-            if User_info.objects.filter(user_nickname=nickname).exists():
+            if UserInfo.objects.filter(user_nickname=nickname).exists():
                 # 닉네임이 이미 존재하는 경우
                 return Response({'isAvailable': False})
             else:
                 # 사용 가능한 닉네임인 경우
                 return Response({'isAvailable': True})
-        except User_info.DoesNotExist:
+        except UserInfo.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         except (TypeError, ValueError):
             # 유효하지 않은 입력 처리
@@ -43,13 +44,13 @@ class id(APIView):
         try:
             if id is None:
                  return Response({'isAvailable': False})
-            if User_info.objects.filter(user_id=id).exists():
+            if UserInfo.objects.filter(user_id=id).exists():
                 # 아이디가 이미 존재하는 경우
                 return Response({'isAvailable': False})
             else:
                 # 사용 가능한 아이디인 경우
                 return Response({'isAvailable': True})
-        except User_info.DoesNotExist:
+        except UserInfo.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         except (TypeError, ValueError):
             # 유효하지 않은 입력 처리
@@ -90,18 +91,24 @@ class signup(APIView):
             user_name = data.get('user_name')
             user_gender = data.get('user_gender')
             user_nickname = data.get('user_nickname')
-            
+            marketing_agree = data.get('marketing_agree')
 
             # 간단한 유효성 검사
-            if not user_id or not user_pw or not user_birth or not user_name or not user_gender or not user_nickname:
+            if not user_id or not user_pw or not user_birth or not user_name or not user_gender or not user_nickname or not marketing_agree:
                 return JsonResponse({'error': '모든 필드는 필수입니다.'}, status=400)
+            
+            if UserInfo.objects.filter(user_nickname=user_nickname).exists():
+                return JsonResponse({'message': '이미 존재하는 닉네임입니다.'}, status=400)
+            
+            if UserInfo.objects.filter(user_id=user_id).exists():
+                return JsonResponse({'message': '이미 가입된 이메일입니다.'}, status=400)
             
             # password hashing
             user_pw = make_password(user_pw)
 
             # 사용자 생성
-            user = User_info.objects.create(user_code = 0, user_id=user_id, user_pw=user_pw, user_birth=user_birth,
-                                            user_name=user_name, user_gender=user_gender, user_nickname=user_nickname)
+            user = UserInfo.objects.create(user_code = 0, user_id=user_id, user_pw=user_pw, user_birth=user_birth,
+                                            user_name=user_name, user_gender=user_gender, user_nickname=user_nickname, marketing_agree=marketing_agree)
 
             return JsonResponse({'message': '회원가입이 성공적으로 완료되었습니다.'}, status=201)
 
