@@ -103,7 +103,7 @@ class signup(APIView):
             user_nickname = data.get("user_nickname")
             marketing_agree = data.get("marketing_agree")
 
-            # 간단한 유효성 검사
+            # 모든 항목을 입력받았는지 검사
             if (
                 not user_id
                 or not user_pw
@@ -114,16 +114,18 @@ class signup(APIView):
             ):
                 return JsonResponse({"error": "모든 필드는 필수입니다."}, status=400)
             
-             # 정규식 적용 유효성 검사
+            # 정규식 적용 유효성 검사
             regexes = self.regexes_all(user_id, user_pw, user_nickname, user_name, user_birth)
             if(regexes != None) :
                 return regexes
             
+            # 닉네임 중복 확인
             if UserInfo.objects.filter(user_nickname=user_nickname).exists():
                 return JsonResponse(
                     {"message": "이미 존재하는 닉네임입니다."}, status=400
                 )
 
+            # 이메일 중복 확인
             if UserInfo.objects.filter(user_id=user_id).exists():
                 return JsonResponse(
                     {"message": "이미 가입된 이메일입니다."}, status=400

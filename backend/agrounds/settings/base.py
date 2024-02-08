@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     "DB",
     # Third party apps
     "rest_framework",
+    "drf_yasg",
     "corsheaders",
     "allauth",
     "allauth.account",
