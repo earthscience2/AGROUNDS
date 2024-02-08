@@ -8,36 +8,36 @@ import { useState } from "react";
 import { useNavigate } from 'next/router';
 import Image from 'next/image';
 
-function SignupModal(props){
+function SignupModal(props) {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
-    const ModalOpen=()=>{
+    const ModalOpen = () => {
         setIsOpen(true);
     }
-    const ModalClose =() =>{
+    const ModalClose = () => {
         setIsOpen(false);
         props.ModalClose();
-        
+
     }
-    const goGoogle=()=>{
+    const goGoogle = () => {
         navigate.push("/GSigninPage")
     }
-    const goKakao=()=>{
+    const goKakao = () => {
         navigate.push("/KSigninPage")
     }
-    const goAground=()=>{
+    const goAground = () => {
         navigate.push("/ASigninPage")
     }
-    
 
-    return(
+
+    return (
         <div className={styles.back}>
-        <div className={styles.background} onClick={ModalClose}></div>
+            <div className={styles.background} onClick={ModalClose}></div>
             <div className={styles.compback}>
-                <div className={styles.closebox}><Image className={styles.close} src={Close} onClick={ModalClose}/></div>
-                <div className={styles.gBtn}><SignupBtn backcolor="white" color="black" text="구글로 회원가입" logoimg={Google} onClick ={goGoogle}/></div>
-                <SignupBtn backcolor="#FEE502" color="black" text="카카오톡으로 회원가입" Image={Kakao} onClick ={goKakao}/>
-                <SignupBtn backcolor="#245441" color="white" text="AGROUNDS로 회원가입" logoimg={Logo} onClick ={goAground}/>
+                <div className={styles.closebox}><Image className={styles.close} src={Close} onClick={ModalClose} /></div>
+                <div className={styles.gBtn}><SignupBtn backcolor="white" color="black" text="구글로 회원가입" logoimg={Google} onClick={goGoogle} /></div>
+                <SignupBtn backcolor="#FEE502" color="black" text="카카오톡으로 회원가입" Image={Kakao} onClick={goKakao} />
+                <SignupBtn backcolor="#245441" color="white" text="AGROUNDS로 회원가입" logoimg={Logo} onClick={goAground} />
             </div>
         </div>
     )

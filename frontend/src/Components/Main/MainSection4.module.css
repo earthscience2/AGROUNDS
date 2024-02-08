@@ -1,326 +1,361 @@
 @import "@/assets/font/font.css";
 /* desctop */
-    /* Large 1920 x 1000 */
-    @media (min-width: 1920px){
-        .MainSection4{
-            display: flex;
-            background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
-            width: 100%;
-            height: 80vh;
-            justify-content: center;
-            align-items: center;
-        }
-        .img{
-            width: 54vh;
-            height: 54vh;
-            box-shadow: 0vh 1vh 1vh#adadad;
-            background-color:white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-right: 8vh;
-            margin-left: -15vh;
-        }
-        .textgroup{
-            margin-left: 8vh;
-        }
-        .text1{
-            font-size: 2.4vh;
-            font-family: 'Inter Bold';
-            font-weight: 800;
-            color: #055540;
-            margin:0
-        }
-        .text2{
-            font-size: 3vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            margin:0;
-            line-height: 1.3;
-        }
-        .text3{
-            font-size: 2vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #8F9194;
-            margin:0 0 4vh 0;
-            line-height: 1.5;
-            position: relative;
-            top:0.3vh;
-        }
-        .conf{
-            font-size: 1.5vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #055540;
-            margin:0
-        }
-        .conf:hover { 
-            color: #8F9194;
-            cursor: pointer;
-          }
+/* Large 1920 x 1000 */
+@media (min-width: 1920px) {
+    .MainSection4 {
+        display: flex;
+        background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
+        width: 100%;
+        height: 80vh;
+        justify-content: center;
+        align-items: center;
+    }
 
+    .img {
+        width: 54vh;
+        height: 54vh;
+        box-shadow: 0vh 1vh 1vh#adadad;
+        background-color: white;
+        border-radius: 3vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-right: 8vh;
+        margin-left: -15vh;
     }
-    @media (min-width:1440px) and (max-width: 1919px){
-        .MainSection4{
-            display: flex;
-            background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
-            width: 100%;
-            height: 70vh;
-            justify-content: center;
-            align-items: center;
-        }
-        .img{
-            width: 40vh;
-            height: 40vh;
-            box-shadow: 0vh 1vh 1vh#adadad;
-            background-color:white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-right: 3vh;
-            margin-left: -1vh;
-        }
-        .textgroup{
-            margin-left: 8vh;
-        }
-        .text1{
-            font-size: 2.4vh;
-            font-family: 'Inter Bold';
-            font-weight: 800;
-            color: #055540;
-            margin:0
-        }
-        .text2{
-            font-size: 3vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            margin:0;
-            line-height: 1.3;
-        }
-        .text3{
-            font-size: 2vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #8F9194;
-            margin:0 0 4vh 0;
-            line-height: 1.5;
-            position: relative;
-            top:0.3vh;
-        }
-        .conf{
-            font-size: 1.5vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #055540;
-            margin:0
-        }
-        .conf:hover { 
-            color: #8F9194;
-            cursor: pointer;
-          }
-    }
-    /* Small 1280px ~ 1439px */
-    @media (min-width: 1280px) and (max-width:1439px){
-        .MainSection4{
-            display: flex;
-            background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
-            width: 100%;
-            height: 60vh;
-            justify-content: center;
-            align-items: center;
-        }
-        .img{
-            width: 40vh;
-            height: 40vh;
-            box-shadow: 0vh 1vh 1vh#adadad;
-            background-color:white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-right: 3vh;
-            margin-left: -1vh;
-        }
-        .textgroup{
-            margin-left: 8vh;
-        }
-        .text1{
-            font-size: 2.4vh;
-            font-family: 'Inter Bold';
-            font-weight: 800;
-            color: #055540;
-            margin:0
-        }
-        .text2{
-            font-size: 3vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            margin:0;
-            line-height: 1.3;
-        }
-        .text3{
-            font-size: 2vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #8F9194;
-            margin:0 0 4vh 0;
-            line-height: 1.5;
-            position: relative;
-            top:0.3vh;
-        }
-        .conf{
-            font-size: 1.5vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #055540;
-            margin:0
-        }
-        .conf:hover { 
-            color: #8F9194;
-            cursor: pointer;
-          }
-    }
-    /* Landscape: 1024px - 1279px */
-    @media (min-width: 1024px) and (max-width:1279px){
-        .MainSection4{
-            display: flex;
-            background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
-            width: 100%;
-            height: 55vh;
-            justify-content: center;
-            align-items: center;
-        }
-        .img{
-            width: 35vh;
-            height: 35vh;
-            box-shadow: 0vh 1vh 1vh#adadad;
-            background-color:white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-right: -1vh;
-            margin-left: 1vh;
-        }
-        .textgroup{
-            margin-left: 8vh;
-        }
-        .text1{
-            font-size: 2vh;
-            font-family: 'Inter Bold';
-            font-weight: 800;
-            color: #055540;
-            margin:0
-        }
-        .text2{
-            font-size: 2.5vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            margin:0;
-            line-height: 1.3;
-        }
-        .text3{
-            font-size: 1.5vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #8F9194;
-            margin:0 0 4vh 0;
-            line-height: 1.5;
-            position: relative;
-            top:0.3vh;
-        }
-        .conf{
-            font-size: 1vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #055540;
-            margin:0
-        }
-        .conf:hover { 
-            color: #8F9194;
-            cursor: pointer;
-          }
-    }
-    
-    /* Tablets */
-    /* Portrait: 768px - 1023px */
-    @media (min-width: 768px) and (max-width:1023px){
-        .MainSection4{
-            display: flex;
-            background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
-            width: 100%;
-            height: 45vh;
-            justify-content: center;
-            align-items: center;
-        }
-        .img{
-            width: 25vh;
-            height: 25vh;
-            box-shadow: 0vh 1vh 1vh#adadad;
-            background-color:white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-right: -1vh;
-            margin-left: 1vh;
-        }
-        .textgroup{
-            margin-left: 8vh;
-        }
-        .text1{
-            font-size: 1vh;
-            font-family: 'Inter Bold';
-            font-weight: 800;
-            color: #055540;
-            margin:0
-        }
-        .text2{
-            font-size: 1.5vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            margin:0;
-            line-height: 1.3;
-        }
-        .text3{
-            font-size: 1vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #8F9194;
-            margin:0 0 4vh 0;
-            line-height: 1.5;
-            position: relative;
-            top:0.3vh;
-        }
-        .conf{
-            font-size: 0.8vh;
-            font-family: 'Inter Bold';
-            font-weight: 700;
-            color: #055540;
-            margin:0;
-            position: relative;
-            bottom:2vh;
-        }
-        .conf:hover { 
-            color: #8F9194;
-            cursor: pointer;
-          }
-    }
-    
-    /* Mobile Device */
-    /* Medium 321px ~ 767px */
-    @media (min-width: 321px) and (max-width: 767px){
 
+    .textgroup {
+        margin-left: 8vh;
     }
-    /* Medium under 320px */
-    @media (max-width: 320px){
-        
+
+    .text1 {
+        font-size: 2.4vh;
+        font-family: 'Inter Bold';
+        font-weight: 800;
+        color: #055540;
+        margin: 0
     }
+
+    .text2 {
+        font-size: 3vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .text3 {
+        font-size: 2vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #8F9194;
+        margin: 0 0 4vh 0;
+        line-height: 1.5;
+        position: relative;
+        top: 0.3vh;
+    }
+
+    .conf {
+        font-size: 1.5vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #055540;
+        margin: 0
+    }
+
+    .conf:hover {
+        color: #8F9194;
+        cursor: pointer;
+    }
+
+}
+
+@media (min-width:1440px) and (max-width: 1919px) {
+    .MainSection4 {
+        display: flex;
+        background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
+        width: 100%;
+        height: 70vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .img {
+        width: 40vh;
+        height: 40vh;
+        box-shadow: 0vh 1vh 1vh#adadad;
+        background-color: white;
+        border-radius: 3vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-right: 3vh;
+        margin-left: -1vh;
+    }
+
+    .textgroup {
+        margin-left: 8vh;
+    }
+
+    .text1 {
+        font-size: 2.4vh;
+        font-family: 'Inter Bold';
+        font-weight: 800;
+        color: #055540;
+        margin: 0
+    }
+
+    .text2 {
+        font-size: 3vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .text3 {
+        font-size: 2vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #8F9194;
+        margin: 0 0 4vh 0;
+        line-height: 1.5;
+        position: relative;
+        top: 0.3vh;
+    }
+
+    .conf {
+        font-size: 1.5vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #055540;
+        margin: 0
+    }
+
+    .conf:hover {
+        color: #8F9194;
+        cursor: pointer;
+    }
+}
+
+/* Small 1280px ~ 1439px */
+@media (min-width: 1280px) and (max-width:1439px) {
+    .MainSection4 {
+        display: flex;
+        background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
+        width: 100%;
+        height: 60vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .img {
+        width: 40vh;
+        height: 40vh;
+        box-shadow: 0vh 1vh 1vh#adadad;
+        background-color: white;
+        border-radius: 3vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-right: 3vh;
+        margin-left: -1vh;
+    }
+
+    .textgroup {
+        margin-left: 8vh;
+    }
+
+    .text1 {
+        font-size: 2.4vh;
+        font-family: 'Inter Bold';
+        font-weight: 800;
+        color: #055540;
+        margin: 0
+    }
+
+    .text2 {
+        font-size: 3vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .text3 {
+        font-size: 2vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #8F9194;
+        margin: 0 0 4vh 0;
+        line-height: 1.5;
+        position: relative;
+        top: 0.3vh;
+    }
+
+    .conf {
+        font-size: 1.5vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #055540;
+        margin: 0
+    }
+
+    .conf:hover {
+        color: #8F9194;
+        cursor: pointer;
+    }
+}
+
+/* Landscape: 1024px - 1279px */
+@media (min-width: 1024px) and (max-width:1279px) {
+    .MainSection4 {
+        display: flex;
+        background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
+        width: 100%;
+        height: 55vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .img {
+        width: 35vh;
+        height: 35vh;
+        box-shadow: 0vh 1vh 1vh#adadad;
+        background-color: white;
+        border-radius: 3vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-right: -1vh;
+        margin-left: 1vh;
+    }
+
+    .textgroup {
+        margin-left: 8vh;
+    }
+
+    .text1 {
+        font-size: 2vh;
+        font-family: 'Inter Bold';
+        font-weight: 800;
+        color: #055540;
+        margin: 0
+    }
+
+    .text2 {
+        font-size: 2.5vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .text3 {
+        font-size: 1.5vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #8F9194;
+        margin: 0 0 4vh 0;
+        line-height: 1.5;
+        position: relative;
+        top: 0.3vh;
+    }
+
+    .conf {
+        font-size: 1vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #055540;
+        margin: 0
+    }
+
+    .conf:hover {
+        color: #8F9194;
+        cursor: pointer;
+    }
+}
+
+/* Tablets */
+/* Portrait: 768px - 1023px */
+@media (min-width: 768px) and (max-width:1023px) {
+    .MainSection4 {
+        display: flex;
+        background: linear-gradient(0.37deg, #D7E19D 0.42%, #D7E19D 0.43%, rgba(215, 225, 157, 0) 98.53%);
+        width: 100%;
+        height: 45vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .img {
+        width: 25vh;
+        height: 25vh;
+        box-shadow: 0vh 1vh 1vh#adadad;
+        background-color: white;
+        border-radius: 3vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-right: -1vh;
+        margin-left: 1vh;
+    }
+
+    .textgroup {
+        margin-left: 8vh;
+    }
+
+    .text1 {
+        font-size: 1vh;
+        font-family: 'Inter Bold';
+        font-weight: 800;
+        color: #055540;
+        margin: 0
+    }
+
+    .text2 {
+        font-size: 1.5vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .text3 {
+        font-size: 1vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #8F9194;
+        margin: 0 0 4vh 0;
+        line-height: 1.5;
+        position: relative;
+        top: 0.3vh;
+    }
+
+    .conf {
+        font-size: 0.8vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        color: #055540;
+        margin: 0;
+        position: relative;
+        bottom: 2vh;
+    }
+
+    .conf:hover {
+        color: #8F9194;
+        cursor: pointer;
+    }
+}
+
+/* Mobile Device */
+/* Medium 321px ~ 767px */
+@media (min-width: 321px) and (max-width: 767px) {}
+
+/* Medium under 320px */
+@media (max-width: 320px) {}

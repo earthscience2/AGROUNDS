@@ -6,18 +6,18 @@ import MainSection3 from "@/Components/Main/MainSection3";
 import MainSection4 from "@/Components/Main/MainSection4";
 import MainSection5 from "@/Components/Main/MainSection5";
 import CompanyInfo from "@/Components/Common/CompanyInfo";
-function MainPage(){
-    return(
+function MainPage() {
+    return (
         <>
-        <NavBar/>
-        <div className={styles.BackGround}>
-            <MainSection1 />
-            <MainSection2 />
-            <MainSection3 />
-            <MainSection4 />
-            <MainSection5 />
-        </div>
-        <CompanyInfo/>
+            <NavBar />
+            <div className={styles.BackGround}>
+                <MainSection1 />
+                <MainSection2 />
+                <MainSection3 />
+                <MainSection4 />
+                <MainSection5 />
+            </div>
+            <CompanyInfo />
         </>
     )
 }

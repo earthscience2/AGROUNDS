@@ -1,6 +1,6 @@
 @import "@/assets/font/font.css";
 
-.login{
+.login {
     width: 54vh;
     height: 65.1vh;
     border-radius: 3vh;
@@ -11,15 +11,17 @@
     align-items: center;
     margin-bottom: 10vh;
 }
-.logo{
+
+.logo {
     font-size: 3.2vh;
     color: #055540;
     font-family: "Inter Semi Bold";
     margin-top: 4.8vh;
     font-weight: 700;
-    
+
 }
-.idbox{
+
+.idbox {
     width: 49.4vh;
     height: 5.4vh;
     margin-top: 5vh;
@@ -28,7 +30,8 @@
     justify-content: center;
     align-items: center;
 }
-.id{
+
+.id {
     width: 45.4vh;
     height: 4vh;
     border: none;
@@ -37,14 +40,15 @@
     font-family: "Inter Semi Bold";
     font-weight: 500;
 }
-.id::placeholder{
+
+.id::placeholder {
     color: #979797;
     font-family: "Inter Semi Bold";
     font-size: 2vh;
     font-weight: 500;
 }
 
-.pwbox{
+.pwbox {
     width: 49.4vh;
     height: 5.4vh;
     margin-top: 2vh;
@@ -54,7 +58,8 @@
     justify-content: center;
     align-items: center;
 }
-.pw{
+
+.pw {
     width: 45.4vh;
     height: 4vh;
     outline: none;
@@ -63,20 +68,23 @@
     font-family: "Inter Semi Bold";
     font-weight: 500;
 }
-.pw::placeholder{
+
+.pw::placeholder {
     color: #979797;
     font-family: "Inter Semi Bold";
     font-size: 2vh;
     font-weight: 500;
 }
-.ggback{
+
+.ggback {
     border-radius: 1vh;
     width: 49.4vh;
     height: 6.6vh;
     border: 1px solid rgb(104, 99, 99);
     margin-top: 1vh;
 }
-.signin{
+
+.signin {
     font-size: 1.5vh;
     font-family: "Inter Semi Bold";
     color: #CDCDCD;
@@ -86,23 +94,27 @@
     position: relative;
     bottom: 1vh;
 }
-.signin:hover{
-    color:black;
+
+.signin:hover {
+    color: black;
     font-weight: 500;
 }
-.find{
+
+.find {
     margin-top: 2vh;
     display: flex;
     margin-bottom: 7.2vh;
 }
-.fline{
+
+.fline {
     height: 2vh;
     width: .2vh;
     background-color: #CDCDCD;
     position: relative;
     bottom: 1vh;
 }
-.fid{
+
+.fid {
     font-size: 1.5vh;
     font-family: "Inter Semi Bold";
     color: #CDCDCD;
@@ -112,11 +124,13 @@
     position: relative;
     bottom: 1vh;
 }
-.fid:hover{
-    color:black;
+
+.fid:hover {
+    color: black;
     font-weight: 500;
 }
-.fpw{
+
+.fpw {
     font-size: 1.5vh;
     font-family: "Inter Semi Bold";
     color: #CDCDCD;
@@ -126,7 +140,8 @@
     position: relative;
     bottom: 1vh;
 }
-.fpw:hover{
-    color:black;
+
+.fpw:hover {
+    color: black;
     font-weight: 500;
 }
