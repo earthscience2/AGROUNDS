@@ -187,7 +187,7 @@ class loginView(APIView):
             return JsonResponse({'error': str(e)}, status=500)
         
 # 로그인
-class loginView(APIView):
+class login(APIView):
     """
     {
         'user_id' : {String},
