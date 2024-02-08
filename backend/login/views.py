@@ -14,6 +14,7 @@ from .serializers import User_info_Serializer
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 import json
+import re
 
 # 닉네임 중복확인
 class nickname(APIView):
@@ -91,7 +92,6 @@ class signup(APIView):
         'user_nickname' : {String}
     }
     """
-
     def post(self, request, *args, **kwargs):
         try:
             data = json.loads(request.body)
@@ -103,14 +103,6 @@ class signup(APIView):
             user_nickname = data.get("user_nickname")
             marketing_agree = data.get("marketing_agree")
 
-            print(user_id)
-            print(user_pw)
-            print(user_birth)
-            print(user_name)
-            print(user_gender)
-            print(user_nickname)
-            print(marketing_agree)
-
             # 간단한 유효성 검사
             if (
                 not user_id
@@ -121,7 +113,12 @@ class signup(APIView):
                 or not user_nickname
             ):
                 return JsonResponse({"error": "모든 필드는 필수입니다."}, status=400)
-
+            
+             # 정규식 적용 유효성 검사
+            regexes = self.regexes_all(user_id, user_pw, user_nickname, user_name, user_birth)
+            if(regexes != None) :
+                return regexes
+            
             if UserInfo.objects.filter(user_nickname=user_nickname).exists():
                 return JsonResponse(
                     {"message": "이미 존재하는 닉네임입니다."}, status=400
@@ -148,14 +145,35 @@ class signup(APIView):
             )
 
             return JsonResponse(
-                {"message": "회원가입이 성공적으로 완료되었습니다.",
-                 "user_info": user}, status=201
+                {"message": "회원가입이 성공적으로 완료되었습니다."}, status=201
             )
 
         except json.JSONDecodeError:
             return JsonResponse({'error': '유효한 JSON 형식이 아닙니다.'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
+        
+    def regexes(self, pattern, text):
+        print(text)
+        return re.compile(r''+pattern).match(text)
+    
+    def regexes_all(self, user_id, user_pw, user_nickname, user_name, user_birth):
+        patterns = ['^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
+                    '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^])[A-Za-z\d@$!%*#?&^]{8,}$',
+                    '^[a-zA-Z가-힣0-9!@#$%^&*()-_=+{};:,<.>]{3,10}$',
+                    '^[가-힣a-zA-Z]{2,20}$',
+                    '^\d{8}$' ]
+        items = [user_id, user_pw, user_nickname, user_name, user_birth]
+        massges = ['이메일', '패스워드', '닉네임', '이름', '생년월일']
+
+        for i in range (0, 5):
+            if (self.regexes(patterns[i], items[i]) == None):
+                return JsonResponse({"error": "올바르지 않은 " + massges[i] +" 형식입니다."}, status=400)
+        
+        return None
+        
+
+
         
 # 로그인
 class login(APIView):
