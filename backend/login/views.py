@@ -71,12 +71,12 @@ class id(APIView):
         
 #         user = authenticate(request, user_id=id, user_pw=pw)
 
-        if user is not None:
-            # 인증 성공: 사용자가 존재하고 비밀번호가 일치하는 경우
-            return Response({'loginSuccess': True})
-        else:
-            # 인증 실패: 사용자가 존재하지 않거나 비밀번호가 일치하지 않는 경우
-            return Response({'loginSuccess': False}, status=status.HTTP_401_UNAUTHORIZED)
+#        if user is not None:
+#            # 인증 성공: 사용자가 존재하고 비밀번호가 일치하는 경우
+#            return Response({'loginSuccess': True})
+#        else:
+#            # 인증 실패: 사용자가 존재하지 않거나 비밀번호가 일치하지 않는 경우
+#            return Response({'loginSuccess': False}, status=status.HTTP_401_UNAUTHORIZED)
         
 # 회원가입
 class signup(APIView):
