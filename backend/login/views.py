@@ -119,7 +119,6 @@ class signup(APIView):
                 or not user_name
                 or not user_gender
                 or not user_nickname
-                or not marketing_agree
             ):
                 return JsonResponse({"error": "모든 필드는 필수입니다."}, status=400)
 
