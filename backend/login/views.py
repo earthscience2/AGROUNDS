@@ -13,6 +13,7 @@ from DB.models import UserInfo
 from .serializers import User_info_Serializer
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
+import json
 
 # 닉네임 중복확인
 class nickname(APIView):
@@ -224,7 +225,6 @@ class login(APIView):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
 
-
 class kakao(APIView):
     def get(self, request):
         redirect_uri = "http://localhost:3000/kakao"
@@ -234,11 +234,9 @@ class kakao(APIView):
             f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
         )
 
-
 class kakaoView(APIView):
     def get(self, request):
         0
-
 
 class google(APIView):
     def get(self, request):
