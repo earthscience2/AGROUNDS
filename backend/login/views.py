@@ -103,6 +103,14 @@ class signup(APIView):
             user_nickname = data.get("user_nickname")
             marketing_agree = data.get("marketing_agree")
 
+            print(user_id)
+            print(user_pw)
+            print(user_birth)
+            print(user_name)
+            print(user_gender)
+            print(user_nickname)
+            print(marketing_agree)
+
             # 간단한 유효성 검사
             if (
                 not user_id
@@ -141,46 +149,9 @@ class signup(APIView):
             )
 
             return JsonResponse(
-                {"message": "회원가입이 성공적으로 완료되었습니다."}, status=201
+                {"message": "회원가입이 성공적으로 완료되었습니다.",
+                 "user_info": user}, status=201
             )
-
-        except json.JSONDecodeError:
-            return JsonResponse({'error': '유효한 JSON 형식이 아닙니다.'}, status=400)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-        
-# 로그인
-class loginView(APIView):
-    """
-    {
-        'user_id' : {String},
-        'user_pw' : {String}
-    }
-    """
-    def post(self, request, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            user_id = data.get('user_id')
-            user_pw = data.get('user_pw')
-
-            # 간단한 유효성 검사
-            if not user_id or not user_pw:
-                return JsonResponse({'error': '모든 필드는 필수입니다.'}, status=400)
-
-            # 사용자 찾기
-            try:
-                user = UserInfo.objects.get(user_id = user_id)
-            except UserInfo.DoesNotExist:
-                return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
-
-            # 비밀번호 확인
-            if not check_password(user_pw, user.user_pw):
-                print(user_id)
-                print(user.user_pw)
-                return JsonResponse({'error': '비밀번호가 일치하지 않습니다.'}, status=401)
-
-            # 로그인 성공
-            return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.'}, status=200)
 
         except json.JSONDecodeError:
             return JsonResponse({'error': '유효한 JSON 형식이 아닙니다.'}, status=400)
@@ -213,12 +184,13 @@ class login(APIView):
 
             # 비밀번호 확인
             if not check_password(user_pw, user.user_pw):
-                print(user_id)
-                print(user.user_pw)
                 return JsonResponse({'error': '비밀번호가 일치하지 않습니다.'}, status=401)
 
             # 로그인 성공
-            return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.'}, status=200)
+            return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
+                                 'user_id' : user.user_id,
+                                 'user_nickname' : user.user_nickname
+                                 }, status=200)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "유효한 JSON 형식이 아닙니다."}, status=400)
