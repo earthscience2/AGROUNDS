@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST='{"pages":{"/coach":[],"/device":[],"/":[],"/league":[],"/login":[],"/match":[],"/player":[],"/signup/google":[],"/signup":[],"/signup/kakao":[],"/team":[]},"app":{},"appUsingSizeAdjust":false,"pagesUsingSizeAdjust":false}';

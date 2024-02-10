@@ -4,6 +4,7 @@ import pymysql
 pymysql.install_as_MySQLdb()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "fo(9(hrxizfeu5_^z@&9bkie#3t#j_^hr&t_zgvm9%k0s@%vpf"
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
@@ -72,7 +73,7 @@ LOGIN_REDIRECT_URL = "/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "../frontend/pages")],
+        "DIRS": [os.path.join(BASE_DIR, 'frontend', 'build')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -132,5 +133,5 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [  # 리액트 앱 빌드 디렉토리
-    os.path.join(BASE_DIR, "../backend/staticfiles"),
+    os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
 ]
