@@ -1,0 +1,60 @@
+@import "../../assets/font/font.css";
+@media (min-width: 1280px){
+.Rank{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1vh 0 0 0;
+    width: 100%;
+}
+.Content{
+    font-size: 1.5vh;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    margin: 1vh 5vh;
+}
+.Topic{
+    font-size: 1.5vh;
+    font-family: 'Inter Medium';
+    margin: 0;
+}}
+@media (min-width: 1024px) and (max-width:1279px){
+    .Rank{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1vh 0 0 0;
+        width: 100%;
+    }
+    .Content{
+        font-size: 1.3vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin: .7vh 4vh 0vh 4vh;
+    }
+    .Topic{
+        font-size: 1.3vh;
+        font-family: 'Inter Medium';
+        margin: 0;
+    }
+}
+@media(max-width:1023px){
+    .Rank{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1vh 0 0 0;
+        width: 100%;
+    }
+    .Content{
+        font-size: 1.3vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin: .7vh 4vh 0vh 4vh;
+    }
+    .Topic{
+        font-size: 1.3vh;
+        font-family: 'Inter Medium';
+        margin: 0;
+    }
+}

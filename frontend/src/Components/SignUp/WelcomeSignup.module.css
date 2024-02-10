@@ -1,0 +1,53 @@
+@import "../../assets/font/font.css";
+.back{
+    width:54vh;
+    height: 60vh;
+    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);
+    margin-top: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3vh;
+    margin-bottom: 12vh;
+}
+.logo{
+    width: 20vh;
+    height: 20vh;
+    margin-bottom: 2vh;
+    margin-top: 6vh;
+}
+.firstline{
+    font-size: 2.4vh;
+    font-family: "Inter Bold";
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    height: 4vh;
+}
+.username{
+    margin-right: 1vh;
+    color: #055540;
+}
+.button{
+    border-radius: 1vh;
+    width: 49.4vh;
+    height: 6.6vh;
+    font-size: 2.4vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Inter Semi Bold";
+    cursor: pointer;
+    font-weight: 600;
+    opacity: 1;
+    transition: background-color .5s ease-in-out;;
+    background-color: #055540;
+    color: white;
+    margin-top: 8vh;
+    
+}
+
+
+

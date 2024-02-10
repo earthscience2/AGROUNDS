@@ -1,0 +1,219 @@
+@import "../../assets/font/font.css";
+@media (min-width: 1280px) {
+.rankgroup{
+    width: 48vh;
+    height: 48vh;
+    box-shadow: 0vh 1vh 1vh#d1d1d1;
+    background-color: white;
+    border-radius: 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 10vh;
+    margin-top: 10vh;
+}
+.text5{
+    font-size: 3vh;
+    font-family: "Inter Bold";
+    font-weight: 700;
+    color:#D93637;
+    margin-bottom: .5vh;
+}
+.text6{
+    font-size: 2.5vh;
+    font-family: "Inter Bold";
+    font-weight: 700;
+    margin: 0 0 0.7vh;
+}
+.text7{
+    font-size: 1.5vh;
+    font-family: "Inter Bold";
+    
+    margin: 0 0 0.7vh;
+}
+.gamegroup{
+    display: flex;
+    align-items: center;
+    border-bottom: .2vh solid black;
+    height: 6vh;
+    width: 80%;
+    justify-content: center;
+}
+.team1{
+    font-size: 2vh;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    
+}
+.team2{
+    font-size: 2vh;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+}
+.vs{
+    font-size: 1.5vh;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    margin:0 1.5vh;
+}
+.flag1{
+    margin-left: -2vh;
+}
+.flag2{
+    margin-right: -2vh;
+}
+.Cheer{
+    color: #d93636b1;
+    font-size: 1.7vh;
+    font-family: 'Inter Bold';
+    margin: 1vh 0 0 1.5vh;
+}
+}
+/* Landscape */
+@media (min-width: 1024px) and (max-width:1279px){
+    .rankgroup{
+        width: 36vh;
+        height: 36vh;
+        box-shadow: 0vh 1vh 1vh#d1d1d1;
+        background-color: white;
+        border-radius: 3vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        margin-left: 3vh;
+        margin-top: 10vh;
+    }
+    .text5{
+        font-size: 2.3vh;
+        font-family: "Inter Bold";
+        font-weight: 700;
+        color:#D93637;
+        margin-bottom: .5vh;
+        margin-top: 1vh;
+    }
+    .text6{
+        font-size: 2.2vh;
+        font-family: "Inter Bold";
+        font-weight: 700;
+        margin: 0 0 0.7vh;
+    }
+    .text7{
+        font-size: 1.2vh;
+        font-family: "Inter Bold";
+        
+        margin: 0 0 0.7vh;
+    }
+    .gamegroup{
+        display: flex;
+        align-items: center;
+        border-bottom: .2vh solid black;
+        height: 5vh;
+        width: 80%;
+        justify-content: center;
+    }
+    .team1{
+        font-size: 1.4vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        
+    }
+    .team2{
+        font-size: 1.4vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+    }
+    .vs{
+        font-size: 1.3vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin:0 1.5vh;
+    }
+    .flag1{
+        margin-left: -2vh;
+    }
+    .flag2{
+        margin-right: -2vh;
+    }
+    .Cheer{
+        color: #d93636b1;
+        font-size: 1.3vh;
+        font-family: 'Inter Bold';
+        margin: 1vh 0 0 1.5vh;
+    }
+}
+@media(max-width:1023px){
+    .rankgroup{
+        width: 36vh;
+        height: 36vh;
+        box-shadow: 0vh 1vh 1vh#d1d1d1;
+        background-color: white;
+        border-radius: 3vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        margin-left: 3vh;
+        margin-top: 10vh;
+    }
+    .text5{
+        font-size: 2.3vh;
+        font-family: "Inter Bold";
+        font-weight: 700;
+        color:#D93637;
+        margin-bottom: .5vh;
+    }
+    .text6{
+        font-size: 2.2vh;
+        font-family: "Inter Bold";
+        font-weight: 700;
+        margin: 0 0 0.7vh;
+    }
+    .text7{
+        font-size: 1.2vh;
+        font-family: "Inter Bold";
+        
+        margin: 0 0 0.7vh;
+    }
+    .gamegroup{
+        display: flex;
+        align-items: center;
+        border-bottom: .2vh solid black;
+        height: 5vh;
+        width: 80%;
+        justify-content: center;
+    }
+    .team1{
+        font-size: 1.7vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        
+    }
+    .team2{
+        font-size: 1.7vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+    }
+    .vs{
+        font-size: 1.3vh;
+        font-family: 'Inter Bold';
+        font-weight: 700;
+        margin:0 1.5vh;
+    }
+    .flag1{
+        margin-left: -2vh;
+    }
+    .flag2{
+        margin-right: -2vh;
+    }
+    .Cheer{
+        color: #d93636b1;
+        font-size: 1.3vh;
+        font-family: 'Inter Bold';
+        margin: 1vh 0 0 1.5vh;
+    }
+}

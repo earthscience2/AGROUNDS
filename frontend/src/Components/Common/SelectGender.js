@@ -1,12 +1,21 @@
 import styles from "./SelectGender.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function SelectGender({color}) {
+function SelectGender({color, setGender}) {
   const [selectedGender, setSelectedGender] = useState(null);
+  const [selectNone, setSelectNone] = useState('');
 
   const handleGenderSelect = (gender) => {
     setSelectedGender(gender);
+    setGender(gender);
+    console.log(gender)
   };
+  const handleGenderNone = (event) => {
+    setSelectNone(event.target.checked);
+  }
+  useEffect((gender) =>{
+    setSelectNone(false)
+  },[setGender])
 
   return (
     <div className={styles.block4}>
@@ -23,6 +32,9 @@ function SelectGender({color}) {
       >
         여자
       </button>
+      
+      <div className={styles.checkbox}><p className={styles.none}>선택안함</p>
+      <input style = {{backgroundColor: selectedGender === 'None'? color: 'white'}} className={`${styles['check']} ${selectedGender === "None" ? styles.active : ''}`} checked={selectNone}onChange={() => handleGenderSelect("None")} type="checkbox" /></div>
     </div>
   );
 }

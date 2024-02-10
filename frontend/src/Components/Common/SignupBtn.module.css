@@ -1,31 +1,198 @@
 @import "../../../src/assets/font/font.css";
-.button{
-    border-radius: 2.3vh;
-    width: 43.8vh;
-    height: 8.6vh;
-    font-size: 2.2vh;
-    display: flex;
-    align-items: center;
-    text-align: left;
-    font-family: "Inter Semi Bold";
-    cursor: pointer;
-    font-weight: 600;
-    opacity: 1;
-    margin-bottom: 2vh;
-}
-.text{
-    margin-left: 3vh;
-    width: 68%;
-}
-.imgbox{
-    display: flex;
-    justify-content: right;
-    margin-left: 2vh;
+
+@import "../../assets/font/font.css";
+/* desctop */
+    /* Large 1920 x 1000 */
+    @media (min-width: 1920px){
+        .button{
+            border-radius: 2.3vh;
+            width: 43.8vh;
+            height: 8.6vh;
+            font-size: 2.2vh;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            font-family: "Inter Semi Bold";
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 1;
+            margin-bottom: 2vh;
+        }
+        .text{
+            margin-left: 3vh;
+            width: 68%;
+        }
+        .imgbox{
+            display: flex;
+            justify-content: right;
+            margin-left: 2vh;
+            
+        }
+        .img{
+             width: 5vh;
+             height: 5.2vh;
+             margin-left: 1vh;
+            cursor: pointer;
+        }
     
-}
-.img{
-     width: 5vh;
-     height: 5.2vh;
-     margin-left: 1vh;
-    cursor: pointer;
-}
+    }
+
+
+    /* Medium 1440px ~ 1919px */
+    @media (min-width:1440px) and (max-width: 1919px){
+        .button{
+            border-radius: 2.3vh;
+            width: 43.8vh;
+            height: 8.6vh;
+            font-size: 2.2vh;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            font-family: "Inter Semi Bold";
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 1;
+            margin-bottom: 2vh;
+        }
+        .text{
+            margin-left: 3vh;
+            width: 68%;
+        }
+        .imgbox{
+            display: flex;
+            justify-content: right;
+            margin-left: 2vh;
+            
+        }
+        .img{
+             width: 5vh;
+             height: 5.2vh;
+             margin-left: 1vh;
+            cursor: pointer;
+        }
+        
+    }
+    /* Small 1280px ~ 1439px */
+    @media (min-width: 1280px) and (max-width:1439px){
+        .button{
+            border-radius: 2.3vh;
+            width: 43.8vh;
+            height: 8.6vh;
+            font-size: 2.2vh;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            font-family: "Inter Semi Bold";
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 1;
+            margin-bottom: 2vh;
+        }
+        .text{
+            margin-left: 3vh;
+            width: 68%;
+        }
+        .imgbox{
+            display: flex;
+            justify-content: right;
+            margin-left: 2vh;
+            
+        }
+        .img{
+             width: 5vh;
+             height: 5.2vh;
+             margin-left: 1vh;
+            cursor: pointer;
+        }
+    }
+/* Tablets */
+    /* Portrait: 768px - 1023px */
+    @media (min-width: 768px) and (max-width:1023px){
+        .button{
+            border-radius: 1.8vh;
+            width: 40vh;
+            height: 6.6vh;
+            font-size: 1.8vh;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            font-family: "Inter Semi Bold";
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 1;
+            margin-bottom: 2vh;
+        }
+        .text{
+            margin-left: 3vh;
+            width: 68%;
+        }
+        .imgbox{
+            display: flex;
+            justify-content: right;
+            margin-left: 2vh;
+            
+        }
+        .img{
+             width: 4vh;
+             height: 4.2vh;
+             margin-left: 1vh;
+             cursor: pointer;
+        }
+        
+    }
+    /* Landscape: 1024px - 1279px */
+    @media (min-width: 1024px) and (max-width:1279px){
+        .button{
+            border-radius: 1.8vh;
+            width: 40vh;
+            height: 6.6vh;
+            font-size: 1.8vh;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            font-family: "Inter Semi Bold";
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 1;
+            margin-bottom: 2vh;
+        }
+        .text{
+            margin-left: 3vh;
+            width: 68%;
+        }
+        .imgbox{
+            display: flex;
+            justify-content: right;
+            margin-left: 2vh;
+            
+        }
+        .img{
+             width: 4vh;
+             height: 4.2vh;
+             margin-left: 1vh;
+             cursor: pointer;
+        }
+        
+    }
+    /* Mobile Device */
+    /* Medium 321px ~ 767px */
+    @media (min-width: 321px) and (max-width: 767px){
+        .BackGround{
+            width: 100%;
+            height: 300vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .MainLine{
+            margin-top: 5.8vh;
+            width: 90%;
+            height: .3vh;
+            background-color: #A5B879;
+        }
+    }
+    /* Medium under 320px */
+    @media (max-width: 320px){
+        
+    }

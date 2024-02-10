@@ -1,7 +1,6 @@
 import React from "react";
 import logo3 from "../../../src/assets/logo3.png";
 import styles from "./CompanyInfo.module.css";
-import Image from 'next/image';
 function CompanyInfo(){
     return(
         <div className={styles.back}>
@@ -19,7 +18,7 @@ function CompanyInfo(){
                 <div className={styles.write3}>Copyright AGROUNDS. 2024 All rights reserved</div>
             </div>
             <div className={styles.logo}>
-                <Image className={styles.logo1} src={logo3}/>
+                <img className={styles.logo1} src={logo3}/>
             </div>
         </div>
     )

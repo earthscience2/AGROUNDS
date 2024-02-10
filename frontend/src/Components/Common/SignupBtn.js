@@ -1,12 +1,14 @@
 import styles from "./SignupBtn.module.css";
 import React from "react";
 
+
 function SignupBtn({backcolor, color, text,logoimg, onClick}){
     const buttonStyle = {
         backgroundColor: backcolor,
         color: color,
        
     }
+    
     
     return(
         <div className={styles.button} onClick={onClick} style={buttonStyle}>

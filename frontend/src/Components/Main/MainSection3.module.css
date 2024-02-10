@@ -1,637 +1,590 @@
-@import "@/assets/font/font.css";
+@import "../../assets/font/font.css";
 /* desctop */
-/* Large 1920 x 1000 */
-@media (min-width: 1920px) {
-    .MainSection3 {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 80vh;
-        flex-direction: column;
-        align-items: center;
+    /* Large 1920 x 1000 */
+    @media (min-width: 1920px){
+        .MainSection3{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 80vh;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tagbox{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tag3{
+            font-size: 2vh;
+            margin:0 0 2vh 0;
+            font-family: 'Inter Medium';
+            
+        }
+        .tag4{
+            font-size: 4vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin:0;
+        }
+        .boxgroup{
+            display: flex;
+        }
+        .box1{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 5vh 0 5vh;
+        }
+        .box2{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 5vh 0 5vh;
+        }
+        .box3{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 5vh 0 5vh;
+        }
+        .inbox1{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFB1B1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .inbox2{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFEB99;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .inbox3{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #BDDDFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .inbox4{
+            width: 36vh;
+            height: 8vh;
+            display: flex;
+            align-items: center;
+        }
+        .img{
+            width: 24vh;
+            height: 24vh;
+        }
+        .text{
+            font-size: 3.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin-left: 4vh;
+        }
+        .conf1{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 12vh;
+        }
+        .conf2{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 22vh;
+        }
+        .conf3{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 19vh;
+        }
+       
+        
     }
-
-    .tagbox {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    @media (min-width:1440px) and (max-width: 1919px){
+        .MainSection3{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 80vh;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tagbox{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tag3{
+            font-size: 2vh;
+            margin:0 0 2vh 0;
+            font-family: 'Inter Medium';
+            
+        }
+        .tag4{
+            font-size: 4vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin:0;
+        }
+        .boxgroup{
+            display: flex;
+        }
+        .box1{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 3vh 0 3vh
+        }
+        .box2{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 5vh 0 5vh;
+        }
+        .box3{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 5vh 0 5vh;
+        }
+        .inbox1{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFB1B1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .inbox2{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFEB99;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .inbox3{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #BDDDFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .inbox4{
+            width: 36vh;
+            height: 8vh;
+            display: flex;
+            align-items: center;
+        }
+        .img{
+            width: 24vh;
+            height: 24vh;
+        }
+        .text{
+            font-size: 3.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin-left: 4vh;
+        }
+        .conf1{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 12vh;
+        }
+        .conf2{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 22vh;
+        }
+        .conf3{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 19vh;
+        }
     }
-
-    .tag3 {
-        font-size: 2vh;
-        margin: 0 0 2vh 0;
-        font-family: 'Inter Medium';
-
+    /* Small 1280px ~ 1439px */
+    @media (min-width: 1280px) and (max-width:1439px){
+        .MainSection3{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 80vh;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tagbox{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tag3{
+            font-size: 2vh;
+            margin:0 0 2vh 0;
+            font-family: 'Inter Medium';
+            
+        }
+        .tag4{
+            font-size: 4vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin:0;
+        }
+        .boxgroup{
+            display: flex;
+        }
+        .box1{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 3vh 0 3vh
+        }
+        .box2{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 5vh 0 5vh;
+        }
+        .box3{
+            width: 36vh;
+            height: 36vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 10vh 5vh 0 5vh;
+        }
+        .inbox1{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFB1B1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .inbox2{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFEB99;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .inbox3{
+            width: 36vh;
+            height: 28vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #BDDDFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .inbox4{
+            width: 36vh;
+            height: 8vh;
+            display: flex;
+            align-items: center;
+        }
+        .img{
+            width: 24vh;
+            height: 24vh;
+        }
+        .text{
+            font-size: 3.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin-left: 4vh;
+        }
+        .conf1{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 12vh;
+        }
+        .conf2{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 22vh;
+        }
+        .conf3{
+            font-size: 1.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 19vh;
+        }
     }
-
-    .tag4 {
-        font-size: 4vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin: 0;
-    }
-
-    .boxgroup {
-        display: flex;
-    }
-
-    .box1 {
-        width: 36vh;
-        height: 36vh;
-        border-radius: 3vh;
-        background-color: white;
-        box-shadow: 0vh 1vh 1vh#d1d1d1;
-        margin: 10vh 5vh 0 5vh;
-    }
-
-    .inbox1 {
-        width: 36vh;
-        height: 28vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFB1B1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox2 {
-        width: 36vh;
-        height: 28vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFEB99;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
-
-    .inbox3 {
-        width: 36vh;
-        height: 28vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #BDDDFF;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox4 {
-        width: 36vh;
-        height: 8vh;
-        display: flex;
-        align-items: center;
-    }
-
-    .img {
-        width: 24vh;
-        height: 24vh;
-    }
-
-    .text {
-        font-size: 3.2vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin-left: 4vh;
-    }
-
-    .conf1 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 10vh;
-    }
-
-    .conf2 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 21vh;
-    }
-
-    .conf3 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 18vh;
-    }
-
-
-}
-
-@media (min-width:1440px) and (max-width: 1919px) {
-    .MainSection3 {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 80vh;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .tagbox {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .tag3 {
-        font-size: 2vh;
-        margin: 0 0 2vh 0;
-        font-family: 'Inter Medium';
-
-    }
-
-    .tag4 {
-        font-size: 4vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin: 0;
-    }
-
-    .boxgroup {
-        display: flex;
-    }
-
-    .box1 {
-        width: 32vh;
-        height: 32vh;
-        border-radius: 3vh;
-        background-color: white;
-        box-shadow: 0vh 1vh 1vh#d1d1d1;
-        margin: 8vh 2.5vh 0 2.5vh;
-    }
-
-    .inbox1 {
-        width: 32vh;
-        height: 26vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFB1B1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox2 {
-        width: 32vh;
-        height: 26vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFEB99;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
-
-    .inbox3 {
-        width: 32vh;
-        height: 26vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #BDDDFF;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox4 {
-        width: 36vh;
-        height: 8vh;
-        display: flex;
-        align-items: center;
-    }
-
-    .img {
-        width: 22vh;
-        height: 22vh;
-    }
-
-    .text {
-        font-size: 2.8vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin-left: 3vh;
-        position: relative;
-        bottom: 1vh;
-    }
-
-    .conf1 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 9vh;
-        position: relative;
-        bottom: 1vh;
-    }
-
-    .conf2 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 19vh;
-        position: relative;
-        bottom: 1vh;
-    }
-
-    .conf3 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 16vh;
-        position: relative;
-        bottom: 1vh;
-    }
-}
-
-/* Small 1280px ~ 1439px */
-@media (min-width: 1280px) and (max-width:1439px) {
-    .MainSection3 {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 80vh;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .tagbox {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .tag3 {
-        font-size: 2vh;
-        margin: 0 0 2vh 0;
-        font-family: 'Inter Medium';
-
-    }
-
-    .tag4 {
-        font-size: 4vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin: 0;
-    }
-
-    .boxgroup {
-        display: flex;
-    }
-
-    .box1 {
-        width: 32vh;
-        height: 32vh;
-        border-radius: 3vh;
-        background-color: white;
-        box-shadow: 0vh 1vh 1vh#d1d1d1;
-        margin: 8vh 2vh 0 2vh;
-    }
-
-    .inbox1 {
-        width: 32vh;
-        height: 26vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFB1B1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox2 {
-        width: 32vh;
-        height: 26vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFEB99;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
-
-    .inbox3 {
-        width: 32vh;
-        height: 26vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #BDDDFF;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox4 {
-        width: 36vh;
-        height: 8vh;
-        display: flex;
-        align-items: center;
-    }
-
-    .img {
-        width: 22vh;
-        height: 22vh;
-    }
-
-    .text {
-        font-size: 2.8vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin-left: 3vh;
-        position: relative;
-        bottom: 1vh;
-    }
-
-    .conf1 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 9vh;
-        position: relative;
-        bottom: 1vh;
-    }
-
-    .conf2 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 19vh;
-        position: relative;
-        bottom: 1vh;
-    }
-
-    .conf3 {
-        font-size: 1.5vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 16vh;
-        position: relative;
-        bottom: 1vh;
-    }
-}
-
-/* Landscape: 1024px - 1279px */
-@media (min-width: 1024px) and (max-width:1279px) {
-    .MainSection3 {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 60vh;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .tagbox {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .tag3 {
-        font-size: 2vh;
-        margin: 0 0 2vh 0;
-        font-family: 'Inter Medium';
-
-    }
-
-    .tag4 {
-        font-size: 4vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin: 0;
-    }
-
-    .boxgroup {
-        display: flex;
-    }
-
-    .box1 {
-        width: 25vh;
-        height: 25vh;
-        border-radius: 3vh;
-        background-color: white;
-        box-shadow: 0vh 1vh 1vh#d1d1d1;
-        margin: 5vh 1vh 0 1vh;
-    }
-
-    .inbox1 {
-        width: 25vh;
-        height: 20vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFB1B1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox2 {
-        width: 25vh;
-        height: 20vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFEB99;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
-
-    .inbox3 {
-        width: 25vh;
-        height: 20vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #BDDDFF;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox4 {
-        width: 36vh;
-        height: 8vh;
-        display: flex;
-        align-items: center;
-    }
-
-    .img {
-        width: 15vh;
-        height: 15vh;
-    }
-
-    .text {
-        font-size: 2.2vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin-left: 3vh;
-        position: relative;
-        bottom: 1.5vh;
-    }
-
-    .conf1 {
-        font-size: 1vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 6.5vh;
-        position: relative;
-        bottom: 1.2vh;
-    }
-
-    .conf2 {
-        font-size: 1vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 14vh;
-        position: relative;
-        bottom: 1.2vh;
-    }
-
-    .conf3 {
-        font-size: 1vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 12vh;
-        position: relative;
-        bottom: 1.2vh;
-    }
-}
 
 /* Tablets */
-/* Portrait: 768px - 1023px */
-@media (min-width: 768px) and (max-width:1023px) {
-    .MainSection3 {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 50vh;
-        flex-direction: column;
-        align-items: center;
+    /* Portrait: 768px - 1023px */
+    @media (min-width: 768px) and (max-width:1023px){
+        .MainSection3{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 80vh;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tagbox{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tag3{
+            font-size: 1.5vh;
+            margin:0 0 2vh 0;
+            font-family: 'Inter Medium';
+            
+        }
+        .tag4{
+            font-size: 2.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin:0;
+        }
+        .boxgroup{
+            display: flex;
+        }
+        .box1{
+            width: 21vh;
+            height: 21vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 5vh 1vh 0 1vh;
+
+        }
+        
+        .inbox1{
+            width: 21vh;
+            height: 16vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFB1B1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .inbox2{
+            width: 21vh;
+            height: 16vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFEB99;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            
+        }
+        .inbox3{
+            width: 21vh;
+            height: 16vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #BDDDFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .inbox4{
+            width: 21vh;
+            height: 5vh;
+            display: flex;
+            align-items: center;
+        }
+        .img{
+            width: 14vh;
+            height: 14vh;
+        }
+        .text{
+            font-size: 1.vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin-left: 2.2vh;
+        }
+        .conf1{
+            font-size: 1.2vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 9vh;
+        }
+        .conf2{
+            font-size: 1.2vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 12.5vh;
+        }
+        .conf3{
+            font-size: 1.2vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 11.5vh;
+        }
     }
+    /* Landscape: 1024px - 1279px */
+    @media (min-width: 1024px) and (max-width:1279px){
+        .MainSection3{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 80vh;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tagbox{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tag3{
+            font-size: 1.5vh;
+            margin:0 0 2vh 0;
+            font-family: 'Inter Medium';
+            
+        }
+        .tag4{
+            font-size: 2.5vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin:0;
+        }
+        .boxgroup{
+            display: flex;
+        }
+        .box1{
+            width: 21vh;
+            height: 21vh;
+            border-radius: 3vh;
+            background-color: white;
+            box-shadow: 0vh 1vh 1vh#d1d1d1;
+            margin: 5vh 2vh 0 2vh;
 
-    .tagbox {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        }
+        
+        .inbox1{
+            width: 21vh;
+            height: 16vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFB1B1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .inbox2{
+            width: 21vh;
+            height: 16vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #FFEB99;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            
+        }
+        .inbox3{
+            width: 21vh;
+            height: 16vh;
+            border-radius: 3vh 3vh 0 0;
+            background-color: #BDDDFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .inbox4{
+            width: 21vh;
+            height: 5vh;
+            display: flex;
+            align-items: center;
+        }
+        .img{
+            width: 14vh;
+            height: 14vh;
+        }
+        .text{
+            font-size: 1.vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            margin-left: 2.2vh;
+        }
+        .conf1{
+            font-size: 1.2vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 9vh;
+        }
+        .conf2{
+            font-size: 1.2vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 12.5vh;
+        }
+        .conf3{
+            font-size: 1.2vh;
+            font-weight: 700;
+            font-family: 'Inter Bold';
+            color:#7a7a7aa4;
+            margin-left: 11.5vh;
+        }
     }
-
-    .tag3 {
-        font-size: 1.5vh;
-        margin: 0 0 2vh 0;
-        font-family: 'Inter Medium';
+    /* Mobile Device */
+    /* Medium 321px ~ 767px */
+    @media (min-width: 321px) and (max-width: 767px){
 
     }
-
-    .tag4 {
-        font-size: 3vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin: 0;
+    /* Medium under 320px */
+    @media (max-width: 320px){
+        
     }
-
-    .boxgroup {
-        display: flex;
-    }
-
-    .box1 {
-        width: 18vh;
-        height: 18vh;
-        border-radius: 3vh;
-        background-color: white;
-        box-shadow: 0vh 1vh 1vh#d1d1d1;
-        margin: 5vh 1vh 0 1vh;
-    }
-
-    .inbox1 {
-        width: 18vh;
-        height: 13vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFB1B1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox2 {
-        width: 18vh;
-        height: 13vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #FFEB99;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
-
-    .inbox3 {
-        width: 18vh;
-        height: 13vh;
-        border-radius: 3vh 3vh 0 0;
-        background-color: #BDDDFF;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .inbox4 {
-        width: 36vh;
-        height: 8vh;
-        display: flex;
-        align-items: center;
-    }
-
-    .img {
-        width: 11vh;
-        height: 11vh;
-    }
-
-    .text {
-        font-size: 1.8vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        margin-left: 2vh;
-        position: relative;
-        bottom: 1.5vh;
-    }
-
-    .conf1 {
-        font-size: 1vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 3vh;
-        position: relative;
-        bottom: 1.3vh;
-    }
-
-    .conf2 {
-        font-size: 1vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 9.5vh;
-        position: relative;
-        bottom: 1.3vh;
-    }
-
-    .conf3 {
-        font-size: 1vh;
-        font-weight: 700;
-        font-family: 'Inter Bold';
-        color: #7a7a7aa4;
-        margin-left: 8vh;
-        position: relative;
-        bottom: 1.3vh;
-    }
-}
-
-/* Mobile Device */
-/* Medium 321px ~ 767px */
-@media (min-width: 321px) and (max-width: 767px) {}
-
-/* Medium under 320px */
-@media (max-width: 320px) {}
