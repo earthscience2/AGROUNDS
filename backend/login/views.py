@@ -11,10 +11,10 @@ from rest_framework import status
 # from .models import User_info
 from DB.models import UserInfo
 from .serializers import User_info_Serializer
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
+
+from rest_framework.permissions import AllowAny
 import json
-import re
 
 # 닉네임 중복확인
 class nickname(APIView):
@@ -92,89 +92,15 @@ class signup(APIView):
         'user_nickname' : {String}
     }
     """
+    #permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            user_id = data.get("user_id")
-            user_pw = data.get("user_pw")
-            user_birth = data.get("user_birth")
-            user_name = data.get("user_name")
-            user_gender = data.get("user_gender")
-            user_nickname = data.get("user_nickname")
-            marketing_agree = data.get("marketing_agree")
-
-            # 모든 항목을 입력받았는지 검사
-            if (
-                not user_id
-                or not user_pw
-                or not user_birth
-                or not user_name
-                or not user_gender
-                or not user_nickname
-            ):
-                return JsonResponse({"error": "모든 필드는 필수입니다."}, status=400)
-            
-            # 정규식 적용 유효성 검사
-            regexes = self.regexes_all(user_id, user_pw, user_nickname, user_name, user_birth)
-            if(regexes != None) :
-                return regexes
-            
-            # 닉네임 중복 확인
-            if UserInfo.objects.filter(user_nickname=user_nickname).exists():
-                return JsonResponse(
-                    {"message": "이미 존재하는 닉네임입니다."}, status=400
-                )
-
-            # 이메일 중복 확인
-            if UserInfo.objects.filter(user_id=user_id).exists():
-                return JsonResponse(
-                    {"message": "이미 가입된 이메일입니다."}, status=400
-                )
-
-            # password hashing
-            user_pw = make_password(user_pw)
-
-            # 사용자 생성
-            user = UserInfo.objects.create(
-                user_code=0,
-                user_id=user_id,
-                user_pw=user_pw,
-                user_birth=user_birth,
-                user_name=user_name,
-                user_gender=user_gender,
-                user_nickname=user_nickname,
-                marketing_agree=marketing_agree,
-            )
-
-            return JsonResponse(
-                {"message": "회원가입이 성공적으로 완료되었습니다."}, status=201
-            )
-
-        except json.JSONDecodeError:
-            return JsonResponse({'error': '유효한 JSON 형식이 아닙니다.'}, status=400)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+        serializer = User_info_Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors['non_field_errors'])
         
-    def regexes(self, pattern, text):
-        print(text)
-        return re.compile(r''+pattern).match(text)
-    
-    def regexes_all(self, user_id, user_pw, user_nickname, user_name, user_birth):
-        patterns = ['^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
-                    '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^])[A-Za-z\d@$!%*#?&^]{8,}$',
-                    '^[a-zA-Z가-힣0-9!@#$%^&*()-_=+{};:,<.>]{3,10}$',
-                    '^[가-힣a-zA-Z]{2,20}$',
-                    '^\d{8}$' ]
-        items = [user_id, user_pw, user_nickname, user_name, user_birth]
-        massges = ['이메일', '패스워드', '닉네임', '이름', '생년월일']
-
-        for i in range (0, 5):
-            if (self.regexes(patterns[i], items[i]) == None):
-                return JsonResponse({"error": "올바르지 않은 " + massges[i] +" 형식입니다."}, status=400)
-        
-        return None
-        
-
 
         
 # 로그인
