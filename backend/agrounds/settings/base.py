@@ -173,3 +173,5 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [  # 리액트 앱 빌드 디렉토리
     os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, '_static')
