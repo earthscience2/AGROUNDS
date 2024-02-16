@@ -27,7 +27,6 @@ class User_info_Serializer(serializers.ModelSerializer):
     
     
     def validate(self, data):
-
         user_id = data.get('user_id', None)
         password = data.get("password")
         user_birth = data.get("user_birth")
