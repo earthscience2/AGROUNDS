@@ -25,10 +25,6 @@ class User_info_Serializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
-    def validate_password(self, value):
-        # 비밀번호에 대한 유효성 검사는 이미 이전에 작성한 코드를 사용합니다.
-        print("pw")
-        return super().validate_password(value)
     
     def validate(self, data):
 
