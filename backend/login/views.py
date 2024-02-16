@@ -62,63 +62,44 @@ class id(APIView):
             return Response(
                 {"error": "Invalid input"}, status=status.HTTP_400_BAD_REQUEST
             )
-
-
-# 로그인 유효성 확인
-# class login(APIView):
-#     def get(self, request, format=None):
-#         id = request.query_params.get('id')
-#         pw = request.query_params.get('pw')
-        
-#         user = authenticate(request, user_id=id, user_pw=pw)
-
-#        if user is not None:
-#            # 인증 성공: 사용자가 존재하고 비밀번호가 일치하는 경우
-#            return Response({'loginSuccess': True})
-#        else:
-#            # 인증 실패: 사용자가 존재하지 않거나 비밀번호가 일치하지 않는 경우
-#            return Response({'loginSuccess': False}, status=status.HTTP_401_UNAUTHORIZED)
         
 # 회원가입
 class signup(APIView):
     """
     json 형식
     {
-        'user_id' : {String},
-        'user_pw' : {String},
-        'user_birth' : {String},
-        'user_name' : {String},
-        'user_gender' : {String},
-        'user_nickname' : {String}
+        "user_id": "jayou1223@gmail.com",
+        "password": "1q2w3e4r!",
+        "user_birth": "20011223",
+        "user_name": "구자유",
+        "user_gender": "male",
+        "user_nickname": "jayou",
+        "marketing_agree": false
     }
     """
     #permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
         serializer = User_info_Serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors['non_field_errors'])
-        
-
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message" : serializer.data}, status=status.HTTP_200_OK)
         
 # 로그인
 class login(APIView):
     """
     {
         'user_id' : {String},
-        'user_pw' : {String}
+        'password' : {String}
     }
     """
     def post(self, request, *args, **kwargs):
         try:
             data = json.loads(request.body)
             user_id = data.get('user_id')
-            user_pw = data.get('user_pw')
+            password = data.get('password')
 
             # 간단한 유효성 검사
-            if not user_id or not user_pw:
+            if not user_id or not password:
                 return JsonResponse({'error': '모든 필드는 필수입니다.'}, status=400)
 
             # 사용자 찾기
@@ -128,7 +109,7 @@ class login(APIView):
                 return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
 
             # 비밀번호 확인
-            if not check_password(user_pw, user.user_pw):
+            if not check_password(password, user.password):
                 return JsonResponse({'error': '비밀번호가 일치하지 않습니다.'}, status=401)
 
             # 로그인 성공

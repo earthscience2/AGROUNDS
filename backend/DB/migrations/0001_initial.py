@@ -92,7 +92,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(primary_key=True, serialize=False)),
                 ('user_code', models.CharField(max_length=50)),
                 ('user_id', models.CharField(max_length=50)),
-                ('user_pw', models.CharField(max_length=50)),
+                ('password', models.CharField(max_length=50)),
             ],
             options={
                 'db_table': 'home_user_info',
@@ -116,11 +116,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('user_code', models.CharField(max_length=45, primary_key=True, serialize=False)),
                 ('user_id', models.CharField(max_length=45)),
-                ('user_pw', models.CharField(max_length=45)),
+                ('password', models.CharField(max_length=45)),
                 ('user_birth', models.CharField(max_length=45)),
                 ('user_name', models.CharField(max_length=45)),
                 ('user_gender', models.CharField(max_length=45)),
-                ('user_email', models.CharField(max_length=45)),
+        
                 ('user_team', models.CharField(max_length=45)),
             ],
             options={

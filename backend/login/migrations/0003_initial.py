@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('user_code', models.CharField(max_length=45, primary_key=True, serialize=False)),
                 ('user_id', models.CharField(max_length=45)),
-                ('user_pw', models.CharField(max_length=200)),
+                ('password', models.CharField(max_length=200)),
                 ('user_birth', models.CharField(max_length=45)),
                 ('user_name', models.CharField(max_length=45)),
                 ('user_gender', models.CharField(max_length=45)),

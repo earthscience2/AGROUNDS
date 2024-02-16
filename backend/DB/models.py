@@ -82,7 +82,7 @@ class TeamInfo(models.Model):
 class UserInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     user_id = models.CharField(max_length=45)
-    user_pw = models.CharField(max_length=200)
+    password = models.CharField(max_length=200)
     user_birth = models.CharField(max_length=45)
     user_name = models.CharField(max_length=45)
     user_gender = models.CharField(max_length=45)

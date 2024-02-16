@@ -7,7 +7,7 @@ class User_info_Serializer(serializers.ModelSerializer):
         fields = (
             "user_code",
             "user_id",
-            "user_pw",
+            "password",
             "user_birth",
             "user_name",
             "user_gender",

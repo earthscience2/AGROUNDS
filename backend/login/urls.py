@@ -2,6 +2,12 @@
 from django.urls import path, include
 from . import views
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+
 urlpatterns = [
     # 로그인
     path("login/", views.login.as_view()),
@@ -15,6 +21,10 @@ urlpatterns = [
     path("google/", views.google.as_view()),
     # 카카오, 구글 인증
     path("allauth/", include("allauth.urls")),
+
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+	path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
     # 카카오, 구글 회원가입(추가입력사항)
 ]

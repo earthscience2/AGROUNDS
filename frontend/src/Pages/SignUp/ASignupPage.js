@@ -100,7 +100,7 @@ function SigninPage(){
 
         let SignUpData = {
             'user_id' : email,
-            'user_pw' : password,
+            'password' : password,
             'user_birth' : birth,
             'user_name' : name,
             'user_gender' : gender,

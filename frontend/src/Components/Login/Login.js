@@ -38,7 +38,7 @@ function Login(props){
         e.preventDefault();
         const loginData = {
             'user_id':userid,
-            'user_pw': userpw
+            'password': userpw
         }
         client.post('/api/login/login/', loginData)
         .then(function(response){
