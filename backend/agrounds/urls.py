@@ -33,6 +33,7 @@ urlpatterns = [
     # 백엔드 api
     path("api/assist/", include("assist.urls")),
     path("api/login/", include("login.urls")),
+    path("api/team/", include('team.urls'),)
 ]
 
 if settings.DEBUG:
