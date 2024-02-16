@@ -15,15 +15,15 @@ class maketeam(APIView):
         'team_name' : {String},
         'team_player' : {String},
         'team_logo' : {String},
-        'team_point' : {Int},
         'team_area' : {String},
         'team_description' : {String},
     }
     """
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = Team_info_Serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(serializer.errors['non_field_errors'])
+            # 유효성 검사 오류 메시지를 확인하여 반환합니다.
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
