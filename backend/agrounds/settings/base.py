@@ -7,7 +7,7 @@ pymysql.install_as_MySQLdb()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "fo(9(hrxizfeu5_^z@&9bkie#3t#j_^hr&t_zgvm9%k0s@%vpf"
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
@@ -173,5 +173,3 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [  # 리액트 앱 빌드 디렉토리
     os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
 ]
-
-STATIC_ROOT = os.path.join(BASE_DIR, '_static')
