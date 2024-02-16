@@ -4,6 +4,8 @@ from DB.models import UserInfo
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 import re
 
 class User_info_Serializer(serializers.ModelSerializer):
@@ -77,3 +79,13 @@ class User_info_Serializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"error" : "올바르지 않은 " + massges[i] +" 형식입니다."})
         
         return None
+    
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Customizes JWT default Serializer to add more information about user"""
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['user_id'] = user.user_id
+        token['password'] = user.password
+        
+        return token

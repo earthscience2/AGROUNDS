@@ -11,9 +11,17 @@ from rest_framework import status
 # from .models import User_info
 from DB.models import UserInfo
 from .serializers import User_info_Serializer
+from .serializers import CustomTokenObtainPairSerializer
 from django.contrib.auth.hashers import check_password
 
-from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+
 import json
 
 # 닉네임 중복확인
@@ -113,15 +121,33 @@ class login(APIView):
                 return JsonResponse({'error': '비밀번호가 일치하지 않습니다.'}, status=401)
 
             # 로그인 성공
+            token = self.get_tokens_for_user(user)
             return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
                                  'user_id' : user.user_id,
-                                 'user_nickname' : user.user_nickname
+                                 'user_nickname' : user.user_nickname,
+                                 'token' : token
                                  }, status=200)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "유효한 JSON 형식이 아닙니다."}, status=400)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+        
+    def get_tokens_for_user(self, user):
+        refresh = RefreshToken.for_user(user)
+        refresh['user_code'] = user.user_code
+
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+    
+class CustomTokenObtainPairView(TokenObtainPairView):
+    # Replace the serializer with your custom
+    serializer_class = CustomTokenObtainPairSerializer
+    
+        
+    
 
 class kakao(APIView):
     def get(self, request):
