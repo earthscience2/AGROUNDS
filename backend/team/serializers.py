@@ -11,25 +11,27 @@ class Team_info_Serializer(serializers.ModelSerializer):
         fields = '__all__'
         model = TeamInfo
         extra_kwargs = {
-            'team_code' : {'default' : 36}
+            'team_code' : {'default' : 321123}
         }
     def create(self, validated_data):
         instance = super().create(validated_data)
 
-        instance.team_age = 0  # default값
-        instance.team_point = 0  # default값 
+
         instance.save()
         return instance
     
     def validate(self, data):
-        team_player = data.get('team_player', {})  # user_code
-        team_logo = data.get('team_logo')
+        # Not Null 처리 
+        required_fields = ['team_host', 'team_name', 'team_player', 'team_area']
+        errors = {field: f"팀 {field}는 필수 항목입니다." for field in required_fields if not data.get(field)}
 
-        if not team_logo:
-            data["team_logo"] = "no logo"
-        if not team_player:
-            raise serializers.ValidationError("error : team_player는 필수입니다.")
-        
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        team_player = data.get('team_player', []) # 배열로 받음 
+        team_logo = data.get('team_logo')
+        team_description = data.get('team_description')
+
         # team_player 중복 확인
         seen = set()
         for player in team_player:

@@ -13,7 +13,7 @@ class maketeam(APIView):
     {
         'team_host' : {String},
         'team_name' : {String},
-        'team_player' : {String},
+        'team_player' : [String],
         'team_logo' : {String},
         'team_area' : {String},
         'team_description' : {String},
