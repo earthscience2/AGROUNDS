@@ -68,6 +68,46 @@ class GameInfo(models.Model):
         db_table = "game_info"
 
 
+
+class MatchInfo(models.Model):
+    match_code = models.CharField(primary_key=True, max_length=45)
+    match_host = models.CharField(max_length=45)
+    match_home = models.CharField(max_length=45)
+    match_away = models.CharField(max_length=45)
+    match_home_player = models.JSONField()
+    match_away_player = models.JSONField()
+    match_home_result = models.IntegerField()
+    match_away_result = models.IntegerField()
+    match_official = models.CharField(max_length=45)
+    match_starttime = models.CharField(max_length=45)
+    match_type = models.JSONField()
+    match_goal = models.JSONField(null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'match_info'
+
+class LeagueInfo(models.Model):
+    league_code = models.CharField(primary_key=True, max_length=45)
+    league_host = models.CharField(max_length=45)
+    league_name = models.CharField(max_length=45)
+    league_startdate = models.CharField(max_length=45)
+    league_enddate = models.CharField(max_length=45)
+    league_startjoin = models.CharField(max_length=45)
+    league_endjoin = models.CharField(max_length=45)
+    league_team = models.JSONField()
+    league_area = models.CharField(max_length=45, null=True, blank=True)
+    league_logo = models.CharField(max_length=45, null=True, blank=True)
+    league_winner = models.CharField(max_length=45, null=True, blank=True)
+    league_gametype = models.CharField(max_length=45)
+    league_official = models.CharField(max_length=45)
+    league_description = models.CharField(max_length=45, null=True, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'league_info'
+
+
 class TeamInfo(models.Model):
     team_code = models.CharField(primary_key=True, max_length=45)
     team_host = models.CharField(max_length=45, blank=True, null=True)

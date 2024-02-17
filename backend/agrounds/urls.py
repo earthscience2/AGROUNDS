@@ -34,6 +34,8 @@ urlpatterns = [
     path("api/assist/", include("assist.urls")),
     path("api/login/", include("login.urls")),
     path("api/team/", include('team.urls'),),
+    path("api/match/", include("match.urls")),
+    path("api/league/", include("league.urls")),
 ]
 
 urlpatterns += [
