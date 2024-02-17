@@ -11,7 +11,7 @@ class Team_info_Serializer(serializers.ModelSerializer):
         fields = '__all__'
         model = TeamInfo
         extra_kwargs = {
-            'team_code' : {'default' : 24}
+            'team_code' : {'default' : 36}
         }
     def create(self, validated_data):
         instance = super().create(validated_data)
@@ -22,8 +22,11 @@ class Team_info_Serializer(serializers.ModelSerializer):
         return instance
     
     def validate(self, data):
-        team_player = data.get('team_player', [])  # user_code
-        
+        team_player = data.get('team_player', {})  # user_code
+        team_logo = data.get('team_logo')
+
+        if not team_logo:
+            data["team_logo"] = "no logo"
         if not team_player:
             raise serializers.ValidationError("error : team_player는 필수입니다.")
         
