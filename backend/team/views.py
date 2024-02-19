@@ -11,12 +11,12 @@ class maketeam(APIView):
     """
     json 형식
     {
-        'team_host' : {String},
-        'team_name' : {String},
-        'team_player' : [String],
-        'team_logo' : {String},
-        'team_area' : {String},
-        'team_description' : {String},
+    "team_host": "test",
+    "team_name": "test",
+    "team_player": ["u_1sa87sc1b4cl3u"],
+    "team_logo": "test",
+    "team_area": "test",
+    "team_description": "test"
     }
     """
     def post(self, request, *args, **kwargs):

@@ -12,19 +12,19 @@ class makematch(APIView):
     """
     json 형식
     {
-        'match_host' : {String},
-        'match_home' : {String},
-        'match_away' : {String},
-        'match_home_player' : {list},
-        'match_away_player' : {list},
-        'match_home_result' : {Int},
-        'match_away_result' : {Int},
-        'match_official' : {String},
-        'match_starttime' : {String},
-        'match_type' : {Dict},
-        'match_goal' : {Dict},
-
+    "match_host": "test_host",
+    "match_home": "test_home",
+    "match_away": "test_away",
+    "match_home_player": ["t_p1", "t2"],
+    "match_away_player": ["a_p1", "p2"],
+    "match_home_result": 1,
+    "match_away_result": 2,
+    "match_starttime" : "test",
+    "match_official": "test_official",
+    "match_type": {"45min": 2},
+    "match_goal": {"tests": 1}
     }
+
     """
     def post(self, request, *args, **kwargs):
         serializer = Match_info_Serializer(data=request.data)

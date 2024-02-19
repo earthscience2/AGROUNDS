@@ -12,20 +12,21 @@ class makeleague(APIView):
     """
     json 형식
     {
-        'leageu_host' : {String},
-        'leageu_name' : {String},
-        'leageu_startdate' : {String},
-        'leageu_enddate' : {String},
-        'leageu_startjoin' : {String},
-        'leageu_endjoin' : {String},
-        'leageu_team' : [list],
-        'leageu_area' : {String},
-        'leageu_logo' : {String},
-        'leageu_winner' : {String},
-        'leage_gametype' : {String},
-        'league_official' : {String},
-        'league_description' : {String}
+    "league_host": "test_host",
+    "league_name": "test_name",
+    "league_startdate": "2024-02-10",
+    "league_enddate": "2024-05-10",
+    "league_startjoin": "2024-01-01",
+    "league_endjoin": "2024-02-01",
+    "league_team": ["team1", "team2", "team3"],
+    "league_area": "test_area",
+    "league_logo": "test_logo",
+    "league_winner": "test_winner",
+    "league_gametype": "test_gametype",
+    "league_official": "test_official",
+    "league_description": "test_description"
     }
+
     """
     def post(self, request, *args, **kwargs):
         serializer = League_info_Serializer(data=request.data)

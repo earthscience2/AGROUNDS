@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from DB.models import LeagueInfo
-
+from DB.models import UserInfo
+from DB.models import TeamInfo
 from django.http import JsonResponse
 
 
@@ -11,7 +12,7 @@ class League_info_Serializer(serializers.ModelSerializer):
         fields = '__all__'
         model = LeagueInfo
         extra_kwargs = {
-            'league_code' : {'default' : 321}
+            'league_code' : {'default' : 32221}
         }
     def create(self, validated_data):
         instance = super().create(validated_data)
@@ -42,6 +43,17 @@ class League_info_Serializer(serializers.ModelSerializer):
             if not data.get(field):
                 raise serializers.ValidationError(f"{field} is required.")
 
+        ## league_host가 존재하는 user_code인지 확인
+        try:
+            user_info = UserInfo.objects.get(user_code=league_host)
+        except UserInfo.DoesNotExist:
+            raise serializers.ValidationError(f"User with user code {league_host} does not exist.")
 
-        
+        ## lague_team리스트에 있는 팀들이 실제로 Teaminfo 테이블에 있는 정식으로 등록된 팀인지 확인
+        for team_code in league_team:
+            try:
+                TeamInfo.objects.get(team_code=team_code)
+            except TeamInfo.DoesNotExist:
+                raise serializers.ValidationError(f"Team with team code {team_code} does not exist.")
+
         return data
