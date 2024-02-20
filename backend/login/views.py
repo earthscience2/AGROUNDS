@@ -11,7 +11,6 @@ from rest_framework import status
 # from .models import User_info
 from DB.models import UserInfo
 from .serializers import User_info_Serializer
-from .serializers import CustomTokenObtainPairSerializer
 from django.contrib.auth.hashers import check_password
 
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -47,7 +46,6 @@ class nickname(APIView):
                 {"error": "Invalid input"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-
 # 아이디 중복확인
 class id(APIView):
     def get(self, request, format=None):
@@ -70,7 +68,7 @@ class id(APIView):
             return Response(
                 {"error": "Invalid input"}, status=status.HTTP_400_BAD_REQUEST
             )
-        
+
 # 회원가입
 class signup(APIView):
     """
@@ -134,6 +132,9 @@ class login(APIView):
             return JsonResponse({"error": str(e)}, status=500)
         
     def get_tokens_for_user(self, user):
+        """
+        token 생성 함수
+        """
         refresh = RefreshToken.for_user(user)
         refresh['user_code'] = user.user_code
 
@@ -141,13 +142,6 @@ class login(APIView):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }
-    
-class CustomTokenObtainPairView(TokenObtainPairView):
-    # Replace the serializer with your custom
-    serializer_class = CustomTokenObtainPairSerializer
-    
-        
-    
 
 class kakao(APIView):
     def get(self, request):
