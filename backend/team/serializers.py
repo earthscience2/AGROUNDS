@@ -3,7 +3,7 @@ from DB.models import TeamInfo
 from DB.models import UserInfo
 from django.http import JsonResponse
 import datetime
-
+from staticfiles.make_code import make_code
 import re
 
 class Team_info_Serializer(serializers.ModelSerializer):
@@ -11,11 +11,12 @@ class Team_info_Serializer(serializers.ModelSerializer):
         fields = '__all__'
         model = TeamInfo
         extra_kwargs = {
-            'team_code': {'default': 2}
+            'team_code': {'required' : False}
         }
 
     def create(self, validated_data):
         instance = super().create(validated_data)
+        instance.team_code = make_code('t')
         instance.save()
         return instance
     

@@ -11,16 +11,16 @@ from .serializers import League_info_Serializer
 class makeleague(APIView):
     """
     json 형식
-    {
-    "league_host": "test_host",
-    "league_name": "test_name",
+    { 
+    "league_host": "u_1sa880533r6rc7", 
+    "league_name": "u_1sa880533r6rc7",
     "league_startdate": "2024-02-10",
     "league_enddate": "2024-05-10",
     "league_startjoin": "2024-01-01",
-    "league_endjoin": "2024-02-01",
-    "league_team": ["team1", "team2", "team3"],
+    "league_endjoin": "2024-02-01", 
+    "league_team": ["0"],
     "league_area": "test_area",
-    "league_logo": "test_logo",
+    "league_logo": "test_logo", 
     "league_winner": "test_winner",
     "league_gametype": "test_gametype",
     "league_official": "test_official",

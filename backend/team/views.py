@@ -11,9 +11,9 @@ class maketeam(APIView):
     """
     json 형식
     {
-    "team_host": "test",
+    "team_host": "t_1sa882k1mp4li4",
     "team_name": "test",
-    "team_player": ["u_1sa87sc1b4cl3u"],
+    "team_player": ["u_1sa880533r6rc7"],
     "team_logo": "test",
     "team_area": "test",
     "team_description": "test"

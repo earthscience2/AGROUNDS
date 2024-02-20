@@ -3,7 +3,7 @@ from DB.models import MatchInfo
 from DB.models import TeamInfo
 from DB.models import UserInfo
 from django.http import JsonResponse
-
+from staticfiles.make_code import make_code
 
 import re
 
@@ -12,10 +12,11 @@ class Match_info_Serializer(serializers.ModelSerializer):
         fields = '__all__'
         model = MatchInfo
         extra_kwargs = {
-            'match_code' : {'default' : 36223222222222}
-        }
+            'match_code' : {'required' : False}
+	    }
     def create(self, validated_data):
         instance = super().create(validated_data)
+        instance.match_code = make_code('m')
         instance.save()
         return instance
     
