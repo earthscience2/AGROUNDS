@@ -15,8 +15,9 @@ class Team_info_Serializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        instance = super().create(validated_data)
-        instance.team_code = make_code('t')
+        team_code = make_code('m')  # 먼저 match_code 생성
+        validated_data['team_code'] = team_code  # validated_data에 추가
+        instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
         return instance
     

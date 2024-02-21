@@ -18,7 +18,7 @@ class makeleague(APIView):
     "league_enddate": "2024-05-10",
     "league_startjoin": "2024-01-01",
     "league_endjoin": "2024-02-01", 
-    "league_team": ["0"],
+    "league_team": ["m_1sa882t2qlvaam"],
     "league_area": "test_area",
     "league_logo": "test_logo", 
     "league_winner": "test_winner",

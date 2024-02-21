@@ -13,11 +13,12 @@ class Match_info_Serializer(serializers.ModelSerializer):
         model = MatchInfo
         extra_kwargs = {
             'match_code' : {'required' : False}
-	    }
+        }
+
     def create(self, validated_data):
-        instance = super().create(validated_data)
-        instance.match_code = make_code('m')
-        instance.save()
+        match_code = make_code('m')  # 먼저 match_code 생성
+        validated_data['match_code'] = match_code  # validated_data에 추가
+        instance = super().create(validated_data)  # 인스턴스 생성
         return instance
     
     def validate(self, data):
@@ -32,7 +33,7 @@ class Match_info_Serializer(serializers.ModelSerializer):
         match_official = data.get('match_official')
         match_type = data.get('match_type', {})
         match_goal = data.get('match_goal', {})
-    
+
         required_fields = ['match_host', 'match_home', 'match_away', 'match_home_player', 'match_away_player',
                            'match_home_result', 'match_away_result', 'match_starttime', 'match_official', 'match_type']
         errors = {field: f"{field} 필드는 필수입니다." for field in required_fields if not data.get(field)}
@@ -55,10 +56,11 @@ class Match_info_Serializer(serializers.ModelSerializer):
         update_team_points(match_home, match_home_result)
         update_team_points(match_away, match_away_result)
 
-
         if errors:
             raise serializers.ValidationError(errors)
 
+        
+        
         
         return data
 

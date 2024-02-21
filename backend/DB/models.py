@@ -70,7 +70,7 @@ class GameInfo(models.Model):
 
 
 class MatchInfo(models.Model):
-    match_code = models.CharField(primary_key=True, max_length=45)
+    match_code = models.CharField(max_length=50, unique=True, primary_key=True)
     match_host = models.CharField(max_length=45)
     match_home = models.CharField(max_length=45)
     match_away = models.CharField(max_length=45)
@@ -120,7 +120,8 @@ class TeamInfo(models.Model):
     team_area = models.CharField(max_length=45, blank=True, null=True)
     team_description = models.CharField(max_length=45, blank=True, null=True)
     team_age = models.IntegerField(blank=True, null=True)
-
+    team_5_match = models.CharField(max_length=45, blank=True, null= True)
+    
     class Meta:
         managed = False
         db_table = 'team_info'

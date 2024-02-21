@@ -15,8 +15,9 @@ class League_info_Serializer(serializers.ModelSerializer):
             'league_code' : {'required' : False}
 	    }
     def create(self, validated_data):
-        instance = super().create(validated_data)
-        instance.league_code = make_code('l')
+        league_code = make_code('m')  # 먼저 match_code 생성
+        validated_data['league_code'] = league_code  # validated_data에 추가
+        instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
         return instance
     
