@@ -124,14 +124,8 @@ class login(APIView):
                 return JsonResponse({'error': '비밀번호가 일치하지 않습니다.'}, status=401)
 
             # 로그인 성공
-
-            # 토큰 발급
-            token = self.getTokensForUser(user)
-            return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
-                                 'user_id' : user.user_id,
-                                 'user_nickname' : user.user_nickname,
-                                 'token' : token
-                                 }, status=200)
+            # 로그인 response return
+            return self.getLogin(user)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "유효한 JSON 형식이 아닙니다."}, status=400)
@@ -149,6 +143,14 @@ class login(APIView):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }
+    
+    def getLogin(self, user):
+        token = self.getTokensForUser(user)
+        return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
+                                'user_id' : user.user_id,
+                                'user_nickname' : user.user_nickname,
+                                'token' : token
+                                }, status=200)
 
 class kakao(APIView):
     def get(self, requset):
@@ -184,9 +186,8 @@ class kakaoCallback(APIView):
             print(cryptographysss.decrypt_aes(encrypted_email))
             return redirect(CLIENT_URL+"/KSigninPage",encrypted_email)
 
-        return JsonResponse({'message': '카카오로그인이 성공적으로 완료되었습니다.'}, status=200)
+        return login.getLogin(user)
         
-
 class google(APIView):
     def get(self, request):
         return redirect(SERVER_URL+"/api/login/allauth/google/login/")
