@@ -3,7 +3,7 @@ from DB.models import LeagueInfo
 from DB.models import UserInfo
 from DB.models import TeamInfo
 from django.http import JsonResponse
-
+from staticfiles.make_code import make_code
 
 import re
 
@@ -12,10 +12,12 @@ class League_info_Serializer(serializers.ModelSerializer):
         fields = '__all__'
         model = LeagueInfo
         extra_kwargs = {
-            'league_code' : {'default' : 32221}
-        }
+            'league_code' : {'required' : False}
+	    }
     def create(self, validated_data):
-        instance = super().create(validated_data)
+        league_code = make_code('m')  # 먼저 match_code 생성
+        validated_data['league_code'] = league_code  # validated_data에 추가
+        instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
         return instance
     
