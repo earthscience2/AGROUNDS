@@ -120,7 +120,7 @@ class TeamInfo(models.Model):
     team_area = models.CharField(max_length=45, blank=True, null=True)
     team_description = models.CharField(max_length=45, blank=True, null=True)
     team_age = models.IntegerField(blank=True, null=True)
-    team_5_match = models.CharField(max_length=45, blank=True, null= True)
+    team_5_match = models.JSONField(max_length=45, blank=True)
     
     class Meta:
         managed = False

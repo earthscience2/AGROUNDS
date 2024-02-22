@@ -6,7 +6,6 @@ import datetime
 from staticfiles.make_code import make_code
 
 import re
-
 class Team_info_Serializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
@@ -19,6 +18,8 @@ class Team_info_Serializer(serializers.ModelSerializer):
         team_code = make_code('t')  # 먼저 match_code 생성
         validated_data['team_code'] = team_code  # validated_data에 추가
         validated_data['team_point'] = 0
+        validated_data['team_player'] =[]
+        validated_data['team_5_match'] =[]
         instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
         return instance
@@ -31,28 +32,11 @@ class Team_info_Serializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errors)
 
         team_player = data.get('team_player', [])
-        team_logo = data.get('team_logo')
-        team_description = data.get('team_description')
 
         # If team_player is provided, execute the following logic.
         if team_player:
             # Calculate team_age based on user_birth for each team player
-            team_age_list = []
-            for player_code in team_player:
-                try:
-                    user_info = UserInfo.objects.get(user_code=player_code)
-                    user_birth = user_info.user_birth
-                    # Assuming user_birth is in YYYYMMDD format
-                    current_date = datetime.datetime.now()
-                    birth_year = int(user_birth[:4])
-                    birth_month = int(user_birth[4:6])
-                    birth_day = int(user_birth[6:8])
-                    birth_date = datetime.datetime(birth_year, birth_month, birth_day)
-                    age_timedelta = current_date - birth_date
-                    team_age = age_timedelta.days // 365
-                    team_age_list.append(team_age)
-                except UserInfo.DoesNotExist:
-                    raise serializers.ValidationError(f"유저 코드 {player_code}에 해당하는 사용자가 존재하지 않습니다.")
+            team_age_list = calculate_team_age([],team_player)
 
             # Check for duplicate team players
             seen = set()
@@ -69,6 +53,7 @@ class Team_info_Serializer(serializers.ModelSerializer):
 
 
 
+## Team 수정페이지
 class UpdateTeamInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamInfo
@@ -91,22 +76,7 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("error : team_player에 중복된 값이 있습니다.")
             
             # Calculate team_age based on user_birth for each team player
-            team_age_list = []
-            for player_code in new_team_player:
-                try:
-                    user_info = UserInfo.objects.get(user_code=player_code)
-                    user_birth = user_info.user_birth
-                    # Assuming user_birth is in YYYYMMDD format
-                    current_date = datetime.datetime.now()
-                    birth_year = int(user_birth[:4])
-                    birth_month = int(user_birth[4:6])
-                    birth_day = int(user_birth[6:8])
-                    birth_date = datetime.datetime(birth_year, birth_month, birth_day)
-                    age_timedelta = current_date - birth_date
-                    team_age = age_timedelta.days // 365
-                    team_age_list.append(team_age)
-                except UserInfo.DoesNotExist:
-                    raise serializers.ValidationError(f"유저 코드 {player_code}에 해당하는 사용자가 존재하지 않습니다.")
+            team_age_list = calculate_team_age(instance.team_player, new_team_player)
 
             # Merge the existing and new team players
             instance.team_player = list(existing_team_player_set | new_team_player_set)
@@ -117,3 +87,24 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+def calculate_team_age(existing_team_player, new_team_player):
+    team_age_list = []
+    all_team_players = existing_team_player + new_team_player
+    for player_code in all_team_players:
+        try:
+            user_info = UserInfo.objects.get(user_code=player_code)
+            user_birth = user_info.user_birth
+            # Assuming user_birth is in YYYYMMDD format
+            current_date = datetime.datetime.now()
+            birth_year = int(user_birth[:4])
+            birth_month = int(user_birth[4:6])
+            birth_day = int(user_birth[6:8])
+            birth_date = datetime.datetime(birth_year, birth_month, birth_day)
+            age_timedelta = current_date - birth_date
+            team_age = age_timedelta.days // 365
+            team_age_list.append(team_age)
+        except UserInfo.DoesNotExist:
+            raise serializers.ValidationError(f"유저 코드 {player_code}에 해당하는 사용자가 존재하지 않습니다.")
+    return team_age_list
