@@ -7,6 +7,11 @@ import { useEffect } from "react";
 import client from "../../Clients";
 
 function Signin({color,text,imgsrc}){
+
+    "http://localhost:3000/KSigninPage/?id=RpleyftNO56B7etR4n5OPgkPyQ=="
+    "http://localhost:3000/ALMainPage/?token=RpleyftNO56B7etR4n5OPgkPyQ=="
+    const user_id = new URL(window.location.href).searchParams.get('id');
+
     const [nickname, setNickname] = useState('');
     const [name, setName] = useState('');
     const [birth,setBirth] = useState('');
@@ -61,6 +66,7 @@ function Signin({color,text,imgsrc}){
         event.preventDefault();
 
         let SignUpData = {
+            'user_id' : user_id,
             'user_birth' : birth,
             'user_name' : name,
             'user_gender' : gender,
@@ -69,7 +75,7 @@ function Signin({color,text,imgsrc}){
 
         }
         console.log(SignUpData);
-        client.post('/api/login/signup/',SignUpData)
+        client.post('/api/login/kakao/signup',SignUpData)
         .then(function(response){
             console.log(response)
         })

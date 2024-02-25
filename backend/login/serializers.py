@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from DB.models import UserInfo
+from DB.models import PlayerInfo
 
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 from staticfiles.make_code import make_code
-
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 import re
 
@@ -23,11 +22,20 @@ class User_info_Serializer(serializers.ModelSerializer):
     def create(self,validated_data):
         password = validated_data.pop('password',None)
         instance = self.Meta.model(**validated_data)
-        if password is not None :
+        if password is not None:
             # hashing password
-            instance.password = make_password(password)
+            if password == "0":
+                instance.password = "0"
+            else:
+                instance.password = make_password(password)
 
         instance.user_code = make_code('u')
+        player_data = {
+            'user_code' : instance.user_code
+        }
+        player_info_serializer = Player_info_Serializer(data = player_data)
+        player_info_serializer.is_valid(raise_exception=True)
+        player_info_serializer.save()
         instance.save()
         return instance
     
@@ -64,7 +72,6 @@ class User_info_Serializer(serializers.ModelSerializer):
         return data
 
     def regexes(self, pattern, text):
-        print(text)
         return re.compile(r''+pattern).match(text)
     
     def regexes_all(self, user_id, password, user_nickname, user_name, user_birth):
@@ -78,8 +85,25 @@ class User_info_Serializer(serializers.ModelSerializer):
 
         for i in range (0, 5):
             if (self.regexes(patterns[i], items[i]) == None):
-                print(serializers.ValidationError("올바르지 않은 " + massges[i] +" 형식입니다."))
+                if (i == 1 and items[i] == "0"):
+                    return None
                 raise serializers.ValidationError({"error" : "올바르지 않은 " + massges[i] +" 형식입니다."})
-        
         return None
-    
+
+
+class Player_info_Serializer(serializers.ModelSerializer):
+    class Meta:
+        fields = '__all__'
+        model = PlayerInfo
+
+        extra_kwargs = {
+            'player_height' : {'required' : False},
+            'player_weight' : {'required' : False},
+            'player_point' : {'required' : False},
+            'player_area' : {'required' : False},
+            'player_position' : {'required' : False},
+            'player_description' : {'required' : False},
+            'player_goal' : {'required' : False},
+            'player_assist' : {'required' : False},
+            'player_foot' : {'required' : False},
+	    }

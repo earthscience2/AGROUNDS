@@ -68,7 +68,6 @@ class GameInfo(models.Model):
         db_table = "game_info"
 
 
-
 class MatchInfo(models.Model):
     match_code = models.CharField(max_length=50, unique=True, primary_key=True)
     match_host = models.CharField(max_length=45)
@@ -140,3 +139,20 @@ class UserInfo(models.Model):
     class Meta:
         managed = False
         db_table = "user_info"
+
+
+class PlayerInfo(models.Model):
+    user_code = models.CharField(primary_key=True, max_length=45)
+    player_height = models.IntegerField()
+    player_weight = models.IntegerField()
+    player_point = models.IntegerField()
+    player_area = models.CharField(max_length=45)
+    player_position = models.CharField(max_length=45)
+    player_description = models.CharField(max_length=200)
+    player_goal = models.IntegerField()
+    player_assist = models.IntegerField()
+    player_foot = models.CharField(max_length=10)
+
+    class Meta:
+        managed = False
+        db_table = "player_info"

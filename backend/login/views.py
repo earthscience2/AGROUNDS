@@ -88,12 +88,13 @@ class signup(APIView):
         "marketing_agree": false
     }
     """
-    #permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
-        serializer = User_info_Serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"message" : serializer.data}, status=status.HTTP_200_OK)
+        user_info_serializer = User_info_Serializer(data=request.data)
+        
+        user_info_serializer.is_valid(raise_exception=True)
+        user_info_serializer.save()
+        return Response({"message" : user_info_serializer.data}, status=status.HTTP_200_OK)
+        
         
 # 로그인
 class login(APIView):
@@ -145,7 +146,7 @@ class login(APIView):
         }
     
     def getLogin(self, user):
-        token = self.getTokensForUser(user)
+        token = self.getTokensForUser(self, user)
         return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
                                 'user_id' : user.user_id,
                                 'user_nickname' : user.user_nickname,
@@ -180,13 +181,34 @@ class kakaoCallback(APIView):
         # 카카오 서버로부터 가져온 유저 이메일이 우리 서비스에 가입되어 있는지 검사 
         try:
             user = UserInfo.objects.get(user_id = kakao_email)
-        except UserInfo.DoesNotExist: # 가입되어있지 않은 유저의 경우 클라이언트 쪽 카카오 회원가입 페이지로 이동
+        except UserInfo.DoesNotExist: # 가입되어있지 않은 유저의 경우 프런트 카카오 회원가입 페이지로 이동
             print("회원가입 진행시켜")
             encrypted_email = cryptographysss.encrypt_aes(kakao_email)
             print(cryptographysss.decrypt_aes(encrypted_email))
-            return redirect(CLIENT_URL+"/KSigninPage",encrypted_email)
+            return redirect(CLIENT_URL+"/KSigninPage/?id=" + encrypted_email)
+        
+        return redirect(CLIENT_URL+"/ALMainPage/?token="+login.getTokensForUser(login, user)['access'])
 
-        return login.getLogin(user)
+class kakaoSignup(APIView):
+    """
+    json 형식
+    {
+        "user_id": decrypted string,
+        "user_birth": "20011223",
+        "user_name": "구자유",
+        "user_gender": "male",
+        "user_nickname": "jayou",
+        "marketing_agree": false
+    }
+    """
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        data["user_id"] = cryptographysss.decrypt_aes(data["user_id"])
+        data["password"] = 0
+        serializer = User_info_Serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message" : serializer.data}, status=status.HTTP_200_OK)
         
 class google(APIView):
     def get(self, request):
