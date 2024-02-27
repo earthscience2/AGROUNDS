@@ -15,6 +15,8 @@ INSTALLED_APPS = [
     "assist",
     "login",
     "DB",
+    "player",
+    "user",
     # Third party apps
     "rest_framework",
     "drf_yasg",

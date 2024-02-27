@@ -1,15 +1,11 @@
-from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import JsonResponse
-
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 # from .models import User_info
-from DB.models import UserInfo
+from .models import UserInfo
 from .serializers import User_info_Serializer
 from django.contrib.auth.hashers import check_password
 
@@ -93,8 +89,7 @@ class signup(APIView):
         
         user_info_serializer.is_valid(raise_exception=True)
         user_info_serializer.save()
-        return Response({"message" : user_info_serializer.data}, status=status.HTTP_200_OK)
-        
+        return Response({user_info_serializer.data}, status=status.HTTP_200_OK)
         
 # 로그인
 class login(APIView):
@@ -187,7 +182,7 @@ class kakaoCallback(APIView):
             print(cryptographysss.decrypt_aes(encrypted_email))
             return redirect(CLIENT_URL+"/KSigninPage/?id=" + encrypted_email)
         
-        return redirect(CLIENT_URL+"/ALMainPage/?token="+login.getTokensForUser(login, user)['access'])
+        return redirect(CLIENT_URL+"/ALMainPage/?code="+login.getTokensForUser(login, user)['access'])
 
 class kakaoSignup(APIView):
     """
@@ -205,10 +200,12 @@ class kakaoSignup(APIView):
         data = request.data
         data["user_id"] = cryptographysss.decrypt_aes(data["user_id"])
         data["password"] = 0
+        print(data)
         serializer = User_info_Serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"message" : serializer.data}, status=status.HTTP_200_OK)
+        new_user = serializer.data
+        return Response(new_user, status=status.HTTP_200_OK)
         
 class google(APIView):
     def get(self, request):
