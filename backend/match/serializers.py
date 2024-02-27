@@ -48,7 +48,7 @@ class Before_Match_info_Serializer(serializers.ModelSerializer):
 
         return data
 
-
+# 매치가 끝난 뒤 입력
 class After_Match_info_Serializer(serializers.ModelSerializer):
     class Meta:
         model = MatchInfo

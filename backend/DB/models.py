@@ -134,7 +134,7 @@ class UserInfo(models.Model):
     user_gender = models.CharField(max_length=45)
     user_nickname = models.CharField(max_length=45)
     marketing_agree = models.BooleanField()
-    user_type = models.IntegerField()
+    login_type = models.IntegerField()
 
     class Meta:
         managed = False
