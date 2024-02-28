@@ -38,3 +38,35 @@ class edit_player(APIView):
             player = PlayerInfo.objects.get(user_code = request.data['user_code'])
         except PlayerInfo.DoesNotExist:
             return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
+        
+class get_players(APIView):
+    """
+    user_code로 선수 데이터를 불러옴
+
+    json 형식
+    {
+        'user_code' : {string}
+    }
+    """
+    def get(self, request, *args, **kwargs):
+        try:
+            all_players = PlayerInfo.objects.all()
+        except PlayerInfo.DoesNotExist:
+            return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
+        serialized_data = [
+            {
+                'index' : idx,
+                'user_code': record.user_code,
+                'player_height': record.player_height,
+                'player_weight' : record.player_weight,
+                'player_point' : record.player_point,
+                'player_area' : record.player_area,
+                'player_position' : record.player_position,
+                'player_description' : record.player_description,
+                'player_goal' : record.player_goal,
+                'player_assist' : record.player_assist,
+                'player_foot' : record.player_foot,
+            }
+            for idx, record in enumerate(all_players)
+        ]
+        return JsonResponse({'data' : serialized_data}, status=200)
