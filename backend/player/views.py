@@ -54,15 +54,15 @@ class get_all_players(APIView):
         for idx, record in enumerate(all_players):
             try:
                 player = UserInfo.objects.get(user_code=record.user_code)
-                nickname = getattr(player, 'user_nickname')
+                user_name = getattr(player, 'user_name')
             except UserInfo.DoesNotExist:
                 # Handle the case where UserInfo does not exist for the given user_code
-                nickname = None
-                
+                user_name = None
+
             serialized_data.append({
                 'index' : idx,
                 'user_code': record.user_code,
-                'user_nickname': nickname,
+                'user_name': user_name,
                 'player_height': record.player_height,
                 'player_weight' : record.player_weight,
                 'player_point' : record.player_point,
