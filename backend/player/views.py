@@ -39,24 +39,30 @@ class edit_player(APIView):
         except PlayerInfo.DoesNotExist:
             return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
         
-class get_players(APIView):
+class get_all_players(APIView):
     """
-    user_code로 선수 데이터를 불러옴
-
-    json 형식
-    {
-        'user_code' : {string}
-    }
+    모든 선수를 json을 원소로 가진 배열 형태로 불러옴
     """
     def get(self, request, *args, **kwargs):
         try:
             all_players = PlayerInfo.objects.all()
+            print()
         except PlayerInfo.DoesNotExist:
             return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
-        serialized_data = [
-            {
+        
+        serialized_data = []
+        for idx, record in enumerate(all_players):
+            try:
+                player = UserInfo.objects.get(user_code=record.user_code)
+                nickname = getattr(player, 'user_nickname')
+            except UserInfo.DoesNotExist:
+                # Handle the case where UserInfo does not exist for the given user_code
+                nickname = None
+                
+            serialized_data.append({
                 'index' : idx,
                 'user_code': record.user_code,
+                'user_nickname': nickname,
                 'player_height': record.player_height,
                 'player_weight' : record.player_weight,
                 'player_point' : record.player_point,
@@ -66,7 +72,22 @@ class get_players(APIView):
                 'player_goal' : record.player_goal,
                 'player_assist' : record.player_assist,
                 'player_foot' : record.player_foot,
-            }
-            for idx, record in enumerate(all_players)
-        ]
+            })
+        # serialized_data = [
+        #     {
+        #         'index' : idx,
+        #         'user_code': record.user_code,
+        #         'user_nickname': getattr(UserInfo.objects.get(user_code = str(record.user_code)), 'user_nickname'),
+        #         'player_height': record.player_height,
+        #         'player_weight' : record.player_weight,
+        #         'player_point' : record.player_point,
+        #         'player_area' : record.player_area,
+        #         'player_position' : record.player_position,
+        #         'player_description' : record.player_description,
+        #         'player_goal' : record.player_goal,
+        #         'player_assist' : record.player_assist,
+        #         'player_foot' : record.player_foot,
+        #     }
+        #    for idx, record in enumerate(all_players)
+        # ]
         return JsonResponse({'data' : serialized_data}, status=200)
