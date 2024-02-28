@@ -13,7 +13,7 @@ class maketeam(APIView):
     """
     json 형식
     {
-    "team_host": "u_1sa886fuu8678", 
+    "team_host": "u_1sa88lq2mi23fl2", 
     "team_name": "test", 
     "team_logo": "test",
     "team_area": "test",
@@ -33,9 +33,8 @@ class update_team(APIView):
     """
     json 형식
     {
-    "team_code": "t_1sa888s3bheta6", 
-    "team_host": "u_1sa886fuu8678", 
-    "team_player": ["u_1sa886fuu8678"],
+    "team_code": "t_1sa88m32hn7rb8", 
+    "team_player": ["규성98"],
     "team_logo": "test",
     "team_area": "test",
     "team_description": "test"
