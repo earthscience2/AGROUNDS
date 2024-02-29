@@ -56,7 +56,6 @@ class get_all_players(APIView):
                 player = UserInfo.objects.get(user_code=record.user_code)
                 user_name = getattr(player, 'user_name')
             except UserInfo.DoesNotExist:
-                # Handle the case where UserInfo does not exist for the given user_code
                 user_name = None
 
             serialized_data.append({
@@ -73,21 +72,4 @@ class get_all_players(APIView):
                 'player_assist' : record.player_assist,
                 'player_foot' : record.player_foot,
             })
-        # serialized_data = [
-        #     {
-        #         'index' : idx,
-        #         'user_code': record.user_code,
-        #         'user_nickname': getattr(UserInfo.objects.get(user_code = str(record.user_code)), 'user_nickname'),
-        #         'player_height': record.player_height,
-        #         'player_weight' : record.player_weight,
-        #         'player_point' : record.player_point,
-        #         'player_area' : record.player_area,
-        #         'player_position' : record.player_position,
-        #         'player_description' : record.player_description,
-        #         'player_goal' : record.player_goal,
-        #         'player_assist' : record.player_assist,
-        #         'player_foot' : record.player_foot,
-        #     }
-        #    for idx, record in enumerate(all_players)
-        # ]
         return JsonResponse({'data' : serialized_data}, status=200)

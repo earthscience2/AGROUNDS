@@ -11,7 +11,8 @@ class League_info_Serializer(serializers.ModelSerializer):
         model = LeagueInfo
         extra_kwargs = {
             'league_code': {'required': False},
-            'league_team': {'required': False}
+            'league_team': {'required': False},
+            'league_official': {'required': False},
         }
     
     def create(self, validated_data):

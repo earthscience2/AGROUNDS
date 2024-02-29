@@ -85,11 +85,13 @@ class signup(APIView):
     }
     """
     def post(self, request, *args, **kwargs):
-        user_info_serializer = User_info_Serializer(data=request.data)
+        data = request.data
+        data['login_type'] = 0
+        user_info_serializer = User_info_Serializer(data=data)
         
         user_info_serializer.is_valid(raise_exception=True)
         user_info_serializer.save()
-        return Response({user_info_serializer.data}, status=status.HTTP_200_OK)
+        return Response(user_info_serializer.data, status=status.HTTP_200_OK)
         
 # 로그인
 class login(APIView):
@@ -141,19 +143,21 @@ class login(APIView):
         }
     
     def getLogin(self, user):
-        token = self.getTokensForUser(self, user)
+        token = self.getTokensForUser(user)
         return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
                                 'user_id' : user.user_id,
                                 'user_nickname' : user.user_nickname,
                                 'token' : token
                                 }, status=200)
 
+# 카카오 로그인
 class kakao(APIView):
     def get(self, requset):
         return redirect(
             f"https://kauth.kakao.com/oauth/authorize?client_id={KAKAO_CLIENT_ID}&redirect_uri={KAKAO_CALLBACK_URI}&response_type=code"
         )
 
+# 카카오 로그인 - callback view
 class kakaoCallback(APIView):
     def get(self, request, format=None):
         try:
@@ -184,6 +188,7 @@ class kakaoCallback(APIView):
         
         return redirect(CLIENT_URL+"/ALMainPage/?code="+login.getTokensForUser(login, user)['access'])
 
+# 카카오 로그인 - 회원가입
 class kakaoSignup(APIView):
     """
     json 형식
@@ -200,13 +205,13 @@ class kakaoSignup(APIView):
         data = request.data
         data["user_id"] = cryptographysss.decrypt_aes(data["user_id"])
         data["password"] = 0
-        print(data)
+        data["login_type"] = 1
         serializer = User_info_Serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         new_user = serializer.data
         return Response(new_user, status=status.HTTP_200_OK)
-        
-class google(APIView):
-    def get(self, request):
-        return redirect(SERVER_URL+"/api/login/allauth/google/login/")
+
+# class google(APIView):
+#     def get(self, request):
+#         return redirect(SERVER_URL+"/api/login/allauth/google/login/")
