@@ -2,10 +2,6 @@ from rest_framework import serializers
 from .models import UserInfo
 from DB.models import PlayerInfo
 
-from django.http import JsonResponse
-from django.contrib.auth.hashers import make_password
-from staticfiles.make_code import make_code
-
 from user.serializers import User_info_Serializer, Player_info_Serializer
 
 import re

@@ -11,6 +11,8 @@ from DB.models import UserInfo
 import json
 from django.forms.models import model_to_dict
 
+from staticfiles.get_info import calculate_age
+
 class get_player_by_user_code(APIView):
     """
     user_code로 선수 데이터를 불러옴
@@ -29,6 +31,7 @@ class get_player_by_user_code(APIView):
         player = model_to_dict(player)
         player.pop('user_code')
         player['user_nickname'] = user.user_nickname
+        player['age'] = calculate_age(user.user_birth)
         return JsonResponse(player, status=200)
 
 
@@ -53,8 +56,9 @@ class get_all_players(APIView):
         serialized_data = []
         for idx, record in enumerate(all_players):
             try:
-                player = UserInfo.objects.get(user_code=record.user_code)
-                user_name = getattr(player, 'user_name')
+                user = UserInfo.objects.get(user_code=record.user_code)
+                user_name = getattr(user, 'user_name')
+                age = calculate_age(getattr(user, 'user_birth'))
             except UserInfo.DoesNotExist:
                 user_name = None
 
@@ -71,5 +75,6 @@ class get_all_players(APIView):
                 'player_goal' : record.player_goal,
                 'player_assist' : record.player_assist,
                 'player_foot' : record.player_foot,
+                'age' : age
             })
         return JsonResponse({'data' : serialized_data}, status=200)

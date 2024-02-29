@@ -145,6 +145,7 @@ class login(APIView):
     def getLogin(self, user):
         token = self.getTokensForUser(user)
         return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
+                                'user_code' : user.user_code,
                                 'user_id' : user.user_id,
                                 'user_nickname' : user.user_nickname,
                                 'token' : token
