@@ -1,8 +1,12 @@
 from DB.models import UserInfo
 
 
-def get_user_code_by_user_nickname(self, nickname):
-    return getattr(UserInfo.objects.get(user_nickname = nickname), 'user_code')
+def get_user_code_by_user_nickname(nickname):
+    try:
+        user_code = getattr(UserInfo.objects.get(user_nickname = nickname), 'user_code')
+    except UserInfo.DoesNotExist:
+        user_code = None
+    return user_code
 
 
 from datetime import datetime

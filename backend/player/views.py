@@ -70,6 +70,7 @@ class get_all_players(APIView):
                 user = UserInfo.objects.get(user_code=record.user_code)
                 user_name = getattr(user, 'user_name')
                 age = calculate_age(getattr(user, 'user_birth'))
+                user_gender = getattr(user, 'user_gender')
             except UserInfo.DoesNotExist:
                 user_name = None
 
@@ -86,6 +87,8 @@ class get_all_players(APIView):
                 'player_goal' : record.player_goal,
                 'player_assist' : record.player_assist,
                 'player_foot' : record.player_foot,
-                'age' : age
+                'age' : age,
+                'user_gender' : user_gender,
+                
             })
         return JsonResponse({'data' : serialized_data, 'num_pages' : paginator.num_pages}, status=200)

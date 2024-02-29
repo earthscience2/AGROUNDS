@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import User_info_Serializer
 
 class test_view(APIView):
     # @swagger_auto_schema(tags=["user_code 조회"], request_body=User_info_Serializer, query_serializer=User_info_Serializer)
