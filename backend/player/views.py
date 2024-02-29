@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -49,12 +50,22 @@ class get_all_players(APIView):
     def get(self, request, *args, **kwargs):
         try:
             all_players = PlayerInfo.objects.all()
-            print()
         except PlayerInfo.DoesNotExist:
             return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
         
+        page = request.query_params.get("page")
+        paginator = Paginator(all_players, 10)
+        
+        if(page is None or int(page) < 1):
+            page = 1
+        elif (int(page) > paginator.num_pages):
+            page = paginator.num_pages
+
+        page_obj = paginator.page(page)
+        print()
+
         serialized_data = []
-        for idx, record in enumerate(all_players):
+        for idx, record in enumerate(page_obj):
             try:
                 user = UserInfo.objects.get(user_code=record.user_code)
                 user_name = getattr(user, 'user_name')
@@ -77,4 +88,4 @@ class get_all_players(APIView):
                 'player_foot' : record.player_foot,
                 'age' : age
             })
-        return JsonResponse({'data' : serialized_data}, status=200)
+        return JsonResponse({'data' : serialized_data, 'num_pages' : paginator.num_pages}, status=200)
