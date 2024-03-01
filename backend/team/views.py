@@ -99,17 +99,14 @@ class TeamMoreInfoAPI(APIView):
 
 class TeamPlayerMoreInfoView(APIView):
     """
-    json 형식
-{ "team_code": "t_1sa88og1lrrmvq", "team_player": "진섭95" }
-
-
+    { 
+    "team_code": "t_1sa88og1lrrmvq", "team_player": "진섭95"
+    }
     """
     def patch(self, request, *args, **kwargs):
         team_code = request.data.get('team_code')
-
         if not team_code:
             return Response({"message": "팀 코드가 제공되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             team_info = TeamInfo.objects.get(team_code=team_code)
         except TeamInfo.DoesNotExist:

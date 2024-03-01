@@ -10,6 +10,7 @@ class MatchInfo(models.Model):
     match_away_player = models.JSONField()
     match_home_result = models.IntegerField()
     match_away_result = models.IntegerField()
+    match_total_result = models.JSONField()
     match_official = models.CharField(max_length=45)
     match_starttime = models.CharField(max_length=45)
     match_type = models.JSONField()

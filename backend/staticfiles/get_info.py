@@ -1,16 +1,12 @@
 from DB.models import UserInfo
 
 from rest_framework import serializers
-def get_user_code_by_user_nickname(nickname_list):
-    user_code_list = []
-    for nickname in nickname_list:
-        try:
-            user_code = getattr(UserInfo.objects.get(user_nickname = nickname), 'user_code')
-            user_code_list.append(user_code)
-        except UserInfo.DoesNotExist:
-            raise serializers.ValidationError(f"유저 닉네임 {nickname}에 해당하는 사용자가 존재하지 않습니다.")
-    return user_code_list
-
+def get_user_code_by_user_nickname(nickname):
+    try:
+        user_code = getattr(UserInfo.objects.get(user_nickname = nickname), 'user_code')
+    except UserInfo.DoesNotExist:
+        user_code = None
+    return user_code
 
 
 from datetime import datetime

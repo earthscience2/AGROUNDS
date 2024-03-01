@@ -5,7 +5,7 @@ from DB.models import TeamInfo
 from django.http import JsonResponse
 from staticfiles.make_code import make_code
 
-
+## main page
 class League_main_page(serializers.ModelSerializer):
     class Meta:
         model = LeagueInfo

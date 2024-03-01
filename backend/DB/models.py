@@ -121,6 +121,7 @@ class TeamInfo(models.Model):
     team_5_match = models.JSONField(max_length=45, blank=True)
     team_tier = models.CharField(max_length=45, blank=True, null=True)
     team_games = models.IntegerField(blank=True, null=True)
+    
     class Meta:
         managed = False
         db_table = 'team_info'
