@@ -139,8 +139,6 @@ class UserInfo(models.Model):
     class Meta:
         managed = False
         db_table = "user_info"
-
-
 class PlayerInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     player_height = models.IntegerField()
