@@ -1,11 +1,14 @@
 from rest_framework import serializers
 from DB.models import TeamInfo
 from DB.models import UserInfo
+from DB.models import PlayerInfo
 from django.http import JsonResponse
 import datetime
 from staticfiles.make_code import make_code
-
+from staticfiles.get_info import get_user_code_by_user_nickname 
 import re
+
+       
 
 ## main page
 class Team_main_page(serializers.ModelSerializer):
@@ -26,8 +29,10 @@ class Team_info_Serializer(serializers.ModelSerializer):
         team_code = make_code('t')  # 먼저 match_code 생성
         validated_data['team_code'] = team_code  # validated_data에 추가
         validated_data['team_point'] = 0
+        validated_data['team_games'] = 0
         validated_data['team_player'] =[]
         validated_data['team_5_match'] =[]
+        
         instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
         return instance
@@ -56,28 +61,28 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
 
         new_team_player = validated_data.get('team_player', [])
         
-        print(new_team_player)
+        print(get_user_code_by_user_nickname(new_team_player))
         # If new_team_player is provided, execute the following logic.
         if new_team_player:
             # Check if the new players are already in the existing team
             existing_team_player_set = set(instance.team_player)
-            new_team_player_set = set(new_team_player)
-            if existing_team_player_set & new_team_player_set:
+            new_team_player_codes = [get_user_code_by_user_nickname(nickname) for nickname in new_team_player]
+            
+            # Raise error if there's duplicate player in the team
+            if existing_team_player_set & set(new_team_player_codes):
                 raise serializers.ValidationError("error : team_player에 중복된 값이 있습니다.")
             
-            # Calculate team_age based on user_birth for each team player
-            team_age_list = calculate_team_age(instance.team_player, new_team_player)
+            # Add new team player codes to the existing team player
+            instance.team_player.extend(new_team_player_codes)
 
-            # Merge the existing and new team players
-            instance.team_player = list(existing_team_player_set | new_team_player_set)
-            
+            # Calculate team_age based on user_birth for each team player
+            team_age_list = calculate_team_age(instance.team_player, new_team_player_codes)
             # Assign the average team age to the data
             if team_age_list:
                 instance.team_age = sum(team_age_list) // len(team_age_list)
 
         instance.save()
         return instance
-
 # team_age 계산 
 def calculate_team_age(existing_team_player, new_team_player):
     team_age_list = []
@@ -101,3 +106,49 @@ def calculate_team_age(existing_team_player, new_team_player):
         except UserInfo.DoesNotExist:
             raise serializers.ValidationError(f"유저 닉네임 {player_nickname}에 해당하는 사용자가 존재하지 않습니다.")
     return team_age_list
+
+# 티어로 search
+class Team_Search(serializers.ModelSerializer):
+    class Meta:
+        model = TeamInfo
+        fields = '__all__'  
+
+    def to_representation(self, instance):
+        tier = self.context.get('team_tier', None)
+
+        if tier is not None and instance.team_tier == tier:
+            return super().to_representation(instance)
+        else:
+            return None
+       
+# 팀 상세 조희 API
+class Team_More_info(serializers.ModelSerializer):
+    class Meta:
+        model = TeamInfo
+        fields = '__all__'
+    def to_representation(self, instance):
+        code = self.context.get('team_code',None)
+
+        if code is not None and instance.team_code == code:
+            return super().to_representation(instance)
+        else:
+            return None
+
+# 팀 선수 상세 조회 API
+
+
+
+class Team_Player_More_info(serializers.ModelSerializer):
+    class Meta:
+        model = TeamInfo
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        team_code = validated_data.get('team_code')
+        team_player = validated_data.get('team_player')
+
+        if instance.team_code == team_code and team_player in instance.team_player:
+            player_info = PlayerInfo.objects.get(player_nickname=team_player)
+            return player_info
+        else:
+            raise serializers.ValidationError("팀 코드와 선수 별명이 일치하지 않습니다.")

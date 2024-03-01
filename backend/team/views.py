@@ -9,16 +9,19 @@ from DB.models import TeamInfo
 from .serializers import Team_info_Serializer
 from .serializers import UpdateTeamInfoSerializer
 from .serializers import Team_main_page
+from .serializers import Team_Search
+from .serializers import Team_More_info
+from .serializers import *
 
 ## main page
-class TeamMain(APIView):
+class TeamMainAPI(APIView):
     def get(self, request):
         team_info = TeamInfo.objects.all()
         serializer = Team_main_page(team_info, many=True)
         return Response(serializer.data)
 
 
-class maketeam(APIView):
+class TeamMakeTeamAPI(APIView):
     """
     json 형식
     {
@@ -38,7 +41,7 @@ class maketeam(APIView):
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class update_team(APIView):
+class TeamUpdateTeamAPI(APIView):
     """
     json 형식
     {
@@ -59,4 +62,63 @@ class update_team(APIView):
             return Response(serializer.data)
         else:
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# 티어로 search
+class TeamSearchAPIView(APIView):
+    """
+    {
+        "tier" : "bronze"
+    }
+    """
+    def post(self, request):
+        team_tier = request.data.get('team_tier')
+        if team_tier is None:
+            return Response({"error": "team_tier parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+        team_info = TeamInfo.objects.filter(team_tier=team_tier)
+        serializer = Team_Search(team_info, many=True, context={'tier': team_tier})
+        return Response(serializer.data)
+
+
+class TeamMoreInfoAPI(APIView):
+    """
+    {
+    "team_code": "t_1sa88og1lrrmvq",
+    "team_player": "진섭95"
+    }
+    """
+    def post(self, request):
+        team_code = request.data.get('team_code')
+        if team_code is None:
+            return Response({"error": "Tier parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+        team_info = TeamInfo.objects.filter(team_code=team_code)
+        serializer = Team_More_info(team_info, many=True, context={'team_code': team_code})
+        return Response(serializer.data)
+
+
+
+class TeamPlayerMoreInfoView(APIView):
+    """
+    json 형식
+{ "team_code": "t_1sa88og1lrrmvq", "team_player": "진섭95" }
+
+
+    """
+    def patch(self, request, *args, **kwargs):
+        team_code = request.data.get('team_code')
+
+        if not team_code:
+            return Response({"message": "팀 코드가 제공되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            team_info = TeamInfo.objects.get(team_code=team_code)
+        except TeamInfo.DoesNotExist:
+            return Response({"message": "해당 팀 코드를 가진 팀이 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = Team_Player_More_info(team_info, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
