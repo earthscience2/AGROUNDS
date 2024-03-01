@@ -19,4 +19,6 @@ class Player_Info_Serializer(serializers.ModelSerializer):
             'player_goal' : {'required' : False},
             'player_assist' : {'required' : False},
             'player_foot' : {'required' : False},
+            'player_num' : {'required' : False},
+            'player_team' : {'required' : False},
 	    }
