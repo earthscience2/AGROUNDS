@@ -13,7 +13,7 @@ from .serializers import Match_main_page
 
 
 ## main page
-class TeamMain(APIView):
+class MatchMain(APIView):
     def get(self, request):
         match_info = MatchInfo.objects.all()
         serializer = Match_main_page(match_info, many=True)

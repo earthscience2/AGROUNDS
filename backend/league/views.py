@@ -10,7 +10,7 @@ from .serializers import League_info_Serializer
 from .serializers import League_main_page
 
 ## main page
-class TeamMain(APIView):
+class LeagueMain(APIView):
     def get(self, request):
         league_info = LeagueInfo.objects.all()
         serializer = League_main_page(league_info, many=True)
