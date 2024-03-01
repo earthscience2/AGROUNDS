@@ -11,6 +11,8 @@ class PlayerInfo(models.Model):
     player_goal = models.IntegerField()
     player_assist = models.IntegerField()
     player_foot = models.CharField(max_length=10)
+    player_num = models.IntegerField()
+    player_team = models.CharField(max_length=45)
 
     class Meta:
         managed = False

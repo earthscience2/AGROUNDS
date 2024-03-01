@@ -141,8 +141,6 @@ class UserInfo(models.Model):
     class Meta:
         managed = False
         db_table = "user_info"
-
-
 class PlayerInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     player_height = models.IntegerField()
@@ -154,6 +152,8 @@ class PlayerInfo(models.Model):
     player_goal = models.IntegerField()
     player_assist = models.IntegerField()
     player_foot = models.CharField(max_length=10)
+    player_num = models.IntegerField()
+    player_team = models.CharField(max_length=45)
 
     class Meta:
         managed = False
