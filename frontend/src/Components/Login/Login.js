@@ -32,7 +32,7 @@ function Login(props){
     }
 
     const onKakaoClick = (e) => {
-        window.location.replace("https://agrounds.com/api/login/kakao");
+        window.location.replace("http://localhost:8000/api/login/kakao");
     }
     const onAgrooundClick = (e) => {
         e.preventDefault();

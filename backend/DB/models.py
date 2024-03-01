@@ -2,7 +2,6 @@ from django.db import models
 
 
 # Create your models here.
-# Create your models here.
 class ARank(models.Model):
     a_team_code = models.CharField(primary_key=True, max_length=45)
     a_team_score = models.CharField(max_length=45)
@@ -68,7 +67,6 @@ class GameInfo(models.Model):
         db_table = "game_info"
 
 
-
 class MatchInfo(models.Model):
     match_code = models.CharField(max_length=50, unique=True, primary_key=True)
     match_host = models.CharField(max_length=45)
@@ -98,7 +96,7 @@ class LeagueInfo(models.Model):
     league_startjoin = models.CharField(max_length=45)
     league_endjoin = models.CharField(max_length=45)
     league_team = models.JSONField()
-    league_area = models.CharField(max_length=45, null=True, blank=True)
+    league_area = models.CharField(max_length=45, blank=True)
     league_logo = models.CharField(max_length=45, null=True, blank=True)
     league_winner = models.CharField(max_length=45, null=True, blank=True)
     league_gametype = models.CharField(max_length=45)
@@ -114,13 +112,13 @@ class TeamInfo(models.Model):
     team_code = models.CharField(primary_key=True, max_length=45)
     team_host = models.CharField(max_length=45, blank=True, null=True)
     team_name = models.CharField(max_length=45, blank=True, null=True)
-    team_player = models.JSONField(blank=True, null=True)
+    team_player = models.JSONField(blank=True)
     team_logo = models.CharField(max_length=45, blank=True, null=True)
     team_point = models.IntegerField(blank=True, null=True)
     team_area = models.CharField(max_length=45, blank=True, null=True)
     team_description = models.CharField(max_length=45, blank=True, null=True)
     team_age = models.IntegerField(blank=True, null=True)
-    team_5_match = models.CharField(max_length=45, blank=True, null= True)
+    team_5_match = models.JSONField(max_length=45, blank=True)
     
     class Meta:
         managed = False
@@ -136,7 +134,23 @@ class UserInfo(models.Model):
     user_gender = models.CharField(max_length=45)
     user_nickname = models.CharField(max_length=45)
     marketing_agree = models.BooleanField()
+    login_type = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = "user_info"
+class PlayerInfo(models.Model):
+    user_code = models.CharField(primary_key=True, max_length=45)
+    player_height = models.IntegerField()
+    player_weight = models.IntegerField()
+    player_point = models.IntegerField()
+    player_area = models.CharField(max_length=45)
+    player_position = models.CharField(max_length=45)
+    player_description = models.CharField(max_length=200)
+    player_goal = models.IntegerField()
+    player_assist = models.IntegerField()
+    player_foot = models.CharField(max_length=10)
+
+    class Meta:
+        managed = False
+        db_table = "player_info"

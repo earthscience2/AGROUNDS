@@ -1,11 +1,9 @@
 from django.contrib import admin
-from django.urls import include, path, re_path
-from django.views.generic import TemplateView
+from django.urls import include, path
 import assist.views
 import DB.views
 import login.views
 
-from django.conf import settings
 from rest_framework import routers
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -36,6 +34,8 @@ urlpatterns = [
     path("api/team/", include('team.urls'),),
     path("api/match/", include("match.urls")),
     path("api/league/", include("league.urls")),
+    path("api/player/", include("player.urls")),
+    path("api/user/", include("user.urls"))
 ]
 
 urlpatterns += [

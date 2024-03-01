@@ -8,9 +8,17 @@ from rest_framework import status
 from DB.models import LeagueInfo
 from .serializers import League_info_Serializer
 from django.db.models import Q
+from .serializers import League_main_page
 
 from datetime import datetime
 
+## main page
+class LeagueMain(APIView):
+    def get(self, request):
+        league_info = LeagueInfo.objects.all()
+        serializer = League_main_page(league_info, many=True)
+        return Response(serializer.data)
+    
 class makeleague(APIView):
     """
     json 형식

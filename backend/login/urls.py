@@ -11,10 +11,12 @@ urlpatterns = [
     path("nickname/", views.nickname.as_view()),
     # 카카오 회원가입
     path("kakao/", views.kakao.as_view()),
+    path("kakao/callback/", views.kakaoCallback.as_view()),
+    path("kakao/signup/", views.kakaoSignup.as_view()),
+    
     # 구글 회원가입
-    path("google/", views.google.as_view()),
+    # path("google/", views.google.as_view()),
     # 카카오, 구글 인증
-    path("allauth/", include("allauth.urls")),
+    # path("allauth/", include("allauth.urls")),
     # 카카오, 구글 회원가입(추가입력사항)
-
 ]

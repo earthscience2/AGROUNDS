@@ -22,7 +22,7 @@ function SignupModal(props){
         navigate("/GSigninPage")
     }
     const goKakao=()=>{
-        navigate("/KSigninPage")
+        window.location.replace("http://localhost:8000/api/login/kakao");
     }
     const goAground=()=>{
         navigate("/ASigninPage")
