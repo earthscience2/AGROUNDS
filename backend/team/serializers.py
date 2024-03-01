@@ -7,6 +7,12 @@ from staticfiles.make_code import make_code
 
 import re
 
+## main page
+class Team_main_page(serializers.ModelSerializer):
+    class Meta:
+        model = TeamInfo
+        fields = '__all__'
+
 # team_player 입력은 update에서만 가능 
 class Team_info_Serializer(serializers.ModelSerializer):
     class Meta:

@@ -9,7 +9,15 @@ from DB.models import MatchInfo
 from .serializers import Before_Match_info_Serializer
 from .serializers import After_Match_info_Serializer
 from rest_framework.generics import get_object_or_404
+from .serializers import Match_main_page
 
+
+## main page
+class TeamMain(APIView):
+    def get(self, request):
+        match_info = MatchInfo.objects.all()
+        serializer = Match_main_page(match_info, many=True)
+        return Response(serializer.data)
 
 
 class Before_makematch(APIView):

@@ -5,6 +5,13 @@ from DB.models import TeamInfo
 from django.http import JsonResponse
 from staticfiles.make_code import make_code
 
+
+class League_main_page(serializers.ModelSerializer):
+    class Meta:
+        model = LeagueInfo
+        fields = '__all__'
+
+
 class League_info_Serializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'

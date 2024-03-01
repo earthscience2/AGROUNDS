@@ -8,6 +8,15 @@ from rest_framework import status
 from DB.models import TeamInfo
 from .serializers import Team_info_Serializer
 from .serializers import UpdateTeamInfoSerializer
+from .serializers import Team_main_page
+
+## main page
+class TeamMain(APIView):
+    def get(self, request):
+        team_info = TeamInfo.objects.all()
+        serializer = Team_main_page(team_info, many=True)
+        return Response(serializer.data)
+
 
 class maketeam(APIView):
     """
