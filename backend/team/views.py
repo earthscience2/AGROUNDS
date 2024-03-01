@@ -54,7 +54,10 @@ class TeamUpdateTeamAPI(APIView):
     """
     def patch(self, request, *args, **kwargs):
         team_code = request.data.get('team_code')
-        team_info = TeamInfo.objects.get(team_code=team_code)
+        try:
+            team_info = TeamInfo.objects.get(team_code=team_code)
+        except TeamInfo.DoesNotExist:
+            return Response({'error' : '해당 팀이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UpdateTeamInfoSerializer(team_info, data=request.data, partial=True)
         
         if serializer.is_valid():

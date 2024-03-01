@@ -59,24 +59,23 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
         instance.team_area = validated_data.get('team_area', instance.team_area)
         instance.team_description = validated_data.get('team_description', instance.team_description)
 
-        new_team_player = validated_data.get('team_player', [])
+        new_team_player = [get_user_code_by_user_nickname(nickname) for nickname in validated_data.get('team_player')]
         
-        print(get_user_code_by_user_nickname(new_team_player))
+        print(new_team_player)
         # If new_team_player is provided, execute the following logic.
         if new_team_player:
             # Check if the new players are already in the existing team
             existing_team_player_set = set(instance.team_player)
-            new_team_player_codes = [get_user_code_by_user_nickname(nickname) for nickname in new_team_player]
             
             # Raise error if there's duplicate player in the team
-            if existing_team_player_set & set(new_team_player_codes):
+            if existing_team_player_set & set(new_team_player):
                 raise serializers.ValidationError("error : team_player에 중복된 값이 있습니다.")
             
             # Add new team player codes to the existing team player
-            instance.team_player.extend(new_team_player_codes)
+            instance.team_player.extend(new_team_player)
 
             # Calculate team_age based on user_birth for each team player
-            team_age_list = calculate_team_age(instance.team_player, new_team_player_codes)
+            team_age_list = calculate_team_age(instance.team_player, new_team_player)
             # Assign the average team age to the data
             if team_age_list:
                 instance.team_age = sum(team_age_list) // len(team_age_list)
@@ -87,12 +86,12 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
 def calculate_team_age(existing_team_player, new_team_player):
     team_age_list = []
     all_team_players = existing_team_player + new_team_player
-    for player_nickname in all_team_players:
+    for player_code in all_team_players:
         try:
 
-            user_info = UserInfo.objects.get(user_nickname=player_nickname)
-            print("asdfasdfas")
-            print("user_info: ", user_info)
+            user_info = UserInfo.objects.get(user_code=player_code)
+            # print("asdfasdfas")
+            # print("user_info: ", user_info)
             user_birth = user_info.user_birth
             # Assuming user_birth is in YYYYMMDD format
             current_date = datetime.datetime.now()
@@ -104,7 +103,7 @@ def calculate_team_age(existing_team_player, new_team_player):
             team_age = age_timedelta.days // 365
             team_age_list.append(team_age)
         except UserInfo.DoesNotExist:
-            raise serializers.ValidationError(f"유저 닉네임 {player_nickname}에 해당하는 사용자가 존재하지 않습니다.")
+            raise serializers.ValidationError(f"유저 코드 {player_code}에 해당하는 사용자가 존재하지 않습니다.")
     return team_age_list
 
 # 티어로 search
