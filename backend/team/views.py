@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+# 함수추가 
+from staticfiles.get_info import get_user_code_by_user_nickname 
 # Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -67,20 +68,39 @@ class TeamUpdateTeamAPI(APIView):
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# 티어로 search
+# team search
 class TeamSearchAPIView(APIView):
     """
+    { 
+       "team_tier" : "bronze"
+    }
+    or 
     {
-        "tier" : "bronze"
+        "team_area": "인천광역시"
     }
     """
     def post(self, request):
         team_tier = request.data.get('team_tier')
-        if team_tier is None:
-            return Response({"error": "team_tier parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
-        team_info = TeamInfo.objects.filter(team_tier=team_tier)
-        serializer = Team_Search(team_info, many=True, context={'tier': team_tier})
-        return Response(serializer.data)
+        team_area = request.data.get('team_area')
+
+        if team_tier is None and team_area is None:
+            return Response({"error": "At least one of team_tier or team_area parameters is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if team_tier and team_area:
+            return Response({"error": "Please provide either team_tier or team_area, not both"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if team_tier:
+            team_info = TeamInfo.objects.filter(team_tier=team_tier)
+            context = {'tier': team_tier}
+        else: 
+            team_info = TeamInfo.objects.filter(team_area=team_area)
+            context = {'area': team_area}
+
+        if team_info.exists():
+            serializer = Team_Search(team_info, many=True, context=context)
+            return Response(serializer.data)
+        else:
+            return Response({"error": "No team information found for the provided criteria"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TeamMoreInfoAPI(APIView):
@@ -93,7 +113,7 @@ class TeamMoreInfoAPI(APIView):
     def post(self, request):
         team_code = request.data.get('team_code')
         if team_code is None:
-            return Response({"error": "Tier parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "team_code parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
         team_info = TeamInfo.objects.filter(team_code=team_code)
         serializer = Team_More_info(team_info, many=True, context={'team_code': team_code})
         return Response(serializer.data)
@@ -103,22 +123,13 @@ class TeamMoreInfoAPI(APIView):
 class TeamPlayerMoreInfoView(APIView):
     """
     { 
-    "team_code": "t_1sa88og1lrrmvq", "team_player": "진섭95"
+        "user_code": "강인01"
     }
     """
-    def patch(self, request, *args, **kwargs):
-        team_code = request.data.get('team_code')
-        if not team_code:
-            return Response({"message": "팀 코드가 제공되지 않았습니다."}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            team_info = TeamInfo.objects.get(team_code=team_code)
-        except TeamInfo.DoesNotExist:
-            return Response({"message": "해당 팀 코드를 가진 팀이 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = Team_Player_More_info(team_info, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        user_code = get_user_code_by_user_nickname(request.data.get('user_code'))
+        if user_code is None:
+            return Response({"error": "user_code parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+        team_info = PlayerInfo.objects.filter(user_code=user_code)
+        serializer = Team_Player_More_info(team_info, many=True, context={'user_code': user_code})
+        return Response(serializer.data)
