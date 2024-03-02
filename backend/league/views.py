@@ -32,11 +32,13 @@ class LeagueMain(APIView):
         for league in league_info:
             league_status = determine_league_status(league).lower()
             league_dict = model_to_dict(league)
+            league_dict['status'] = league_status
             league_dict['testfield'] = 'testValue'
             league_dict['status_priority'] = status_priority.get(league_status, 5)
             return_value.append(
                 league_dict
             )
+        return_value.sort(key=lambda x: x['status_priority'])
         return Response(return_value)
     
 class makeleague(APIView):
