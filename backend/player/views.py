@@ -99,7 +99,6 @@ class get_all_players(APIView):
             page = paginator.num_pages
 
         page_obj = paginator.page(page)
-        print()
 
         serialized_data = []
         for idx, record in enumerate(page_obj):

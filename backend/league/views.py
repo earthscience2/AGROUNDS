@@ -9,20 +9,40 @@ from DB.models import LeagueInfo
 from .serializers import League_info_Serializer
 from django.db.models import Q
 from .serializers import League_main_page
+from django.forms.models import model_to_dict
 
 from datetime import datetime
+
+# 리그 상태 중요도
+status_priority = {
+            "모집전": 1,
+            "모집중": 2,
+            "진행전": 3,
+            "진행중": 4,
+            "종료": 5,
+            "상태 미정": 6
+        }
 
 ## main page
 class LeagueMain(APIView):
     def get(self, request):
         league_info = LeagueInfo.objects.all()
-        serializer = League_main_page(league_info, many=True)
-        return Response(serializer.data)
+        # serializer = League_main_page(league_info, many=True)
+        return_value = []
+        for league in league_info:
+            league_status = determine_league_status(league).lower()
+            league_dict = model_to_dict(league)
+            league_dict['testfield'] = 'testValue'
+            league_dict['status_priority'] = status_priority.get(league_status, 5)
+            return_value.append(
+                league_dict
+            )
+        return Response(return_value)
     
 class makeleague(APIView):
     """
     json 형식
-    { 
+    {
     "league_host": "u_1sa880533r6rc7", 
     "league_name": "u_1sa880533r6rc7",
     "league_startdate": "2024-02-10",
@@ -33,11 +53,10 @@ class makeleague(APIView):
     "league_area": "test_area",
     "league_logo": "test_logo", 
     "league_winner": "test_winner",
-    "league_gametype": "test_gametype",s
+    "league_gametype": "test_gametype",
     "league_official": "test_official",
     "league_description": "test_description"
     }
-
     """
     def post(self, request, *args, **kwargs):
         serializer = League_info_Serializer(data=request.data)
@@ -74,7 +93,7 @@ def determine_league_status(league):
     
 class searchleague(APIView):
     def get(self, request, format=None):
-            
+        
         word = request.query_params.get("word", "")
         local = request.query_params.get("local", "")
         requested_status = request.query_params.get("type", "").lower()
@@ -88,15 +107,6 @@ class searchleague(APIView):
         leagues = LeagueInfo.objects.filter(query)
         
         filtered_leagues = []
-        
-        status_priority = {
-            "모집전": 1,
-            "모집중": 2,
-            "진행전": 3,
-            "진행중": 4,
-            "종료": 5,
-            "상태 미정": 6
-        }
 
         for league in leagues:
             league_status = determine_league_status(league).lower()  # 상태 결정 함수 사용
