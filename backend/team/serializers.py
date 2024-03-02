@@ -6,8 +6,10 @@ from django.http import JsonResponse
 import datetime
 from staticfiles.make_code import make_code
 from staticfiles.get_info import get_user_code_by_user_nickname 
+from staticfiles.get_info import get_player_info_by_user_code 
 import re
-
+from rest_framework.response import Response
+from rest_framework import status
        
 
 ## main page
@@ -133,21 +135,20 @@ class Team_More_info(serializers.ModelSerializer):
         else:
             return None
 
+
+    
 # 팀 선수 상세 조회 API
-
-
-
 class Team_Player_More_info(serializers.ModelSerializer):
     class Meta:
-        model = TeamInfo
+        model = PlayerInfo
         fields = '__all__'
+    def to_representation(self, instance):
+        { "user_code": "강인01" }
 
-    def update(self, instance, validated_data):
-        team_code = validated_data.get('team_code')
-        team_player = validated_data.get('team_player')
 
-        if instance.team_code == team_code and team_player in instance.team_player:
-            player_info = PlayerInfo.objects.get(player_nickname=team_player)
-            return player_info
+        user_code = self.context.get('user_code',None)
+        print(user_code)
+        if user_code is not None and instance.user_code == user_code:
+            return super().to_representation(instance)
         else:
-            raise serializers.ValidationError("팀 코드와 선수 별명이 일치하지 않습니다.")
+            return None
