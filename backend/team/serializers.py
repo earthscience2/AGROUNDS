@@ -108,20 +108,25 @@ def calculate_team_age(existing_team_player, new_team_player):
             raise serializers.ValidationError(f"유저 코드 {player_code}에 해당하는 사용자가 존재하지 않습니다.")
     return team_age_list
 
-# 티어로 search
+# team search
 class Team_Search(serializers.ModelSerializer):
     class Meta:
         model = TeamInfo
         fields = '__all__'  
 
     def to_representation(self, instance):
-        tier = self.context.get('team_tier', None)
+        tier = self.context.get('tier', None)
+        area = self.context.get('area', None)
 
         if tier is not None and instance.team_tier == tier:
             return super().to_representation(instance)
+        
+        elif area is not None and instance.team_area == area:
+            return super().to_representation(instance)
+        
         else:
-            return None
-       
+            raise serializers.ValidationError("No team information found")
+
 # 팀 상세 조희 API
 class Team_More_info(serializers.ModelSerializer):
     class Meta:
@@ -143,9 +148,7 @@ class Team_Player_More_info(serializers.ModelSerializer):
         model = PlayerInfo
         fields = '__all__'
     def to_representation(self, instance):
-        { "user_code": "강인01" }
-
-
+        
         user_code = self.context.get('user_code',None)
         print(user_code)
         if user_code is not None and instance.user_code == user_code:

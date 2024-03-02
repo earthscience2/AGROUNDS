@@ -68,20 +68,39 @@ class TeamUpdateTeamAPI(APIView):
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# 티어로 search
+# team search
 class TeamSearchAPIView(APIView):
     """
+    { 
+       "team_tier" : "bronze"
+    }
+    or 
     {
-        "tier" : "bronze"
+        "team_area": "인천광역시"
     }
     """
     def post(self, request):
         team_tier = request.data.get('team_tier')
-        if team_tier is None:
-            return Response({"error": "team_tier parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
-        team_info = TeamInfo.objects.filter(team_tier=team_tier)
-        serializer = Team_Search(team_info, many=True, context={'tier': team_tier})
-        return Response(serializer.data)
+        team_area = request.data.get('team_area')
+
+        if team_tier is None and team_area is None:
+            return Response({"error": "At least one of team_tier or team_area parameters is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if team_tier and team_area:
+            return Response({"error": "Please provide either team_tier or team_area, not both"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if team_tier:
+            team_info = TeamInfo.objects.filter(team_tier=team_tier)
+            context = {'tier': team_tier}
+        else: 
+            team_info = TeamInfo.objects.filter(team_area=team_area)
+            context = {'area': team_area}
+
+        if team_info.exists():
+            serializer = Team_Search(team_info, many=True, context=context)
+            return Response(serializer.data)
+        else:
+            return Response({"error": "No team information found for the provided criteria"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TeamMoreInfoAPI(APIView):
