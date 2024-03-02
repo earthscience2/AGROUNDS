@@ -8,6 +8,7 @@ from rest_framework import status
 
 from .models import PlayerInfo
 from DB.models import UserInfo
+from .serializers import *
 
 import json
 from django.forms.models import model_to_dict
@@ -51,13 +52,33 @@ class get_player_detail(APIView):
         player['user_gender'] = user.user_gender
         return JsonResponse(player, status=200)
 
-
 class edit_player(APIView):
-    def post(self, request, *args, **kwargs):
+    '''
+    json 형식
+    {
+        'user_code' : {유저코드},
+        'player_height' : 188,
+        'player_weight' : 70,
+        'player_area' : '서울특별시',
+        'player_position' : 'CB',
+        'player_description' : '안녕히계세요',
+        'player_foot' : '5/1',
+        'player_num' : 1,
+        'player_team' : {팀코드},
+    }
+    '''
+    def patch(self, request, *args, **kwargs):
         try:
             player = PlayerInfo.objects.get(user_code = request.data['user_code'])
         except PlayerInfo.DoesNotExist:
             return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
+        serializer = Player_Info_Serializer(player, data=request.data, partial = True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class get_all_players(APIView):
     """

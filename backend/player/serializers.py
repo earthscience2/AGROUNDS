@@ -22,3 +22,16 @@ class Player_Info_Serializer(serializers.ModelSerializer):
             'player_num' : {'required' : False},
             'player_team' : {'required' : False},
 	    }
+
+    def update(self, instance, validated_data):
+        instance.player_height = validated_data.get('player_height', instance.player_height)
+        instance.player_weight = validated_data.get('player_weight',instance.player_weight)
+        instance.player_area = validated_data.get('player_area',instance.player_area)
+        instance.player_position = validated_data.get('player_position',instance.player_position)
+        instance.player_description = validated_data.get('player_description',instance.player_description)
+        instance.player_foot = validated_data.get('player_foot',instance.player_foot)
+        instance.player_num = validated_data.get('player_num',instance.player_num)
+        instance.player_team = validated_data.get('player_team',instance.player_team)
+        instance.save()
+        return instance
+    
