@@ -84,6 +84,7 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+        
 # team_age 계산 
 def calculate_team_age(existing_team_player, new_team_player):
     team_age_list = []
@@ -147,11 +148,18 @@ class Team_Player_More_info(serializers.ModelSerializer):
     class Meta:
         model = PlayerInfo
         fields = '__all__'
+
     def to_representation(self, instance):
+        user_code = self.context.get('user_code', None)
         
-        user_code = self.context.get('user_code',None)
-        print(user_code)
-        if user_code is not None and instance.user_code == user_code:
+        try:
+            player_info = get_player_info_by_user_code(user_code)
+            
+        except ValueError as e:
+            # 유저 코드에 해당하는 선수 정보가 없는 경우
+            return {"error": str(e)}
+
+        if player_info == instance:
             return super().to_representation(instance)
         else:
             return None
