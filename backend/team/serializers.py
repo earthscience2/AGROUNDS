@@ -10,7 +10,8 @@ from staticfiles.get_info import get_player_info_by_user_code
 import re
 from rest_framework.response import Response
 from rest_framework import status
-       
+from django.db.models import Avg
+from staticfiles.get_info import calculate_age
 
 ## main page
 class Team_main_page(serializers.ModelSerializer):
@@ -127,31 +128,110 @@ class Team_Search(serializers.ModelSerializer):
         
         else:
             raise serializers.ValidationError("No team information found")
+  
+
+
+# 팀 요약 조회 API 
+class Team_Short_info(serializers.Serializer):
+    area = serializers.CharField()
+    total_teams = serializers.SerializerMethodField()
+    total_players = serializers.SerializerMethodField()
+    total_avg_age = serializers.SerializerMethodField()
+
+    class Meta:
+        fields = ['area', 'total_teams', 'total_players', 'total_avg_age']
+
+    def get_total_teams(self, obj):
+        return TeamInfo.objects.filter(team_area=obj["area"]).count()
+
+    def get_total_players(self, obj):
+        teams = TeamInfo.objects.filter(team_area=obj["area"])
+        total_players = 0
+        for team in teams:
+            total_players += len(team.team_player)
+        return total_players
+
+    def get_total_avg_age(self, obj):
+        teams = TeamInfo.objects.filter(team_area=obj["area"])
+        total_age = 0
+        total_teams = 0
+        for team in teams:
+            if team.team_age: 
+                total_age += team.team_age
+                total_teams += 1
+        return int(total_age / total_teams) if total_teams > 0 else 0
+
+
 
 # 팀 상세 조희 API
-class Team_More_info(serializers.ModelSerializer):
-    class Meta:
-        model = TeamInfo
-        fields = '__all__'
-    def to_representation(self, instance):
-        code = self.context.get('team_code',None)
-
-        if code is not None and instance.team_code == code:
-            return super().to_representation(instance)
-        else:
-            return None
-
-
-    
-# 팀 선수 상세 조회 API
-class Team_Player_More_info(serializers.ModelSerializer):
+class PlayerInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlayerInfo
-        fields = '__all__'
+        fields = ['player_num', 'player_position', 'player_goal', 'player_assist', 'player_foot']
+
+class Team_More_info(serializers.ModelSerializer):
+    team_percent = serializers.SerializerMethodField()
+    players = serializers.SerializerMethodField() 
+    
+    class Meta:
+        model = TeamInfo
+        fields = ['team_logo','team_name','team_games','team_percent','team_age','players']
+
+    def get_team_percent(self, obj):
+        
+        return 
+
+    def get_players(self, obj):
+        player_infos = PlayerInfo.objects.filter(user_code__in=obj.team_player)
+        return PlayerInfoSerializer(player_infos, many=True).data
+
+
+
+# 팀 선수 상세 조회 API
+class Team_Player_More_info(serializers.ModelSerializer):
+    player_age = serializers.SerializerMethodField()  
+    player_gender = serializers.SerializerMethodField()  
+    player_attend = serializers.SerializerMethodField()  
+    player_games = serializers.SerializerMethodField()  
+    player_attendpoint = serializers.SerializerMethodField()  
+    
+
+    class Meta:
+        model = PlayerInfo
+        fields = ['player_height','player_weight','player_foot','player_position','player_age','player_num'
+        ,'player_gender','player_goal','player_assist','player_games','player_attend','player_attendpoint']
+
+    def get_player_age(self, obj):
+        user_code = self.context.get('user_code', None)
+        user_info = UserInfo.objects.filter(user_code=user_code).first()
+        if not user_info:
+            return None  # user_code에 해당하는 UserInfo 객체가 없는 경우
+        return calculate_age(user_info.user_birth)
+
+
+    def get_player_gender(self, obj):
+        user_code = self.context.get('user_code', None)
+        user_info = UserInfo.objects.filter(user_code=user_code).first()
+        if not user_info:
+            return None  # user_code에 해당하는 UserInfo 객체가 없는 경우
+        return user_info.user_gender
+    
+    # 다음회의
+    def get_player_games(self,obj): 
+        
+        return
+    # 다음회의 
+    def get_player_attend(self,obj):
+
+        return
+    # 다음회의
+    def get_player_attendpoint(self,obj):
+        
+        return
+    
 
     def to_representation(self, instance):
         user_code = self.context.get('user_code', None)
-        
         try:
             player_info = get_player_info_by_user_code(user_code)
             

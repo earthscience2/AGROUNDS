@@ -102,24 +102,27 @@ class TeamSearchAPIView(APIView):
         else:
             return Response({"error": "No team information found for the provided criteria"}, status=status.HTTP_404_NOT_FOUND)
 
-
+# 팀 상세 조희 API
 class TeamMoreInfoAPI(APIView):
     """
     {
-    "team_code": "t_1sa88og1lrrmvq",
-    "team_player": "진섭95"
+    "team_code": "t_1sa88og1lrrmvq"
     }
     """
     def post(self, request):
         team_code = request.data.get('team_code')
         if team_code is None:
             return Response({"error": "team_code parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
         team_info = TeamInfo.objects.filter(team_code=team_code)
+        if not team_info.exists():
+            return Response({"error": "Team with provided team_code does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
         serializer = Team_More_info(team_info, many=True, context={'team_code': team_code})
         return Response(serializer.data)
 
 
-
+# 팀 선수 상세 조회 API
 class TeamPlayerMoreInfoView(APIView):
     """
     { 
@@ -133,3 +136,15 @@ class TeamPlayerMoreInfoView(APIView):
         team_info = PlayerInfo.objects.filter(user_code=user_code)
         serializer = Team_Player_More_info(team_info, many=True, context={'user_code': user_code})
         return Response(serializer.data)
+
+# 팀 요약 조회 API 
+class TeamShortView(APIView):
+    def get(self, request, format=None):
+        areas = ["서울특별시", "인천광역시", "부산광역시", "대전광역시", "대구광역시",
+                 "울산광역시","광주광역시","경기도","강원도","충청북도",
+                 "충청남도","경상북도","전라북도","전라남도","세종특별자치시","제주특별자치도"]
+        data = [{"area": area} for area in areas]
+        serializer = Team_Short_info(data=data, many=True)
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
