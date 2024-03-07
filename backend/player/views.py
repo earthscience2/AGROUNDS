@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 
+from django.db.models import Q
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -30,9 +32,7 @@ class get_player_detail(APIView):
     @swagger_auto_schema(
         operation_summary="user_code로 선수 데이터를 불러옴",
         operation_description="user_code를 query_paramter로 받아 선수 데이터를 리턴해줘요",
-        manual_parameters=[
-             test_view_parameter
-        ],
+        manual_parameters=get_player_detail_parameters,
         responses={
             200: "success",
             401: "닉네임을 입력하지 않았을 경우",
@@ -47,8 +47,7 @@ class get_player_detail(APIView):
         except PlayerInfo.DoesNotExist:
             return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
         player = model_to_dict(player)
-        player['user_nickname'] = user.user_nickname
-        player['age'] = calculate_age(user.user_birth)
+        player['user_name'] = user.user_name
         player['user_gender'] = user.user_gender
         return JsonResponse(player, status=200)
 
@@ -80,13 +79,22 @@ class edit_player(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-class get_all_players(APIView):
+class searh_players(APIView):
     """
     모든 선수를 json을 원소로 가진 배열 형태로 불러옴
     """
+    @swagger_auto_schema(
+        operation_summary="position별 선수목록 조회 가능",
+        operation_description="position별 선수목록 조회가 가능합니다. position을 입력하지 않으면 전체 선수 목록을 리턴합니다.",
+        manual_parameters=searh_players_parameters,
+    )
     def get(self, request, *args, **kwargs):
+        position = request.query_params.get("position")
+        query = Q()
+        if position:
+            query &= Q(player_position__icontains=position)
         try:
-            all_players = PlayerInfo.objects.all()
+            all_players = PlayerInfo.objects.filter(query)
         except PlayerInfo.DoesNotExist:
             return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
         
