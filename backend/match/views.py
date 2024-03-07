@@ -10,7 +10,7 @@ from .serializers import Before_Match_info_Serializer
 from .serializers import After_Match_info_Serializer
 from rest_framework.generics import get_object_or_404
 from .serializers import Match_main_page
-
+from .serializers import *
 
 ## main page
 class MatchMain(APIView):
@@ -64,3 +64,17 @@ class After_makematch(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class MatchMoreInfoAPI(APIView):
+    """
+    {
+    "match_code": "m_1sa888s3d1aqm1"
+    }
+    """
+    def post(self, request):
+        match_code = request.data.get('match_code')
+        if match_code is None:
+            return Response({"error": "team_code parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+        match_info = MatchInfo.objects.filter(match_code=match_code)
+        serializer = Match_More_info(match_info, many=True, context={'match_code': match_code})
+        return Response(serializer.data)
+

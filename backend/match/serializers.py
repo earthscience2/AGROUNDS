@@ -2,6 +2,7 @@ from rest_framework import serializers
 from DB.models import MatchInfo
 from DB.models import TeamInfo
 from DB.models import UserInfo
+from DB.models import PlayerInfo
 from django.http import JsonResponse
 from staticfiles.make_code import make_code
 
@@ -149,3 +150,31 @@ def update_team_points(team_code, match_result):
         except TeamInfo.DoesNotExist:
             raise serializers.ValidationError(f"팀 코드 {team_code}에 해당하는 팀이 존재하지 않습니다.")
 
+
+# 경기 상세 정보 API  
+class PlayerInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlayerInfo
+        fields = '__all__'
+
+class Match_More_info(serializers.ModelSerializer):
+    match_home_player = PlayerInfoSerializer(many=True)
+    match_away_player = PlayerInfoSerializer(many=True)
+
+    class Meta:
+        model = MatchInfo
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        code = self.context.get('match_code', None)
+        
+        if code is not None and instance.match_code == code:
+            representation = super().to_representation(instance)
+            representation['match_home_player'] = self.get_player_representation(instance.match_home_player.all())
+            representation['match_away_player'] = self.get_player_representation(instance.match_away_player.all())
+            return representation
+        else:
+            return None
+
+    def get_player_representation(self, players):
+        return PlayerInfoSerializer(players, many=True).data
