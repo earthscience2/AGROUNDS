@@ -137,9 +137,10 @@ class Team_Short_info(serializers.Serializer):
     total_teams = serializers.SerializerMethodField()
     total_players = serializers.SerializerMethodField()
     total_avg_age = serializers.SerializerMethodField()
+    total_avg_tier = serializers.SerializerMethodField()
 
     class Meta:
-        fields = ['area', 'total_teams', 'total_players', 'total_avg_age']
+        fields = ['area', 'total_teams', 'total_players', 'total_avg_age','total_avg_tier']
 
     def get_total_teams(self, obj):
         return TeamInfo.objects.filter(team_area=obj["area"]).count()
@@ -161,6 +162,8 @@ class Team_Short_info(serializers.Serializer):
                 total_teams += 1
         return int(total_age / total_teams) if total_teams > 0 else 0
 
+    def get_total_avg_tier(self,obj):
+        return
 
 
 # 팀 상세 조희 API
@@ -175,7 +178,7 @@ class Team_More_info(serializers.ModelSerializer):
     
     class Meta:
         model = TeamInfo
-        fields = ['team_logo','team_name','team_games','team_percent','team_age','players']
+        fields = ['team_logo','team_tier','team_name','team_games','team_percent','team_age','team_games','players']
 
     def get_team_percent(self, obj):
         

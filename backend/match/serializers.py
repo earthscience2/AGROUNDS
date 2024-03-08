@@ -59,6 +59,7 @@ class Before_Match_info_Serializer(serializers.ModelSerializer):
 
 # 매치가 끝난 뒤 입력
 class After_Match_info_Serializer(serializers.ModelSerializer):
+    
     class Meta:
         model = MatchInfo
         fields = ['match_code', 'match_home_player', 'match_away_player', 'match_home_result', 'match_away_result','match_total_result', 'match_goal']
@@ -115,10 +116,13 @@ class After_Match_info_Serializer(serializers.ModelSerializer):
         validate_team_players(data['match_home'], data['match_home'], match_home_player, 'team_player')
         validate_team_players(data['match_away'], data['match_away'], match_away_player, 'team_player')
 
-        # # 팀의 점수를 업데이트합니다.
+        # 팀의 점수를 업데이트합니다.
         update_team_points(data['match_home'], match_home_result)
         update_team_points(data['match_away'], match_away_result)
-
+        
+        # 각 팀의 gaems수 증가
+        update_team_games(data['match_home'])
+        update_team_games(data['match_away'])
         # # 오류가 있는 경우 예외를 발생시킵니다.
         if errors:
             raise serializers.ValidationError(errors)
@@ -139,6 +143,17 @@ def validate_team_players(match_code, team_code, match_players, player_attr):
     except TeamInfo.DoesNotExist:
         raise serializers.ValidationError(f"팀 코드 {team_code}에 해당하는 팀이 존재하지 않습니다.")
 
+# team_games 필드 업데이트 
+def update_team_games(team_code):
+    try:
+            # Find the corresponding team and update team_point
+        team_info = TeamInfo.objects.get(team_code=team_code)
+        team_info.team_games += 1
+        team_info.save()
+    except TeamInfo.DoesNotExist:
+        raise serializers.ValidationError(f"팀 코드 {team_code}에 해당하는 팀이 존재하지 않습니다.")
+
+    
 ##득점을 team_point에 업데이트 
 def update_team_points(team_code, match_result):
     if match_result is not None:

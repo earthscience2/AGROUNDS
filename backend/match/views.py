@@ -44,13 +44,12 @@ class Before_makematch(APIView):
 class After_makematch(APIView):
     """
 {
-    "match_code": "m_1sa888s3d1aqm1",
-    "match_home_player": ["u_1sa886fuu8678"],
-    "match_away_player": ["u_1sa888s39k4cpf"],
-    "match_home_result": 1,
-    "match_away_result": 2,
+    "match_code": "m_610rv74mgkvv2",
+    "match_home_player": ["u_1sa88i83ldrgi"],
+    "match_away_player": ["u_1sa88i83ldrgi"],
+    "match_home_result": 1, "match_away_result": 2, 
     "match_total_result": {"test_home": "승"},
-    "match_goal": {"tests": 1}
+    "match_goal": {"tests": 1} 
 }
 
     """
