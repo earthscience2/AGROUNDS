@@ -12,6 +12,11 @@ from rest_framework.generics import get_object_or_404
 from .serializers import Match_main_page
 from .serializers import *
 
+from drf_yasg.utils import swagger_auto_schema
+from .swagger_parameters import *
+
+from django.forms.models import model_to_dict
+
 ## main page
 class MatchMain(APIView):
     def get(self, request):
@@ -63,12 +68,18 @@ class After_makematch(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class MatchMoreInfoAPI(APIView):
     """
     {
     "match_code": "m_1sa888s3d1aqm1"
     }
     """
+    @swagger_auto_schema(
+        operation_summary="return match detail by match_coode",
+        operation_description="match_code로 경기 상세 정보 조회",
+        request_body=MatchMoreInfoAPI_parameter
+    )
     def post(self, request):
         match_code = request.data.get('match_code')
         if match_code is None:
