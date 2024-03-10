@@ -137,3 +137,51 @@ class searh_players(APIView):
                 # 'user_gender' : user_gender,
             })
         return JsonResponse({'data' : serialized_data, 'num_pages' : paginator.num_pages}, status=200)
+    
+class local_players(APIView):
+    def get(self, requset, format=None):
+        areas = ["전국", "서울특별시", "인천광역시", "대전광역시", "대구광역시",
+                 "울산광역시","부산광역시","광주광역시","경기도","강원도","충청북도",
+                 "충청남도","경상북도","전라북도","전라남도","세종특별자치시","제주특별자치도"]
+        results = []
+
+        for area in areas:
+            # 특정 지역에 해당하는 선수만 필터링합니다.
+            players = PlayerInfo.objects.filter(player_area__iexact=area)
+            area_stats = {
+                'area'          : area,
+                'total_players' : 0,
+                'average_age'   : 0,
+                'average_point': 0,
+                'most_position' : 0
+            }
+
+            sum_of_age = 0
+            sum_of_point = 0
+            total_players = len(players)
+
+            for player in players:
+                try:
+                    user = UserInfo.objects.get(user_code = player.user_code)
+                except UserInfo.DoesNotExist:
+                    print("존재하지 않는 유저정보 code :" + player.user_code)
+                    total_players -= 1
+                    continue
+                   
+                age = calculate_age(getattr(user, 'user_birth'))
+                sum_of_age += age
+                sum_of_point += player.player_point
+            
+            if(total_players == 0):
+                results.append(area_stats)
+                continue
+            
+            area_stats['total_players'] = total_players
+            area_stats['average_age'] = sum_of_age/total_players
+            area_stats['average_point'] = sum_of_point/total_players
+
+            results.append(area_stats)
+
+        return Response(results, status=status.HTTP_200_OK)
+
+            
