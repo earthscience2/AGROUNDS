@@ -15,6 +15,8 @@ function Login(props){
     const [isid,setIsid] = useState('');
     const [isPassword,setIsPassword] = useState('');
     const [isLogin,setIsLogin] = useState('')
+    const [token, setToken] = useState('');
+    const [Logined, setIsLogined] = useState('');
     const navigate = useNavigate();
     const ModalOpen=()=>{
         setIsOpen(true);
@@ -32,19 +34,23 @@ function Login(props){
     }
 
     const onKakaoClick = (e) => {
-        window.location.replace("http://localhost:8000/api/login/kakao");
+        window.location.replace(process.env.REACT_APP_BASE_URL+"/api/login/kakao");
     }
     const onAgrooundClick = (e) => {
         e.preventDefault();
         const loginData = {
             'user_id':userid,
             'password': userpw
+
         }
         client.post('/api/login/login/', loginData)
         .then(function(response){
-                sessionStorage.setItem('nickname', response.data.user_nickname);
-                console.log(response.data.user_nickname);
-                navigate('/ALMainPage');
+            console.log(response)
+            setToken(response.data.token)
+            sessionStorage.setItem('nickname', response.data.user_nickname);
+            sessionStorage.setItem('token', response.data.token)
+            sessionStorage.setItem('usercode', response.data.user_code)
+            navigate('/ALMainPage');
         })
         .catch(function(error){
             setIsLogin(false);
@@ -59,7 +65,7 @@ function Login(props){
             <div className={styles.login}>
                 <div className={styles.logo}>AGROUNDS</div>
                 <div className={styles.idbox}><input onChange={handleIdChange} placeholder="아이디"className={styles.id} type="text"></input></div>
-                <div className={styles.pwbox}><input onChange={handlePwChange} placeholder="비밀번호"className={styles.pw} type="text"></input></div>
+                <div className={styles.pwbox}><input onChange={handlePwChange} placeholder="비밀번호"className={styles.pw} type="password"></input></div>
                 {isid && isPassword ?<Button onClick={onAgrooundClick} type="submit"color="#FFFFFF"backcolor="#055540" text="로그인" logoimg={logo5}/>:<Button type="button"color="white"backcolor="#dadada" text="로그인" logoimg={logo5}/>}
                 
                 <div className={styles.find}>

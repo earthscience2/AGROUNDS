@@ -6,7 +6,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            height: 80vh;
+            height: 80vw;
             flex-direction: column;
             align-items: center;
         }
@@ -16,13 +16,13 @@
             align-items: center;
         }
         .tag3{
-            font-size: 2vh;
-            margin:0 0 2vh 0;
+            font-size: 1.5vw;
+            margin:0 0 1.5vw 0;
             font-family: 'Inter Medium';
             
         }
         .tag4{
-            font-size: 4vh;
+            font-size: 2.5vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             margin:0;
@@ -31,42 +31,42 @@
             display: flex;
         }
         .box1{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 5vh 0 5vh;
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .box2{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 5vh 0 5vh;
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .box3{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 5vh 0 5vh;
+            box-shadow: 0vw 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .inbox1{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFB1B1;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .inbox2{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFEB99;
             display: flex;
             justify-content: center;
@@ -74,50 +74,50 @@
             
         }
         .inbox3{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #BDDDFF;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .inbox4{
-            width: 36vh;
-            height: 8vh;
+            width: 26vw;
+            height: 5vw;
             display: flex;
             align-items: center;
         }
         .img{
-            width: 24vh;
-            height: 24vh;
+            width: 16vw;
+            height: 16vw;
         }
         .text{
-            font-size: 3.5vh;
+            font-size: 1.8vw;
             font-weight: 700;
             font-family: 'Inter Bold';
-            margin-left: 4vh;
+            margin-left: 3vw;
         }
         .conf1{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 12vh;
+            margin-left: 12vw;
         }
         .conf2{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 22vh;
+            margin-left: 17vw;
         }
         .conf3{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 19vh;
+            margin-left: 15.5vw;
         }
        
         
@@ -127,7 +127,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            height: 80vh;
+            height: 80vw;
             flex-direction: column;
             align-items: center;
         }
@@ -137,13 +137,13 @@
             align-items: center;
         }
         .tag3{
-            font-size: 2vh;
-            margin:0 0 2vh 0;
+            font-size: 1.5vw;
+            margin:0 0 1.5vw 0;
             font-family: 'Inter Medium';
             
         }
         .tag4{
-            font-size: 4vh;
+            font-size: 2.5vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             margin:0;
@@ -152,42 +152,42 @@
             display: flex;
         }
         .box1{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 3vh 0 3vh
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .box2{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 5vh 0 5vh;
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .box3{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 5vh 0 5vh;
+            box-shadow: 0vw 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .inbox1{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFB1B1;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .inbox2{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFEB99;
             display: flex;
             justify-content: center;
@@ -195,50 +195,50 @@
             
         }
         .inbox3{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #BDDDFF;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .inbox4{
-            width: 36vh;
-            height: 8vh;
+            width: 26vw;
+            height: 5vw;
             display: flex;
             align-items: center;
         }
         .img{
-            width: 24vh;
-            height: 24vh;
+            width: 16vw;
+            height: 16vw;
         }
         .text{
-            font-size: 3.5vh;
+            font-size: 1.8vw;
             font-weight: 700;
             font-family: 'Inter Bold';
-            margin-left: 4vh;
+            margin-left: 3vw;
         }
         .conf1{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 12vh;
+            margin-left: 12vw;
         }
         .conf2{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 22vh;
+            margin-left: 17vw;
         }
         .conf3{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 19vh;
+            margin-left: 15.5vw;
         }
     }
     /* Small 1280px ~ 1439px */
@@ -247,7 +247,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            height: 80vh;
+            height: 80vw;
             flex-direction: column;
             align-items: center;
         }
@@ -257,13 +257,13 @@
             align-items: center;
         }
         .tag3{
-            font-size: 2vh;
-            margin:0 0 2vh 0;
+            font-size: 1.5vw;
+            margin:0 0 1.5vw 0;
             font-family: 'Inter Medium';
             
         }
         .tag4{
-            font-size: 4vh;
+            font-size: 2.5vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             margin:0;
@@ -272,42 +272,42 @@
             display: flex;
         }
         .box1{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 3vh 0 3vh
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .box2{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 5vh 0 5vh;
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .box3{
-            width: 36vh;
-            height: 36vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 10vh 5vh 0 5vh;
+            box-shadow: 0vw 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
         .inbox1{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFB1B1;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .inbox2{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFEB99;
             display: flex;
             justify-content: center;
@@ -315,50 +315,50 @@
             
         }
         .inbox3{
-            width: 36vh;
-            height: 28vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #BDDDFF;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .inbox4{
-            width: 36vh;
-            height: 8vh;
+            width: 26vw;
+            height: 5vw;
             display: flex;
             align-items: center;
         }
         .img{
-            width: 24vh;
-            height: 24vh;
+            width: 16vw;
+            height: 16vw;
         }
         .text{
-            font-size: 3.5vh;
+            font-size: 1.8vw;
             font-weight: 700;
             font-family: 'Inter Bold';
-            margin-left: 4vh;
+            margin-left: 3vw;
         }
         .conf1{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 12vh;
+            margin-left: 12vw;
         }
         .conf2{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 22vh;
+            margin-left: 17vw;
         }
         .conf3{
-            font-size: 1.5vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 19vh;
+            margin-left: 15.5vw;
         }
     }
 
@@ -369,7 +369,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            height: 80vh;
+            height: 80vw;
             flex-direction: column;
             align-items: center;
         }
@@ -379,13 +379,13 @@
             align-items: center;
         }
         .tag3{
-            font-size: 1.5vh;
-            margin:0 0 2vh 0;
+            font-size: 1.5vw;
+            margin:0 0 1.5vw 0;
             font-family: 'Inter Medium';
             
         }
         .tag4{
-            font-size: 2.5vh;
+            font-size: 2.5vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             margin:0;
@@ -394,81 +394,93 @@
             display: flex;
         }
         .box1{
-            width: 21vh;
-            height: 21vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 5vh 1vh 0 1vh;
-
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
-        
+        .box2{
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
+            background-color: white;
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
+        }
+        .box3{
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
+            background-color: white;
+            box-shadow: 0vw 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
+        }
         .inbox1{
-            width: 21vh;
-            height: 16vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFB1B1;
             display: flex;
             justify-content: center;
             align-items: center;
-            
         }
         .inbox2{
-            width: 21vh;
-            height: 16vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFEB99;
             display: flex;
             justify-content: center;
             align-items: center;
             
-            
         }
         .inbox3{
-            width: 21vh;
-            height: 16vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #BDDDFF;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .inbox4{
-            width: 21vh;
-            height: 5vh;
+            width: 26vw;
+            height: 5vw;
             display: flex;
             align-items: center;
         }
         .img{
-            width: 14vh;
-            height: 14vh;
+            width: 16vw;
+            height: 16vw;
         }
         .text{
-            font-size: 1.vh;
+            font-size: 1.8vw;
             font-weight: 700;
             font-family: 'Inter Bold';
-            margin-left: 2.2vh;
+            margin-left: 3vw;
         }
         .conf1{
-            font-size: 1.2vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 9vh;
+            margin-left: 12vw;
         }
         .conf2{
-            font-size: 1.2vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 12.5vh;
+            margin-left: 17vw;
         }
         .conf3{
-            font-size: 1.2vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 11.5vh;
+            margin-left: 15.5vw;
         }
     }
     /* Landscape: 1024px - 1279px */
@@ -477,7 +489,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            height: 80vh;
+            height: 80vw;
             flex-direction: column;
             align-items: center;
         }
@@ -487,13 +499,13 @@
             align-items: center;
         }
         .tag3{
-            font-size: 1.5vh;
-            margin:0 0 2vh 0;
+            font-size: 1.5vw;
+            margin:0 0 1.5vw 0;
             font-family: 'Inter Medium';
             
         }
         .tag4{
-            font-size: 2.5vh;
+            font-size: 2.5vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             margin:0;
@@ -502,81 +514,93 @@
             display: flex;
         }
         .box1{
-            width: 21vh;
-            height: 21vh;
-            border-radius: 3vh;
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
             background-color: white;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            margin: 5vh 2vh 0 2vh;
-
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
         }
-        
+        .box2{
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
+            background-color: white;
+            box-shadow: 0vh 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
+        }
+        .box3{
+            width: 26vw;
+            height: 26vw;
+            border-radius: 2.5vw;
+            background-color: white;
+            box-shadow: 0vw 1vw 1vw#d1d1d1;
+            margin: 5vw 2vw 0 2vw;
+        }
         .inbox1{
-            width: 21vh;
-            height: 16vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFB1B1;
             display: flex;
             justify-content: center;
             align-items: center;
-            
         }
         .inbox2{
-            width: 21vh;
-            height: 16vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #FFEB99;
             display: flex;
             justify-content: center;
             align-items: center;
             
-            
         }
         .inbox3{
-            width: 21vh;
-            height: 16vh;
-            border-radius: 3vh 3vh 0 0;
+            width: 26vw;
+            height: 21vw;
+            border-radius: 2.5vw 2.5vw 0 0;
             background-color: #BDDDFF;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .inbox4{
-            width: 21vh;
-            height: 5vh;
+            width: 26vw;
+            height: 5vw;
             display: flex;
             align-items: center;
         }
         .img{
-            width: 14vh;
-            height: 14vh;
+            width: 16vw;
+            height: 16vw;
         }
         .text{
-            font-size: 1.vh;
+            font-size: 1.8vw;
             font-weight: 700;
             font-family: 'Inter Bold';
-            margin-left: 2.2vh;
+            margin-left: 3vw;
         }
         .conf1{
-            font-size: 1.2vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 9vh;
+            margin-left: 12vw;
         }
         .conf2{
-            font-size: 1.2vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 12.5vh;
+            margin-left: 17vw;
         }
         .conf3{
-            font-size: 1.2vh;
+            font-size: 1vw;
             font-weight: 700;
             font-family: 'Inter Bold';
             color:#7a7a7aa4;
-            margin-left: 11.5vh;
+            margin-left: 15.5vw;
         }
     }
     /* Mobile Device */

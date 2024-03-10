@@ -3,7 +3,15 @@ from .models import PlayerInfo
 
 from django.http import JsonResponse
 
-
+# 플레이어 정보 불러오기
+class Player_main_page(serializers.ModelSerializer):
+    class Meta:
+        model = PlayerInfo
+        fields = '__all__'
+        
+        
+        
+# 플레이어 정보 불러오기
 class Player_Info_Serializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'

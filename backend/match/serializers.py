@@ -8,12 +8,11 @@ from staticfiles.make_code import make_code
 
 import re
 
-## main page
+# 경기 정보 불러오기
 class Match_main_page(serializers.ModelSerializer):
     class Meta:
         model = MatchInfo
         fields = '__all__'
-
 
 # 매치 처음에 설정에서 입력
 class Before_Match_info_Serializer(serializers.ModelSerializer):

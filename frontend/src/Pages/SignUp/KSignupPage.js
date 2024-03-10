@@ -15,7 +15,6 @@ function SigninPage(){
             <div style={styles}>
                 <Signin text="카카오톡으" imgsrc={Kakao} color="#FEE502"/> 
             </div>
-            
             <CompanyInfo/>
         </div>
     )

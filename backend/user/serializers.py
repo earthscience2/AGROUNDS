@@ -8,6 +8,14 @@ from staticfiles.make_code import make_code
 
 import re
 
+# 유저 정보 불러오기
+class User_main_page(serializers.ModelSerializer):
+    class Meta:
+        model = UserInfo
+        fields = '__all__'
+        
+        
+        
 class User_info_Serializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'

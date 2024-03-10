@@ -1,5 +1,6 @@
 from django.db import models
 
+# DB폴더에서 이미 불러오고 있음 삭제필요
 class PlayerInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     player_height = models.IntegerField(blank=True)

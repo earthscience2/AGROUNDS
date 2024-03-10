@@ -4,7 +4,7 @@ import styles from "./NavBar.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SignupModal from "../SignUp/SignupModal";
-
+import { NavLink } from "react-router-dom";
 function NavBar(){
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
@@ -20,38 +20,45 @@ function NavBar(){
     const DoLogin = () => {
         navigate("/LoginPage");
     }
-    const moveLeague = () => {
-        navigate("/LeaguePage");
-    }
-    const moveGame = () => {
-        navigate("/GamePage");
-    }
-    const moveTeam = () => {
-        navigate("/TeamPage");
-    }
-    const movePlayer = () => {
-        navigate("/PlayerPage");
-    }
-    const moveDirector = () => {
-        navigate("/DirectorPage");
-    }
-    const moveEquipment = () => {
-        navigate("/EquipmentPage");
-    }
+    // const moveLeague = () => {
+    //     navigate("/LeaguePage");
+    // }
+    // const moveGame = () => {
+    //     navigate("/GamePage");
+    // }
+    // const moveTeam = () => {
+    //     navigate("/TeamPage");
+    // }
+    // const movePlayer = () => {
+    //     navigate("/PlayerPage");
+    // }
+    // const moveDirector = () => {
+    //     navigate("/DirectorPage");
+    // }
+    // const moveEquipment = () => {
+    //     navigate("/EquipmentPage");
+    // }
 
+    
     
     return(
         <div className={styles.Back}>
             {isOpen &&(<div className={styles.compbox}><SignupModal ModalClose = {ModalClose}/></div>)}
             <img onClick={moveMain}className={styles.Logo} src={Logo1} alt="Logo1"/>
-            <div className={styles.NavBar}>
-                <p onClick={moveLeague}className={styles.tag}>리그 & 컵</p>
-                <p onClick={moveGame} className={styles.tag}>경기</p>
-                <p onClick={moveTeam} className={styles.tag}>팀</p>
-                <p onClick={movePlayer} className={styles.tag}>선수</p>
-                <p onClick={moveDirector} className={styles.tag}>감독</p>
-                <p onClick={moveEquipment} className={styles.tag}>분석장비</p>
-            </div>
+            <nav className={styles.NavBar}>
+                <NavLink to='/LeaguePage' className={({isActive})=>
+                    isActive ? styles.active : styles.tag}  >리그 & 컵</NavLink>
+                <NavLink to='/GamePage' className={({isActive})=>
+                    isActive ? styles.active : styles.tag}>경기</NavLink>
+                <NavLink to='/TeamPage' className={({isActive})=>
+                    isActive ? styles.active : styles.tag}>팀</NavLink>
+                <NavLink to='/PlayerPage' className={({isActive})=>
+                    isActive ? styles.active : styles.tag}>선수</NavLink>
+                <NavLink to='/DirectorPage' className={({isActive})=>
+                    isActive ? styles.active : styles.tag}>관리</NavLink>
+                <NavLink to='/EquipmentPage' className={({isActive})=>
+                    isActive ? styles.active : styles.tag}>전술분석</NavLink>
+            </nav>
             <div className={styles.box2}>
                 <div className={styles.Login} onClick={DoLogin}>로그인</div>
                 <div className={styles.line}/>

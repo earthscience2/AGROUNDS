@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
+# DB폴더에서 이미 불러오고 있음 삭제필요
 class MatchInfo(models.Model):
     match_code = models.CharField(primary_key=True, max_length=45)
     match_host = models.CharField(max_length=45)

@@ -2,16 +2,22 @@ import React, { useEffect } from "react";
 import styles from "./MainSection2.module.css";
 import logo from "../../assets/logo4.png";
 import { useState} from "react";
+import { useNavigate } from "react-router-dom";
 
 function MainSection2(){
-    const [showDiv, setShowDiv] = useState(false);
-
-  
+    const navigate = useNavigate();
+    
+    const moveLeague=()=>{
+        navigate('/LeaguePage')
+    }
+    const moveEquipment=()=>{
+        navigate('/EquipmentPage')
+    }
 
     return(
-        <div className={`${styles.MainSection2} ${showDiv ? styles.show : ''}`}>
-            <div className={styles.textgroup1}>
-                <div className={styles.textgroup1_1}>
+        <div className={styles.MainSection2}>
+            <div className={styles.textgroup1} >
+                <div className={styles.textgroup1_1} onClick={moveLeague}>
                     <p className={styles.text1}>경기를 재밌게</p>
                     <p className={styles.text2}><span className={styles.text5}>아마추어</span> 축구리그</p>
                     <p className={styles.text3}>AGROUNDS에서 리그를 만들거나 인기있는 리그에 참여하고 <br/>
@@ -19,7 +25,7 @@ function MainSection2(){
                     <div className={styles.confirm1}>확인하기 -&gt;</div>
                 </div>
                 <div className={styles.line}/>
-                <div className={styles.textgroup1_2}>
+                <div className={styles.textgroup1_2} onClick={moveEquipment}>
                     <p className={styles.text1}>어려운 전술분석은</p>
                     <p className={styles.text5}>AGROUNDS</p>
                     <p className={styles.text3}>GPS 장비를 이용해서 경기기록과 분석까지 한 번에 가능하고<br/>

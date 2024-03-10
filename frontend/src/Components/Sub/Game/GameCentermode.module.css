@@ -1,0 +1,73 @@
+
+.polyL{
+    width: 2vw;
+    height: 4vw;
+    position: relative;
+    top:-12vw;
+    margin-right: 80vw;
+}
+.polyR{
+    width: 2vw;
+    height: 4vw;
+    position: relative;
+    top:-17vw;
+    margin-left: 80vw;
+} 
+.swiper{
+    width: 70vw;
+    height: 20vw;
+    margin-top: 3vw;
+    z-index: 1;
+}
+.slide{
+    background-color: #f8f8f8ba;
+    border-radius: 2vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vw;
+    color: black;
+    text-align: center;
+}
+
+.slide.SwiperSlideActive{
+    background-color: #ffffff;
+    border-radius: 1vw;
+    border: 2px solid #054409;
+}
+.divbox{
+    width: 16vw;
+    border-top: .1vw solid black;
+    margin-top: 1vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    
+}
+.text{
+    margin-bottom: 0;
+    font-size: 1.7vw;
+    margin-top: -1vw;
+}
+.textbox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    
+}
+.text1{
+    font-size: .9vw;
+    font-family: 'Inter Semi Bold';
+    color: #2e2e2e89;
+    margin: 1.3vw 0 0 0 ;
+    
+}
+.text2{
+    font-size: 1.7vw;
+    font-family: 'Inter Semi Bold';
+    margin:.5vw 0;
+}

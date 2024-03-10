@@ -8,39 +8,38 @@
             align-items: center;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(180deg, #D6E09C 0%, #FFFFFF 100%);
-            
+            padding-top: 10vw;
         }
         .textgroup{
-            margin-right: 10vh;
-            margin-left: 10vh;
+            margin-right: 7vw;
+            margin-left: 7vw;
         }
         .text1{
-            font-size: 2.4vh;
+            font-size: 2vw;
             font-family: "Inter Bold";
-            font-weight: 700;
+            font-weight: 800;
             color: #245441;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
         }
         .text2{
-            font-size: 5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
             margin: 0;
         }
         .text3{
-            font-size: 5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
             margin-top: 0;
         }
         .text4{
-            font-size: 1.8vh;
+            font-size: 1.3vw;
             font-family: "Inter Bold";
-            font-weight: 600;
+            font-weight: 700;
             color: #8F9194;
             margin: 0;
             line-height: 1.5;
@@ -54,73 +53,42 @@
             align-items: center;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(180deg, #D6E09C 0%, #FFFFFF 100%);
-            
+            padding-top: 10vw;
         }
         .textgroup{
-            margin-right: 10vh;
-            margin-left: 10vh;
+            margin-right: 7vw;
+            margin-left: 7vw;
+            
         }
         .text1{
-            font-size: 2.4vh;
+            font-size: 2vw;
             font-family: "Inter Bold";
-            font-weight: 700;
+            font-weight: 800;
             color: #245441;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
         }
         .text2{
-            font-size: 5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
             margin: 0;
         }
         .text3{
-            font-size: 5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
             margin-top: 0;
         }
         .text4{
-            font-size: 1.8vh;
+            font-size: 1.3vw;
             font-family: "Inter Bold";
-            font-weight: 600;
+            font-weight: 700;
             color: #8F9194;
             margin: 0;
             line-height: 1.5;
-        }
-        .rankgroup{
-            width: 48vh;
-            height: 48vh;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            background-color: white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-left: 10vh;
-            cursor: pointer;
-        }
-        .text5{
-            font-size: 3.2vh;
-            font-family: "Inter Bold";
-            font-weight: 600;
-            color:#D93637;
-        }
-        .text6{
-            font-size: 3.2vh;
-            font-family: "Inter Bold";
-            font-weight: 600;
-            color:#2E2E2E;
-        }
-        .text7{
-            font-size: 5vh;
-            font-family: "Inter Bold";
-            font-weight: 700;
-            color:#055540;
         }
     }
     /* Small 1280px ~ 1439px */
@@ -131,73 +99,41 @@
             align-items: center;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(180deg, #D6E09C 0%, #FFFFFF 100%);
-            
+            padding-top: 10vw;
         }
         .textgroup{
-            margin-right: 6vh;
-            margin-left: 10vh;
+            margin-right: 7vw;
+            margin-left: 7vw;
         }
         .text1{
-            font-size: 2.4vh;
+            font-size: 2vw;
             font-family: "Inter Bold";
-            font-weight: 700;
+            font-weight: 800;
             color: #245441;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
         }
         .text2{
-            font-size: 5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
             margin: 0;
         }
         .text3{
-            font-size: 5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
             margin-top: 0;
         }
         .text4{
-            font-size: 1.8vh;
+            font-size: 1.3vw;
             font-family: "Inter Bold";
-            font-weight: 600;
+            font-weight: 700;
             color: #8F9194;
             margin: 0;
             line-height: 1.5;
-        }
-        .rankgroup{
-            width: 48vh;
-            height: 48vh;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            background-color: white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-left: 10vh;
-            cursor: pointer;
-        }
-        .text5{
-            font-size: 3.2vh;
-            font-family: "Inter Bold";
-            font-weight: 600;
-            color:#D93637;
-        }
-        .text6{
-            font-size: 3.2vh;
-            font-family: "Inter Bold";
-            font-weight: 600;
-            color:#2E2E2E;
-        }
-        .text7{
-            font-size: 5vh;
-            font-family: "Inter Bold";
-            font-weight: 700;
-            color:#055540;
         }
     }
 
@@ -209,74 +145,42 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 90vh;
-            background: linear-gradient(180deg, #D6E09C 0%, #FFFFFF 100%);
-            
+            height: 100vh;
+            padding-top: 10vw;
         }
         .textgroup{
-            margin-right: 3.3vh;
+            margin-right: 7vw;
+            margin-left: 7vw;
         }
         .text1{
-            font-size: 2vh;
+            font-size: 2vw;
             font-family: "Inter Bold";
-            font-weight: 700;
+            font-weight: 800;
             color: #245441;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
         }
         .text2{
-            font-size: 3.5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
             margin: 0;
         }
         .text3{
-            font-size: 3.5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
             margin-top: 0;
         }
         .text4{
-            font-size: 1.5vh;
+            font-size: 1.3vw;
             font-family: "Inter Bold";
-            font-weight: 600;
+            font-weight: 700;
             color: #8F9194;
             margin: 0;
             line-height: 1.5;
-        }
-        .rankgroup{
-            width: 30vh;
-            height: 30vh;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            background-color: white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            margin-left: 3.5vh;
-        }
-        .text5{
-            font-size: 3vh;
-            font-family: "Inter Bold";
-            font-weight: 600;
-            color:#D93637;
-            margin: 0;
-        }
-        .text6{
-            font-size: 2.5vh;
-            font-family: "Inter Bold";
-            font-weight: 600;
-            color:#2E2E2E;
-        }
-        .text7{
-            font-size: 3.6vh;
-            font-family: "Inter Bold";
-            font-weight: 700;
-            color:#055540;
         }
     }
     /* Landscape: 1024px - 1279px */
@@ -286,74 +190,42 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 90vh;
-            background: linear-gradient(180deg, #D6E09C 0%, #FFFFFF 100%);
-            
+            height: 100vh;
+            padding-top: 10vw;
         }
         .textgroup{
-            margin-right: 3.3vh;
+            margin-right: 7vw;
+            margin-left: 7vw;
         }
         .text1{
-            font-size: 2vh;
+            font-size: 2vw;
             font-family: "Inter Bold";
-            font-weight: 700;
+            font-weight: 800;
             color: #245441;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
         }
         .text2{
-            font-size: 3.5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
             margin: 0;
         }
         .text3{
-            font-size: 3.5vh;
+            font-size: 3.2vw;
             font-family: "Inter Bold";
             font-weight: 700;
             color: black;
-            margin-bottom: 1vh;
+            margin-bottom: 0;
             margin-top: 0;
         }
         .text4{
-            font-size: 1.5vh;
+            font-size: 1.3vw;
             font-family: "Inter Bold";
-            font-weight: 600;
+            font-weight: 700;
             color: #8F9194;
             margin: 0;
             line-height: 1.5;
-        }
-        .rankgroup{
-            width: 30vh;
-            height: 30vh;
-            box-shadow: 0vh 1vh 1vh#d1d1d1;
-            background-color: white;
-            border-radius: 3vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            margin-left: 3.5vh;
-        }
-        .text5{
-            font-size: 3vh;
-            font-family: "Inter Bold";
-            font-weight: 600;
-            color:#D93637;
-            margin: 0;
-        }
-        .text6{
-            font-size: 2.5vh;
-            font-family: "Inter Bold";
-            font-weight: 600;
-            color:#2E2E2E;
-        }
-        .text7{
-            font-size: 3.6vh;
-            font-family: "Inter Bold";
-            font-weight: 700;
-            color:#055540;
         }
     }
 

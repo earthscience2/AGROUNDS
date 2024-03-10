@@ -5,13 +5,9 @@ import SelectGender from "../Common/SelectGender";
 import AgreeCheckbox from "../Common/AgreeCheckbox";
 import { useEffect } from "react";
 import client from "../../Clients";
+import { redirect } from "react-router-dom";
 
 function Signin({color,text,imgsrc}){
-
-    "http://localhost:3000/KSigninPage/?id=RpleyftNO56B7etR4n5OPgkPyQ=="
-    "http://localhost:3000/ALMainPage/?token=RpleyftNO56B7etR4n5OPgkPyQ=="
-    const user_id = new URL(window.location.href).searchParams.get('id');
-
     const [nickname, setNickname] = useState('');
     const [name, setName] = useState('');
     const [birth,setBirth] = useState('');
@@ -24,10 +20,11 @@ function Signin({color,text,imgsrc}){
     const [isName,setIsName] = useState('');
     const [isBirth,setIsBirth] = useState('');
     const [isDup,setIsDup] = useState('');
-
+    
     
     let isAgree = privacyAgree && termsAgree;
     let isAllValid = isDup && isName && isBirth && isAgree;
+    let user_id = new URL(window.location.href).searchParams.get('id');
 
     useEffect(() => {
         setAllAgree(privacyAgree && termsAgree && marketingAgree)
@@ -75,9 +72,10 @@ function Signin({color,text,imgsrc}){
 
         }
         console.log(SignUpData);
-        client.post('/api/login/kakao/signup',SignUpData)
+        client.post('/api/login/kakao/signup/',SignUpData)
         .then(function(response){
             console.log(response)
+            return <redirect to="/WelcomeSignupPage"/>
         })
         .catch(function(error){
             console.log(error);

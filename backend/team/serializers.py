@@ -13,12 +13,12 @@ from rest_framework import status
 from django.db.models import Avg
 from staticfiles.get_info import calculate_age
 
-## main page
+# 팀 정보 불러오기
 class Team_main_page(serializers.ModelSerializer):
     class Meta:
         model = TeamInfo
         fields = '__all__'
-
+        
 # team_player 입력은 update에서만 가능 
 class Team_info_Serializer(serializers.ModelSerializer):
     class Meta:

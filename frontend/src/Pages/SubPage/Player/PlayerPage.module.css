@@ -1,0 +1,408 @@
+@import '../../../../src/assets/font/font.css';
+.back{
+    width: 100%;
+    height: 70vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+}
+.back1{
+    width: 90%;
+    height: 60vw;
+    display: flex;
+    justify-content: center;
+    
+}
+.back2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+}
+.textgroup2{
+    display: flex;
+    width: 90%;
+}
+
+.sortbox{
+    width:100%;
+    height: 4vw;
+    display: flex;
+    justify-content: center;
+    margin: 2vw 0 0 0;
+
+}
+.searchbox{
+    width:80%;
+    height: 3vw;
+    background-color: #F8F8F8;
+    border-radius: .8vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search{
+    border: none;
+    height: 2.5vw;
+    width: 87%;
+    margin-left: 1vw;
+    margin-right: .5vw;
+    font-family: 'Inter Bold';
+    font-size: 1vw;
+    font-weight: 700;
+    background-color: #F8F8F8;
+}
+.sort{
+    margin-left: 2vw;
+    background-color: #F8F8F8;
+    border-radius: .8vw;
+    width: 15%;
+    height: 3vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    border: none;
+    font-size: 1vw;
+    text-align: center;
+}
+.dropicon{
+    width: 1vw;
+    margin-right: 1vw;
+}
+.contentbox{
+    display: flex;
+    flex-direction: column;
+    margin-top: .7vw;
+    width: 100%;
+    height: 40vw;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.leaguebox{
+    background-color: #F8F8F8;
+    width: 100%;
+    height: 40vw;
+    border-radius: 3vw;
+    box-shadow: 0vw .5vw .5vw rgba(0, 0, 0, 0.25);
+    
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.textgroup{
+    width: 90%;
+    height:8vw;
+}
+.text1{
+    font-family: 'Inter Bold';
+    font-size: .7vw;
+    color: #6E6E6E;
+    margin-top: 3vw;
+    margin-bottom: 0;
+}
+.text2{
+    font-family: 'Inter Semi Bold';
+    font-size: 1.5vw;
+    font-weight: 800;
+    margin-top: .3vw;
+}
+.region{
+    background-color: #ffffff;
+    border-radius: .6vw;
+    width: 11vw;
+    height: 2.3vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    color: white;
+    font-size: 1vw;
+    margin-top: 4vw;
+    margin-left: 30%;
+    cursor: pointer;
+    background-color: #245441;
+}
+.side{
+    width: 1vw;
+    margin-left:.2vw;
+    color: white;
+}
+.tableArea{
+    width:90%;
+    height:28vw;
+}
+.table{
+    width:100%;
+    /* height:28vw; */
+    border-collapse: collapse;
+}
+.thead{
+    border-bottom: .2vw solid black;
+    /* border: 2px solid #000000; */
+}
+.tr{
+    width: 100%;
+    height: 2vw;
+    padding: 0;
+    border-bottom: 2px solid #000000;
+}
+.thead1,.thead2,.thead3,.thead4,.thead5,.thead6{
+    font-family: 'Inter Bold';
+    font-size: .8svw;
+    /* border-bottom: 2px solid #000000; */
+}
+
+.thead1{
+    padding: 0 2vw;
+    
+}
+.thead2{
+    padding: 0 3vw;
+    
+}
+.thead3{
+    padding: 0 4vw;
+}
+.thead4{
+    padding: 0 2vw;
+}
+.thead5{
+    padding: 0 2vw;
+}
+.thead6{
+    padding: 0 2vw;
+}
+.td,.td1{
+    text-align: center;
+    height: 2vw;
+    border-bottom: 2px solid #D9D9D9;
+    margin: 0;
+    font-family: 'Inter Bold';
+    font-size: .8vw;
+}
+.td1{
+    font-family: 'Inter Bold';
+    font-size: .8vw;
+    font-weight: 800;
+
+}
+.makeLeague{
+    margin-top: 2vw;
+    background-color: #000000;
+    color: #D6E09C;
+    border-radius: 1.5vw;
+    width: 9vw;
+    height: 4vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    border: .1vw solid #055540;
+    font-size: 1vw;
+    cursor: pointer;
+    
+}
+.plus{
+    font-size: 2vw;
+    font-weight: 300;
+    margin-right:.5vw;
+    
+}
+
+.contentpages{
+    display: flex;
+    flex-direction: row;
+    height: 4vw;
+    align-items: center;
+}
+.pages{
+    margin: 0 1vw;
+    cursor: pointer;
+}
+.arrowl{
+    rotate: 180deg;
+    width: 1vw;
+    height: .8vw;
+    margin-right: 1vw;
+}
+.arrow{
+    width: 1vw;
+    height: .8vw;
+    margin-left: 1vw;
+}
+.profile{
+    width: 7vw;
+    height: 6vw;
+    margin:0 1vw
+}
+.teammember{
+    display: flex;
+    flex-direction: column;
+    background-color: #F8F8F8;
+    width: 35%;
+    height: 40vw;
+    border-radius: 3vw;
+    box-shadow: 0vw .5vw .5vw rgba(0, 0, 0, 0.25);
+    margin-left: 2vw;
+    margin-top: 13.3vw;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+.playerpro{
+    font-family: 'Inter Bold';
+    font-size: .8vw;
+    font-weight: 500;
+    margin: 0 0 .8vw 0;
+    color: #6E6E6E;
+    margin: 2vw 0 0 -23vw;
+}
+.contentbox1{
+    display: flex;
+    align-items: center;
+    border-bottom: .2vw solid black;
+    width: 90%;
+    height: 11vw;
+}
+.positionbox{
+    display: flex;
+}
+.position{
+    width: 14vw;
+    height:18vw;
+    background-color: #D9D9D9;
+}
+.contentbox3{
+    display: flex;
+    flex-direction: column;
+    margin-left: 2vw;
+}
+.contentbox4{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 2vw;
+}
+.about{
+    font-family: 'Inter Bold';
+    font-size: 1vw;
+    color: #6E6E6E;
+    font-weight: 600;
+    margin: 0 0 .8vw 0;
+}
+.inform{
+    font-family: 'Inter Bold';
+    font-size: 1vw;
+    font-weight: 700;
+    margin: 0 0 .8vw 0;
+}
+.prefer{
+    margin: 1vw 5.5vw .4vw 5.5vw;
+    font-family: 'Inter Bold';
+    font-size: .6vw;
+    color: #6E6E6E;
+}
+.path{
+    font-family: 'Inter Bold';
+    font-size: .6vw;
+    color: #6E6E6E;
+
+    margin-bottom: 2vw;
+}
+.contentbox{
+    display: flex;
+    align-items: center;
+}
+.textbox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.FCname{
+    font-family: 'Inter Bold';
+    font-size: 1.6vw;
+    color: black;
+    font-weight: 700;
+    margin-bottom: .4vw;
+}
+.textbox0{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.textbox{
+    display: flex;
+    flex-direction: row;
+}
+.text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 .9vw
+}
+.text3{
+    font-family: 'Inter Bold';
+    font-size: .7vw;
+    color: #6E6E6E;
+    font-weight: 600;
+    margin: .2vw 0;
+}
+.text4{
+    font-family: 'Inter Bold';
+    font-size: 1.3vw;
+    color: black;
+    font-weight: 700;
+    margin: .2vw 0;
+}
+.career{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+.careertext{
+    font-family: 'Inter Bold';
+    font-size: .8vw;
+    color: #6E6E6E;
+    font-weight: 600;
+    margin: 1vw 25vw 0 0;
+}
+.careerbox{
+    border-top: .2vw solid black;
+    width: 90%;
+    height: 3vw;
+    overflow-y: scroll;
+    display: flex;
+}
+.period{
+    width: 50%;
+    font-family: 'Inter Bold';
+    font-size: .8vw;
+    color: #6E6E6E;
+    font-weight: 600;
+    height: .8vw;
+    margin:.5vw 0;
+}
+.fc{
+    width: 50%;
+    font-family: 'Inter Bold';
+    font-size: .8vw;
+    font-weight: 600;
+    margin:.5vw 0;
+}

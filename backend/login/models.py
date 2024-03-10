@@ -1,5 +1,6 @@
 from django.db import models
 
+# DB폴더에서 이미 불러오고 있음 삭제필요
 class UserInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     user_id = models.CharField(max_length=45)

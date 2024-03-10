@@ -17,14 +17,14 @@ from .swagger_parameters import *
 
 from django.forms.models import model_to_dict
 
-## main page
+# 경기 정보 불러오기
 class MatchMain(APIView):
     def get(self, request):
         match_info = MatchInfo.objects.all()
         serializer = Match_main_page(match_info, many=True)
         return Response(serializer.data)
 
-
+# 경기 전 정보 만들기
 class Before_makematch(APIView):
     """
     json 형식
@@ -45,7 +45,8 @@ class Before_makematch(APIView):
         else:
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        
+# 경기 후 정보 만들기
 class After_makematch(APIView):
     """
 {
@@ -68,7 +69,8 @@ class After_makematch(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        
+# 경기 상세 조회
 class MatchMoreInfoAPI(APIView):
     """
     {

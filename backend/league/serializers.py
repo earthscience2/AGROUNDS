@@ -5,13 +5,13 @@ from DB.models import TeamInfo
 from django.http import JsonResponse
 from staticfiles.make_code import make_code
 
-## main page
+# 리그 정보 불러오기
 class League_main_page(serializers.ModelSerializer):
     class Meta:
         model = LeagueInfo
         fields = '__all__'
-
-
+        
+# 리그 정보 불러오기(기능추가)
 class League_info_Serializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'

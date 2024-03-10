@@ -1,0 +1,98 @@
+@import '../../../assets/font/font.css';
+.back2{
+    background: linear-gradient(180deg, #D6E09C 0%, #FFFFFF 100%);
+    width: 100%;
+    height: 60vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+}
+.whitebord{
+    width: 60vw;
+    height: 34vw;
+    background-color: #FFFFFF;
+    border-radius: .8vw;
+    box-shadow: 0vw .7vw .9vw #afafaf;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.contents{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 24vw;
+    width: 100%;
+}
+.progress{
+    display: flex;
+    flex-direction: column;
+    height: 2vw;
+}
+.back{
+    font-size: 1.2vw;
+    font-weight: 400;
+    font-family: 'Inter Semi Bold';
+    margin: 0;
+    color: #245441;
+
+}
+.numselect{
+    background-color: #DCE2CF;
+    width: 24vw;
+    height: 2vw;
+    border-radius: 3vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1vw;
+    margin-bottom: -7vw;
+    
+    
+}
+
+.num2{
+    width:4vw;
+    font-family: 'Inter Semi Bold';
+    font-weight: 800;
+    font-size: 1.2vw;
+    display: flex;
+    justify-content: center;
+}
+.num1{
+    width:4vw;
+    height: 2vw;
+    font-family: 'Inter Semi Bold';
+    font-weight: 800;
+    font-size: 1.2vw;
+    display: flex;
+    justify-content: center;
+    background-color: #245441;
+    border-radius: 3vw;
+    align-items: center;
+    color: white;
+}
+
+.inform{
+    font-family: 'Inter Semi Bold';
+    font-weight: 700;
+    font-size: .9vw;
+    color: #CDCDCD;
+    position: absolute;
+    bottom: 3vw;
+    height: 1.5vw;
+    width: 25vw;
+    text-align: center;
+    border-bottom: .1vw solid #CDCDCD;
+    display: flex;
+}
+.arrow{
+    width: 2.5vw;
+    height:2.5vw;
+    margin-top: -.6vw;
+}

@@ -20,6 +20,7 @@ from staticfiles.get_info import calculate_age
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_parameters import *
 
+# 플레이어 상세조회
 class get_player_detail(APIView):
     """
     user_code로 선수 데이터를 불러옴
@@ -51,6 +52,7 @@ class get_player_detail(APIView):
         player['user_gender'] = user.user_gender
         return JsonResponse(player, status=200)
 
+# 플레이어 수정
 class edit_player(APIView):
     '''
     json 형식
@@ -79,6 +81,7 @@ class edit_player(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+# 플레이어 검색
 class searh_players(APIView):
     """
     모든 선수를 json을 원소로 가진 배열 형태로 불러옴
@@ -138,6 +141,7 @@ class searh_players(APIView):
             })
         return JsonResponse({'data' : serialized_data, 'num_pages' : paginator.num_pages}, status=200)
     
+# 플레이어 지역 조회
 class local_players(APIView):
     def get(self, requset, format=None):
         areas = ["전국", "서울특별시", "인천광역시", "대전광역시", "대구광역시",

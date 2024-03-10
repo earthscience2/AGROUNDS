@@ -6,11 +6,15 @@ import MainSection2 from "../../Components/Main/MainSection2";
 import MainSection3 from "../../Components/Main/MainSection3";
 import MainSection4 from "../../Components/Main/MainSection4";
 import MainSection5 from "../../Components/Main/MainSection5";
-
+import ALMainPage from "./ALMainPage";
 import { useNavigate } from "react-router-dom";
 import CompanyInfo from "../../Components/Common/CompanyInfo";
 function MainPage(){
+    const isLogin = sessionStorage.getItem('isLogin');
+    
     return(
+        <>
+        {isLogin ? ALMainPage :
         <>
         <NavBar/>
         <div className={styles.BackGround}>
@@ -23,6 +27,9 @@ function MainPage(){
         </div>
         <CompanyInfo/>
         </>
+}
+</>
+
     )
 }
 export default MainPage;

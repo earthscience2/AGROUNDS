@@ -1,0 +1,149 @@
+@import '../../../../assets/font/font.css';
+.name1{
+    font-family: 'Inter Semi Bold';
+    font-weight: 700;
+    font-size: 2vw;
+    margin-bottom: 1vw;
+    margin-top: -3vw;
+}
+.name2{
+    font-family: 'Inter Semi Bold';
+    font-weight: 700;
+    font-size: 1.5vw;
+    color: #979797;
+    margin-top: 0;
+}
+.box{
+    display: flex;
+}
+.tbox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 15vw;
+    height: 15vw;
+    margin: 0 1vw 0 0;
+}
+.tboxA{
+    border: .1vw solid #245441;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 15vw;
+    height: 15vw;
+    margin-right: 1vw;
+}
+.lboxA{
+    border: .1vw solid #245441;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 15vw;
+    height: 15vw;
+    margin-left: 1vw;
+}
+.lbox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 15vw;
+    height: 15vw;
+    margin: 0 0 0 1vw;
+}
+.tournament{
+    width: 10vw;
+    height: 4vw;
+    margin-top: 4vw;
+}
+.league{
+    width: 9vw;
+    height: 8vw;
+}
+.text1{
+    font-family: 'Inter Semi Bold';
+    font-size: 1.4vw;
+    font-weight: 700;
+    margin: 1vw 0;
+}
+.text2{
+    font-family: 'Inter Semi Bold';
+    color: #979797;
+    font-size: .9vw;
+    font-weight: 600;
+    margin: 0;
+}
+.select{
+    width: 6vw;
+    height: 2.3vw;
+    background-color: #055540;
+    color: white;
+    font-family: 'Inter Bold';
+    font-size: 1.1vw;
+    text-align: center;
+    line-height: 2.5vw;
+    border-radius: .7vw;
+    margin-top: .4vw;
+    margin-left: 1.5vw;
+}
+.pbox{
+    width: 16vw;
+    height: 10vw;
+    border: .3vw solid #D6E09C;
+    border-radius: 2vw;
+    margin: 1vw 1vw;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    
+}
+.pboxA{
+    width: 16vw;
+    height: 10vw;
+    border: .3vw solid #055540;
+    border-radius: 2vw;
+    margin: 1vw 1vw;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    
+}
+.box1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.text3{
+    font-family: 'Inter Semi Bold';
+    font-size: .8vw;
+    font-weight: 600;
+    color:#5F5F5F;
+    margin: 0;
+}
+.text4{
+    font-family: 'Inter Semi Bold';
+    font-size: .6vw;
+    font-weight: 700;
+    color:#5F5F5F;
+    margin:.1vw 0;
+}
+.text5{
+    font-family: 'Inter Semi Bold';
+    font-size: 1vw;
+    font-weight: 700
+
+}
+.text6{
+    font-family: 'Inter Semi Bold';
+    font-size: 1.4vw;
+    font-weight: 700;
+    margin: 0;
+}

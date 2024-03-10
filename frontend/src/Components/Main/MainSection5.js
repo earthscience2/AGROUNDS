@@ -1,5 +1,4 @@
 import styles from "./MainSection5.module.css";
-import LoginInput from "./LoginInput";
 import MainSection from "../../assets/MainSection4.png";
 function MainSection5(){
     

@@ -1,0 +1,126 @@
+/* @import "../../assets/font/font.css";
+.slickslider{
+    height: 30vw;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+
+    align-items: center;
+}
+
+.slide{
+    background-color: rgb(255, 255, 255);
+    height: 15vw;
+    width: 16vw;
+    border-radius: 1.5vw;
+    text-align: center;
+    margin:0 2vw;
+    box-shadow: 0vh .5vw .5vw#949494;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.slide.active{
+    transform: scale(1.5);
+    margin: 0 5vw;
+    z-index: 1888;
+}
+.leaguename{
+    font-family: 'Inter Semi Bold';
+    font-weight: 700;
+    font-size: 1.3vw;
+    margin-bottom: .5vw;
+}
+.name{
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    font-size: 1vw;
+    color: #245441;
+    margin-bottom: 0;
+}
+.date{
+    font-family: 'Inter Regular';
+    font-weight: 700;
+    font-size: .5vw;
+    color: #245441;
+    margin-top: .4vw;
+}
+.goto{
+    color: #2e2e2eac;
+    font-size: .7vw;
+    font-family: 'Inter Semi Bold';
+}
+*/
+.polyL{
+    width: 2vw;
+    height: 4vw;
+    position: relative;
+    top:-12vw;
+    margin-right: 80vw;
+}
+.polyR{
+    width: 2vw;
+    height: 4vw;
+    position: relative;
+    top:-17vw;
+    margin-left: 80vw;
+} 
+.swiper{
+    width: 70vw;
+    height: 20vw;
+    margin-top: 3vw;
+    z-index: 1;
+}
+.slide{
+    background-color: #f8f8f8ba;
+    border-radius: 2vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vw;
+    color: black;
+    text-align: center;
+}
+
+.slide.SwiperSlideActive{
+    background-color: #ffffff;
+    border-radius: 1vw;
+    border: 2px solid #054409;
+}
+.divbox{
+    width: 16vw;
+    border-top: .1vw solid black;
+    margin-top: 1vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.divbox2{
+    display: flex;
+    align-items: center;
+}
+.text{
+    margin-bottom: 0;
+    margin-top: -1vw;
+    font-size: 1.7vw;
+}
+.textbox{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 0 1vw;
+}
+.text1{
+
+    font-family: 'Inter Semi Bold';
+    color: #2e2e2e89;
+    margin: 1.3vw 0 0 0 ;
+}
+.text2{
+    font-family: 'Inter Semi Bold';
+    margin:.5vw 0;
+}

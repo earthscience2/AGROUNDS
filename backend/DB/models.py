@@ -1,7 +1,6 @@
 from django.db import models
 
-
-# Create your models here.
+# 순위?
 class ARank(models.Model):
     a_team_code = models.CharField(primary_key=True, max_length=45)
     a_team_score = models.CharField(max_length=45)
@@ -11,7 +10,7 @@ class ARank(models.Model):
         managed = False
         db_table = "a_rank"
 
-
+# 경기 분석
 class AnalGame(models.Model):
     anal_code = models.CharField(primary_key=True, max_length=45)
     anal_game_code = models.CharField(max_length=45)
@@ -23,7 +22,7 @@ class AnalGame(models.Model):
         managed = False
         db_table = "anal_game"
 
-
+# 선수 분석
 class AnalPlayer(models.Model):
     anal_code = models.CharField(primary_key=True, max_length=45)
     anal_gps_code = models.CharField(max_length=45)
@@ -34,7 +33,7 @@ class AnalPlayer(models.Model):
         managed = False
         db_table = "anal_player"
 
-
+# 경기 GPS정보
 class GameGps(models.Model):
     gps_code = models.CharField(primary_key=True, max_length=45)
     gps_game_code = models.CharField(max_length=45)
@@ -49,7 +48,7 @@ class GameGps(models.Model):
         managed = False
         db_table = "game_gps"
 
-
+# 삭제필요(경기정보와 중복)
 class GameInfo(models.Model):
     game_code = models.IntegerField(primary_key=True)
     game_home_team = models.CharField(max_length=45)
@@ -66,7 +65,7 @@ class GameInfo(models.Model):
         managed = False
         db_table = "game_info"
 
-
+# 경기 정보 
 class MatchInfo(models.Model):
     match_code = models.CharField(max_length=50, unique=True, primary_key=True)
     match_host = models.CharField(max_length=45)
@@ -86,7 +85,7 @@ class MatchInfo(models.Model):
         managed = False
         db_table = 'match_info'
 
-
+# 리그 정보 
 class LeagueInfo(models.Model):
     league_code = models.CharField(primary_key=True, max_length=45)
     league_host = models.CharField(max_length=45)
@@ -107,7 +106,7 @@ class LeagueInfo(models.Model):
         managed = False
         db_table = 'league_info'
 
-
+# 팀 정보 
 class TeamInfo(models.Model):
     team_code = models.CharField(primary_key=True, max_length=45)
     team_host = models.CharField(max_length=45, blank=True, null=True)
@@ -117,16 +116,13 @@ class TeamInfo(models.Model):
     team_point = models.IntegerField(blank=True, null=True)
     team_area = models.CharField(max_length=45, blank=True, null=True)
     team_description = models.CharField(max_length=45, blank=True, null=True)
-    team_age = models.IntegerField(blank=True, null=True)
-    team_5_match = models.JSONField(max_length=45, blank=True)
-    team_tier = models.CharField(max_length=45, blank=True, null=True)
     team_games = models.IntegerField(blank=True, null=True)
     
     class Meta:
         managed = False
         db_table = 'team_info'
 
-
+# 유저 정보 
 class UserInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     user_id = models.CharField(max_length=45)
@@ -141,8 +137,8 @@ class UserInfo(models.Model):
     class Meta:
         managed = False
         db_table = "user_info"
-from django.db import models
 
+# 선수 정보 
 class PlayerInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     player_height = models.IntegerField(blank=True)

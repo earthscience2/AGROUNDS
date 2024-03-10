@@ -1,0 +1,238 @@
+@import '../../../../src/assets/font/font.css';
+.back{
+    width: 100%;
+    height: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+}
+.textgroup2{
+    display: flex;
+    width: 80%;
+}
+.othercontents{
+    width: 61%;
+    height: 10vw;
+    background-color: #F8F8F8;
+    border-radius: .8vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    margin-top: 6vw;
+}
+.sortbox{
+    width:90%;
+    height: 4vw;
+    display: flex;
+    justify-content: center;
+    margin: 2vw 0 0 0;
+
+}
+.searchbox{
+    width:55%;
+    height: 3vw;
+    background-color: #F8F8F8;
+    border-radius: .8vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search{
+    border: none;
+    height: 2.5vw;
+    width: 87%;
+    margin-left: 1vw;
+    margin-right: .5vw;
+    font-family: 'Inter Bold';
+    font-size: 1vw;
+    font-weight: 700;
+    background-color: #F8F8F8;
+}
+.sort{
+    margin-left: 2vw;
+    background-color: #F8F8F8;
+    border-radius: .8vw;
+    width: 10%;
+    height: 3vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    border: none;
+    font-size: 1vw;
+    text-align: center;
+}
+.dropicon{
+    width: 1vw;
+    margin-right: 1vw;
+}
+.contentbox{
+    display: flex;
+    flex-direction: column;
+    margin-top: .7vw;
+    width: 100%;
+    height: 50vw;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.leaguebox{
+    background-color: #F8F8F8;
+    width: 60%;
+    height: 40vw;
+    border-radius: 1vw;
+    box-shadow: 0vw .5vw .5vw rgba(0, 0, 0, 0.25);
+    border: .3vw solid #678F75;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.textgroup{
+    width: 80%;
+    height: 8vw;
+}
+.text1{
+    font-family: 'Inter Bold';
+    font-size: .7vw;
+    color: #6E6E6E;
+    margin-top: 3vw;
+    margin-bottom: 0;
+}
+.text2{
+    font-family: 'Inter Semi Bold';
+    font-size: 1.5vw;
+    font-weight: 800;
+    margin-top: .3vw;
+}
+.region{
+    background-color: #ffffff;
+    border-radius: .6vw;
+    width: 11vw;
+    height: 2.3vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    color: white;
+    font-size: 1vw;
+    margin-top: 4vw;
+    margin-left: 30%;
+    cursor: pointer;
+    background-color: #245441;
+}
+.side{
+    width: 1vw;
+    margin-left:.2vw;
+    color: white;
+}
+.tableArea{
+    width:90%;
+    height:28vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.table{
+    width:90%;
+    height:2vw;
+    
+}
+.thead{
+    border-bottom: .2vw solid #055540;
+}
+.tr{
+    width: 88%;
+    height: 2vw;
+}
+.thead1,.thead2,.thead3,.thead4,.thead5,.thead6{
+    font-family: 'Inter Bold';
+    font-size: .8svw;
+    border-bottom: 2px solid #000000;
+}
+
+.thead1{
+    padding: 0 1vw;
+    
+}
+.thead2{
+    padding: 0 5vw;
+    
+}
+.thead3{
+    padding: 0 4vw;
+}
+.thead4{
+    padding: 0 1vw;
+}
+.thead5{
+    padding: 0 3vw;
+}
+.thead6{
+    padding: 0 2vw;
+}
+.td,.td1{
+    text-align: center;
+    height: 2vw;
+    border-bottom: 2px solid #D9D9D9;
+    margin: 0;
+    font-family: 'Inter Bold';
+    font-size: .8vw;
+}
+.td1{
+    font-family: 'Inter Bold';
+    font-size: .8vw;
+    font-weight: 800;
+
+}
+.makeLeague{
+    margin-top: 2vw;
+    background-color: #000000;
+    color: #D6E09C;
+    border-radius: 1.5vw;
+    width: 9vw;
+    height: 4vw;
+    box-shadow: 0vw .2vw .5vw rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    border: .1vw solid #055540;
+    font-size: 1vw;
+    cursor: pointer;
+    
+}
+.plus{
+    font-size: 2vw;
+    font-weight: 300;
+    margin-right:.5vw;
+    
+}
+
+.contentpages{
+    display: flex;
+    flex-direction: row;
+    margin-top: 1vw;
+}
+.pages{
+    margin: 0 1vw
+}
+.arrowl{
+    rotate: 180deg;
+    width: 1vw;
+    height: .8vw;
+    margin-right: 1vw;
+}
+.arrow{
+    width: 1vw;
+    height: .8vw;
+    margin-left: 1vw;
+}

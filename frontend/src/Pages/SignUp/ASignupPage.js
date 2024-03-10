@@ -8,6 +8,7 @@ import { useState } from "react";
 import SelectGender from "../../Components/Common/SelectGender";
 import AgreeCheckbox from "../../Components/Common/AgreeCheckbox";
 import client from "../../Clients";
+import { useNavigate } from "react-router-dom";
 
 function SigninPage(){
     const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ function SigninPage(){
     const [name, setName] = useState('');
     const [birth,setBirth] = useState('');
     const [gender, setGender] = useState('');
-    const [marketingAgree, setMarketingAgree] = useState('');
+    const [marketingAgree, setMarketingAgree] = useState(false);
     const [termsAgree,setTermsAgree] = useState('');
     const [privacyAgree,setPrivacyAgree] = useState('');
     const [allAgree,setAllAgree] = useState('');
@@ -28,6 +29,7 @@ function SigninPage(){
     const [isName,setIsName] = useState('');
     const [isBirth,setIsBirth] = useState('');
     const [isDup,setIsDup] = useState('');
+    const navigate = useNavigate();
 
 
     let isAgree = privacyAgree && termsAgree;
@@ -36,6 +38,7 @@ function SigninPage(){
     useEffect(() => {
         setAllAgree(privacyAgree && termsAgree && marketingAgree)
     },[privacyAgree ,termsAgree, marketingAgree])
+    
 
     const saveNickname = event => {
         setNickname(event.target.value);
@@ -108,10 +111,11 @@ function SigninPage(){
             'marketing_agree' : marketingAgree
 
         }
-        console.log(SignUpData);
+        
         client.post('/api/login/signup/',SignUpData)
         .then(function(response){
             console.log(response)
+            navigate("/WelcomeSignUpPage")
         })
         .catch(function(error){
             console.log(error);
