@@ -32,9 +32,9 @@ class Team_info_Serializer(serializers.ModelSerializer):
         team_code = make_code('t')  # 먼저 match_code 생성
         validated_data['team_code'] = team_code  # validated_data에 추가
         validated_data['team_point'] = 0
-        validated_data['team_games'] = 0
+        validated_data['team_games'] = [] # team_gmaes []로 초기화해야 aftermatch에서 append됨  
         validated_data['team_player'] =[]
-        validated_data['team_5_match'] =[]
+        
         
         instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
@@ -54,7 +54,7 @@ class Team_info_Serializer(serializers.ModelSerializer):
 class UpdateTeamInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamInfo
-        exclude = ('team_code', 'team_name', 'team_point', 'team_5_match',)
+        exclude = ('team_code', 'team_name', 'team_point')
 
     def update(self, instance, validated_data):
         instance.team_host = validated_data.get('team_host', instance.team_host)
@@ -153,14 +153,15 @@ class Team_Short_info(serializers.Serializer):
         return total_players
 
     def get_total_avg_age(self, obj):
-        teams = TeamInfo.objects.filter(team_area=obj["area"])
-        total_age = 0
-        total_teams = 0
-        for team in teams:
-            if team.team_age: 
-                total_age += team.team_age
-                total_teams += 1
-        return int(total_age / total_teams) if total_teams > 0 else 0
+        # teams = TeamInfo.objects.filter(team_area=obj["area"])
+        # total_age = 0
+        # total_teams = 0
+        # for team in teams:
+        #     if team.team_age: 
+        #         total_age += team.team_age
+        #         total_teams += 1
+        # int(total_age / total_teams) if total_teams > 0 else 0
+        return 
 
     def get_total_avg_tier(self,obj):
         return
@@ -175,10 +176,13 @@ class PlayerInfoSerializer(serializers.ModelSerializer):
 class Team_More_info(serializers.ModelSerializer):
     team_percent = serializers.SerializerMethodField()
     players = serializers.SerializerMethodField() 
-    
+    team_games = serializers.SerializerMethodField() 
     class Meta:
         model = TeamInfo
-        fields = ['team_logo','team_tier','team_name','team_games','team_percent','team_age','team_games','players']
+        fields = ['team_logo','team_name','team_games','team_percent','team_age','players']
+
+    def get_team_games(self,obj):
+        return len(obj.team_games)
 
     def get_team_percent(self, obj):
         

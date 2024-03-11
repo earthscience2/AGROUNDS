@@ -16,8 +16,14 @@ def get_player_info_by_user_code(usercode):
         raise ValueError(f"유저 코드 {usercode}에 해당하는 선수 정보가 존재하지 않습니다.")
     return player_info
 
+# def get_team_age_by_user_code(usercode):
+#     try:
+#         User_info = UserInfo.objects.get(user_code=usercode)
 
-from datetime import datetime
+#     except UserInfo.DoesNotExist:
+#         raise ValueError(f"유저 코드 {usercode}에 해당하는 선수 정보가 존재하지 않습니다.")
+#     return 
+# from datetime import datetime
 
 def calculate_age(birthdate):
     birthdate = datetime.strptime(birthdate, '%Y%m%d')
