@@ -2,6 +2,7 @@ from rest_framework import serializers
 from DB.models import TeamInfo
 from DB.models import UserInfo
 from DB.models import PlayerInfo
+from DB.models import MatchInfo
 from django.http import JsonResponse
 import datetime
 from staticfiles.make_code import make_code
@@ -52,6 +53,7 @@ class Team_info_Serializer(serializers.ModelSerializer):
 
 ## Team 수정페이지
 class UpdateTeamInfoSerializer(serializers.ModelSerializer):
+    team_ages = serializers.SerializerMethodField()
     class Meta:
         model = TeamInfo
         exclude = ('team_code', 'team_name', 'team_point')
@@ -81,8 +83,9 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
             team_age_list = calculate_team_age(instance.team_player, new_team_player)
             # Assign the average team age to the data
             if team_age_list:
-                instance.team_age = sum(team_age_list) // len(team_age_list)
-
+                print(sum(team_age_list) // len(team_age_list))
+            
+                
         instance.save()
         return instance
         
@@ -117,13 +120,13 @@ class Team_Search(serializers.ModelSerializer):
         fields = '__all__'  
 
     def to_representation(self, instance):
-        tier = self.context.get('tier', None)
+        # tier = self.context.get('tier', None)
         area = self.context.get('area', None)
 
-        if tier is not None and instance.team_tier == tier:
-            return super().to_representation(instance)
+        # if tier is not None and instance.team_tier == tier:
+        #     return super().to_representation(instance)
         
-        elif area is not None and instance.team_area == area:
+        if area is not None and instance.team_area == area:
             return super().to_representation(instance)
         
         else:
@@ -152,16 +155,18 @@ class Team_Short_info(serializers.Serializer):
             total_players += len(team.team_player)
         return total_players
 
+    # 3/14 team_age 삭제 후 age계산 
     def get_total_avg_age(self, obj):
-        # teams = TeamInfo.objects.filter(team_area=obj["area"])
-        # total_age = 0
-        # total_teams = 0
-        # for team in teams:
-        #     if team.team_age: 
-        #         total_age += team.team_age
-        #         total_teams += 1
-        # int(total_age / total_teams) if total_teams > 0 else 0
-        return 
+        teams = TeamInfo.objects.filter(team_area=obj["area"])
+        total_age = 0
+        total_teams = 0
+        for team in teams:
+            if team.team_player:
+                for player in team.team_player:
+                    userinfo = UserInfo.objects.get(user_code = player)
+                    total_age += calculate_age(userinfo.user_birth)
+                    total_teams +=1
+        return int(total_age / total_teams) if total_teams > 0 else 0
 
     def get_total_avg_tier(self,obj):
         return
@@ -177,9 +182,25 @@ class Team_More_info(serializers.ModelSerializer):
     team_percent = serializers.SerializerMethodField()
     players = serializers.SerializerMethodField() 
     team_games = serializers.SerializerMethodField() 
+    team_ages = serializers.SerializerMethodField() 
+    team_tier = serializers.SerializerMethodField() 
     class Meta:
         model = TeamInfo
-        fields = ['team_logo','team_name','team_games','team_percent','team_age','players']
+        fields = ['team_logo','team_tier','team_name','team_games','team_ages','team_percent','players']
+
+    def get_team_tier(self,obj):
+        return
+    
+    # 3/14 team_age 필드 제거 후 팀 나이 계산 
+    def get_team_ages(self,obj):
+        total_age=0
+        l=0
+        if obj.team_player:
+            for player in obj.team_player:
+                userinfo = UserInfo.objects.get(user_code = player)
+                total_age += calculate_age(userinfo.user_birth)
+                l += 1
+        return total_age//l
 
     def get_team_games(self,obj):
         return len(obj.team_games)
@@ -223,10 +244,23 @@ class Team_Player_More_info(serializers.ModelSerializer):
             return None  # user_code에 해당하는 UserInfo 객체가 없는 경우
         return user_info.user_gender
     
-    # 다음회의
-    def get_player_games(self,obj): 
-        
-        return
+    # 3/14 출전경기 
+    def get_player_games(self, obj): 
+        user_code = self.context.get('user_code', None)
+        teams = TeamInfo.objects.filter(team_player__contains=[user_code])
+        a = []
+        for team in teams:
+            if team.team_games:
+                for match_code in team.team_games:
+                    print("match_code: ", match_code)
+                    matchinfo = MatchInfo.objects.filter(match_code=match_code).first()
+                    if matchinfo:
+                        if user_code in matchinfo.match_home_player or user_code in matchinfo.match_away_player:
+                            a.append({"match_code": match_code, "team_code": team.team_code})
+        return a
+
+
+
     # 다음회의 
     def get_player_attend(self,obj):
 

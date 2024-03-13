@@ -2,6 +2,7 @@ from DB.models import UserInfo
 from DB.models import PlayerInfo
 from DB.models import TeamInfo
 from rest_framework import serializers
+from datetime import datetime
 def get_user_code_by_user_nickname(nickname):
     try:
         user_code = getattr(UserInfo.objects.get(user_nickname = nickname), 'user_code')
