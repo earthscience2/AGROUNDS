@@ -41,6 +41,10 @@ class User_info_Serializer(serializers.ModelSerializer):
         player_data = {
             'user_code' : instance.user_code
         }
+
+        birth = validated_data.pop('user_birth', None)
+        birth = birth[0:4] + '-' + birth[4:6] + '-' + birth[6:8]
+        instance.user_birth = birth
         player_info_serializer = Player_info_Serializer(data = player_data)
         player_info_serializer.is_valid(raise_exception=True)
         player_info_serializer.save()

@@ -64,9 +64,9 @@ def get_general_position(user_code):
 
 def calculate_age(birthday):
     """
-    birthday(yyyymmdd)를 받아 나이를 계산해주는 함수
+    birthday(yyyy-mm-dd)를 받아 나이를 계산해주는 함수
     """
-    birthday = datetime.strptime(birthday, '%Y%m%d')
+    birthday = datetime.strptime(birthday, '%Y-%m-%d')
 
     current_date = datetime.now()
 
