@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 # from .models import User_info
-from DB.models import MatchInfo
+from DB.models import MatchInfo, LeagueInfo
 from .serializers import Before_Match_info_Serializer
 from .serializers import After_Match_info_Serializer
 from rest_framework.generics import get_object_or_404
@@ -91,4 +91,48 @@ class MatchMoreInfoAPI(APIView):
         data.pop('match_home_player')
         data.pop('match_away_player')
         return Response(data)
+    
+class MatchLocalInfoAPI(APIView):
+    """
+    지역별 경기 요약 조회
+    """
+    def get(self, requst, format=None):
+        areas = ["전국", "서울특별시", "인천광역시", "대전광역시", "대구광역시",
+                 "울산광역시","부산광역시","광주광역시","경기도","강원도","충청북도",
+                 "충청남도","경상북도","전라북도","전라남도","세종특별자치시","제주특별자치도"]
+        results = []
 
+        for area in areas:
+            # 특정 지역에 해당하는 경기만 필터링합니다.
+            matchs = MatchInfo.objects.filter(match_area__iexact=area)
+            area_states = {
+                'area' : area,
+                'total_matchs' : 0,
+                'friendly_matchs' : 0,
+                'league_matchs' : 0,
+                'cup_matchs' : 0
+            }
+
+            if (len(matchs) == 0) :
+                results.append(area_states)
+                continue
+
+            for match in matchs:
+                area_states['total_matchs'] += 1
+                match_official = match.match_official
+                if(match_official == 'unofficial'):
+                    area_states['friendly_matchs'] += 1
+                else:
+                    try:
+                        league_gametype = getattr(LeagueInfo.objects.get(league_code = match_official), 'league_gametype')
+                        if(league_gametype[0:3] == 'cup'):
+                            area_states['cup_matchs'] += 1
+                        elif(league_gametype[0:6] == 'league'):
+                            area_states['league_matchs'] += 1
+                    except LeagueInfo.DoesNotExist:
+                        print('리그코드 : ' + match_official + ' 에 해당하는 리그가 존재하지 않습니다.')
+                        continue
+
+            results.append(area_states)
+                
+        return Response(results)
