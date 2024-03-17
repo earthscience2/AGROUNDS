@@ -2,6 +2,7 @@ from DB.models import UserInfo
 from DB.models import PlayerInfo
 from DB.models import TeamInfo
 from rest_framework import serializers
+from datetime import datetime
 def get_user_code_by_user_nickname(nickname):
     """
     user nickname을 받아 user_code를 리턴해주는 함수
@@ -52,7 +53,14 @@ def get_general_position(user_code):
         raise ValueError(f"유저 코드 {user_code}에 해당하는 선수 정보가 존재하지 않습니다.")
     return player_position
 
-from datetime import datetime
+# def get_team_age_by_user_code(usercode):
+#     try:
+#         User_info = UserInfo.objects.get(user_code=usercode)
+
+#     except UserInfo.DoesNotExist:
+#         raise ValueError(f"유저 코드 {usercode}에 해당하는 선수 정보가 존재하지 않습니다.")
+#     return 
+# from datetime import datetime
 
 def calculate_age(birthday):
     """

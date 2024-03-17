@@ -117,8 +117,9 @@ class TeamInfo(models.Model):
     team_point = models.IntegerField(blank=True, null=True)
     team_area = models.CharField(max_length=45, blank=True, null=True)
     team_description = models.CharField(max_length=45, blank=True, null=True)
-    team_games = models.IntegerField(blank=True, null=True)
+    team_games = models.JSONField(blank=True)
     
+
     class Meta:
         managed = False
         db_table = 'team_info'

@@ -28,10 +28,10 @@ class MatchMain(APIView):
 class Before_makematch(APIView):
     """
     json 형식
-    {
-    "match_host": "u_1sa886fuu8678",
-    "match_home": "t_1sa888s33li50r",
-    "match_away": "t_1sa888s3bheta6",
+{ 
+    "match_host": "u_1sa88i8j4kg5q",
+    "match_home": "t_610r973000r99",
+    "match_away": "t_1sa8gs928g1h3b",
     "match_starttime" : "test",
     "match_official": "test_official",
     "match_type": {"45min": 2}
@@ -50,14 +50,14 @@ class Before_makematch(APIView):
 class After_makematch(APIView):
     """
 {
-    "match_code": "m_610rv74mgkvv2",
-    "match_home_player": ["u_1sa88i83ldrgi"],
-    "match_away_player": ["u_1sa88i83ldrgi"],
-    "match_home_result": 1, "match_away_result": 2, 
+    "match_code": "m_1sa8gs932ldl1p",
+    "match_home_player": ["u_1sa88fr5gv8kce"],
+    "match_away_player": ["u_1sa88i87mgcc4"],
+    "match_home_result": 1,
+    "match_away_result": 2,
     "match_total_result": {"test_home": "승"},
-    "match_goal": {"tests": 1} 
+    "match_goal": {"tests": 1}
 }
-
     """
     def post(self, request, *args, **kwargs):
         match_code = request.data.get('match_code')
