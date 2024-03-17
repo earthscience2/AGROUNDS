@@ -16,6 +16,7 @@ class MatchInfo(models.Model):
     match_starttime = models.CharField(max_length=45)
     match_type = models.JSONField()
     match_goal = models.JSONField(null=True)
+    match_area = models.CharField(max_length=45)
 
     class Meta:
         managed = False

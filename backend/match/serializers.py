@@ -5,6 +5,8 @@ from DB.models import UserInfo
 from DB.models import PlayerInfo
 from django.http import JsonResponse
 from staticfiles.make_code import make_code
+from staticfiles.get_info import get_team_name_by_team_code
+from staticfiles.get_info import get_general_position
 
 import re
 
@@ -172,23 +174,89 @@ class PlayerInfoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class Match_More_info(serializers.ModelSerializer):
-    match_home_player = PlayerInfoSerializer(many=True)
-    match_away_player = PlayerInfoSerializer(many=True)
-
     class Meta:
         model = MatchInfo
         fields = '__all__'
 
-    def to_representation(self, instance):
-        code = self.context.get('match_code', None)
-        
-        if code is not None and instance.match_code == code:
-            representation = super().to_representation(instance)
-            representation['match_home_player'] = self.get_player_representation(instance.match_home_player.all())
-            representation['match_away_player'] = self.get_player_representation(instance.match_away_player.all())
-            return representation
-        else:
-            return None
+    home_team_code = ''
+    # custom_field
+    home_team_name = serializers.SerializerMethodField('get_home_team_name')
+    home_team_FW = serializers.SerializerMethodField('get_home_team_FW')
+    home_team_MF = serializers.SerializerMethodField('get_home_team_MF')
+    home_team_DF = serializers.SerializerMethodField('get_home_team_DF')
+    home_team_GK = serializers.SerializerMethodField('get_home_team_GK')
+    home_team_scorer = serializers.SerializerMethodField('get_home_team_scorer')
 
-    def get_player_representation(self, players):
-        return PlayerInfoSerializer(players, many=True).data
+    away_team_name = serializers.SerializerMethodField('get_away_team_name')
+    away_team_FW = serializers.SerializerMethodField('get_away_team_FW')
+    away_team_MF = serializers.SerializerMethodField('get_away_team_MF')
+    away_team_DF = serializers.SerializerMethodField('get_away_team_DF')
+    away_team_GK = serializers.SerializerMethodField('get_away_team_GK')
+    away_team_scorer = serializers.SerializerMethodField('get_away_team_scorer')
+
+    # functions
+
+    def get_team_name(self, team_code):
+        return get_team_name_by_team_code(team_code=team_code)
+    
+    def get_team_lineup(self, user_codes, position):
+        player_list = []
+        for user_code in user_codes:
+            if(get_general_position(user_code=user_code) == position):
+                player_list.append(user_code)
+        return player_list
+    
+    # interfaces
+
+    # home team
+
+    def get_home_team_name(self, obj):
+        return self.get_team_name(team_code=obj.match_home)
+    
+    def get_home_team_FW(self, obj):
+       return self.get_team_lineup(user_codes = obj.match_home_player, position = 'FW')
+    
+    def get_home_team_MF(self, obj):
+       return self.get_team_lineup(user_codes = obj.match_home_player, position = 'MF')
+    
+    def get_home_team_DF(self, obj):
+       return self.get_team_lineup(user_codes = obj.match_home_player, position = 'DF')
+    
+    def get_home_team_GK(self, obj):
+       return self.get_team_lineup(user_codes = obj.match_home_player, position = 'GK')
+    
+    # away team
+
+    def get_away_team_name(self, obj):
+        return self.get_team_name(team_code=obj.match_away)
+    
+    def get_away_team_FW(self, obj):
+       return self.get_team_lineup(user_codes = obj.match_away_player, position = 'FW')
+    
+    def get_away_team_MF(self, obj):
+       return self.get_team_lineup(user_codes = obj.match_away_player, position = 'MF')
+    
+    def get_away_team_DF(self, obj):
+       return self.get_team_lineup(user_codes = obj.match_away_player, position = 'DF')
+    
+    def get_away_team_GK(self, obj):
+       return self.get_team_lineup(user_codes = obj.match_away_player, position = 'GK')
+    
+    def get_home_team_scorer(self, obj):
+        team_code = obj.match_home
+        match_goal = obj.match_goal
+        home_team_scorer = []
+        for each_score in match_goal:
+            if(each_score['team'] == team_code):
+                home_team_scorer.append(each_score['goal'])
+        return home_team_scorer
+    
+    def get_away_team_scorer(self, obj):
+        team_code = obj.match_away
+        match_goal = obj.match_goal
+        away_team_scorer = []
+        for each_score in match_goal:
+            if(each_score['team'] == team_code):
+                away_team_scorer.append(each_score['goal'])
+        return away_team_scorer
+        

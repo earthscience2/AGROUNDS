@@ -73,20 +73,22 @@ class After_makematch(APIView):
 # 경기 상세 조회
 class MatchMoreInfoAPI(APIView):
     """
-    {
-    "match_code": "m_1sa888s3d1aqm1"
-    }
+    ?match_code=m_1sa888s3d1aqm1
     """
     @swagger_auto_schema(
         operation_summary="return match detail by match_coode",
-        operation_description="match_code로 경기 상세 정보 조회",
-        request_body=MatchMoreInfoAPI_parameter
+        operation_description="match_code로 경기 상세 정보 조회 ",
+        manual_parameters=MatchMoreInfoAPI_parameters,
     )
-    def post(self, request):
-        match_code = request.data.get('match_code')
+    def get(self, request):
+        match_code = request.query_params.get('match_code')
         if match_code is None:
             return Response({"error": "team_code parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
-        match_info = MatchInfo.objects.filter(match_code=match_code)
-        serializer = Match_More_info(match_info, many=True, context={'match_code': match_code})
-        return Response(serializer.data)
+        match_info = MatchInfo.objects.get(match_code=match_code)
+        serializer = Match_More_info(match_info)
+        data = serializer.data
+        data.pop('match_goal')
+        data.pop('match_home_player')
+        data.pop('match_away_player')
+        return Response(data)
 
