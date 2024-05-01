@@ -1,0 +1,9 @@
+# 필수
+from django.urls import path, include
+from . import views
+
+urlpatterns = [
+    path("main/",views.V2_MatchMain.as_view()),# 경기 정보
+    path("beforematch/", views.V2_Before_makematch.as_view()),# 경기 전 입력 
+    path("aftermatch/", views.V2_After_makematch.as_view()),# 경기 후 입력 
+]

@@ -48,7 +48,7 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
     Host 변경 - 주장 변경
     Logo 변경 
     Name 변경 - 팀 이름 변경
-    Players 변경 - 팀원 추가
+    Players 변경 - 팀원 추가 / 삭제 만들예정
     '''
     class Meta:
         model = V2_TeamInfo

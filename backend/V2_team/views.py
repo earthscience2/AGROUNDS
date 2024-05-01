@@ -8,14 +8,14 @@ from DB.models import V2_TeamInfo
 from .serializers import *
 
 ## V2_team 전체 DB정보
-class V2TeamMainAPI(APIView):
+class V2_TeamMainAPI(APIView):
     def get(self, request):
         team_info = V2_TeamInfo.objects.all()
         serializer = Team_main_page(team_info, many=True)
         return Response(serializer.data)
 
 ## V2_team 팀 생성 
-class TeamMakeTeamAPI(APIView):
+class V2_TeamMakeTeamAPI(APIView):
     """
     json 형식
     {
@@ -34,7 +34,7 @@ class TeamMakeTeamAPI(APIView):
 
 
 ## V2_team 업데이트 
-class TeamUpdateTeamAPI(APIView):
+class V2_TeamUpdateTeamAPI(APIView):
     """
     json 형식
     {
