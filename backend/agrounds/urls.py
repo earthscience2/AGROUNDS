@@ -1,8 +1,5 @@
 from django.contrib import admin
 from django.urls import include, path
-import assist.views
-import DB.views
-import login.views
 
 from rest_framework import routers
 from rest_framework import permissions
@@ -36,6 +33,7 @@ urlpatterns = [
     path("api/league/", include("league.urls")),
     path("api/player/", include("player.urls")),
     path("api/user/", include("user.urls")),
+    path("api/V2login/", include("V2_login.urls")),
     path("api/V2team/", include("V2_team.urls")),
     path("api/V2match/", include("V2_match.urls"))
 ]

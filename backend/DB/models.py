@@ -159,17 +159,23 @@ class PlayerInfo(models.Model):
         managed = False
         db_table = "player_info"
 
-# V2 팀 생성
-class V2_TeamInfo(models.Model):
-    v2_team_code = models.CharField(primary_key=True, max_length=45)
-    v2_team_host = models.CharField(max_length=45, blank=True, null=True)
-    v2_team_players = models.JSONField(blank=True, null=True)
-    v2_team_logo = models.CharField(max_length=45, blank=True, null=True)
-    v2_team_name = models.CharField(max_length=45)
+# V2 로그인
+class V2_UserInfo(models.Model):
+    user_code = models.CharField(primary_key=True, max_length=45)
+    user_id = models.CharField(max_length=45)
+    password = models.CharField(max_length=200)
+    user_birth = models.CharField(max_length=45)
+    user_name = models.CharField(max_length=45)
+    user_gender = models.CharField(max_length=45)
+    user_nickname = models.CharField(max_length=45)
+    marketing_agree = models.BooleanField()
+    login_type = models.IntegerField()
+
     class Meta:
         managed = False
-        db_table = 'V2_team_info'
+        db_table = "V2_user_info"
 
+# V2 팀 생성
 class V2_TeamInfo(models.Model):
     v2_team_code = models.CharField(primary_key=True, max_length=45)
     v2_team_host = models.CharField(max_length=45, blank=True, null=True)
