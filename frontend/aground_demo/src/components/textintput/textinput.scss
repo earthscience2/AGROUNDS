@@ -1,0 +1,16 @@
+.inputbox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 37vh;
+    height: 7vh;
+    border: 1px solid #cdcdcd;
+    border-radius: 3.5vh;
+    font-weight: 400;
+    color: white;
+    .input{
+        width: 80%;
+        height: 5vh;
+        border: none;
+    }
+}
