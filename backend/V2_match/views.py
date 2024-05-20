@@ -27,8 +27,10 @@ class V2_Before_makematch(APIView):
     json 형식
     {
     "v2_match_location":"asdfas",
-    "v2_match_home":"asdf",
-    "v2_match_away":"asdfasd"
+    "v2_match_host":"sdfsdf",
+    "v2_match_home":"아스키",
+    "v2_match_away":"땅울림",
+    "v2_match_schedule":"2024-03-24"
     }
     """
     def post(self, request, *args, **kwargs):
@@ -44,8 +46,11 @@ class V2_Before_makematch(APIView):
 class V2_After_makematch(APIView):
     """
 {
-    "v2_match_code":"m_610tah4aj79tb",
-    "v2_match_result":["asdf"]
+    "v2_match_code": "m_610tah54nchjd",
+    "v2_match_result": ["asdf"],
+    "v2_match_players": ["asdfas", "asdfas"],
+    "v2_match_goalplayers": ["asdf"], #선택
+    "v2_match_GPSplayers": ["asdf"]
 }
     """
     def post(self, request, *args, **kwargs):
