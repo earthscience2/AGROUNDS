@@ -31,11 +31,11 @@ const LogIn=()=>{
 
     const onAgrooundClick = (e) => {
         e.preventDefault();
+
         const loginData = {
-            'user_id':userid,
+            'user_id': userid,
             'password': userpw
         }
-        // error 못 잡음
         client.post('/api/login/login/', loginData)
         .then(function(response){
             console.log(response)
@@ -51,14 +51,14 @@ const LogIn=()=>{
             console.log(error);
         })
     }
-
+// 유효성 검사 
     return (
         <form onSubmit={onAgrooundClick}>
             <div className='background'>
                 <div className='logo'>AGROUNDS</div>
-                <div className='input-div1'><Textinput onChange={handleIdChange} placeholder='이메일을 입력해주세요' type='email'/></div>
-                <div className='input-div2'><Textinput onChange={handlePwChange} placeholder='비밀번호를 입력해주세요' type='password'/></div>
-                {isid && isPassword ? <GeneralBtn children="로그인" color='black'onClick={onAgrooundClick}/>: <GeneralBtn color='white' children="로그인" onClick={onAgrooundClick}/>}
+                <div className='input-div1'><Textinput onChange={handleIdChange} size='large' placeholder='이메일을 입력해주세요' type='email'/></div>
+                <div className='input-div2'><Textinput onChange={handlePwChange} size='large' placeholder='비밀번호를 입력해주세요' type='password'/></div>
+                {isid && isPassword ? <GeneralBtn children="로그인" color='black'onClick={onAgrooundClick}/>: <GeneralBtn color='white' children="로그인" />}
                 <div className='etcbtn'>
                     <div className='createaccount'onClick={()=>navigate('/SignUp')}>계정 생성하기</div>
                     <div className='kakaobtn' onClick={onKakaoClick}><img src={KakaoLogo}/></div>
