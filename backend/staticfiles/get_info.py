@@ -41,10 +41,14 @@ def get_team_code_by_team_name(team_name):
     try:
         v2_team_code = getattr(V2_TeamInfo.objects.get(v2_team_name = team_name), 'v2_team_code')
     except V2_TeamInfo.DoesNotExist:
+        # 0이면 해당 team_name에 대한 v2_team_name이 없다. 즉, V2_TeamInfo에 해당 team_name이 없다. 
         v2_team_code = 0
     return v2_team_code
 
 def update_team_match_code(team_code, match_code):
+    """
+    team_code 받아 match_code를 업데이트. 
+    """
     team = V2_TeamInfo.objects.get(v2_team_code=team_code)
     if team.v2_team_match:
         team.v2_team_match.append(match_code)
