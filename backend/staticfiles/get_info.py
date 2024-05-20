@@ -1,6 +1,7 @@
 from DB.models import UserInfo
 from DB.models import PlayerInfo
 from DB.models import TeamInfo
+from DB.models import *
 from rest_framework import serializers
 from datetime import datetime
 def get_user_code_by_user_nickname(nickname):
@@ -33,6 +34,25 @@ def get_team_name_by_team_code(team_code):
         raise ValueError(f"팀 코드 {team_code}에 해당하는 선수 정보가 존재하지 않습니다.")
     return team_name
 
+def get_team_code_by_team_name(team_name):
+    """
+    team_name을 받아 team_code를 리턴해주는 함수
+    """
+    try:
+        v2_team_code = getattr(V2_TeamInfo.objects.get(v2_team_name = team_name), 'v2_team_code')
+    except V2_TeamInfo.DoesNotExist:
+        v2_team_code = 0
+    return v2_team_code
+
+def update_team_match_code(team_code, match_code):
+    team = V2_TeamInfo.objects.get(v2_team_code=team_code)
+    if team.v2_team_match:
+        team.v2_team_match.append(match_code)
+    else:
+        team.v2_team_match = [match_code]
+    team.save()
+    return team.v2_team_match
+    
 def get_general_position(user_code):
     """
     user_code를 받아 해당 유저의 포지션(공격수/미드필더/수비수/골키퍼)를 리턴해주는 함수
