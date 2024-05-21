@@ -12,13 +12,15 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from staticfiles import cryptographysss
 
-
 import json
 import requests
 
 # 클라이언트 / 서버 주소
-CLIENT_URL = "http://localhost:3000"
-SERVER_URL = "http://localhost:8000"
+# CLIENT_URL = "http://localhost:3000"
+# SERVER_URL = "http://localhost:8000"
+
+CLIENT_URL = "http://agrounds.com"
+SERVER_URL = "http://agrounds.com"
 
 KAKAO_CALLBACK_URI = SERVER_URL + "/api/login/kakao/callback/"
 KAKAO_REDIRECT_URI = SERVER_URL + "/api/login/kakao/"
