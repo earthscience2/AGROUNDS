@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './create_team.scss';
 import Profile from "../../assets/user-icon.svg";
 
-const CreateTeam = ({show, onClose}) => {
+const CreateTeam = ({onClose}) => {
 
 
     return (
