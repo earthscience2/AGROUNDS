@@ -15,6 +15,8 @@ const FirstSignup = () => {
     const TeamJoinModalOpen = () => {
         setTeamJoinModal(!teamJoinModal);
     }
+
+    
     return (
         <div className='first-signup-bg'>
             {teamCreateModal ? <CreateTeamModal onClose={TeamCreateModalOpen}/> : ''}

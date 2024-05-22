@@ -5,18 +5,20 @@
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center;
     width: 100vw;
     height: 100vh;
+
     .join-team-modal-mainbg{
-            width: 36vh;
+            width: 100%;
             height: 50%;;
             background-color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            border-radius: 1.8vh;
-            border: 2px solid black;
+            border-radius: 4vh 4vh 0 0;
+            position: fixed;
+            bottom: 0;
+        
         .join-team-modal-close{
                 width: 80%;
                 display: flex;
@@ -25,30 +27,32 @@
                 text-align: center;
                 
                 &:nth-child(1){
-                    font-size: 2.2vh;
-                    font-weight: 500;
-                    margin-left: 27%;
+                    font-size: 2vh;
+                    font-weight: 700;
+                    margin-left: 28%;
                 }
                 .modal-close{
-                    margin-left: 27%;
+                    margin-left: 28%;
                 }
             }
         .join-team-modal-input{
-            width: 30vh;
+            width: 80%;
                 height: 5vh;
-                border-radius: 1.4vh;
+                border-radius: 3vh;
                 border: 1px solid black;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 margin-top: 5vh;
             .join-team-modal-inputtext{
-                width: 25vh;
+                width: 80%;
                 height: 4vh;
                 border: none;
             }
             .join-team-modal-searchicon{
                 height: 2vh;
+                margin-right: 10%;
+                margin-top: .5vh;
             }
         }
     }
