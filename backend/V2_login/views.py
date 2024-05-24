@@ -215,3 +215,8 @@ class kakaoSignup(APIView):
         serializer.save()
         new_user = serializer.data
         return Response(new_user, status=status.HTTP_200_OK)
+
+# 토큰으로 사용자 정보 받아오기
+class getUserInfo(APIView):
+    def get(self, request, *args, **kwargs):
+        token = request.META.get('token', 'unknown')
