@@ -15,7 +15,9 @@ class V2_User_info_Serializer(serializers.ModelSerializer):
         # password 제외하고 리턴
         extra_kwargs = {
     	    'password' : {'write_only' : True },
-            'user_code' : {'required' : False}
+            'user_code' : {'required' : False},
+            'team_code' : {'required' : False},
+            'user_type' : {'required' : False},
 	    }
         
     
@@ -85,4 +87,16 @@ class V2_User_info_Serializer(serializers.ModelSerializer):
                     return None
                 raise serializers.ValidationError({"error" : "올바르지 않은 " + massges[i] +" 형식입니다."})
         return None
+    
+# class Login_Serializer(serializers.Serializer):
+#     user_id = serializers.CharField(required = True)
+#     password = serializers.CharField(required = True, write_only = True)
 
+#     def validate(self, data):
+#         user = authenticate(**data)
+#         if user:
+#             token = Token.objects.get(user=user) # 해당 유저의 토큰을 불러옴
+#             return token
+#         raise serializers.ValidationError( # 가입된 유저가 없을 경우
+#             {"error": "Unable to log in with provided credentials."}
+#     )
