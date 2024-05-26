@@ -28,22 +28,29 @@ const LogIn=()=>{
     const onKakaoClick = (e) => {
         window.location.replace(process.env.REACT_APP_BASE_URL+"/api/login/kakao");
     }
-
     const onAgrooundClick = (e) => {
+        console.log(process.env.REACT_APP_BASE_URL + '/api/V2login/login/');
         e.preventDefault();
 
         const loginData = {
             'user_id': userid,
             'password': userpw
         }
-        client.post('/api/login/login/', loginData)
+        client.post('/api/V2login/login/', loginData)
         .then(function(response){
             console.log(response)
             setToken(response.data.token)
             sessionStorage.setItem('nickname', response.data.user_nickname);
             sessionStorage.setItem('token', response.data.token)
-            sessionStorage.setItem('usercode', response.data.user_code)
-            navigate('/SignUp');
+            sessionStorage.setItem('usercode', response.data.user_code);
+            sessionStorage.setItem('usertype', response.data.user_type);
+            sessionStorage.setItem('teamcode', response.data.team_code);
+            if (sessionStorage.getItem('usertype') === -1){
+                navigate('/FirstSignup');
+            }else{
+                navigate('/MainPage');
+            }
+            
         })
         .catch(function(error){
             setIsLogin(false);
