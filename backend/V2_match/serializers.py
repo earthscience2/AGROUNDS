@@ -102,3 +102,8 @@ class After_Match_info_Serializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errors)
 
         return data
+
+class MatchSearchByMatchcode(serializers.ModelSerializer):
+    class Meta:
+        model = V2_MatchInfo
+        fields = '__all__'

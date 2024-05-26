@@ -59,3 +59,40 @@ class V2_TeamUpdateTeamAPI(APIView):
         else:
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class TeamSearchByTeamcodeAPI(APIView):
+    '''
+    {
+    "v2_team_code": "t_610t7o2eh77eu"
+    }
+    '''
+    def post(self, request):
+        v2_team_code = request.data.get('v2_team_code')
+        if not v2_team_code:
+            return Response({'error': 'v2_team_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            team_info = V2_TeamInfo.objects.get(v2_team_code=v2_team_code)
+        except V2_TeamInfo.DoesNotExist:
+            return Response({'error': 'No team found with the provided team code.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = TeamSearchByTeamcode(team_info)
+        return Response(serializer.data)
+
+class TeamSearchByTeamnameAPI(APIView):
+    '''
+    {
+    "v2_team_name": "땅"
+    }
+    '''
+    def post(self, request):
+        v2_team_name = request.data.get('v2_team_name')
+        if not v2_team_name:
+            return Response({'error': 'v2_team_name is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        teams = V2_TeamInfo.objects.filter(v2_team_name__icontains=v2_team_name)
+        if not teams.exists():
+            return Response({'error': 'No teams found with the provided name.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = TeamSearchByTeamname(teams, many=True)
+        return Response(serializer.data)

@@ -62,3 +62,22 @@ class V2_After_makematch(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MatchSearchByMatchcodeAPI(APIView):
+    '''
+    {
+    "v2_match_code": "m_1sa95c543pabii"
+    }
+    '''
+    def post(self, request):
+        v2_match_code = request.data.get('v2_match_code')
+        if not v2_match_code:
+            return Response({'error': 'v2_match_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        match = V2_MatchInfo.objects.filter(v2_match_code=v2_match_code)
+        if not match.exists():
+            return Response({'error': 'No match found with the provided code.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = MatchSearchByMatchcode(match, many=True)
+        return Response(serializer.data)
