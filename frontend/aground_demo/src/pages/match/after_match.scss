@@ -49,8 +49,10 @@
                 @include centerDisplay(row);
                 margin-top: 1vh;
                 border-radius: 3vh;
-                &::after{
-                    border: 1px solid black;
+                cursor: pointer;
+                &.selected{
+                    background-color: #000000;
+                    color: white;
                 }
             }
             .after_match_player_name{
