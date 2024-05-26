@@ -103,7 +103,7 @@ class After_Match_info_Serializer(serializers.ModelSerializer):
 
         return data
 
-# 매치코드로 매치정보 찾기
+# 매치코드로 매치정보 찾기2
 class MatchSearchByMatchcode(serializers.ModelSerializer):
     class Meta:
         model = V2_MatchInfo
