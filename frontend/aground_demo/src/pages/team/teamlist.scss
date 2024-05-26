@@ -1,0 +1,62 @@
+@mixin centerDisplay(){
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@mixin BoldText($font){
+    font-size: $font;
+    font-weight: 600
+}
+
+.teamlist-background{
+    @include centerDisplay();
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(245, 245, 245);
+    .teamlist-logo{
+        @include BoldText(2.4vh);
+        margin-top: 5vh;
+ 
+    }
+    .teamlist-title{
+        @include BoldText(2.5vh);
+        margin-top: 4vh;
+       
+    }
+    .teamlist-line{
+        width: 40vh;
+        height: .15vh;
+        background-color: rgba(0, 0, 0, 0.781);
+        margin-top: 3vh;
+    }
+    .teamlist-largebox{
+        @include centerDisplay();
+        width: 42vh;
+        height: 70vh;
+        margin-top: 4vh;
+        border-radius: 1vh;
+        display: block;
+        overflow-y: auto;
+        margin-left: 3vh;
+        .teamlist-personbox{
+            background-color: rgb(255, 255, 255);
+            box-shadow: 1vh 1vh 0.2 2 #c4c4c4;
+            width: 38vh;
+            height: 7vh;
+            border-radius: 1vh;
+            margin-top: 2vh;
+            display: flex;
+            
+            align-items: center;
+            .teamlist-personbox-player{
+                width: 80%;
+                margin-left: 3vh;
+            }
+            .teamlist-personbox-minus{
+                height: 2.5vh;
+            
+            }
+        }
+    }
+}

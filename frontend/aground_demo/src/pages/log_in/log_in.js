@@ -42,8 +42,13 @@ const LogIn=()=>{
             setToken(response.data.token)
             sessionStorage.setItem('nickname', response.data.user_nickname);
             sessionStorage.setItem('token', response.data.token)
-            sessionStorage.setItem('usercode', response.data.user_code)
-            navigate('/FirstSignup');
+            sessionStorage.setItem('usercode', response.data.user_code);
+            sessionStorage.setItem('usertype', response.data.user_type);
+            sessionStorage.setItem('teamcode', response.data.team_code);
+            if (sessionStorage.getItem('usertype') === -1){
+                navigate('/FirstSignup');
+            }
+            navigate('/mainSignup');
         })
         .catch(function(error){
             setIsLogin(false);
