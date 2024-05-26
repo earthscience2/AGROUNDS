@@ -16,3 +16,10 @@ backend/player/__pycache__
 backend/staticfiles/__pycache__
 backend/team/__pycache__
 backend/user/__pycache__
+# Ignore all __pycache__ directories and files
+**/__pycache__/
+*.pyc
+*.pyo
+.__pycache__
+
+backend/DB/migrations/__pycache__
