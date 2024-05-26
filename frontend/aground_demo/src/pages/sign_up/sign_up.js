@@ -90,12 +90,12 @@ const SignUp = () => {
         }
         console.log(SignUpData);
 
-        client.post('/api/login/signup/',SignUpData)
+        client.post('/api/V2login/signup/',SignUpData)
         .then(function(response){
             console.log(response)
             navigate("/") //mainpage로
         })
-        .catch(function(error){
+        .catch(function(error){ 
             console.log(error);
         })
     }
