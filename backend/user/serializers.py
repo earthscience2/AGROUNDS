@@ -42,9 +42,9 @@ class User_info_Serializer(serializers.ModelSerializer):
             'user_code' : instance.user_code
         }
 
-        birth = validated_data.pop('user_birth', None)
-        birth = birth[0:4] + '-' + birth[4:6] + '-' + birth[6:8]
-        instance.user_birth = birth
+        # birth = validated_data.pop('user_birth', None)
+        # birth = birth[0:4] + '-' + birth[4:6] + '-' + birth[6:8]
+        # instance.user_birth = birth
         player_info_serializer = Player_info_Serializer(data = player_data)
         player_info_serializer.is_valid(raise_exception=True)
         player_info_serializer.save()
@@ -91,7 +91,7 @@ class User_info_Serializer(serializers.ModelSerializer):
                     '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^])[A-Za-z\d@$!%*#?&^]{8,}$',
                     '^[a-zA-Z가-힣0-9!@#$%^&*()-_=+{};:,<.>]{3,10}$',
                     '^[가-힣a-zA-Z]{2,20}$',
-                    '^\d{8}$' ]
+                    '^(?:(?:19|20)\d{2})-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$' ]
         items = [user_id, password, user_nickname, user_name, user_birth]
         massges = ['이메일', '패스워드', '닉네임', '이름', '생년월일']
 
