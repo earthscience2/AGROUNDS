@@ -30,30 +30,50 @@ const AfterMatch = () => {
         });
         console.log(attend)
     };
+
+    const onSubmitHandler = () => {
+        const afterMatchData = {
+            "v2_match_code": '',
+            "v2_match_result": [homeScore, awayScore],
+            "v2_match_players": attend,
+            "v2_match_GPSplayers": ["asdf"]
+        }
+        client.post('/api/V2match/aftermatch/', afterMatchData)
+        .then(function(response){
+            console.log(response);
+        })
+        .catch(function(error){
+            console.log(error)
+        })
+    }
+    const isValid = homeScore && awayScore && attend
+    
     return (
-        <div className='after_match_background'>
-            <div className='after_match_title'>AGROUNDS</div>
-            <MatchPlan myTeam='ththth' teamName='자유' place='인하대학교 대운동장' date='2024-12-11' homeScore={homeScore} awayScore={awayScore}/>
-            <div className='after_match_score_inputbox'>
-                <div className='after_match_score'>Score</div>
-                <div className='after_match_score_input'>
-                    <Textinput size='small' placeholder='Home Score' type='number' onChange={(e) => setHomeScore(e.target.value)}/>
-                    <div className='after_match_score_input_-'>-</div>
-                    <Textinput size='small'placeholder='Away Score' type='number' onChange={(e) => setAwayScore(e.target.value)}/>
+        <form onSubmit={onSubmitHandler}>
+            <div className='after_match_background'>
+                <div className='after_match_title'>AGROUNDS</div>
+                <MatchPlan myTeam='ththth' teamName='자유' place='인하대학교 대운동장' date='2024-12-11' homeScore={homeScore} awayScore={awayScore}/>
+                <div className='after_match_score_inputbox'>
+                    <div className='after_match_score'>Score</div>
+                    <div className='after_match_score_input'>
+                        <Textinput size='small' placeholder='Home Score' type='number' onChange={(e) => setHomeScore(e.target.value)}/>
+                        <div className='after_match_score_input_-'>-</div>
+                        <Textinput size='small'placeholder='Away Score' type='number' onChange={(e) => setAwayScore(e.target.value)}/>
+                    </div>
                 </div>
-            </div>
-            <div className='after_match_score_playerbox'>
-                <div className='after_match_player_title'>참여자 선택</div>
-                <div className='after_match_player_list'>
-                    {teamList.map((player, index) => (
-                        <div className={`after_match_player ${attend.includes(player) ? 'selected' : ''}`} key={index} onClick={() => addPlayerToAttend(player)}>
-                            <div className='after_match_player_name'>{player}</div>
-                        </div>
-                    ))}
+                <div className='after_match_score_playerbox'>
+                    <div className='after_match_player_title'>참여자 선택</div>
+                    <div className='after_match_player_list'>
+                        {teamList.map((player, index) => (
+                            <div className={`after_match_player ${attend.includes(player) ? 'selected' : ''}`} key={index} onClick={() => addPlayerToAttend(player)}>
+                                <div className='after_match_player_name'>{player}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
+                {isValid ? <GeneralBtn color='black' children='입력완료' onClick={onSubmitHandler}/> : <GeneralBtn color='white' children='입력완료' onClick={() => alert('필드를 모두 입력해주세요')}/>}
             </div>
-            <GeneralBtn color='black' children='입력완료'/>
-        </div>
+        </form>
     );
 };
 
