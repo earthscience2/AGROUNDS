@@ -6,6 +6,7 @@ import LogIn from './pages/log_in/log_in';
 import FirstSignup from './pages/team/first_signup';
 import AddMatch from './pages/match/add_match';
 import TeamList from './pages/team/teamlist';
+import MainPage from './pages/main_page/main_page';
 function App() {
   return (
     <BrowserRouter>
@@ -16,7 +17,7 @@ function App() {
         <Route path="/FirstSignup" element={<FirstSignup/>}/>
         <Route path="/AddMatch" element={<AddMatch/>}/>
         <Route path="/TeamList" element={<TeamList/>}/>
-
+        <Route path="/MainPage" element={<MainPage/>}/>
       </Routes>
     </BrowserRouter>
   );

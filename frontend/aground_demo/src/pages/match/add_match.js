@@ -14,9 +14,7 @@ const AddMatch = () => {
     const navigate = useNavigate();
     const onSubmitHandler = async event => {
         event.preventDefault();
-        const dateTime = {
-            
-        }
+        
         let AddMatchData = {
             'v2_match_location': place,
             'v2_match_host' : sessionStorage.getItem('nickname'),

@@ -20,12 +20,13 @@
     .add_match_matchplan{
         width: 40vh;
         height: 23vh;
-        border: 1px dashed black;
+        border: 1px solid black;
         border-radius: 1vh;
         margin-top: 7vh;
         @include centerDisplay();
         .add_match_matchplan_title{
-            @include BoldText(2vh);
+            font-size: 2.1vh;
+            font-weight: 700;
             margin-top: 2.5vh;
         }
         .add_match_matchplan_teambox{
