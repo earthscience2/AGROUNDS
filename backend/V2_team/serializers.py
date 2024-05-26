@@ -61,3 +61,16 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
         instance.v2_team_players = validated_data.get("v2_team_players", instance.v2_team_players)
         instance.save()
         return instance
+    
+class TeamSearchByTeamcode(serializers.ModelSerializer):
+    class Meta:
+        model = V2_TeamInfo
+        fields = '__all__'
+        
+    
+class TeamSearchByTeamname(serializers.ModelSerializer):
+    class Meta:
+        model = V2_TeamInfo
+        fields = '__all__'
+        
+    
