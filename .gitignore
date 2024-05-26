@@ -23,3 +23,4 @@ backend/user/__pycache__
 .__pycache__
 
 backend/**/__pycache__/
+backend/agrounds/settings/__pycache__/
