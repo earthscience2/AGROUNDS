@@ -1,2 +1,4 @@
 .DS_Store
-Find . | grep -E “(__pycache__|\.pyc|\.pyo$)” | xargs rm -rf
+__pycache__/
+*.pyc
+*.pyo
