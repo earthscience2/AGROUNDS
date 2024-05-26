@@ -46,11 +46,14 @@ class V2_Before_makematch(APIView):
 class V2_After_makematch(APIView):
     """
 {
-    "v2_match_code": "m_610tah54nchjd",
-    "v2_match_result": ["asdf"],
-    "v2_match_players": ["asdfas", "asdfas"],
-    "v2_match_goalplayers": ["asdf"], #선택
-    "v2_match_GPSplayers": ["asdf"]
+    "v2_match_location": "인하대",
+    "v2_match_schedule": "2024-05-02",
+    "v2_match_code": "m_1sa95sb441biic",
+    "v2_match_result": ["2", "5"],
+    "v2_match_players": ["이용준", "손아섭", "최정원", "박건우", "데이비슨", "권희동",
+    "서호철", "김주원", "김형준", "김성욱", "박세혁", "김세훈"],
+    "v2_match_goalplayers": ["오윤석", "엄상백"],
+    "v2_match_GPSplayers": ["조용호", "로하스"]
 }
     """
     def post(self, request, *args, **kwargs):
