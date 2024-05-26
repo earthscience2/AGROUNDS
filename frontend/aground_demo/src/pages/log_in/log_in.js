@@ -47,8 +47,10 @@ const LogIn=()=>{
             sessionStorage.setItem('teamcode', response.data.team_code);
             if (sessionStorage.getItem('usertype') === -1){
                 navigate('/FirstSignup');
+            }else{
+                navigate('/MainPage');
             }
-            navigate('/mainSignup');
+            
         })
         .catch(function(error){
             setIsLogin(false);

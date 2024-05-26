@@ -13,10 +13,11 @@
     @include centerDisplay();
     width: 100vw;
     height: 100vh;
-    background-color: rgb(245, 245, 245);
+    background-color: rgb(234, 235, 237);
     .teamlist-logo{
-        @include BoldText(2.4vh);
-        margin-top: 5vh;
+        font-size: 2.1vh;
+        font-weight: 700;
+        margin-top: 2.5vh;
  
     }
     .teamlist-title{
@@ -26,15 +27,16 @@
     }
     .teamlist-line{
         width: 40vh;
-        height: .15vh;
+        height: 1px;
         background-color: rgba(0, 0, 0, 0.781);
         margin-top: 3vh;
+        margin-bottom: -1vh;
     }
     .teamlist-largebox{
         @include centerDisplay();
         width: 42vh;
         height: 70vh;
-        margin-top: 4vh;
+        margin-top: 2vh;
         border-radius: 1vh;
         display: block;
         overflow-y: auto;

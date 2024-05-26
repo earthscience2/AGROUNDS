@@ -1,3 +1,9 @@
+@mixin centerDisplay($direc){
+    display: flex;
+    flex-direction: $direc;
+    align-items: center;
+    justify-content: center;
+}
 .join-team-modal-bg{
     position: fixed;
     top: 0;
@@ -53,6 +59,29 @@
                 height: 2vh;
                 margin-right: 10%;
                 margin-top: .5vh;
+                cursor: pointer;
+            }
+        }
+        .join-team-modal-teambox{
+            width: 40vh;
+            height: 19vh;
+            margin: 1vh 0 1vh 4vh;
+            overflow-y: scroll;
+            display: block;
+            .join-team-modal-teambox-list{
+                width: 90%;
+                height: 7vh;
+                background-color: rgb(234, 235, 237);
+                @include centerDisplay(row);
+                margin-top: 1vh;
+                border-radius: 2vh;
+                &:hover{
+                    border: 1px solid black;
+                }
+                .join-team-modal-teambox-team{
+                    font-size: 2vh;
+                    font-weight: 600;
+                }
             }
         }
     }

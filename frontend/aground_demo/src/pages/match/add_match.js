@@ -9,7 +9,7 @@ const AddMatch = () => {
     const [time, setTime]= useState(null);
     const [date, setDate] = useState(null);
     const [place, setPlace] = useState('');
-    const [myTeam, setMyTeam] = useState('소영팀')
+    const [myTeam, setMyTeam] = useState('')
     const isValid = teamName && time && date && place;
     const navigate = useNavigate();
     const onSubmitHandler = async event => {
