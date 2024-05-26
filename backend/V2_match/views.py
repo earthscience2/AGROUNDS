@@ -81,3 +81,21 @@ class MatchSearchByMatchcodeAPI(APIView):
 
         serializer = MatchSearchByMatchcode(match, many=True)
         return Response(serializer.data)
+
+# v2_match_code로 match삭제하기 
+class MatchDeletebyMatchcodeAPI(APIView):
+    '''
+    {
+        "v2_match_code": "m_610tcd8peuv2mg"
+    }
+    '''
+    def post(self, request):
+        v2_match_code = request.data.get('v2_match_code')
+        if not v2_match_code:
+            return Response({'error': 'v2_match_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            match = V2_MatchInfo.objects.get(v2_match_code=v2_match_code)
+            match.delete()
+            return Response({'success': 'Match deleted successfully.'}, status=status.HTTP_200_OK)
+        except V2_MatchInfo.DoesNotExist:
+            return Response({'error': 'Match not found.'}, status=status.HTTP_404_NOT_FOUND)
