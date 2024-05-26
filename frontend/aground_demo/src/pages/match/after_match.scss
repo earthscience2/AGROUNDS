@@ -1,0 +1,62 @@
+@mixin centerDisplay($direc){
+    display: flex;
+    flex-direction: $direc;
+    align-items: center;
+    justify-content: center;
+}
+
+.after_match_background{
+    @include centerDisplay(column);
+    .after_match_title{
+        font-size: 2.1vh;
+        font-weight: 700;
+        margin-top: 2.5vh;
+    }
+    .after_match_score_inputbox{
+        @include centerDisplay(column);
+        .after_match_score{
+            font-size: 2vh;
+            font-weight: 500;
+            width: 90%;
+            margin: 3vh 0 1.5vh 0;
+        }
+        .after_match_score_input{
+            @include centerDisplay(row);
+            .after_match_score_input_-{
+                font-size: 3vh;
+                color: #000000;
+            }
+        }
+    }
+    .after_match_score_playerbox{
+        @include centerDisplay(column);
+        .after_match_player_title{
+            font-size: 1.8vh;
+            font-weight: 500;
+            width: 85%;
+            margin: 3vh 0 1.5vh 0;
+        }
+        .after_match_player_list{
+            width: 40vh;
+            height: 30vh;
+            margin: 1vh 0 2vh 4vh;
+            overflow-y: scroll;
+            display: block;
+            .after_match_player{
+                width: 90%;
+                height: 6vh;
+                background-color: rgb(234, 235, 237);
+                @include centerDisplay(row);
+                margin-top: 1vh;
+                border-radius: 3vh;
+                &::after{
+                    border: 1px solid black;
+                }
+            }
+            .after_match_player_name{
+                font-size: 2vh;
+                font-weight: 600;
+            }
+        }
+    }
+}

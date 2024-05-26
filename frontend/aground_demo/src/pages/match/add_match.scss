@@ -71,8 +71,9 @@
         }
     }
     .add_match_logo{
-        @include BoldText(2.4vh);
-        margin-top: 5vh;
+        font-size: 2.1vh;
+        font-weight: 700;
+        margin-top: 2.5vh;
     }
     .add_match_title{
         @include BoldText(2.1vh);

@@ -7,6 +7,7 @@ const JoinTeamModal = ({onClose}) => {
     const [search, setSearch] = useState('');
     const [searchList, setSearchList] = useState([]);
     const [joinTeam, setJoinTeam] = useState('');
+    
     const join = (team) => {
         setJoinTeam(team)
         console.log(team)
@@ -21,7 +22,7 @@ const JoinTeamModal = ({onClose}) => {
         client.post('/api/V2team/searchbyname/', searchData)
         .then(function(response){
             console.log(response.data);
-            setSearchList(response.data)
+            setSearchList(response.data);
         })
         .catch(function(error){
             alert('해당하는 팀이 없습니다');
