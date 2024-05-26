@@ -27,6 +27,7 @@ const JoinTeamModal = ({onClose}) => {
             alert('해당하는 팀이 없습니다');
         })
 
+        // 팀 가입하기 api 생성 필요
         
     }
     

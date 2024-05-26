@@ -7,6 +7,7 @@ import FirstSignup from './pages/team/first_signup';
 import AddMatch from './pages/match/add_match';
 import TeamList from './pages/team/teamlist';
 import MainPage from './pages/main_page/main_page';
+import AfterMatch from './pages/match/after_match';
 function App() {
   return (
     <BrowserRouter>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/AddMatch" element={<AddMatch/>}/>
         <Route path="/TeamList" element={<TeamList/>}/>
         <Route path="/MainPage" element={<MainPage/>}/>
+        <Route path="/AfterMatch" element={<AfterMatch/>}/>
       </Routes>
     </BrowserRouter>
   );
