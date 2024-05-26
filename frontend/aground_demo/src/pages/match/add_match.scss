@@ -1,0 +1,86 @@
+@mixin centerDisplay(){
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@mixin BoldText($font){
+    font-size: $font;
+    font-weight: 600
+
+}
+@mixin MediumText($font){
+    font-size: $font;
+    font-weight: 500
+}
+.add_match_background{
+    @include centerDisplay();
+    height: 100vh;
+    width: 100vw;
+    .add_match_matchplan{
+        width: 40vh;
+        height: 23vh;
+        border: 1px solid black;
+        border-radius: 1vh;
+        margin-top: 7vh;
+        @include centerDisplay();
+        .add_match_matchplan_title{
+            font-size: 2.1vh;
+            font-weight: 700;
+            margin-top: 2.5vh;
+        }
+        .add_match_matchplan_teambox{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 3vh;
+            width: 90%;
+            .add_match_matchplan_teamname1{
+                @include BoldText(2.6vh);
+                width: 45%;
+                text-align: center;
+            }
+            .add_match_matchplan_teamname2{
+                @include BoldText(2.6vh);
+                width: 45%;
+                text-align: center;
+            }
+            .add_match_matchplan_vs{
+                margin: 0 2vh;
+                @include BoldText(2vh);
+                width: 10%;
+            }
+        }
+        .add_match_matchplan_place{
+            margin-top: 2vh;
+            color: #000000ad;
+            @include BoldText(1.8vh);
+        }
+        .add_match_matchplan_date{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            width: 100%;
+            margin-top: 1vh;
+            @include MediumText(1.5vh);
+            color: #00000066;
+            .add_match_matchplan_datespace{
+                margin: 0 .5vh;
+                
+            }
+        }
+    }
+    .add_match_logo{
+        @include BoldText(2.4vh);
+        margin-top: 5vh;
+    }
+    .add_match_title{
+        @include BoldText(2.1vh);
+        width: 40vh;
+        margin-top: 5vh;
+        margin-bottom: 3vh;
+    }
+    .add_match_button{
+        margin-top: 3vh;
+    }
+}
