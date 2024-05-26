@@ -23,3 +23,5 @@ backend/user/__pycache__
 *.pyo
 .__pycache__
 
+
+backend/DB/migrations/__pycache__/
