@@ -24,4 +24,4 @@ backend/user/__pycache__
 .__pycache__
 
 
-backend/DB/migrations/__pycache__/
+backend/**/__pycache__/
