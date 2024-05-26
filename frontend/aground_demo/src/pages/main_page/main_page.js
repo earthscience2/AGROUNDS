@@ -35,7 +35,7 @@ const MainPage = () => {
             
             <div className='main_page_contentbox'>
                 {team.map((match, index) => (
-                    <div className='main_page_matchplan' key={index}>
+                    <div className='main_page_matchplan' key={index} >
                         <div className='main_page_matchplan_teambox'><div className='main_page_matchplan_teamname1'>{match.v2_match_home}</div><div className='main_page_matchplan_vs'>VS</div><div className='main_page_matchplan_teamname2'>{match.v2_match_away}</div></div>
                         <div className='main_page_matchplan_place'>{match.v2_match_location}</div>
                         <div className='main_page_matchplan_date'><div className='main_page_matchplan_datespace'>{match.v2_match_schedule}</div></div>
