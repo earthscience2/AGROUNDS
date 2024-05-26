@@ -12,13 +12,15 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from staticfiles import cryptographysss
 
-
 import json
 import requests
 
 # 클라이언트 / 서버 주소
-CLIENT_URL = "http://localhost:3000"
-SERVER_URL = "http://localhost:8000"
+# CLIENT_URL = "http://localhost:3000"
+# SERVER_URL = "http://localhost:8000"
+
+CLIENT_URL = "http://agrounds.com"
+SERVER_URL = "http://agrounds.com"
 
 KAKAO_CALLBACK_URI = SERVER_URL + "/api/login/kakao/callback/"
 KAKAO_REDIRECT_URI = SERVER_URL + "/api/login/kakao/"
@@ -213,3 +215,8 @@ class kakaoSignup(APIView):
         serializer.save()
         new_user = serializer.data
         return Response(new_user, status=status.HTTP_200_OK)
+
+# 토큰으로 사용자 정보 받아오기
+class getUserInfo(APIView):
+    def get(self, request, *args, **kwargs):
+        token = request.META.get('token', 'unknown')

@@ -170,6 +170,8 @@ class V2_UserInfo(models.Model):
     user_nickname = models.CharField(max_length=45)
     marketing_agree = models.BooleanField()
     login_type = models.IntegerField()
+    team_code = models.CharField(max_length=20)
+    user_type = models.IntegerField()
 
     class Meta:
         managed = False
