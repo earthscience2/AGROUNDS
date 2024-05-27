@@ -8,6 +8,7 @@ import client from '../../clients';
 import GeneralBtn from '../../components/button/generalBtn';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import GoBack from '../../assets/go-back-icon.png';
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password,setPassword] = useState('');
@@ -28,7 +29,7 @@ const SignUp = () => {
     const [isBirth,setIsBirth] = useState('');
     const [selectedGender, setSelectedGender] = useState(null);
 
-    const navigate = useNavigate;
+    const navigate = useNavigate();
     const handleGenderSelect = (gender) => {
         setSelectedGender(gender);
         setGender(gender);
@@ -104,6 +105,7 @@ const SignUp = () => {
     return (
         <form onSubmit={onSubmitHandler}>
             <div className='signupbackground'>
+            <img className='signup_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
                 <div className='signuptitle'>회원가입</div>
                 <SignUpInput title='이름' type='text' onChange={saveName}/>
                 <SignUpInput title='닉네임' type='text' onChange={saveNickname}/>

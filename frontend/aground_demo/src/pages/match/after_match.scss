@@ -12,6 +12,12 @@
         font-weight: 700;
         margin-top: 2.5vh;
     }
+    .after_match_goback_icon{
+        height: 2vh;
+        position: relative;
+        right: 18.7vh;
+        top: 4.6vh;
+    }
     .after_match_score_inputbox{
         @include centerDisplay(column);
         .after_match_score{

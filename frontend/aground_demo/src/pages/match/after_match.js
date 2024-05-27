@@ -5,12 +5,14 @@ import Textinput from '../../components/textintput/textinput';
 import client from '../../clients';
 import GeneralBtn from '../../components/button/generalBtn';
 import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
+import GoBack from '../../assets/go-back-icon.png';
 const AfterMatch = () => {
     const [homeScore, setHomeScore] = useState(0);
     const [awayScore, setAwayScore] = useState(0);
     const [teamList, setTeamList] = useState([]);
     const [attend, setAttend] = useState([]);
-    
+    const navigate = useNavigate();
     useEffect(()=> {
         client.get('/api/V2team/main')
         .then(function(response){
@@ -51,6 +53,7 @@ const AfterMatch = () => {
     return (
         <form onSubmit={onSubmitHandler}>
             <div className='after_match_background'>
+                <img className='after_match_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
                 <div className='after_match_title'>AGROUNDS</div>
                 <MatchPlan myTeam='ththth' teamName='자유' place='인하대학교 대운동장' date='2024-12-11' homeScore={homeScore} awayScore={awayScore}/>
                 <div className='after_match_score_inputbox'>
