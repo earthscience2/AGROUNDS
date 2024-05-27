@@ -7,4 +7,5 @@ urlpatterns = [
     path("beforematch/", views.V2_Before_makematch.as_view()),# 경기 전 입력 
     path("aftermatch/", views.V2_After_makematch.as_view()),# 경기 후 입력 
     path("searchbymatchcode/", views.MatchSearchByMatchcodeAPI.as_view()),
+    path('deletematch/', views.MatchDeletebyMatchcodeAPI.as_view()),
 ]
