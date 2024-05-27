@@ -196,11 +196,11 @@ class V2_MatchInfo(models.Model):
     v2_match_home = models.CharField(max_length=45)
     v2_match_away = models.CharField(max_length=45)
     v2_match_result = models.JSONField(blank=True, null=True)
-    
     v2_match_schedule = models.CharField(max_length=45, default=None)
     v2_match_players = models.JSONField(blank=True, null=True)
     v2_match_goalplayers = models.JSONField(blank=True, null=True)
     v2_match_GPSplayers = models.JSONField(blank=True, null=True)
+    v2_match_teamcode = models.JSONField(blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'V2_match_info'

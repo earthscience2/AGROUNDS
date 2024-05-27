@@ -75,7 +75,6 @@ class MatchSearchByMatchcodeAPI(APIView):
         v2_match_code = request.data.get('v2_match_code')
         if not v2_match_code:
             return Response({'error': 'v2_match_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
-
         match = V2_MatchInfo.objects.filter(v2_match_code=v2_match_code)
         if not match.exists():
             return Response({'error': 'No match found with the provided code.'}, status=status.HTTP_404_NOT_FOUND)
@@ -100,3 +99,21 @@ class MatchDeletebyMatchcodeAPI(APIView):
             return Response({'success': 'Match deleted successfully.'}, status=status.HTTP_200_OK)
         except V2_MatchInfo.DoesNotExist:
             return Response({'error': 'Match not found.'}, status=status.HTTP_404_NOT_FOUND)
+            
+# team_code로 match정보들 불러오기(v2_match_teamcode에서 찾음)
+class MatchSearchByTeamcodeAPI(APIView):
+    '''
+    {
+        "v2_team_code": "t_1sa95sa127nh9q"
+    }
+    '''
+    def post(self, request):
+        v2_team_code = request.data.get('v2_team_code')
+        if not v2_team_code:
+            return Response({'error': 'v2_team_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        matches = V2_MatchInfo.objects.filter(v2_match_teamcode__contains=[v2_team_code])
+        if not matches.exists():
+            return Response({'error': 'No match found with the provided code.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = MatchSearchByMatchcode(matches, many=True)
+        return Response(serializer.data)
