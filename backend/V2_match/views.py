@@ -46,8 +46,6 @@ class V2_Before_makematch(APIView):
 class V2_After_makematch(APIView):
     """
 {
-    "v2_match_location": "인하대",
-    "v2_match_schedule": "2024-05-02",
     "v2_match_code": "m_1sa95sb441biic",
     "v2_match_result": ["2", "5"],
     "v2_match_players": ["이용준", "손아섭", "최정원", "박건우", "데이비슨", "권희동",
