@@ -94,7 +94,7 @@ class After_Match_info_Serializer(serializers.ModelSerializer):
         # v2_match_GPSplayers = data.get('v2_match_GPSplayers')
         
         # 필수 필드를 확인하고 부족한 경우 오류를 발생시킵니다.
-        required_fields = ['v2_match_schedule','v2_match_location', 'v2_match_result', 'v2_match_players', 'v2_match_GPSplayers']
+        required_fields = ['v2_match_result', 'v2_match_players', 'v2_match_GPSplayers']
         errors = {field: f"{field} 필드는 필수입니다." for field in required_fields if not data.get(field)}
 
         # 오류가 있는 경우 예외를 발생시킵니다.
