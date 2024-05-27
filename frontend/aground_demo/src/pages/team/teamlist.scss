@@ -61,11 +61,12 @@
             justify-content: center;
             .teamlist-personbox-player{
                 width: 80%;
-             
+                &.minus{
+                    margin-right: -3vh;
+                }
             }
             .teamlist-personbox-minus{
-                height: 2.5vh;
-            
+                height: 2.2vh;
             }
         }
     }
