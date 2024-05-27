@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from DB.models import V2_UserInfo
+from DB.models import V2_TeamInfo
 from .serializers import V2_User_info_Serializer
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import check_password
@@ -156,6 +157,13 @@ class login(APIView):
     
     def getLogin(self, user):
         token = self.getTokensForUser(user)
+        team_name = ""
+        if user.team_code is not "":
+            try:
+                team_name = V2_TeamInfo.objects.get(v2_team_code = user.team_code).v2_team_name
+            except V2_TeamInfo.DoesNotExist:
+                return JsonResponse({'error':'팀코드에 해당하는 팀이 존재하지 않습니다.'}, status=400)
+            
         return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
                                 'user_code' : user.user_code,
                                 'user_id' : user.user_id,
@@ -164,6 +172,7 @@ class login(APIView):
                                 'login_type' : user.login_type,
                                 'team_code' : user.team_code,
                                 'user_type' : user.user_type,
+                                'team_name' : team_name,
                                 }, status=200)
 
 # 카카오 로그인
