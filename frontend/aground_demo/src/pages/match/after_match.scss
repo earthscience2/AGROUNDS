@@ -7,6 +7,7 @@
 
 .after_match_background{
     @include centerDisplay(column);
+    overflow-x: hidden;
     .after_match_title{
         font-size: 2.1vh;
         font-weight: 700;
@@ -20,11 +21,20 @@
     }
     .after_match_score_inputbox{
         @include centerDisplay(column);
+
         .after_match_score{
             font-size: 2vh;
             font-weight: 500;
             width: 90%;
             margin: 3vh 0 1.5vh 0;
+            height: 2vh;
+            .after_match_score_essencial{
+                color: rgb(255, 0, 0);
+                position: relative;
+                bottom: 1.8vh;
+                margin: 0;
+                left: 5vh;
+            }
         }
         .after_match_score_input{
             @include centerDisplay(row);
@@ -40,7 +50,30 @@
             font-size: 1.8vh;
             font-weight: 500;
             width: 85%;
+            height: 1.8vh;
             margin: 3vh 0 1.5vh 0;
+            .after_match_player_title_essencial{
+                color: rgb(255, 0, 0);
+                position: relative;
+                bottom: 1.8vh;
+                margin: 0;
+                left: 8.7vh;
+                
+            }
+            .after_match_player_title_number{
+                color: #000000;
+                position: relative;
+                bottom: 5vh;
+                font-size: 1.8vh;
+                left: 29vh;
+                width: 7vh;
+                text-align: center;
+                line-height: 3vh;
+                height: 3vh;
+                border-radius: 2vh;
+                align-items: center;
+                border: 1px solid black;
+            }
         }
         .after_match_player_list{
             width: 40vh;
@@ -63,6 +96,63 @@
             }
             .after_match_player_name{
                 font-size: 2vh;
+                font-weight: 600;
+            }
+        }
+    }
+    .after_match_score_gps_playerbox{
+        @include centerDisplay(column);
+        .after_match_gps_player_title{
+            font-size: 1.8vh;
+            font-weight: 500;
+            width: 85%;
+            height: 1.8vh;
+            margin: 3vh 0 1.5vh 0;
+            .after_match_gps_player_title_essencial{
+                color: rgb(255, 0, 0);
+                position: relative;
+                bottom: 1.8vh;
+                margin: 0;
+                left: 12.2vh;
+                
+            }
+            .after_match_gps_player_title_number{
+                color: #000000;
+                position: relative;
+                bottom: 5vh;
+                font-size: 1.8vh;
+                left: 29vh;
+                width: 7vh;
+                text-align: center;
+                line-height: 3vh;
+                height: 3vh;
+                border-radius: 2vh;
+                align-items: center;
+                border: 1px solid black;
+            }
+        }
+        .after_match_gps_player_list{
+            width: 40vh;
+            min-height: 10vh;
+            margin: 1vh 0 2vh 2vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr;
+            .after_match_gps_player{
+                width: 8vh;
+                height: 4vh;
+                background-color: rgb(234, 235, 237);
+                @include centerDisplay(row);
+                margin-top: 1vh;
+                border-radius: 1vh;
+                cursor: pointer;
+                &.selected{
+                    background-color: #000000;
+                    color: white;
+                }
+            }
+            .after_match_gps_player_name{
+                font-size: 1.7vh;
                 font-weight: 600;
             }
         }
