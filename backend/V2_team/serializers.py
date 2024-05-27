@@ -58,6 +58,24 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
         instance.v2_team_host = validated_data.get('v2_team_host', instance.v2_team_host)
         instance.v2_team_logo = validated_data.get('v2_team_logo', instance.v2_team_logo)
         instance.v2_team_name = validated_data.get("v2_team_name", instance.v2_team_name)
-        instance.v2_team_players = validated_data.get("v2_team_players", instance.v2_team_players)
+        
+        # 새로운 플레이어들을 기존 플레이어 리스트에 추가
+        new_players = validated_data.get("v2_team_players", [])
+        instance.v2_team_players.extend(new_players)
+        
         instance.save()
         return instance
+
+    
+class TeamSearchByTeamcode(serializers.ModelSerializer):
+    class Meta:
+        model = V2_TeamInfo
+        fields = '__all__'
+        
+    
+class TeamSearchByTeamname(serializers.ModelSerializer):
+    class Meta:
+        model = V2_TeamInfo
+        fields = '__all__'
+        
+    

@@ -69,12 +69,12 @@ class Before_Match_info_Serializer(serializers.ModelSerializer):
 class After_Match_info_Serializer(serializers.ModelSerializer):
     '''
     POST
-    v2_match_code, v2_match_result, v2_match_players, v2_match_GPSplayers - 필수
+    v2_match_code, v2_match_result, v2_match_players, v2_match_GPSplayers, v2_match_location, v2_match_schedule - 필수
     v2_match_goalplayers - 선택 
     '''
     class Meta:
         model = V2_MatchInfo
-        fields = ['v2_match_result', 'v2_match_code', 'v2_match_players', 'v2_match_goalplayers', 'v2_match_GPSplayers']
+        fields = ['v2_match_result','v2_match_location','v2_match_schedule', 'v2_match_code', 'v2_match_players', 'v2_match_goalplayers', 'v2_match_GPSplayers']
 
     def validate(self, data):
         match_code = data.get('v2_match_code')
@@ -89,9 +89,9 @@ class After_Match_info_Serializer(serializers.ModelSerializer):
         if before_match_info.v2_match_code != match_code:
             raise serializers.ValidationError("주어진 v2_match_code에 해당하는 매치 정보를 찾을 수 없습니다.")
 
-        v2_match_result = data.get('v2_match_result')
-        v2_match_players = data.get('v2_match_players')
-        v2_match_GPSplayers = data.get('v2_match_GPSplayers')
+        # v2_match_result = data.get('v2_match_result')
+        # v2_match_players = data.get('v2_match_players')
+        # v2_match_GPSplayers = data.get('v2_match_GPSplayers')
         
         # 필수 필드를 확인하고 부족한 경우 오류를 발생시킵니다.
         required_fields = ['v2_match_result', 'v2_match_players', 'v2_match_GPSplayers']
@@ -102,3 +102,10 @@ class After_Match_info_Serializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errors)
 
         return data
+
+# 매치코드로 매치정보 찾기
+class MatchSearchByMatchcode(serializers.ModelSerializer):
+    class Meta:
+        model = V2_MatchInfo
+        fields = '__all__'
+
