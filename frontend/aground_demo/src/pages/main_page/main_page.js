@@ -7,16 +7,37 @@ import './main_page.scss';
 import { useNavigate } from 'react-router-dom';
 const MainPage = () => {
     const [team, setTeam] = useState([]);
+    const [teamName, setTeamName] = useState('');
     const navigate = useNavigate();
+    const [matchCode, setMatchCode] = useState([])
+
+    const teamcode = {
+        "v2_team_code" : 't_1sa95sa10rmdrs'
+    }
+    const matchcode = {
+        "v2_match_code" : matchCode
+    }
+
     useEffect(() => {
-        client.get('/api/V2match/main/')
+        client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
-            setTeam(response.data)
-           
+            console.log(response);
+            setTeamName(response.data.v2_team_name)
+            
+            setMatchCode(response.data.v2_team_match);
+            console.log(matchCode);
         })
         .catch(function(error){
             console.log(error)
         })
+    }, [])
+
+    client.post('/api/V2match/searchbymatchcode/', matchcode)
+    .then(function(response) {
+        console.log(response);
+    })
+    .catch(function(error){
+        console.log(error)
     })
 
 
@@ -42,7 +63,7 @@ const MainPage = () => {
                 <div className='main_page_nav_logo'>AGROUNDS</div>
                 <div className='main_page_teamlogobox'>
                     <div className='main_page_teamlogobox_box'>
-                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div><div className='main_page_teamlogobox_teamname'>토트넘</div>
+                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div><div className='main_page_teamlogobox_teamname'>{teamName}</div>
                     </div>
                         <div className='main_page_nav'>
                             <div className='main_page_title'>경기일정</div>

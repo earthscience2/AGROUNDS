@@ -52,14 +52,16 @@ const AfterMatch = () => {
             "v2_match_code": '',
             "v2_match_result": [homeScore, awayScore],
             "v2_match_players": attend,
-            "v2_match_GPSplayers": gpsPlayer
+            "v2_match_GPSplayers": gpsPlayer,
+            "v2_match_location": place,
+            "v2_match_schedule": date
         }
         client.post('/api/V2match/aftermatch/', afterMatchData)
         .then(function(response){
-            console.log('경기 결과를 성공적으로 입력했습니다 !');
+            alert('경기 결과를 성공적으로 입력했습니다 !');
         })
         .catch(function(error){
-            console.log(error)
+            alert(error)
         })
     }
     const isValid = homeScore && awayScore && attend
