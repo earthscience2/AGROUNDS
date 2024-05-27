@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from DB.models import V2_UserInfo
 from .serializers import V2_User_info_Serializer
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import check_password
 
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -230,5 +231,14 @@ class kakaoSignup(APIView):
 
 # 토큰으로 사용자 정보 받아오기
 class getUserInfo(APIView):
-    def get(self, request, *args, **kwargs):
-        token = request.META.get('token', 'unknown')
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        user_data = {
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+        }
+        return Response(user_data, status=status.HTTP_200_OK)

@@ -5,6 +5,7 @@ import datetime
 from staticfiles.make_code import make_code
 from rest_framework.response import Response
 from rest_framework import status
+from V2_login.serializers import V2_UpdateUserInfoSerializer
 
 # V2_team 정보 불러오기
 class Team_main_page(serializers.ModelSerializer):
@@ -24,16 +25,27 @@ class Team_info_Serializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        team_code = make_code('t')  # 먼저 match_code 생성
+        team_code = make_code('t')  # 먼저 team_code 생성
         validated_data['v2_team_code'] = team_code  # validated_data에 추가
         validated_data['v2_team_players'] = [] #여기서는 생성만하고 추가 불가능
+
+        # ===============================================================
+        # 팀을 생성한 유저의 V2_user_info 레코드의 team_code 필드에 생성한 team_code 업데이트
+        v2_user_info = V2_UserInfo.objects.get(user_code = validated_data['v2_team_host'])
+        user_info_serializer = V2_UpdateUserInfoSerializer(v2_user_info, data={'team_code' : team_code}, partial=True)
+        if user_info_serializer.is_valid():
+            user_info_serializer.save()
+        else:
+            raise serializers.ValidationError(user_info_serializer.errors)
+        # ===============================================================
+        
         # v2_team_host는 user_code로 대체 
         instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
         return instance
 
     def validate(self, data):
-        required_fields = ['v2_team_name']
+        required_fields = ['v2_team_name', 'v2_team_host']
         errors = {field: f"팀 {field}는 필수 항목입니다." for field in required_fields if not data.get(field)}
         
         if errors:

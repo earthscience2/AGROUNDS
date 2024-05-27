@@ -19,6 +19,7 @@ class V2_TeamMakeTeamAPI(APIView):
     """
     json 형식
     {
+    "v2_team_host" : "u_1sa95ior6ijpr",
     "v2_team_logo": "asdfasfd",
     "v2_team_name": "test"
     }
@@ -44,7 +45,7 @@ class V2_TeamUpdateTeamAPI(APIView):
     "v2_team_players": ["규성", "니니니"]
     }
     """
-    # 여기서 v2_team_code는 user_code를 타고 가서 그때의 tema_code를 불러와서 팀 수정
+    # 여기서 v2_team_code는 user_code를 타고 가서 그때의 team_code를 불러와서 팀 수정
     def patch(self, request, *args, **kwargs):
         v2_team_code = request.data.get('v2_team_code')
         try:
@@ -96,3 +97,47 @@ class TeamSearchByTeamnameAPI(APIView):
 
         serializer = TeamSearchByTeamname(teams, many=True)
         return Response(serializer.data)
+    
+class V2_JoinTeamAPI(APIView):
+    '''
+    팀 가입 api
+    {
+    "user_code" : "u_1sa95ior6ijpr"
+    "team_code" : "t_1sa95sa10rmdrs"
+    }
+    '''
+    def post(self, request):
+        user_code = request.data.get('user_code')
+        team_code = request.data.get('team_code')
+        if not user_code:
+            return Response({'error': 'user_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not team_code:
+            return Response({'error': 'team_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            v2_user_info = V2_UserInfo.objects.get(user_code = user_code)
+        except V2_UserInfo.DoesNotExist:
+            Response({'error' : '해당 유저가 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            v2_team_info = V2_TeamInfo.objects.get(v2_team_code = team_code)
+        except V2_TeamInfo.DoesNotExist:
+            Response({'error' : '해당 팀이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_info_serializer = V2_UpdateUserInfoSerializer(v2_user_info, data={'team_code' : team_code}, partial=True)
+        new_team_players = v2_team_info.v2_team_players + [user_code] # 기존 플레이어에 새 플레이어 추가
+        team_info_serializer = UpdateTeamInfoSerializer(v2_team_info, data={'v2_team_players' : new_team_players}, partial=True)
+
+        # 유효성 검사 후 .save() 실행
+        if user_info_serializer.is_valid():
+            user_info_serializer.save()
+        else:
+            return Response(user_info_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        if team_info_serializer.is_valid():
+            team_info_serializer.save()
+        else:
+            return Response(team_info_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({'message' : '팀 가입에 성공했습니다.'})
+        
+        
+        
