@@ -15,7 +15,7 @@
 .main_page_background{
     @include centerDisplay(column);
     height: max-content;
-    background-color: rgb(234, 235, 237);
+    background-color: rgb(241, 242, 243);
     
     .main_page_navbox{
         @include centerDisplay(column);
@@ -24,7 +24,7 @@
         position: fixed;
         left: auto;
         top: 0;
-        background-color: rgb(234, 235, 237);
+        background-color: rgb(241, 242, 243);
         z-index: 1;
         .main_page_nav_logo{
             font-size: 2.1vh;
@@ -92,7 +92,7 @@
     
     .main_page_contentbox{
         position: relative;
-        background-color: rgb(234, 235, 237);
+        background-color: rgb(241, 242, 243);
         min-height: 100vh;
         .main_page_contentbox_empty{
             text-align: center;

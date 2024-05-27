@@ -54,6 +54,15 @@
             .match_result_player_name{
                 font-size: 2vh;
                 font-weight: 600;
+                width: 70%;
+                margin-right: 5vh;
+                &.gps{
+                    margin-right: -2vh;
+                }
+            }
+            .match_result_player_gps{
+                height: 2vh;
+                margin-left: 5vh;
             }
             
         }
