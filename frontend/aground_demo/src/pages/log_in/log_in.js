@@ -44,7 +44,7 @@ const LogIn=()=>{
             sessionStorage.setItem('teamcode', response.data.team_code);
             sessionStorage.setItem('teamname', response.data.team_name);
             sessionStorage.setItem('logintype', response.data.login_type);
-
+            console.log(response)
             if (response.data.team_code === ""){
                 navigate('/FirstSignup');
             }else{

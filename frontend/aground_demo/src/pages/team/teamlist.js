@@ -20,7 +20,7 @@ const TeamList = () => {
         .then(function(response){
             console.log(response);
             setTeamName(response.data.v2_team_name);
-            setTeamList(response.data.v2_team_players);
+            setTeamList(response.data.v2_team_players_names);
             
         })
         .catch(function(error){

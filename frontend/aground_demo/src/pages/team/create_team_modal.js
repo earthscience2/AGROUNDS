@@ -25,6 +25,8 @@ const CreateTeam = ({onClose}) => {
 
         client.post('/api/V2team/create/', CreateTeamData)
         .then(function(response){
+            sessionStorage.setItem('teamcode', response.data.v2_team_code)
+            sessionStorage.setItem('teamname', teamName)
             console.log(response)
             alert(`${teamName}팀을 생성했어요`);
             navigate('/MainPage');

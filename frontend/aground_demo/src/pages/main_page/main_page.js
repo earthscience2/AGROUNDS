@@ -12,27 +12,32 @@ const MainPage = () => {
     const [matchCode, setMatchCode] = useState([])
 
     const teamcode = {
-        "v2_team_code" : sessionStorage.getItem('teamcode')
+        'v2_team_code' : sessionStorage.getItem('teamcode')
     }
-    const matchcode = {
-        "v2_match_code" : matchCode
-    }
+
 
     useEffect(() => {
-
         client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
-            console.log(teamName);
-            setTeamName(response.data.v2_team_name)
-            
+            setTeamName(response.data.v2_team_name);
             setMatchCode(response.data.v2_team_match);
-            console.log(matchCode);
+        })
+        .catch(function(error){
+            console.log(error);
+        })
+        
+
+        client.post('/api/V2match/searchbyteamcode/', teamcode)
+        .then(function(response){
+            setTeam(response.data)
         })
         .catch(function(error){
             console.log(error)
         })
-    }, [])
 
+    }, [])
+    
+    console.log(sessionStorage.getItem('teamcode'))
 
     const isEmpty = () => {
         if (team.length < 1 ){
@@ -41,7 +46,7 @@ const MainPage = () => {
             )
         }else{
             return team.map((match, index) => (
-                <div className='main_page_matchplan' key={index} onClick={()=>navigate('/MatchResults')}>
+                <div className='main_page_matchplan' key={match.v2_match_code} onClick={()=>navigate('/MatchResults',{state : {matchCode : match.v2_match_code}})}>
                     <div className='main_page_matchplan_teambox'><div className='main_page_matchplan_teamname1'>{match.v2_match_home}</div><div className='main_page_matchplan_vs'>VS</div><div className='main_page_matchplan_teamname2'>{match.v2_match_away}</div></div>
                     <div className='main_page_matchplan_place'>{match.v2_match_location}</div>
                     <div className='main_page_matchplan_date'><div className='main_page_matchplan_datespace'>{match.v2_match_schedule}</div></div>

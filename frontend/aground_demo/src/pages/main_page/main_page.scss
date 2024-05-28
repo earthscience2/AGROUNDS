@@ -114,7 +114,7 @@
             margin-top: 3vh;
             background-color: white;
             &:first-of-type{
-                margin-top: 25vh;
+                margin-top: 28vh;
             }
             &:hover{
                 border: 1px solid black;
@@ -122,9 +122,10 @@
     
             .main_page_matchplan_teambox{
                 @include centerDisplay(row);
+                width: 100%;
                 .main_page_matchplan_teamname1{
                     @include BoldText(2.4vh);
-                    width: 70%;
+                    width: 40%;
                     text-align: center;
                 }
                 .main_page_matchplan_vs{
@@ -134,7 +135,7 @@
                 }
                 .main_page_matchplan_teamname2{
                     @include BoldText(2.4vh);
-                    width: 70%;
+                    width: 40%;
                     text-align: center;
                 }
             }

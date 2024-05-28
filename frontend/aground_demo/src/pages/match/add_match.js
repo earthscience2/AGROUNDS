@@ -21,7 +21,7 @@ const AddMatch = () => {
             'v2_match_host' : sessionStorage.getItem('usercode'),
             "v2_match_home": sessionStorage.getItem('teamname') ,
             "v2_match_away" : teamName,
-            "v2_match_schedule" : `${date}${time}`
+            "v2_match_schedule" : `${date} ${time}`
         }
         client.post('/api/V2match/beforematch/', AddMatchData)
         .then(function(response){
