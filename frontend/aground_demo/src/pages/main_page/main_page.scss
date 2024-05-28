@@ -24,7 +24,7 @@
         position: fixed;
         left: auto;
         top: 0;
-        background-color: rgb(241, 242, 243);
+        background-color: rgb(255, 255, 255);
         z-index: 1;
         .main_page_nav_logo{
             font-size: 2.1vh;
@@ -35,9 +35,10 @@
 
         .main_page_teamlogobox{
             @include centerDisplay(column);
-            width: 40vh;
-            height: 20vh;
-            border-bottom: 1px solid black;
+            width: 47vh;
+            height: 22vh;
+            border-bottom: 2px solid black;
+            border-radius: 5vh;
             margin-top: -2vh;
             .main_page_teamlogobox_box{
                 @include centerDisplay(row);

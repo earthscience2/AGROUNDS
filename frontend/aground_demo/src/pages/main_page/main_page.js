@@ -32,13 +32,13 @@ const MainPage = () => {
         })
     }, [])
 
-    client.post('/api/V2match/searchbymatchcode/', matchcode)
-    .then(function(response) {
-        console.log(response);
-    })
-    .catch(function(error){
-        console.log(error)
-    })
+    // client.post('/api/V2match/searchbymatchcode/', matchcode)
+    // .then(function(response) {
+    //     console.log(response);
+    // })
+    // .catch(function(error){
+    //     console.log(error)
+    // })
 
 
     const isEmpty = () => {

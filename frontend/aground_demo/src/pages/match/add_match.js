@@ -15,18 +15,20 @@ const AddMatch = () => {
     const navigate = useNavigate();
     const onSubmitHandler = async event => {
         event.preventDefault();
-        
+        const teamcode = {
+            "v2_team_code" : 't_1sa95sa10rmdrs' //수정필요
+        }
         let AddMatchData = {
             'v2_match_location': place,
             'v2_match_host' : sessionStorage.getItem('nickname'),
-            "v2_match_home": myTeam ,//수정 필요
+            "v2_match_home": sessionStorage.getItem('teamname') ,//수정 필요
             "v2_match_away" : teamName,
             "v2_match_schedule" : `${date}${time}`
         }
         client.post('/api/V2match/beforematch/', AddMatchData)
         .then(function(response){
             alert('일정이 추가되었습니다.');
-            navigate('/FirstSignup');
+            navigate('/MainPage');
         })
         .catch(function(error){
             alert(error.response.error);

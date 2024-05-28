@@ -3,11 +3,12 @@ import './create_team.scss';
 import FileUpload from '../../components/file-upload/file_upload';
 import client from '../../clients';
 import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
 const CreateTeam = ({onClose}) => {
 
     const [teamName, setTeamName] = useState('');
     const [teamLogo, setTeamLogo] = useState(null);
-
+    const navigate = useNavigate();
     const changeName = (event) => {
         setTeamName(event.target.value)
     }
@@ -27,9 +28,13 @@ const CreateTeam = ({onClose}) => {
         client.post('/api/V2team/create/', CreateTeamData)
         .then(function(response){
             console.log(response)
+            alert(`${teamName}팀을 생성했어요`);
+            navigate('/MainPage');
+
         })
         .catch(function(error){
             console.log(error);
+            alert(error)
         })
 
     }
@@ -44,7 +49,7 @@ const CreateTeam = ({onClose}) => {
                         <div className='create-team-modal-team-text'>팀 이름</div>
                         <div className='create-team-modal-input'><input onChange={changeName} className='create-team-modal-inputtext'type='text'/></div>
                     </div>
-                    {teamLogo && teamName ? <div className={classNames('create-team-modal-button', 'black')} onClick={onSubmitHandler}>생성</div> : 
+                    { teamName ? <div className={classNames('create-team-modal-button', 'black')} onClick={onSubmitHandler}>생성</div> : 
                     <div className={classNames('create-team-modal-button', 'white')} >생성</div>}
                 </div>
             </div>
