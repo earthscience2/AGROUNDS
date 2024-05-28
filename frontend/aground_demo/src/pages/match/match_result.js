@@ -7,6 +7,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import GoBack from '../../assets/go-back-icon.png';
 import Gps from '../../assets/gps.png';
 import classNames from 'classnames';
+import GeneralBtn from '../../components/button/generalBtn';
 const MatchResults = () => {
     const [teamList, setTeamList] = useState([]);
     const [gpsList, setGpsList] = useState([]);
@@ -61,6 +62,21 @@ const MatchResults = () => {
         return gpsList.includes(playerName);
     };
     
+    const deleteBtn = () => {
+        if(window.confirm("삭제하시겠습니까?") === true){
+            client.post('/api/V2match/deletematch/', matchcode)
+            .then(function(response){
+                console.log(response);
+                navigate('/MainPage')
+            })
+            .catch(function(error){
+                console(error)
+            })
+        }else{
+            
+        }
+        
+    }
     return (
             <div className='match_result_background'>
                 <img className='match_result_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
@@ -78,6 +94,7 @@ const MatchResults = () => {
                         ))}
                     </div>
                 </div>
+                <GeneralBtn color='black' onClick={deleteBtn}>삭제하기</GeneralBtn>
             </div>
     );
 };
