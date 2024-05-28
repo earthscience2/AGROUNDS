@@ -12,16 +12,17 @@ const MainPage = () => {
     const [matchCode, setMatchCode] = useState([])
 
     const teamcode = {
-        "v2_team_code" : 't_1sa95sa10rmdrs'
+        "v2_team_code" : sessionStorage.getItem('teamcode')
     }
     const matchcode = {
         "v2_match_code" : matchCode
     }
 
     useEffect(() => {
+
         client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
-            console.log(response);
+            console.log(teamName);
             setTeamName(response.data.v2_team_name)
             
             setMatchCode(response.data.v2_team_match);
@@ -31,14 +32,6 @@ const MainPage = () => {
             console.log(error)
         })
     }, [])
-
-    // client.post('/api/V2match/searchbymatchcode/', matchcode)
-    // .then(function(response) {
-    //     console.log(response);
-    // })
-    // .catch(function(error){
-    //     console.log(error)
-    // })
 
 
     const isEmpty = () => {

@@ -3,11 +3,12 @@ import './join_team_modal.scss';
 import Search from "../../assets/search-icon.svg";
 import client from '../../clients';
 import GeneralBtn from '../../components/button/generalBtn';
+import { useNavigate } from 'react-router-dom';
 const JoinTeamModal = ({onClose}) => {
     const [search, setSearch] = useState('');
     const [searchList, setSearchList] = useState([]);
     const [joinTeam, setJoinTeam] = useState('');
-    
+    const navigate = useNavigate();
     const join = (team) => {
         setJoinTeam(team)
     }
@@ -37,6 +38,8 @@ const JoinTeamModal = ({onClose}) => {
         client.post('/api/V2team/join-team/', joinData)
         .then(function(response){
             alert('가입되었습니다.');
+            sessionStorage.setItem('teamcode', response.data.team_code);
+            navigate('/MainPage')
         })
         .catch(function(error){
             alert(error);
