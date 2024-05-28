@@ -5,13 +5,10 @@ import client from '../../clients';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 const CreateTeam = ({onClose}) => {
-
     const [teamName, setTeamName] = useState('');
     const [teamLogo, setTeamLogo] = useState(null);
     const navigate = useNavigate();
-    const changeName = (event) => {
-        setTeamName(event.target.value)
-    }
+
 
     const handleFileUpload = (file) => {
         setTeamLogo(file);
@@ -21,6 +18,7 @@ const CreateTeam = ({onClose}) => {
         event.preventDefault();
 
         let CreateTeamData = {
+            'v2_team_host': sessionStorage.getItem('usercode'),
             'v2_team_logo': teamLogo,
             'v2_team_name': teamName
         }
@@ -34,7 +32,7 @@ const CreateTeam = ({onClose}) => {
         })
         .catch(function(error){
             console.log(error);
-            alert(error)
+            alert(error.config.message)
         })
 
     }
@@ -47,7 +45,7 @@ const CreateTeam = ({onClose}) => {
                     <FileUpload onFileUpload={handleFileUpload}/>
                     <div className='create-team-modal-team'>
                         <div className='create-team-modal-team-text'>팀 이름</div>
-                        <div className='create-team-modal-input'><input onChange={changeName} className='create-team-modal-inputtext'type='text'/></div>
+                        <div className='create-team-modal-input'><input onChange={(e) => setTeamName(e.target.value)} className='create-team-modal-inputtext'type='text'/></div>
                     </div>
                     { teamName ? <div className={classNames('create-team-modal-button', 'black')} onClick={onSubmitHandler}>생성</div> : 
                     <div className={classNames('create-team-modal-button', 'white')} >생성</div>}

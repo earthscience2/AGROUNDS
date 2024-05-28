@@ -10,9 +10,8 @@ const JoinTeamModal = ({onClose}) => {
     
     const join = (team) => {
         setJoinTeam(team)
-        console.log(team)
     }
-    const onSubmitHandler = (event) => {
+    const onSearchHandler = (event) => {
         event.preventDefault();
 
         let searchData = {
@@ -21,15 +20,28 @@ const JoinTeamModal = ({onClose}) => {
         
         client.post('/api/V2team/searchbyname/', searchData)
         .then(function(response){
-            console.log(response.data);
             setSearchList(response.data);
         })
         .catch(function(error){
             alert('해당하는 팀이 없습니다');
         })
+    }
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
 
-        // 팀 가입하기 api 생성 필요
-        
+        let joinData = {
+            'user_code' : sessionStorage.getItem('usercode'),
+            'team_code' : joinTeam
+        }
+
+        client.post('/api/V2team/join-team/', joinData)
+        .then(function(response){
+            alert('가입되었습니다.');
+        })
+        .catch(function(error){
+            alert(error);
+        })
+
     }
     
     return (
@@ -39,17 +51,17 @@ const JoinTeamModal = ({onClose}) => {
                     <div className='join-team-modal-close'><div>팀 가입하기 </div><div className='modal-close'onClick={onClose}>X</div></div>
                     <div className='join-team-modal-input'>
                         <input className='join-team-modal-inputtext' placeholder='팀 이름을 입력하세요' type='text' onChange={(e) => setSearch(e.target.value)}/>
-                        <div onClick={onSubmitHandler}><img className='join-team-modal-searchicon' src={Search} /></div>
+                        <div onClick={onSearchHandler}><img className='join-team-modal-searchicon' src={Search} /></div>
                     </div>
                     <div className='join-team-modal-teambox'>
                         {searchList.map((team, index) => (
-                                <div className='join-team-modal-teambox-list' onClick={() => join(team.v2_team_name)} key={index}>
+                                <div className='join-team-modal-teambox-list' onClick={() => join(team.v2_team_code)} key={index}>
                                 <div className='join-team-modal-teambox-team'>{team.v2_team_name}</div>
                             </div>
                         ))}
                         
                     </div>
-                    <GeneralBtn color='black'>팀 가입하기</GeneralBtn>  
+                    {joinTeam ? <GeneralBtn color='black' onClick={onSubmitHandler}>팀 가입하기</GeneralBtn>  : <GeneralBtn color='white' >팀 가입하기</GeneralBtn>}
                 </div>
             </div>
         </form>
