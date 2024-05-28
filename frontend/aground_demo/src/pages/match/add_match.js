@@ -10,27 +10,26 @@ const AddMatch = () => {
     const [time, setTime]= useState(null);
     const [date, setDate] = useState(null);
     const [place, setPlace] = useState('');
-    const [myTeam, setMyTeam] = useState('')
     const isValid = teamName && time && date && place;
     const navigate = useNavigate();
+    const myTeamName = sessionStorage.getItem('teamname')
     const onSubmitHandler = async event => {
         event.preventDefault();
         
         let AddMatchData = {
             'v2_match_location': place,
-            'v2_match_host' : sessionStorage.getItem('nickname'),
-            "v2_match_home": myTeam ,//수정 필요
+            'v2_match_host' : sessionStorage.getItem('usercode'),
+            "v2_match_home": sessionStorage.getItem('teamname') ,
             "v2_match_away" : teamName,
-            "v2_match_schedule" : `${date}${time}`
+            "v2_match_schedule" : `${date} ${time}`
         }
         client.post('/api/V2match/beforematch/', AddMatchData)
         .then(function(response){
             alert('일정이 추가되었습니다.');
-            navigate('/FirstSignup');
+            navigate('/MainPage');
         })
         .catch(function(error){
             alert(error.response.error);
-            console.log(error)
         })
     }
     return (
@@ -40,7 +39,7 @@ const AddMatch = () => {
                 <div className='add_match_logo'>AGROUNDS</div>
                 <div className='add_match_matchplan'>
                     <div className='add_match_matchplan_title'>MATCH</div>
-                    <div className='add_match_matchplan_teambox'><div className='add_match_matchplan_teamname1'>{myTeam}</div><div className='add_match_matchplan_vs'>VS</div><div className='add_match_matchplan_teamname2'>{teamName}</div></div>
+                    <div className='add_match_matchplan_teambox'><div className='add_match_matchplan_teamname1'>{myTeamName}</div><div className='add_match_matchplan_vs'>VS</div><div className='add_match_matchplan_teamname2'>{teamName}</div></div>
                     <div className='add_match_matchplan_place'>{place}</div>
                     <div className='add_match_matchplan_date'>{date}<div className='add_match_matchplan_datespace'></div>{time}</div>
                 </div>

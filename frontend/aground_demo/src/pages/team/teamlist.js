@@ -11,15 +11,16 @@ const TeamList = () => {
     const [teamList, setTeamList] = useState([]);
     const [teamName, setTeamName] = useState('');
     const teamcode = {
-        "v2_team_code" : 't_1sa95sa10rmdrs' //수정필요
+        "v2_team_code" : sessionStorage.getItem('teamcode')
     }
 
     useEffect(() => {
+        
         client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
             console.log(response);
             setTeamName(response.data.v2_team_name);
-            setTeamList(response.data.v2_team_players);
+            setTeamList(response.data.v2_team_players_names);
             
         })
         .catch(function(error){

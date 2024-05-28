@@ -24,7 +24,7 @@
         position: fixed;
         left: auto;
         top: 0;
-        background-color: rgb(241, 242, 243);
+        background-color: rgb(255, 255, 255);
         z-index: 1;
         .main_page_nav_logo{
             font-size: 2.1vh;
@@ -35,9 +35,10 @@
 
         .main_page_teamlogobox{
             @include centerDisplay(column);
-            width: 40vh;
-            height: 20vh;
-            border-bottom: 1px solid black;
+            width: 47vh;
+            height: 22vh;
+            border-bottom: 2px solid black;
+            border-radius: 5vh;
             margin-top: -2vh;
             .main_page_teamlogobox_box{
                 @include centerDisplay(row);
@@ -113,7 +114,7 @@
             margin-top: 3vh;
             background-color: white;
             &:first-of-type{
-                margin-top: 25vh;
+                margin-top: 28vh;
             }
             &:hover{
                 border: 1px solid black;
@@ -121,9 +122,10 @@
     
             .main_page_matchplan_teambox{
                 @include centerDisplay(row);
+                width: 100%;
                 .main_page_matchplan_teamname1{
                     @include BoldText(2.4vh);
-                    width: 70%;
+                    width: 40%;
                     text-align: center;
                 }
                 .main_page_matchplan_vs{
@@ -133,7 +135,7 @@
                 }
                 .main_page_matchplan_teamname2{
                     @include BoldText(2.4vh);
-                    width: 70%;
+                    width: 40%;
                     text-align: center;
                 }
             }

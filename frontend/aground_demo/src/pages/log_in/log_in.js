@@ -18,18 +18,16 @@ const LogIn=()=>{
     const handleIdChange = (e) =>{
         setUserid(e.target.value);
         setIsid(e.target.value.toLowerCase().match(/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/))
-        console.log(e.target.value)
     }
     const handlePwChange = (e) => {
         setUserpw(e.target.value);
         setIsPassword(e.target.value.toLowerCase().match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/))
-        console.log(e.target.value)
+ 
     }
     const onKakaoClick = (e) => {
         window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
     }
     const onAgrooundClick = (e) => {
-        console.log(process.env.REACT_APP_BASE_URL + '/api/V2login/login/');
         e.preventDefault();
 
         const loginData = {
@@ -38,14 +36,16 @@ const LogIn=()=>{
         }
         client.post('/api/V2login/login/', loginData)
         .then(function(response){
-            console.log(response)
             setToken(response.data.token)
             sessionStorage.setItem('nickname', response.data.user_nickname);
             sessionStorage.setItem('token', response.data.token)
             sessionStorage.setItem('usercode', response.data.user_code);
             sessionStorage.setItem('usertype', response.data.user_type);
             sessionStorage.setItem('teamcode', response.data.team_code);
-            if (sessionStorage.getItem('usertype') === '-1'){
+            sessionStorage.setItem('teamname', response.data.team_name);
+            sessionStorage.setItem('logintype', response.data.login_type);
+            console.log(response)
+            if (response.data.team_code === ""){
                 navigate('/FirstSignup');
             }else{
                 navigate('/MainPage');
@@ -55,7 +55,6 @@ const LogIn=()=>{
         .catch(function(error){
             setIsLogin(false);
             alert(error.response.data.error)
-            console.log(error);
         })
     }
 
