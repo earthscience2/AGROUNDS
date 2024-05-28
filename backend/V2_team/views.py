@@ -122,9 +122,8 @@ class V2_JoinTeamAPI(APIView):
         except V2_TeamInfo.DoesNotExist:
             Response({'error' : '해당 팀이 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user_info_serializer = V2_UpdateUserInfoSerializer(v2_user_info, data={'team_code' : team_code}, partial=True)
-        new_team_players = v2_team_info.v2_team_players + [user_code] # 기존 플레이어에 새 플레이어 추가
-        team_info_serializer = UpdateTeamInfoSerializer(v2_team_info, data={'v2_team_players' : new_team_players}, partial=True)
+        user_info_serializer = V2_UpdateUserInfoSerializer(v2_user_info, data={'team_code' : team_code, 'user_type' : 1}, partial=True)
+        team_info_serializer = UpdateTeamInfoSerializer(v2_team_info, data={'v2_team_players' : [user_code]}, partial=True)
 
         # 유효성 검사 후 .save() 실행
         if user_info_serializer.is_valid():
