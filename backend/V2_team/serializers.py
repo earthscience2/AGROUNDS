@@ -83,15 +83,27 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
         return instance
 
     
-class TeamSearchByTeamcode(serializers.ModelSerializer):
+## 팀 플레이어의 이름을 포함하여 데이터 직렬화
+class TeamInfoIncludedPlayersNames(serializers.ModelSerializer):
+    v2_team_players_names = serializers.SerializerMethodField()
+
     class Meta:
         model = V2_TeamInfo
-        fields = '__all__'
+        fields = ['v2_team_code', 'v2_team_host', 'v2_team_players',
+                   'v2_team_logo', 'v2_team_name', 'v2_team_match', 'v2_team_players_names']
         
+    def get_v2_team_players_names(self, obj):
+        def getName(user_code):
+            if user_code.startswith("u_"):
+                try:
+                    return V2_UserInfo.objects.get(user_code = user_code).user_name
+                except V2_UserInfo.DoesNotExist:
+                    raise serializers.ValidationError(f"유저 코드 {user_code}에 해당하는 유저가 존재하지 않습니다.")
+            else:
+                return user_code
+        players_names = map(getName, obj.v2_team_players)
+        return players_names
     
-class TeamSearchByTeamname(serializers.ModelSerializer):
-    class Meta:
-        model = V2_TeamInfo
-        fields = '__all__'
-        
+    
+
     

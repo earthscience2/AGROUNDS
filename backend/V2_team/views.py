@@ -77,7 +77,7 @@ class TeamSearchByTeamcodeAPI(APIView):
         except V2_TeamInfo.DoesNotExist:
             return Response({'error': 'No team found with the provided team code.'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = TeamSearchByTeamcode(team_info)
+        serializer = TeamInfoIncludedPlayersNames(team_info)
         return Response(serializer.data)
 
 class TeamSearchByTeamnameAPI(APIView):
@@ -95,7 +95,7 @@ class TeamSearchByTeamnameAPI(APIView):
         if not teams.exists():
             return Response({'error': 'No teams found with the provided name.'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = TeamSearchByTeamname(teams, many=True)
+        serializer = TeamInfoIncludedPlayersNames(teams, many=True)
         return Response(serializer.data)
     
 class V2_JoinTeamAPI(APIView):
