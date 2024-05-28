@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './log_in.scss';
 import GeneralBtn from '../../components/button/generalBtn';
 import Textinput from '../../components/textintput/textinput';
@@ -26,7 +26,7 @@ const LogIn=()=>{
         console.log(e.target.value)
     }
     const onKakaoClick = (e) => {
-        window.location.replace(process.env.REACT_APP_BASE_URL+"/api/login/kakao");
+        window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
     }
     const onAgrooundClick = (e) => {
         console.log(process.env.REACT_APP_BASE_URL + '/api/V2login/login/');
@@ -45,7 +45,7 @@ const LogIn=()=>{
             sessionStorage.setItem('usercode', response.data.user_code);
             sessionStorage.setItem('usertype', response.data.user_type);
             sessionStorage.setItem('teamcode', response.data.team_code);
-            if (sessionStorage.getItem('usertype') === -1){
+            if (sessionStorage.getItem('usertype') === '-1'){
                 navigate('/FirstSignup');
             }else{
                 navigate('/MainPage');
@@ -58,6 +58,7 @@ const LogIn=()=>{
             console.log(error);
         })
     }
+
 // 유효성 검사 
     return (
         <form onSubmit={onAgrooundClick}>

@@ -9,6 +9,7 @@ import TeamList from './pages/team/teamlist';
 import MainPage from './pages/main_page/main_page';
 import AfterMatch from './pages/match/after_match';
 import MatchResults from './pages/match/match_result';
+import LoadingForLogin from './pages/log_in/loading_for_login';
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ function App() {
         <Route path="/MainPage" element={<MainPage/>}/>
         <Route path="/AfterMatch" element={<AfterMatch/>}/>
         <Route path="/MatchResults" element={<MatchResults/>}/>
+        <Route path='/LoadingForLogin' element={<LoadingForLogin/>}/>
       </Routes>
     </BrowserRouter>
   );

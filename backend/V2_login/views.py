@@ -1,6 +1,8 @@
 from django.shortcuts import redirect
 from django.http import JsonResponse
 
+import jwt
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,6 +10,8 @@ from DB.models import V2_UserInfo
 from DB.models import V2_TeamInfo
 from .serializers import V2_User_info_Serializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import UntypedToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from django.contrib.auth.hashers import check_password
 
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -18,14 +22,14 @@ import json
 import requests
 
 # 클라이언트 / 서버 주소
-# CLIENT_URL = "http://localhost:3000"
-# SERVER_URL = "http://localhost:8000"
+CLIENT_URL = "http://localhost:3000"
+SERVER_URL = "http://localhost:8000"
 
-CLIENT_URL = "http://agrounds.com"
-SERVER_URL = "http://agrounds.com"
+# CLIENT_URL = "http://agrounds.com"
+# SERVER_URL = "http://agrounds.com"
 
-KAKAO_CALLBACK_URI = SERVER_URL + "/api/login/kakao/callback/"
-KAKAO_REDIRECT_URI = SERVER_URL + "/api/login/kakao/"
+KAKAO_CALLBACK_URI = SERVER_URL + "/api/V2login/kakao/callback/"
+KAKAO_REDIRECT_URI = SERVER_URL + "/api/V2login/kakao/"
 KAKAO_CLIENT_ID = "31b5a921fbd3a1e8f96e06d992364864"
 
 # 닉네임 중복확인
@@ -209,10 +213,10 @@ class kakaoCallback(APIView):
             print("회원가입 진행시켜")
             encrypted_email = cryptographysss.encrypt_aes(kakao_email)
             print(cryptographysss.decrypt_aes(encrypted_email))
-            return redirect(CLIENT_URL+"/KSigninPage/?id=" + encrypted_email)
+            return redirect(CLIENT_URL+"/KakaoSignUp/?id=" + encrypted_email)
         
         # 가입되어있는 경우 토큰을 url파라메터로 전송해줌.
-        return redirect(CLIENT_URL+"/ALMainPage/?code="+login.getTokensForUser(login, user)['access'])
+        return redirect(CLIENT_URL+"/LoadingForLogin/?code="+login.getTokensForUser(login, user)['access'])
 
 # 카카오 로그인 - 회원가입
 class kakaoSignup(APIView):
@@ -240,14 +244,51 @@ class kakaoSignup(APIView):
 
 # 토큰으로 사용자 정보 받아오기
 class getUserInfo(APIView):
-    permission_classes = [IsAuthenticated]
+    """
+    헤더에 토큰을 넣고 get요청을 보내면 유저 정보를 리턴해줍니다.
+    client.defaults.headers.common['Authorization'] = token;
+    """
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        user_data = {
-            "username": user.username,
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-        }
-        return Response(user_data, status=status.HTTP_200_OK)
+        auth_header = request.headers.get('Authorization')
+        if auth_header is None:
+            return Response({'detail': 'Authorization header missing or invalid'}, status=status.HTTP_401_UNAUTHORIZED)
+        token = auth_header.split(' ')[0]
+
+        # 토큰 decoding
+        try:
+            decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        except jwt.ExpiredSignatureError:
+            return Response({'detail': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.InvalidTokenError:
+            return Response({'detail': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        user_code = decoded_token.get('user_code')
+        try:
+            user = V2_UserInfo.objects.get(user_code = user_code)
+        except V2_UserInfo.DoesNotExist:
+            return Response(
+                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # 토큰 재발급
+        token = login.getTokensForUser(login, user)
+
+        team_name = ""
+        if user.team_code is not "":
+            try:
+                team_name = V2_TeamInfo.objects.get(v2_team_code = user.team_code).v2_team_name
+            except V2_TeamInfo.DoesNotExist:
+                return JsonResponse({'error':'팀코드에 해당하는 팀이 존재하지 않습니다.'}, status=400)
+            
+        return JsonResponse({'message': '유저 정보를 불러왔습니다.',
+                                'user_code' : user.user_code,
+                                'user_id' : user.user_id,
+                                'user_nickname' : user.user_nickname,
+                                'token' : token,
+                                'login_type' : user.login_type,
+                                'team_code' : user.team_code,
+                                'user_type' : user.user_type,
+                                'team_name' : team_name,
+                                }, status=200)
