@@ -88,6 +88,12 @@ class V2_User_info_Serializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"error" : "올바르지 않은 " + massges[i] +" 형식입니다."})
         return None
     
+class V2_UpdateUserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = V2_UserInfo
+        fields = '__all__'
+    
+    
 # class Login_Serializer(serializers.Serializer):
 #     user_id = serializers.CharField(required = True)
 #     password = serializers.CharField(required = True, write_only = True)

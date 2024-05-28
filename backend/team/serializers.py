@@ -36,7 +36,6 @@ class Team_info_Serializer(serializers.ModelSerializer):
         validated_data['team_games'] = [] # team_gmaes []로 초기화해야 aftermatch에서 append됨  
         validated_data['team_player'] =[]
         
-        
         instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
         return instance

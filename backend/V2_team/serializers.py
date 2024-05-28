@@ -5,6 +5,7 @@ import datetime
 from staticfiles.make_code import make_code
 from rest_framework.response import Response
 from rest_framework import status
+from V2_login.serializers import V2_UpdateUserInfoSerializer
 
 # V2_team 정보 불러오기
 class Team_main_page(serializers.ModelSerializer):
@@ -24,16 +25,31 @@ class Team_info_Serializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        team_code = make_code('t')  # 먼저 match_code 생성
+        team_code = make_code('t')  # 먼저 team_code 생성
         validated_data['v2_team_code'] = team_code  # validated_data에 추가
-        validated_data['v2_team_players'] = [] #여기서는 생성만하고 추가 불가능
+        validated_data['v2_team_players'] = [validated_data['v2_team_host']] #여기서는 생성만하고 추가 불가능
+
+        # ===============================================================
+        # 팀을 생성한 유저의 V2_user_info 레코드의 team_code 필드에 생성한 team_code 업데이트
+        v2_user_info = V2_UserInfo.objects.get(user_code = validated_data['v2_team_host'])
+        user_info_update_data = {
+            'team_code' : team_code,
+            'user_type' : 0 # 감독임을 의미
+        }
+        user_info_serializer = V2_UpdateUserInfoSerializer(v2_user_info, data=user_info_update_data, partial=True)
+        if user_info_serializer.is_valid():
+            user_info_serializer.save()
+        else:
+            raise serializers.ValidationError(user_info_serializer.errors)
+        # ===============================================================
+        
         # v2_team_host는 user_code로 대체 
         instance = super().create(validated_data)  # 인스턴스 생성
         instance.save()
         return instance
 
     def validate(self, data):
-        required_fields = ['v2_team_name']
+        required_fields = ['v2_team_name', 'v2_team_host']
         errors = {field: f"팀 {field}는 필수 항목입니다." for field in required_fields if not data.get(field)}
         
         if errors:
@@ -67,15 +83,27 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
         return instance
 
     
-class TeamSearchByTeamcode(serializers.ModelSerializer):
+## 팀 플레이어의 이름을 포함하여 데이터 직렬화
+class TeamInfoIncludedPlayersNames(serializers.ModelSerializer):
+    v2_team_players_names = serializers.SerializerMethodField()
+
     class Meta:
         model = V2_TeamInfo
-        fields = '__all__'
+        fields = ['v2_team_code', 'v2_team_host', 'v2_team_players',
+                   'v2_team_logo', 'v2_team_name', 'v2_team_match', 'v2_team_players_names']
         
+    def get_v2_team_players_names(self, obj):
+        def getName(user_code):
+            if user_code.startswith("u_"):
+                try:
+                    return V2_UserInfo.objects.get(user_code = user_code).user_name
+                except V2_UserInfo.DoesNotExist:
+                    raise serializers.ValidationError(f"유저 코드 {user_code}에 해당하는 유저가 존재하지 않습니다.")
+            else:
+                return user_code
+        players_names = map(getName, obj.v2_team_players)
+        return players_names
     
-class TeamSearchByTeamname(serializers.ModelSerializer):
-    class Meta:
-        model = V2_TeamInfo
-        fields = '__all__'
-        
+    
+
     

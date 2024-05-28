@@ -13,10 +13,10 @@ class Match_main_page(serializers.ModelSerializer):
 
 # 경기 전 일정잡기
 class Before_Match_info_Serializer(serializers.ModelSerializer):
-    '''
+    """
     v2_match_location, v2_match_home, v2_match_away, v2_match_schedule - 필수
     v2_match_home, v2_match_away 중복 안됨
-    '''
+    """
     class Meta:
         model = V2_MatchInfo
         fields = ['v2_match_host', 'v2_match_location', 'v2_match_home', 'v2_match_away', 'v2_match_schedule']
@@ -26,15 +26,18 @@ class Before_Match_info_Serializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
-        # Generate match_code and inject into data for validation purposes
         v2_match_code = make_code('m')
-        self._v2_match_code = v2_match_code  # Store it for use in validation and creation
+        self._v2_match_code = v2_match_code 
         data['v2_match_code'] = v2_match_code
         return data
 
     def create(self, validated_data):
         v2_match_code = self._v2_match_code  # Use the stored match_code
         validated_data['v2_match_code'] = v2_match_code
+        validated_data['v2_match_teamcode'] = []
+        # Update team match codes
+        self.update_team_codes(validated_data)
+
         instance = super().create(validated_data)
         return instance
 
@@ -52,18 +55,26 @@ class Before_Match_info_Serializer(serializers.ModelSerializer):
         if v2_match_home == v2_match_away:
             raise serializers.ValidationError("v2_match_home과 v2_match_away는 중복될 수 없습니다.")
 
-        def get_team_code(team_name):
-            return get_team_code_by_team_name(team_name=team_name)
-
-        v2_match_code = self._v2_match_code  # Use the stored match_code
-
-        # match추가하게 되면 v2_team_match에 해당 match_code 업데이트
-        if(get_team_code(v2_match_home) != 0 ):
-            update_team_match_code(get_team_code(v2_match_home), v2_match_code)
-        if(get_team_code(v2_match_away) != 0 ):    
-            update_team_match_code(get_team_code(v2_match_away), v2_match_code)
-
         return data
+
+    def update_team_codes(self, validated_data):
+        v2_match_teamcode = []
+
+        home_team = validated_data.get('v2_match_home')
+        away_team = validated_data.get('v2_match_away')
+        match_code = validated_data.get('v2_match_code')
+
+        home_code = get_team_code_by_team_name(home_team)
+        if home_code:
+            v2_match_teamcode.append(home_code)
+            update_team_match_code(home_code, match_code)
+
+        away_code = get_team_code_by_team_name(away_team)
+        if away_code:
+            v2_match_teamcode.append(away_code)
+            update_team_match_code(away_code, match_code)
+
+        validated_data['v2_match_teamcode'] = v2_match_teamcode
 
 
 class After_Match_info_Serializer(serializers.ModelSerializer):
@@ -109,3 +120,8 @@ class MatchSearchByMatchcode(serializers.ModelSerializer):
         model = V2_MatchInfo
         fields = '__all__'
 
+# 팀코드로 매치정보 찾기 
+class MatchSearchByTeamcode(serializers.ModelSerializer):
+    class Meta:
+        model = V2_MatchInfo
+        fields = '__all__'

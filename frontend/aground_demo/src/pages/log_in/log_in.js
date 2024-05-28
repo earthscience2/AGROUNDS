@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './log_in.scss';
 import GeneralBtn from '../../components/button/generalBtn';
 import Textinput from '../../components/textintput/textinput';
@@ -25,7 +25,7 @@ const LogIn=()=>{
  
     }
     const onKakaoClick = (e) => {
-        window.location.replace(process.env.REACT_APP_BASE_URL+"/api/login/kakao");
+        window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
     }
     const onAgrooundClick = (e) => {
         e.preventDefault();
@@ -57,6 +57,7 @@ const LogIn=()=>{
             alert(error.response.data.error)
         })
     }
+
 // 유효성 검사 
     return (
         <form onSubmit={onAgrooundClick}>

@@ -32,16 +32,31 @@ const KakaoSignUp = () => {
     };
     
     let isAgree = privacyAgree && termsAgree;
-    let isAllValid =  isNickname && isAgree;
+    let isAllValid =  isNickname && isAgree && isName && isBirth;
+
+    useEffect(() => {
+        setEmail(new URL(window.location.href).searchParams.get('id'));
+    }, [])
 
     useEffect(() => {
         setAllAgree(privacyAgree && termsAgree && marketingAgree)
     },[privacyAgree ,termsAgree, marketingAgree])
+
+    const saveName = event => {
+        setName(event.target.value);
+        const IsValidName = /^[가-힣a-zA-Z]{2,20}$/.test(event.target.value)
+        setIsName(IsValidName);
+        }
     
     const saveNickname = event => {
         setNickname(event.target.value);
         const IsValidNickname = /^[a-zA-Z가-힣0-9!@#$%^&*()-_=+{};:,<.>]{3,10}$/.test(event.target.value)
         setIsNickname(IsValidNickname)
+    }
+
+    const saveBirth = event => {
+        setBirth(event.target.value);
+        setIsBirth(event.target.value);
     }
     
     
@@ -62,7 +77,7 @@ const KakaoSignUp = () => {
         client.post('/api/V2login/kakao/signup/',SignUpData)
         .then(function(response){
             console.log(response)
-            navigate("/") //mainpage로
+            window.location.replace("/") //mainpage로
         })
         .catch(function(error){ 
             console.log(error);
@@ -72,6 +87,7 @@ const KakaoSignUp = () => {
         <form onSubmit={onSubmitHandler}>
             <div className='kakaosignupbackground'>
                 <div className='kakaosignuptitle'>추가정보</div>
+                <SignUpInput title='이름' type='text' onChange={saveName}/>
                 <SignUpInput title='닉네임' type='text' onChange={saveNickname}/>
                 <div className='kakaosignupinput'>
                     <div className='kakaogender_title'>성별</div>
@@ -88,9 +104,8 @@ const KakaoSignUp = () => {
                         </div>
                     </div>
                 </div>
-                
+                <SignUpInput title='생년월일' type='date' onChange={saveBirth}/>
                 <Checkbox setTermsAgree={setTermsAgree}privacyAgree={privacyAgree}termsAgree={termsAgree}marketingAgree={marketingAgree}allAgree={allAgree}setAllAgree={setAllAgree}setMarketingAgree={setMarketingAgree}setPrivacyAgree={setPrivacyAgree} />
-                <div style={{marginTop: '13vh'}}></div>
                 {isAllValid ? <GeneralBtn color='black' onClick={onSubmitHandler}>가입하기</GeneralBtn> : <GeneralBtn type='button'color='white'>가입하기</GeneralBtn>}
                 
             </div>
