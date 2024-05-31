@@ -2,33 +2,45 @@ import React,{useEffect, useState} from 'react';
 import './teamlist.scss';
 import minus from '../../assets/minus.png';
 import client from '../../clients';
-const TeamList = () => {
+import { useNavigate } from 'react-router-dom';
+import GoBack from '../../assets/go-back-icon.png';
+import classNames from 'classnames';
 
+const TeamList = () => {
+    const navigate = useNavigate();
     const [teamList, setTeamList] = useState([]);
     const [teamName, setTeamName] = useState('');
+    const teamcode = {
+        "v2_team_code" : sessionStorage.getItem('teamcode')
+    }
+
     useEffect(() => {
-        client.get('/api/V2team/main/')
+        
+        client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
-            const Players = response.data.flatMap(team => team.v2_team_players);
-            setTeamName(sessionStorage.getItem('team_code'))
-            setTeamList(Players);
+            console.log(response);
+            setTeamName(response.data.v2_team_name);
+            setTeamList(response.data.v2_team_players_names);
+            
         })
         .catch(function(error){
             console.log(error)
         })
-    }, [teamList])
+    }, [])
     
-
+    
+    const usertype = sessionStorage.getItem('usertype');
     return (
         <div className='teamlist-background'>
+            <img className='teamlist_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
             <div className='teamlist-logo'>AGROUNDS</div>
             <div className='teamlist-title'>{teamName} 팀원 목록</div>
             <div className='teamlist-line'></div>
             <div className='teamlist-largebox'>
                 {teamList.map((player, index) => (
                     <div key={index} className='teamlist-personbox'>
-                        <div className='teamlist-personbox-player'>{player}</div>
-                        {sessionStorage.getItem('usertype') === 0 ? <img className='teamlist-personbox-minus'src={minus}/> : ''}
+                        <div className={classNames(`teamlist-personbox-player ${usertype == 0 ? 'minus' : ''}` )}>{player}</div>
+                        {usertype == 0 ? <img className='teamlist-personbox-minus'src={minus}/> : ''}
                         
                     </div>
                 ))}

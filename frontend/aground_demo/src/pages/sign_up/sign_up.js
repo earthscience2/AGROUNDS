@@ -8,13 +8,12 @@ import client from '../../clients';
 import GeneralBtn from '../../components/button/generalBtn';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import GoBack from '../../assets/go-back-icon.png';
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password,setPassword] = useState('');
-    
     const [isEmail,setIsEmail] = useState('');
     const [isPassword,setIsPassword] = useState('');
-    
     const [nickname, setNickname] = useState('');
     const [name, setName] = useState('');
     const [birth,setBirth] = useState('');
@@ -28,7 +27,7 @@ const SignUp = () => {
     const [isBirth,setIsBirth] = useState('');
     const [selectedGender, setSelectedGender] = useState(null);
 
-    const navigate = useNavigate;
+    const navigate = useNavigate();
     const handleGenderSelect = (gender) => {
         setSelectedGender(gender);
         setGender(gender);
@@ -92,11 +91,12 @@ const SignUp = () => {
 
         client.post('/api/V2login/signup/',SignUpData)
         .then(function(response){
-            console.log(response)
-            navigate("/") //mainpage로
+            console.log(response);
+            navigate("/") 
         })
         .catch(function(error){ 
-            console.log(error);
+            alert(error.response.data.error);
+            console.log(error)
         })
     }
 
@@ -104,6 +104,7 @@ const SignUp = () => {
     return (
         <form onSubmit={onSubmitHandler}>
             <div className='signupbackground'>
+            <img className='signup_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
                 <div className='signuptitle'>회원가입</div>
                 <SignUpInput title='이름' type='text' onChange={saveName}/>
                 <SignUpInput title='닉네임' type='text' onChange={saveNickname}/>
@@ -122,8 +123,8 @@ const SignUp = () => {
                         </div>
                     </div>
                 </div>
-                <SignUpInput title='이메일' type='email' onChange={saveEmail} />
-                <SignUpInput title='비밀번호' type='password' onChange={savePassword}/>
+                <SignUpInput title='이메일' placeholder='이메일 형식으로 입력'type='email' onChange={saveEmail} />
+                <SignUpInput title='비밀번호' placeholder='특수문자 포함 8자리이상' type='password' onChange={savePassword}/>
                 <SignUpInput title='생년월일' type='date' onChange={saveBirth}/>
                 <Checkbox setTermsAgree={setTermsAgree}privacyAgree={privacyAgree}termsAgree={termsAgree}marketingAgree={marketingAgree}allAgree={allAgree}setAllAgree={setAllAgree}setMarketingAgree={setMarketingAgree}setPrivacyAgree={setPrivacyAgree} />
                 {isAllValid ? <GeneralBtn color='black' onClick={onSubmitHandler}>가입하기</GeneralBtn> : <GeneralBtn type='button'color='white'>가입하기</GeneralBtn>}

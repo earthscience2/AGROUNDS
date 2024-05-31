@@ -11,18 +11,22 @@
 }
 
 
+
 .main_page_background{
     @include centerDisplay(column);
-    height: max-content ;
-    background-color: rgb(234, 235, 237);
+    height: max-content;
+    width: 100%;
+    background-color: rgb(241, 242, 243);
+    
     .main_page_navbox{
         @include centerDisplay(column);
-        width: 44vh;
+        width: 100%;
         margin: 0 auto;
         position: fixed;
         left: auto;
         top: 0;
-        background-color: rgb(234, 235, 237);
+        background-color: rgb(255, 255, 255);
+        z-index: 1;
         .main_page_nav_logo{
             font-size: 2.1vh;
             font-weight: 700;
@@ -32,10 +36,11 @@
 
         .main_page_teamlogobox{
             @include centerDisplay(column);
-            width: 40vh;
-            height: 20vh;
+            width: 100%;
+            height: 22vh;
             border-bottom: 1px solid black;
-            margin-top: -2vh;
+            background-color: white;
+            margin-top: 0vh;
             .main_page_teamlogobox_box{
                 @include centerDisplay(row);
                 
@@ -60,7 +65,7 @@
             
             .main_page_nav{
                 @include centerDisplay(row);
-                width:44vh;
+                width:45vh;
                 margin-bottom: -8vh;
                 margin-top: 2vh;
                 .main_page_title{
@@ -88,6 +93,21 @@
     
     
     .main_page_contentbox{
+        position: relative;
+        background-color: rgb(241, 242, 243);
+        min-height: 100vh;
+        margin-top: 5vh;
+        .main_page_contentbox_empty{
+            text-align: center;
+            .main_page_contentbox_empty_text1{
+                @include BoldText(4vh);
+                margin-top: 45vh;
+            }
+            .main_page_contentbox_empty_text2{
+                @include BoldText(2.5vh);
+                margin-top: 3vh
+            }
+        }
         .main_page_matchplan{
             @include centerDisplay(column);
             width: 40vh;
@@ -96,7 +116,7 @@
             margin-top: 3vh;
             background-color: white;
             &:first-of-type{
-                margin-top: 25vh;
+                margin-top: 28vh;
             }
             &:hover{
                 border: 1px solid black;
@@ -104,9 +124,10 @@
     
             .main_page_matchplan_teambox{
                 @include centerDisplay(row);
+                width: 100%;
                 .main_page_matchplan_teamname1{
                     @include BoldText(2.4vh);
-                    width: 70%;
+                    width: 40%;
                     text-align: center;
                 }
                 .main_page_matchplan_vs{
@@ -116,7 +137,7 @@
                 }
                 .main_page_matchplan_teamname2{
                     @include BoldText(2.4vh);
-                    width: 70%;
+                    width: 40%;
                     text-align: center;
                 }
             }
