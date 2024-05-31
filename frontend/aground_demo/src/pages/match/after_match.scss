@@ -8,6 +8,7 @@
 .after_match_background{
     @include centerDisplay(column);
     overflow-x: hidden;
+    
     .after_match_title{
         font-size: 2.1vh;
         font-weight: 700;
