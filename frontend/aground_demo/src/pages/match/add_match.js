@@ -10,7 +10,7 @@ const AddMatch = () => {
     const [time, setTime]= useState(null);
     const [date, setDate] = useState(null);
     const [place, setPlace] = useState('');
-    const isValid = teamName && time && date && place;
+    const isValid = teamName && date && place;
     const navigate = useNavigate();
     const myTeamName = sessionStorage.getItem('teamname')
     const onSubmitHandler = async event => {
@@ -21,7 +21,7 @@ const AddMatch = () => {
             'v2_match_host' : sessionStorage.getItem('usercode'),
             "v2_match_home": sessionStorage.getItem('teamname') ,
             "v2_match_away" : teamName,
-            "v2_match_schedule" : `${date} ${time}`
+            "v2_match_schedule" : date
         }
         client.post('/api/V2match/beforematch/', AddMatchData)
         .then(function(response){
@@ -47,7 +47,7 @@ const AddMatch = () => {
                 <SignUpInput title='상대팀 명' type='text' onChange={(e) => setTeamName(e.target.value)}/>
                 <SignUpInput title= "경기 장소"type="text" onChange={(e) => setPlace(e.target.value)} />
                 <SignUpInput title= "경기 일자" type='date' onChange={(e) => setDate(e.target.value)} />
-                <SignUpInput title= "경기 시간"type="time" onChange={(e) => setTime(e.target.value)} />
+                {/* <SignUpInput title= "경기 시간"type="time" onChange={(e) => setTime(e.target.value)} /> */}
                 <div className='add_match_button'>{isValid ? <GeneralBtn color='black' children='추가하기' onClick={onSubmitHandler}/> : <GeneralBtn color='white' children='추가하기'/>}</div>
             </div>
         </form>

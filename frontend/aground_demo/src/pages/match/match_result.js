@@ -87,8 +87,8 @@ const MatchResults = () => {
                     <div className='match_result_player_title'>참여자 목록</div>
                     <div className='match_result_player_list'>
                         {teamList.map((player, index) => (
-                            <div className='match_result_player' key={index} >
-                                <div onClick={hasGps(player) ? (()=>navigate('/PersonalMatchResult')) : (() => alert('gps 사용자가 아닙니다.'))} className={classNames(`match_result_player_name ${hasGps(player) && 'gps'} `)}>{player}</div>
+                            <div onClick={hasGps(player) ? (()=>navigate('/PersonalMatchResult')) : (() => alert('gps 사용자가 아닙니다.'))}className='match_result_player' key={index} >
+                                <div  className={classNames(`match_result_player_name ${hasGps(player) && 'gps'} `)}>{player}</div>
                                 {hasGps(player) && <img src={Gps} className='match_result_player_gps' />}
                             </div>
                         ))}

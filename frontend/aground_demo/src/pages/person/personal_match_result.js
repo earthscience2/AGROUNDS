@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import './personal_match_result.scss';
 import GoBack from '../../assets/go-back-white-icon.png';
 import { useNavigate } from 'react-router-dom';
-import FullHeatMap from '../../assets/풀경기/full-heat-map.png';
-import FullSprint from '../../assets/풀경기/full-sprint-map.png';
-import FullMovePath from '../../assets/풀경기/full-move-path.png';
+import FullHeatMap from '../../assets/full-match/full-heat-map.png';
+import FullSprint from '../../assets/full-match/full-sprint-map.png';
+import FullMovePath from '../../assets/full-match/full-move-path.png';
 const PersonalMatchResult = () => {
     const navigate = useNavigate();
     const nickname = '김용민 기요미';

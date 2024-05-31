@@ -15,11 +15,12 @@
 .main_page_background{
     @include centerDisplay(column);
     height: max-content;
+    width: 100%;
     background-color: rgb(241, 242, 243);
     
     .main_page_navbox{
         @include centerDisplay(column);
-        width: 45vh;
+        width: 100%;
         margin: 0 auto;
         position: fixed;
         left: auto;
@@ -35,11 +36,11 @@
 
         .main_page_teamlogobox{
             @include centerDisplay(column);
-            width: 47vh;
+            width: 100%;
             height: 22vh;
-            border-bottom: 2px solid black;
-            border-radius: 5vh;
-            margin-top: -2vh;
+            border-bottom: 1px solid black;
+            background-color: white;
+            margin-top: 0vh;
             .main_page_teamlogobox_box{
                 @include centerDisplay(row);
                 
@@ -95,11 +96,12 @@
         position: relative;
         background-color: rgb(241, 242, 243);
         min-height: 100vh;
+        margin-top: 5vh;
         .main_page_contentbox_empty{
             text-align: center;
             .main_page_contentbox_empty_text1{
                 @include BoldText(4vh);
-                margin-top: 50vh;
+                margin-top: 45vh;
             }
             .main_page_contentbox_empty_text2{
                 @include BoldText(2.5vh);
