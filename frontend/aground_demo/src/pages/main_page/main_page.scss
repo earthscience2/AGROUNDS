@@ -15,11 +15,12 @@
 .main_page_background{
     @include centerDisplay(column);
     height: max-content;
+    width: 100%;
     background-color: rgb(241, 242, 243);
     
     .main_page_navbox{
         @include centerDisplay(column);
-        width: 45vh;
+        width: 47vh;
         margin: 0 auto;
         position: fixed;
         left: auto;
@@ -37,9 +38,9 @@
             @include centerDisplay(column);
             width: 47vh;
             height: 22vh;
-            border-bottom: 2px solid black;
-            border-radius: 5vh;
-            margin-top: -2vh;
+            border-bottom: 1px solid black;
+            background-color: white;
+            margin-top: 0vh;
             .main_page_teamlogobox_box{
                 @include centerDisplay(row);
                 
