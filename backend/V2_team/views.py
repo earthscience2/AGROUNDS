@@ -5,7 +5,9 @@ from rest_framework.response import Response
 from rest_framework import status
 # from .models import User_info
 from DB.models import V2_TeamInfo
+from DB.forms import ImageUploadForm
 from .serializers import *
+from staticfiles.image_uploader import S3ImgUploader
 
 ## V2_team 전체 DB정보
 class V2_TeamMainAPI(APIView):
@@ -25,9 +27,23 @@ class V2_TeamMakeTeamAPI(APIView):
     }
     """
     def post(self, request, *args, **kwargs):
-        serializer = Team_info_Serializer(data=request.data)
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+                # 파일 객체 추출
+                image = form.cleaned_data['v2_team_logo']
+                # uploader 객체 생성
+                uploader = S3ImgUploader(image)
+                image_url = uploader.url
+
+        request_data = request.data.copy()
+        request_data['v2_team_logo'] = image_url
+
+        serializer = Team_info_Serializer(data=request_data)
+
         if serializer.is_valid():
             serializer.save()
+            # 모든 값이 유효하면 이미지 업로드 수행
+            uploader.upload()
             return Response(serializer.data)
         else:
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.

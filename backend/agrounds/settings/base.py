@@ -1,6 +1,14 @@
 from datetime import timedelta
 import os
 import pymysql
+import environ
+
+env = environ.Env(DEBUG=(bool, True)) #환경변수를 불러올 수 있는 상태로 세팅
+
+#환경변수 파일 읽어오기
+environ.Env.read_env(
+    env_file=os.path.join('.env')
+)
 
 pymysql.install_as_MySQLdb()
 
@@ -25,6 +33,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "storages",
     # Django apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -175,3 +184,14 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [  # 리액트 앱 빌드 디렉토리
     os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
 ]
+
+# AWS S3 bucket 설정
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'agrounds-image-bucket'
+AWS_S3_REGION_NAME = 'ap-northeast-2'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+# S3에 저장되는 파일의 URL 구성
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+DEFAULT_FILE_STORAGE = 'agrounds.storage_backends.MediaStorage'
