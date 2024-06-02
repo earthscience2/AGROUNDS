@@ -65,7 +65,6 @@ const KakaoSignUp = () => {
 
         let SignUpData = {
             'user_id' : email,
-            'password' : password,
             'user_birth' : birth,
             'user_name' : name,
             'user_gender' : gender,
@@ -80,6 +79,7 @@ const KakaoSignUp = () => {
             window.location.replace("/") //mainpage로
         })
         .catch(function(error){ 
+            console.log(error)
             alert(error.response.data.error);
         })
     }
