@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 # from .models import User_info
 from DB.models import V2_TeamInfo
+from PIL import Image
 from DB.forms import ImageUploadForm
 from .serializers import *
 from staticfiles.image_uploader import S3ImgUploader
@@ -27,13 +28,24 @@ class V2_TeamMakeTeamAPI(APIView):
     }
     """
     def post(self, request, *args, **kwargs):
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
+        # form = ImageUploadForm(request.POST, request.FILES)
+        logo = request.FILES.get('v2_team_logo')
+        image_url = ''
+        uploader = None
+        # if form.is_valid():
+        if logo is not None:
                 # 파일 객체 추출
-                image = form.cleaned_data['v2_team_logo']
+                # image = form.cleaned_data['v2_team_logo']
+                try:
+                    image = Image.open(logo)
+                    image.verify()
+                except (IOError, SyntaxError) as e:
+                    return Response({"error": "Invalid image file"}, status=status.HTTP_400_BAD_REQUEST)
                 # uploader 객체 생성
-                uploader = S3ImgUploader(image)
+                uploader = S3ImgUploader(logo)
                 image_url = uploader.url
+        else : 
+            return Response('팀로고 : 파일 업로드 실패.', status=status.HTTP_400_BAD_REQUEST)
 
         request_data = request.data.copy()
         request_data['v2_team_logo'] = image_url
@@ -43,7 +55,8 @@ class V2_TeamMakeTeamAPI(APIView):
         if serializer.is_valid():
             serializer.save()
             # 모든 값이 유효하면 이미지 업로드 수행
-            uploader.upload()
+            if uploader is not None:
+                uploader.upload()
             return Response(serializer.data)
         else:
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.
