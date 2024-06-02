@@ -92,7 +92,7 @@ const SignUp = () => {
         client.post('/api/V2login/signup/',SignUpData)
         .then(function(response){
             console.log(response);
-            navigate("/") 
+            navigate("/")
         })
         .catch(function(error){ 
             alert(error.response.data.error);

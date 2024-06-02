@@ -80,7 +80,7 @@ const KakaoSignUp = () => {
             window.location.replace("/") //mainpage로
         })
         .catch(function(error){ 
-            alert(error.response.data.error)
+            alert(error.response.data.error);
         })
     }
     return (
