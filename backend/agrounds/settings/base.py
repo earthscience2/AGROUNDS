@@ -211,10 +211,14 @@ LOGGING = {
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 0,  # 백업 파일을 남기지 않고 삭제
         },
+        'console': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['file', 'console'],
             'level': 'ERROR',
             'propagate': True,
         },
