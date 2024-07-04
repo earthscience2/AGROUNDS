@@ -2,17 +2,21 @@ from datetime import timedelta
 import os
 import pymysql
 import environ
+import logging
+from logging.handlers import RotatingFileHandler
 
-env = environ.Env(DEBUG=(bool, True)) #환경변수를 불러올 수 있는 상태로 세팅
 
-#환경변수 파일 읽어오기
-environ.Env.read_env(
-    env_file=os.path.join('.env')
-)
+
 
 pymysql.install_as_MySQLdb()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+env = environ.Env(DEBUG=(bool, True)) #환경변수를 불러올 수 있는 상태로 세팅
+
+#환경변수 파일 읽어오기
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "fo(9(hrxizfeu5_^z@&9bkie#3t#j_^hr&t_zgvm9%k0s@%vpf"
 DEBUG = True
@@ -201,15 +205,17 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/home/ubuntu/logs/debug.log',
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': env('LOG_DIRECTORY'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 0,  # 백업 파일을 남기지 않고 삭제
         },
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'propagate': True,
         },
     },
