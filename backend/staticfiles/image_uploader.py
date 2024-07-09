@@ -1,56 +1,85 @@
 import boto3
 import uuid
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from io import BytesIO
 from django.conf import settings
+from botocore.exceptions import NoCredentialsError, PartialCredentialsError, BotoCoreError
 
 class S3ImgUploader:
     def __init__(self, file):
         self.file = file
-        self.filename = uuid.uuid1().hex
-        self.url = f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/img/{self.filename}"
+        self.filename = f"img/teamlogo/{uuid.uuid1().hex}.jpg"
+        self.url = f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/{self.filename}"
     
     def compress_image(self, file):
-        image = Image.open(file)
+        try:
+            image = Image.open(file)
+        except UnidentifiedImageError:
+            raise ValueError("Invalid image file.")
+        
         output = BytesIO()
         
-        # 압축 품질 설정
+        # Set compression quality
         quality = 85
         
-        # 압축을 위한 이미지 저장
-        image.save(output, format='JPEG', quality=quality)
+        # Save image for compression
+        try:
+            image.save(output, format='JPEG', quality=quality)
+        except OSError as e:
+            raise ValueError(f"Image compression failed: {e}")
+        
         output.seek(0)
         
-        # 압축된 이미지 크기가 1MB 이상인 경우 반복적으로 품질을 줄여서 저장
+        # Reduce quality iteratively if the compressed image size is still greater than 1MB
         while output.tell() > 1 * 1024 * 1024:
             output = BytesIO()
             quality -= 5
-            image.save(output, format='JPEG', quality=quality)
+            if quality < 10:  # Prevent infinite loop with very small quality
+                raise ValueError("Unable to compress image to desired size.")
+            try:
+                image.save(output, format='JPEG', quality=quality)
+            except OSError as e:
+                raise ValueError(f"Image compression failed: {e}")
             output.seek(0)
         
         return output
 
     def upload(self):
         '''
-        파일 업로더
+        Upload the file to S3
         '''
-        s3_client = boto3.client(
-            's3',
-            aws_access_key_id     = settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key = settings.AWS_SECRET_ACCESS_KEY,
-            region_name=settings.AWS_S3_REGION_NAME
-        )
+        try:
+            s3_client = boto3.client(
+                's3',
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                region_name=settings.AWS_S3_REGION_NAME
+            )
 
-        # 파일 크기가 1MB 이상일 경우 압축 진행
+        except (NoCredentialsError, PartialCredentialsError):
+            raise ValueError("AWS credentials are not available or incomplete.")
+        except BotoCoreError as e:
+            raise ValueError(f"Failed to create S3 client: {e}")
+
+        # Compress the file if it is larger than 1MB
         if self.file.size > 1 * 1024 * 1024:
-            self.file = self.compress_image(self.file)
+            try:
+                self.file = self.compress_image(self.file)
+            except ValueError as e:
+                raise ValueError(f"Image compression error: {e}")
         
-        s3_client.upload_fileobj(
-            self.file,
-            settings.AWS_STORAGE_BUCKET_NAME,
-            self.filename,
-            ExtraArgs={
-                "ContentType": self.file.content_type
-            }
-        )
-        return f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/img/{url}"
+        try:
+            # 업로드 전에 파일 포인터의 위치를 처음 위치로 초기화
+            self.file.seek(0)
+            s3_client.upload_fileobj(
+                self.file,
+                settings.AWS_STORAGE_BUCKET_NAME,
+                self.filename,
+                ExtraArgs={
+                    'ContentType': self.file.content_type
+                }
+            )
+        except BotoCoreError as e:
+            raise ValueError(f"Failed to upload file to S3: {e}")
+        
+        return self.url
