@@ -6,8 +6,9 @@ from django.conf import settings
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, BotoCoreError
 
 class S3ImgUploader:
-    def __init__(self, file):
+    def __init__(self, file, filename):
         self.file = file
+        # self.filename = f"img/teamlogo/{uuid.uuid1().hex}.jpg"
         self.filename = f"img/teamlogo/{uuid.uuid1().hex}.jpg"
         self.url = f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/{self.filename}"
     
