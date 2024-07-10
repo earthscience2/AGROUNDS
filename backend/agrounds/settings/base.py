@@ -1,10 +1,22 @@
 from datetime import timedelta
 import os
 import pymysql
+import environ
+import logging
+from logging.handlers import RotatingFileHandler
+
+
+
 
 pymysql.install_as_MySQLdb()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+env = environ.Env(DEBUG=(bool, True)) #환경변수를 불러올 수 있는 상태로 세팅
+
+#환경변수 파일 읽어오기
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "fo(9(hrxizfeu5_^z@&9bkie#3t#j_^hr&t_zgvm9%k0s@%vpf"
 DEBUG = True
@@ -25,6 +37,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "storages",
     # Django apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -134,7 +147,8 @@ DATABASES = {
         "NAME": "agroundsDB",  # RDS 데이터베이스 이름
         "USER": "ground",  # RDS 데이터베이스 사용자 이름
         "PASSWORD": "assist0907",  # RDS 데이터베이스 비밀번호
-        "HOST": "agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com",  # RDS 인스턴스 엔드포인트
+        # "HOST": "agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com",  # RDS 인스턴스 엔드포인트
+        "HOST": "127.0.0.1",  # RDS 인스턴스 엔드포인트
         "PORT": "3306",  # MySQL 기본 포트
         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
     }
@@ -175,3 +189,39 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [  # 리액트 앱 빌드 디렉토리
     os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
 ]
+
+# AWS S3 bucket 설정
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'agrounds-image-bucket'
+AWS_S3_REGION_NAME = 'ap-northeast-2'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+# S3에 저장되는 파일의 URL 구성
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+DEFAULT_FILE_STORAGE = 'agrounds.storage_backends.MediaStorage'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': env('LOG_DIRECTORY'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 0,  # 백업 파일을 남기지 않고 삭제
+        },
+        'console': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}

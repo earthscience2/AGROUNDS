@@ -23,7 +23,9 @@ const CreateTeam = ({onClose}) => {
             'v2_team_name': teamName
         }
 
-        client.post('/api/V2team/create/', CreateTeamData)
+        console.log(CreateTeamData)
+
+        client.post('/api/V2team/create/', CreateTeamData, {headers: {'Content-Type': 'multipart/form-data'}})
         .then(function(response){
             sessionStorage.setItem('teamcode', response.data.v2_team_code)
             sessionStorage.setItem('teamname', teamName)
