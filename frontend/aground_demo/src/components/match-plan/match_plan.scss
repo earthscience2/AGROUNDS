@@ -50,14 +50,14 @@
         margin-top: 1.5vh;
         margin-left: -.9vh;
         .match_plan_homeScore{
-
+            @include BoldText(2vh);
         }
         .match_plan_-{
             @include BoldText(2vh);
             margin: 0 2vh;
         }
         .match_plan_awayscore{
-
+            @include BoldText(2vh);
         }
     }
     .match_plan_place{
