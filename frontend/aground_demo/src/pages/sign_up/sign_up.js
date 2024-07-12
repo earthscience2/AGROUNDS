@@ -71,7 +71,7 @@ const SignUp = () => {
     
     const saveBirth = event => {
         setBirth(event.target.value);
-        setIsBirth(birth);
+        setIsBirth(event.target.value);
     }
     
     
