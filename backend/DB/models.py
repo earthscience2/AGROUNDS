@@ -172,7 +172,9 @@ class V2_UserInfo(models.Model):
     login_type = models.IntegerField()
     team_code = models.CharField(max_length=20)
     user_type = models.IntegerField()
-
+    user_concept = models.IntegerField()
+    user_height = models.IntegerField()
+    user_weight = models.IntegerField()
     class Meta:
         managed = False
         db_table = "V2_user_info"
@@ -185,6 +187,7 @@ class V2_TeamInfo(models.Model):
     v2_team_logo = models.CharField(max_length=45, blank=True, null=True)
     v2_team_name = models.CharField(max_length=45)
     v2_team_match = models.JSONField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = 'V2_team_info'
