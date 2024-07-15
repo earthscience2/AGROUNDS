@@ -25,7 +25,8 @@ const LogIn=()=>{
  
     }
     const onKakaoClick = (e) => {
-        window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
+        window.location.replace("/LoadingForLogin/?code=0");
+        // window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
     }
     const onAgrooundClick = (e) => {
         e.preventDefault();
