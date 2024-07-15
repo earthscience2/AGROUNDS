@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const MainPage = () => {
     const [team, setTeam] = useState([]);
     const [teamName, setTeamName] = useState('');
+    const [teamLogo, setTeamLogo] = useState('');
     const navigate = useNavigate();
     const [matchCode, setMatchCode] = useState([])
 
@@ -21,6 +22,7 @@ const MainPage = () => {
         .then(function(response){
             setTeamName(response.data.v2_team_name);
             setMatchCode(response.data.v2_team_match);
+            setTeamLogo(response.data.v2_team_logo);
         })
         .catch(function(error){
             console.log(error);
@@ -61,7 +63,7 @@ const MainPage = () => {
                 <div className='main_page_nav_logo'>AGROUNDS</div>
                 <div className='main_page_teamlogobox'>
                     <div className='main_page_teamlogobox_box'>
-                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div><div className='main_page_teamlogobox_teamname'>{teamName}</div>
+                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={teamLogo}/></div><div className='main_page_teamlogobox_teamname'>{teamName}</div>
                     </div>
                         <div className='main_page_nav'>
                             <div className='main_page_title'>경기일정</div>
