@@ -172,7 +172,6 @@ class V2_UserInfo(models.Model):
     login_type = models.IntegerField()
     team_code = models.CharField(max_length=20)
     user_type = models.IntegerField()
-    user_concept = models.IntegerField()
     user_height = models.IntegerField()
     user_weight = models.IntegerField()
     class Meta:

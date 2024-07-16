@@ -107,8 +107,9 @@ class login(APIView):
 
     user_type
     -1 : 가입 후 첫 로그인
-    0 : 감독
+    0 : 감  독
     1 : 선수
+    2 : 개인 회원 
 
     login_type
     0 : 일반 로그인

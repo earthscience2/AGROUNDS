@@ -117,3 +117,23 @@ class MatchSearchByTeamcodeAPI(APIView):
 
         serializer = MatchSearchByMatchcode(matches, many=True)
         return Response(serializer.data)
+
+# user_nickname으로 match정보들 불러오기
+class MatchSearchBynicknameAPI(APIView):
+    '''
+    {
+        "user_nickname": "김인범"
+    }
+    '''
+    def post(self, request):
+        user_nickname = request.data.get('user_nickname')
+        if not user_nickname:
+            return Response({'error': 'user_nickname is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        matches = V2_MatchInfo.objects.filter(v2_match_players__contains=[user_nickname])
+        if not matches.exists():
+            return Response({'error': 'No match found with the provided user_nickname.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = MatchSearchByMatchcode(matches, many=True)
+        return Response(serializer.data)
+
