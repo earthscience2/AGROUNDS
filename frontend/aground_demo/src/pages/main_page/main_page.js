@@ -9,14 +9,17 @@ const MainPage = () => {
     const [team, setTeam] = useState([]);
     const [teamName, setTeamName] = useState('');
     const navigate = useNavigate();
-    const [matchCode, setMatchCode] = useState([])
+    const [matchCode, setMatchCode] = useState([]);
+    const [userName, setUserName] = useState('');
 
     const teamcode = {
         'v2_team_code' : sessionStorage.getItem('teamcode')
     }
+    
 
 
     useEffect(() => {
+        setUserName(sessionStorage.getItem('nickname'))
         client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
             setTeamName(response.data.v2_team_name);
@@ -61,11 +64,12 @@ const MainPage = () => {
                 <div className='main_page_nav_logo'>AGROUNDS</div>
                 <div className='main_page_teamlogobox'>
                     <div className='main_page_teamlogobox_box'>
-                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div><div className='main_page_teamlogobox_teamname'>{teamName}</div>
+                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div>{teamName ? <div className='main_page_teamlogobox_teamname'>{teamName}</div> : <div className='main_page_teamlogobox_teamname'>{userName}</div> }
                     </div>
                         <div className='main_page_nav'>
                             <div className='main_page_title'>경기일정</div>
-                            <img className='main_page_nav_team' onClick={() => navigate('/TeamList')}src={Team}/>
+                            {teamName ? <img className='main_page_nav_team' onClick={() => navigate('/TeamList')}src={Team}/> : ''}
+                            
                             <img className='main_page_nav_addevent' onClick={() => navigate('/AddMatch')}src={addEvent}/>
                     </div>
                 </div>
