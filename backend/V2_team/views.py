@@ -144,10 +144,6 @@ class V2_JoinTeamAPI(APIView):
     "user_code" : "u_1sa95ior6ijpr"
     "team_code" : "t_1sa95sa10rmdrs"
     }
-    
-    user_concept 
-    '0' - 팀 가입하는 사용자(default)
-    '1' - 개인 회원
     '''
     def post(self, request):
         user_code = request.data.get('user_code')
@@ -200,7 +196,7 @@ class V2_JoinPersonalAPI(APIView):
         except V2_UserInfo.DoesNotExist:
             return Response({'error': '해당 유저가 존재하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        v2_user_info.user_concept = 1
+        v2_user_info.user_type = 2
         v2_user_info.save()
 
         return Response({'message': '개인 가입에 성공했습니다.'})
