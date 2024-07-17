@@ -55,7 +55,7 @@ const LogIn=()=>{
         })
         .catch(function(error){
             setIsLogin(false);
-            alert(error.response.data.error)
+            alert(error)
         })
     }
 

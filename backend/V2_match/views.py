@@ -60,6 +60,13 @@ class V2_After_makematch(APIView):
         serializer = After_Match_info_Serializer(match_info, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            for match_players in match_info.v2_match_players:
+                try:
+                    user = V2_UserInfo.objects.get(user_code = match_players)
+                    
+                except V2_UserInfo.DoesNotExist:
+                    print('경기 참여자 입력 중 에러 발생 : 해당 유저 코드가 존재하지 않습니다.')
+
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

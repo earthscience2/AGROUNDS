@@ -22,11 +22,11 @@ import json
 import requests
 
 # 클라이언트 / 서버 주소
-# CLIENT_URL = "http://localhost:3000"
-# SERVER_URL = "http://localhost:8000"
+CLIENT_URL = "http://localhost:3000"
+SERVER_URL = "http://localhost:8000"
 
-CLIENT_URL = "http://agrounds.com"
-SERVER_URL = "http://agrounds.com"
+# CLIENT_URL = "http://agrounds.com"
+# SERVER_URL = "http://agrounds.com"
 
 KAKAO_CALLBACK_URI = SERVER_URL + "/api/V2login/kakao/callback/"
 KAKAO_REDIRECT_URI = SERVER_URL + "/api/V2login/kakao/"
@@ -163,7 +163,7 @@ class login(APIView):
     def getLogin(self, user):
         token = self.getTokensForUser(user)
         team_name = ""
-        if user.team_code is not "":
+        if user.user_type == 0 or user.user_type == 1:
             try:
                 team_name = V2_TeamInfo.objects.get(v2_team_code = user.team_code).v2_team_name
             except V2_TeamInfo.DoesNotExist:
@@ -281,7 +281,7 @@ class getUserInfo(APIView):
         token = login.getTokensForUser(login, user)
 
         team_name = ""
-        if user.team_code is not "":
+        if user.user_type == 0 or user.user_type == 1:
             try:
                 team_name = V2_TeamInfo.objects.get(v2_team_code = user.team_code).v2_team_name
             except V2_TeamInfo.DoesNotExist:

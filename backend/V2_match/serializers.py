@@ -111,7 +111,7 @@ class After_Match_info_Serializer(serializers.ModelSerializer):
         # 오류가 있는 경우 예외를 발생시킵니다.
         if errors:
             raise serializers.ValidationError(errors)
-
+        
         return data
 
 # 매치코드로 매치정보 찾기
