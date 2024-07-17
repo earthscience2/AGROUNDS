@@ -9,4 +9,5 @@ urlpatterns = [
     path("searchbymatchcode/", views.MatchSearchByMatchcodeAPI.as_view()),
     path('deletematch/', views.MatchDeletebyMatchcodeAPI.as_view()),
     path('searchbyteamcode/', views.MatchSearchByTeamcodeAPI.as_view()),
+    path('searchbyusernickname/', views.MatchSearchBynicknameAPI.as_view()),
 ]
