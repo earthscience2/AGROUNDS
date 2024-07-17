@@ -22,11 +22,11 @@ import json
 import requests
 
 # 클라이언트 / 서버 주소
-# CLIENT_URL = "http://localhost:3000"
-# SERVER_URL = "http://localhost:8000"
+CLIENT_URL = "http://localhost:3000"
+SERVER_URL = "http://localhost:8000"
 
-CLIENT_URL = "http://agrounds.com"
-SERVER_URL = "http://agrounds.com"
+# CLIENT_URL = "http://agrounds.com"
+# SERVER_URL = "http://agrounds.com"
 
 KAKAO_CALLBACK_URI = SERVER_URL + "/api/V2login/kakao/callback/"
 KAKAO_REDIRECT_URI = SERVER_URL + "/api/V2login/kakao/"
@@ -111,8 +111,9 @@ class login(APIView):
 
     user_type
     -1 : 가입 후 첫 로그인
-    0 : 감독
+    0 : 감  독
     1 : 선수
+    2 : 개인 회원 
 
     login_type
     0 : 일반 로그인
@@ -162,7 +163,7 @@ class login(APIView):
     def getLogin(self, user):
         token = self.getTokensForUser(user)
         team_name = ""
-        if user.team_code is not "":
+        if user.user_type == 0 or user.user_type == 1:
             try:
                 team_name = V2_TeamInfo.objects.get(v2_team_code = user.team_code).v2_team_name
             except V2_TeamInfo.DoesNotExist:
@@ -171,6 +172,7 @@ class login(APIView):
         return JsonResponse({'message': '로그인이 성공적으로 완료되었습니다.',
                                 'user_code' : user.user_code,
                                 'user_id' : user.user_id,
+                                'user_name' : user.user_name,
                                 'user_nickname' : user.user_nickname,
                                 'token' : token,
                                 'login_type' : user.login_type,
@@ -279,7 +281,7 @@ class getUserInfo(APIView):
         token = login.getTokensForUser(login, user)
 
         team_name = ""
-        if user.team_code is not "":
+        if user.user_type == 0 or user.user_type == 1:
             try:
                 team_name = V2_TeamInfo.objects.get(v2_team_code = user.team_code).v2_team_name
             except V2_TeamInfo.DoesNotExist:
@@ -289,6 +291,7 @@ class getUserInfo(APIView):
                                 'user_code' : user.user_code,
                                 'user_id' : user.user_id,
                                 'user_nickname' : user.user_nickname,
+                                'user_name' : user.user_name,
                                 'token' : token,
                                 'login_type' : user.login_type,
                                 'team_code' : user.team_code,

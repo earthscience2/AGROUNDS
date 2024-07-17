@@ -25,7 +25,8 @@ const LogIn=()=>{
  
     }
     const onKakaoClick = (e) => {
-        window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
+        window.location.replace("/LoadingForLogin/?code=0");
+        // window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
     }
     const disabledBtn = () => {
         alert('아이디와 비밀번호를 확인 해주세요.')

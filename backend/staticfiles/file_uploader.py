@@ -7,8 +7,8 @@ class S3FileUploader:
         파일과 파일 이름(경로)을 파라메터로 넘겨주면
         s3버킷에 업로드
         사용법 : 
-        1. S3FileUploder import 하기 - from staticfiles.image_uploader import S3ImgUploader
-        2. S3ImgUploader 객체 생성하기 - ex) fileUploader = S3ImgUploader(file, img/logo/자유팀.jpeg)
+        1. S3FileUploder import 하기 - from staticfiles.file_uploader import S3FileUploder
+        2. S3FileUploder 객체 생성하기 파라메터 : 파일, 파일경로 - ex) fileUploader = S3FileUploder(file, img/logo/테스트.txt)
         3. upload 실행 - fileUploader.upload() / try catch문 사용하여 예외처리 가능
         4. fileUploader.url로 파일이 업로드된 url을 가져올 수 있음. 
            DB에는 파일 전체 url이 아닌 파일 이름이 포함된 경로만 저장하고, 불러올 때는 staticfiles.get_file_url의 get_file_url 

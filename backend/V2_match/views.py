@@ -60,6 +60,13 @@ class V2_After_makematch(APIView):
         serializer = After_Match_info_Serializer(match_info, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            for match_players in match_info.v2_match_players:
+                try:
+                    user = V2_UserInfo.objects.get(user_code = match_players)
+                    
+                except V2_UserInfo.DoesNotExist:
+                    print('경기 참여자 입력 중 에러 발생 : 해당 유저 코드가 존재하지 않습니다.')
+
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -117,3 +124,23 @@ class MatchSearchByTeamcodeAPI(APIView):
 
         serializer = MatchSearchByMatchcode(matches, many=True)
         return Response(serializer.data)
+
+# user_nickname으로 match정보들 불러오기
+class MatchSearchBynicknameAPI(APIView):
+    '''
+    {
+        "user_nickname": "김인범"
+    }
+    '''
+    def post(self, request):
+        user_nickname = request.data.get('user_nickname')
+        if not user_nickname:
+            return Response({'error': 'user_nickname is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        matches = V2_MatchInfo.objects.filter(v2_match_players__contains=[user_nickname])
+        if not matches.exists():
+            return Response({'error': 'No match found with the provided user_nickname.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = MatchSearchByMatchcode(matches, many=True)
+        return Response(serializer.data)
+

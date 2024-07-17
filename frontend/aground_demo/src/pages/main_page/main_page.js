@@ -8,13 +8,24 @@ import { useNavigate } from 'react-router-dom';
 import MyPage from '../../assets/mypageicon.png';
 const MainPage = () => {
     const [team, setTeam] = useState([]);
+    const [teamLogo, setTeamLogo] = useState('');
     const navigate = useNavigate();
 
     const teamName = sessionStorage.getItem('teamname');
     const userNickname = sessionStorage.getItem('username');
     
     useEffect(() => {
-        client.post('/api/V2match/searchbyusernickname/', { user_nickname: userNickname })
+        client.post('/api/V2team/searchbycode/', teamcode)
+        .then(function(response){
+            setMatchCode(response.data.v2_team_match);
+            setTeamLogo(response.data.v2_team_logo);
+        })
+        .catch(function(error){
+            console.log(error);
+        })
+        
+
+        client.post('/api/V2match/searchbyteamcode/', teamcode)
         .then(function(response){
             setTeam(response.data)
         })
@@ -46,7 +57,7 @@ const MainPage = () => {
                 <div className='main_page_nav_logo'>AGROUNDS</div><img className='main_page_nav_icon' onClick={() => navigate('/MyPage')}src={MyPage}/>
                 <div className='main_page_teamlogobox'>
                     <div className='main_page_teamlogobox_box'>
-                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div>{teamName ? <div className='main_page_teamlogobox_teamname'>{teamName}</div> : <div className='main_page_teamlogobox_teamname'>{userNickname}</div> }
+                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={teamLogo}/></div>{teamName ? <div className='main_page_teamlogobox_teamname'>{teamName}</div> : <div className='main_page_teamlogobox_teamname'>{userNickname}</div> }
                     </div>
                         <div className='main_page_nav'>
                             <div className='main_page_title'>경기일정</div>
