@@ -174,6 +174,7 @@ class V2_UserInfo(models.Model):
     user_type = models.IntegerField()
     user_height = models.IntegerField()
     user_weight = models.IntegerField()
+    user_position = models.CharField(max_length=45)
     class Meta:
         managed = False
         db_table = "V2_user_info"
