@@ -208,13 +208,15 @@ class V2_HeWeight(APIView):
     {
     "user_code" : "u_1sa95ior6ijpr",
     "user_weight" : 74,
-    "user_height" : 180
+    "user_height" : 180,
+    "user_position" : "ST"
     }
     '''
     def post(self, request):
         user_code = request.data.get('user_code')
         user_weight = request.data.get('user_weight')
         user_height = request.data.get('user_height')
+        user_position = request.data.get('user_position')
 
         if not user_code:
             return Response({'error': 'user_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -222,6 +224,8 @@ class V2_HeWeight(APIView):
             return Response({'error': 'user_weight is required.'}, status=status.HTTP_400_BAD_REQUEST)
         if not user_height:
             return Response({'error': 'user_height is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not user_position:
+            return Response({'error': 'user_position is required.'}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             v2_user_info = V2_UserInfo.objects.get(user_code=user_code)
@@ -233,6 +237,7 @@ class V2_HeWeight(APIView):
         
         v2_user_info.user_height = user_height
         v2_user_info.user_weight = user_weight
+        v2_user_info.user_position = user_position
         v2_user_info.save()
 
         return Response({'message': '키 몸무게 정보가 입력되었습니다.'})

@@ -18,6 +18,9 @@ class V2_User_info_Serializer(serializers.ModelSerializer):
             'user_code' : {'required' : False},
             'team_code' : {'required' : False},
             'user_type' : {'required' : False},
+            'user_height' : {'required' : False},
+            'user_weight' : {'required' : False},
+            'user_position' : {'required' : False},
 	    }
         
     
