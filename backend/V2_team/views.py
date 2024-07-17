@@ -5,7 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 # from .models import User_info
 from DB.models import V2_TeamInfo
+from PIL import Image
+from DB.forms import ImageUploadForm
 from .serializers import *
+from staticfiles.image_uploader import S3ImgUploader
 
 ## V2_team 전체 DB정보
 class V2_TeamMainAPI(APIView):
@@ -25,10 +28,43 @@ class V2_TeamMakeTeamAPI(APIView):
     }
     """
     def post(self, request, *args, **kwargs):
-        serializer = Team_info_Serializer(data=request.data)
+        # form = ImageUploadForm(request.POST, request.FILES)
+        logo = request.FILES.get('v2_team_logo')
+        request_data = request.data.copy()
+        uploader = None
+
+        # if form.is_valid():
+        if logo is not None:
+                # 파일 객체 추출
+                # image = form.cleaned_data['v2_team_logo']
+                try:
+                    image = Image.open(logo)
+                    image.verify()
+                except (IOError, SyntaxError) as e:
+                    return Response({"error": "Invalid image file"}, status=status.HTTP_400_BAD_REQUEST)
+                # uploader 객체 생성, url 추출
+                uploader = S3ImgUploader(logo)
+                filename = uploader.filename
+        else : 
+            return Response('팀로고 : 파일 업로드 실패.', status=status.HTTP_400_BAD_REQUEST)
+
+        request_data['v2_team_logo'] = filename
+
+        serializer = Team_info_Serializer(data=request_data)
+
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+            # 모든 값이 유효하면 이미지 업로드 수행
+            if uploader is not None:
+                try:
+                    uploader.upload()
+                except ValueError as e:
+                    return Response({"error": f"fail to upload file : {e}"}, status=status.HTTP_400_BAD_REQUEST)
+                except Exception as e:
+                    return Response({"error": f"fail to upload file : {e}"}, status=status.HTTP_400_BAD_REQUEST)
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response('팀로고 : 파일 업로드 실패. uploader가 None입니다.', status=status.HTTP_400_BAD_REQUEST)
         else:
             # 유효성 검사 오류 메시지를 확인하여 반환합니다.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

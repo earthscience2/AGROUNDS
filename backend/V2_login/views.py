@@ -232,14 +232,17 @@ class kakaoSignup(APIView):
     }
     """
     def post(self, request, *args, **kwargs):
-        data = request.data
-        data["user_id"] = cryptographysss.decrypt_aes(data["user_id"])
-        data["password"] = 0
-        data["login_type"] = 1
-        serializer = V2_User_info_Serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        new_user = serializer.data
+        try:
+            data = request.data
+            data["user_id"] = cryptographysss.decrypt_aes(data["user_id"])
+            data["password"] = 0
+            data["login_type"] = 1
+            serializer = V2_User_info_Serializer(data=request.data)
+        except:
+            JsonResponse({'error' : '카카오로부터 로그인 오류'}, status=402)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            new_user = serializer.data
         return Response(new_user, status=status.HTTP_200_OK)
 
 # 토큰으로 사용자 정보 받아오기

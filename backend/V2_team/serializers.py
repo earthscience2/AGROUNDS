@@ -6,6 +6,7 @@ from staticfiles.make_code import make_code
 from rest_framework.response import Response
 from rest_framework import status
 from V2_login.serializers import V2_UpdateUserInfoSerializer
+from staticfiles.get_file_url import get_file_url
 
 # V2_team 정보 불러오기
 class Team_main_page(serializers.ModelSerializer):
@@ -86,6 +87,7 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
 ## 팀 플레이어의 이름을 포함하여 데이터 직렬화
 class TeamInfoIncludedPlayersNames(serializers.ModelSerializer):
     v2_team_players_names = serializers.SerializerMethodField()
+    v2_team_logo = serializers.SerializerMethodField()
 
     class Meta:
         model = V2_TeamInfo
@@ -103,6 +105,10 @@ class TeamInfoIncludedPlayersNames(serializers.ModelSerializer):
                 return user_code
         players_names = map(getName, obj.v2_team_players)
         return players_names
+    
+    # 파일경로로 된 로고를 url로 변환
+    def get_v2_team_logo(self, obj):
+        return get_file_url(obj.v2_team_logo)
     
     
 
