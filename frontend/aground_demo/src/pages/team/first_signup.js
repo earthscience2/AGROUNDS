@@ -26,6 +26,7 @@ const FirstSignup = () => {
 
             client.post('/api/V2team/join-personal/',userCode)
             .then(function(response){
+                sessionStorage.setItem('usertype', 2);
                 alert('개인 가입에 성공했습니다.')
             })
             .catch(function(err){

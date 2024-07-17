@@ -33,6 +33,12 @@
             margin-top: 2.5vh;
 
         }
+        .main_page_nav_icon{
+            height: 2.6vh;
+            position: relative;
+            left: 18vh;
+            bottom: 2.6vh
+        }
 
         .main_page_teamlogobox{
             @include centerDisplay(column);

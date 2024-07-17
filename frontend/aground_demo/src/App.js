@@ -12,6 +12,8 @@ import MatchResults from './pages/match/match_result';
 import PersonalMatchResult from './pages/person/personal_match_result';
 import LoadingForLogin from './pages/log_in/loading_for_login';
 import PersonalInfo from './pages/person/personal_info';
+import MyPage from './pages/my-page/my_page';
+import ExtraData from './pages/log_in/extra_data';
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +30,8 @@ function App() {
         <Route path='/LoadingForLogin' element={<LoadingForLogin/>}/>
         <Route path="/PersonalMatchResult" element={<PersonalMatchResult/>}/>
         <Route path="/PersonalInfo" element={<PersonalInfo/>}/>
+        <Route path="/MyPage" element={<MyPage/>}/>
+        <Route path="/ExtraData" element={<ExtraData/>}/>
       </Routes>
     </BrowserRouter>
   );

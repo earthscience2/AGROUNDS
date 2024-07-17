@@ -5,6 +5,7 @@ import Team from '../../assets/team.png';
 import client from '../../clients';
 import './main_page.scss';
 import { useNavigate } from 'react-router-dom';
+import MyPage from '../../assets/mypageicon.png';
 const MainPage = () => {
     const [team, setTeam] = useState([]);
     const [teamName, setTeamName] = useState('');
@@ -61,7 +62,7 @@ const MainPage = () => {
     return (
         <div className='main_page_background'>
             <div className='main_page_navbox'>
-                <div className='main_page_nav_logo'>AGROUNDS</div>
+                <div className='main_page_nav_logo'>AGROUNDS</div><img className='main_page_nav_icon' onClick={() => navigate('/MyPage')}src={MyPage}/>
                 <div className='main_page_teamlogobox'>
                     <div className='main_page_teamlogobox_box'>
                         <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div>{teamName ? <div className='main_page_teamlogobox_teamname'>{teamName}</div> : <div className='main_page_teamlogobox_teamname'>{userName}</div> }
