@@ -8,41 +8,29 @@ import { useNavigate } from 'react-router-dom';
 import MyPage from '../../assets/mypageicon.png';
 const MainPage = () => {
     const [team, setTeam] = useState([]);
-    const [teamName, setTeamName] = useState('');
     const navigate = useNavigate();
     const [matchCode, setMatchCode] = useState([]);
-    const [userName, setUserName] = useState('');
-
-    const teamcode = {
-        'v2_team_code' : sessionStorage.getItem('teamcode')
-    }
     
+
+    const userNickname = {
+        'user_nickname' : sessionStorage.getItem('username')
+    }
+    const teamName = sessionStorage.getItem('teamname')
 
 
     useEffect(() => {
-        setUserName(sessionStorage.getItem('nickname'))
-        client.post('/api/V2team/searchbycode/', teamcode)
-        .then(function(response){
-            setTeamName(response.data.v2_team_name);
-            setMatchCode(response.data.v2_team_match);
-        })
-        .catch(function(error){
-            console.log(error);
-        })
-        
-
-        client.post('/api/V2match/searchbyteamcode/', teamcode)
+        client.post('/api/V2match/searchbyusernickname/', userNickname)
         .then(function(response){
             setTeam(response.data)
+            console.log(team)
         })
         .catch(function(error){
             console.log(error)
+            console.log('엥')
         })
 
     }, [])
     
-    console.log(sessionStorage.getItem('teamcode'))
-
     const isEmpty = () => {
         if (team.length < 1 ){
             return(
@@ -65,7 +53,7 @@ const MainPage = () => {
                 <div className='main_page_nav_logo'>AGROUNDS</div><img className='main_page_nav_icon' onClick={() => navigate('/MyPage')}src={MyPage}/>
                 <div className='main_page_teamlogobox'>
                     <div className='main_page_teamlogobox_box'>
-                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div>{teamName ? <div className='main_page_teamlogobox_teamname'>{teamName}</div> : <div className='main_page_teamlogobox_teamname'>{userName}</div> }
+                        <div className='main_page_teamlogobox_logobox'><img className='main_page_teamlogobox_logo' src={UserIcon}/></div>{teamName ? <div className='main_page_teamlogobox_teamname'>{teamName}</div> : <div className='main_page_teamlogobox_teamname'>{userNickname}</div> }
                     </div>
                         <div className='main_page_nav'>
                             <div className='main_page_title'>경기일정</div>
