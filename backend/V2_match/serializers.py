@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from DB.models import *
+from V2_login.serializers import V2_UpdateUserInfoSerializer, V2_User_info_Serializer_summary
 from staticfiles.make_code import make_code
 from staticfiles.get_info import get_team_code_by_team_name
 from staticfiles.get_info import update_team_match_code
@@ -113,12 +114,56 @@ class After_Match_info_Serializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errors)
         
         return data
+    
+    def update(self, instance, validated_data):
+        v2_match_players = validated_data['v2_match_players']
+        v2_match_code = validated_data['v2_match_code']
+        print(v2_match_players)
+        for match_players in v2_match_players:
+                try:
+                    user = V2_UserInfo.objects.get(user_code = match_players)
+                except V2_UserInfo.DoesNotExist:
+                    print('경기 참여자 입력 중 에러 발생 : 해당 유저 코드가 존재하지 않습니다.')
+                    continue
+                user_match_list_new = user.user_match_list
+                if user_match_list_new is None or user_match_list_new == "":
+                    user_match_list_new = []
+                user_match_list_new.append(v2_match_code)
+                print(user_match_list_new)
+                user_info_update_data = {
+                    'user_match_list' : user_match_list_new,
+                }
+                user_info_serializer = V2_UpdateUserInfoSerializer(user, data=user_info_update_data, partial=True)
+                if user_info_serializer.is_valid():
+                    user_info_serializer.save()
+                else:
+                    raise serializers.ValidationError(user_info_serializer.errors)
+        return super().update(instance, validated_data)
 
 # 매치코드로 매치정보 찾기
 class MatchSearchByMatchcode(serializers.ModelSerializer):
+    v2_match_players_detail = serializers.SerializerMethodField()
+
     class Meta:
         model = V2_MatchInfo
-        fields = '__all__'
+        fields = ['v2_match_code', 'v2_match_host', 'v2_match_location',
+                  'v2_match_home', 'v2_match_away', 'v2_match_result', 'v2_match_schedule',
+                  'v2_match_players_detail', 'v2_match_goalplayers', 'v2_match_GPSplayers', 'v2_match_teamcode']
+
+    def get_v2_match_players_detail(self, obj):
+        def getName(user_code):
+            if user_code.startswith("u_"):
+                try:
+                    uesr_info_serializer = V2_User_info_Serializer_summary(V2_UserInfo.objects.get(user_code = user_code))
+                except V2_UserInfo.DoesNotExist:
+                    print('case 4')
+                    raise serializers.ValidationError(f"유저 코드 {user_code}에 해당하는 유저가 존재하지 않습니다.")
+                return uesr_info_serializer.data
+            else:
+                print('case 1')
+                return user_code
+        players_names = map(getName, obj.v2_match_players)
+        return players_names
 
 # 팀코드로 매치정보 찾기 
 class MatchSearchByTeamcode(serializers.ModelSerializer):

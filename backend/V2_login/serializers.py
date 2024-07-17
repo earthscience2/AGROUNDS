@@ -95,6 +95,12 @@ class V2_UpdateUserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = V2_UserInfo
         fields = '__all__'
+
+class V2_User_info_Serializer_summary(serializers.ModelSerializer):
+    class Meta:
+        model = V2_UserInfo
+        fields = ['user_code', 'user_name', 'user_gender', 
+                  'user_nickname', 'user_height', 'user_weight', 'user_position']
     
     
 # class Login_Serializer(serializers.Serializer):
