@@ -26,7 +26,6 @@ const MainPage = () => {
         })
         .catch(function(error){
             console.log(error)
-            console.log('엥')
         })
 
     }, [])
