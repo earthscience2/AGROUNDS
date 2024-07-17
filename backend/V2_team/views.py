@@ -28,22 +28,19 @@ class V2_TeamMakeTeamAPI(APIView):
     }
     """
     def post(self, request, *args, **kwargs):
-        # form = ImageUploadForm(request.POST, request.FILES)
         logo = request.FILES.get('v2_team_logo')
         request_data = request.data.copy()
         uploader = None
 
-        # if form.is_valid():
         if logo is not None:
-                # 파일 객체 추출
-                # image = form.cleaned_data['v2_team_logo']
                 try:
                     image = Image.open(logo)
                     image.verify()
                 except (IOError, SyntaxError) as e:
                     return Response({"error": "Invalid image file"}, status=status.HTTP_400_BAD_REQUEST)
                 # uploader 객체 생성, url 추출
-                uploader = S3ImgUploader(logo)
+                filedir = "img/teamlogo/"
+                uploader = S3ImgUploader(logo, filedir)
                 filename = uploader.filename
         else : 
             return Response('팀로고 : 파일 업로드 실패.', status=status.HTTP_400_BAD_REQUEST)
