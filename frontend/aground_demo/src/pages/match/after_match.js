@@ -5,7 +5,7 @@ import Textinput from '../../components/textintput/textinput';
 import client from '../../clients';
 import GeneralBtn from '../../components/button/generalBtn';
 import classNames from 'classnames';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, UNSAFE_ErrorResponseImpl } from 'react-router-dom';
 import GoBack from '../../assets/go-back-icon.png';
 import SignUpInput from '../../components/textintput/sign_up_input';
 
@@ -99,6 +99,7 @@ const AfterMatch = () => {
             navigate(-1)
         })
         .catch(function(error){
+            console.log(error);
             alert('필드를 모두 입력해주세요.')
         })
     }
