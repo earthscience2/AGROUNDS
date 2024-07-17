@@ -38,7 +38,7 @@ const TeamList = () => {
             <div className='teamlist-line'></div>
             <div className='teamlist-largebox'>
                 {teamList.map((player, index) => (
-                    <div key={index} className='teamlist-personbox'>
+                    <div key={index} className='teamlist-personbox' onClick={() => navigate('/PersonalInfo')}>
                         <div className={classNames(`teamlist-personbox-player ${usertype == 0 ? 'minus' : ''}` )}>{player}</div>
                         {usertype == 0 ? <img className='teamlist-personbox-minus'src={minus}/> : ''}
                         

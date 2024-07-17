@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './first_signup.scss';
 import GeneralBtn from '../../components/button/generalBtn';
 import Soccer from "../../assets/soccer.svg"
 import CreateTeamModal from './create_team_modal';
 import JoinTeamModal from './join_team_modal';
 import { useNavigate } from 'react-router-dom';
+import client from '../../clients';
 
 const FirstSignup = () => {
     const [teamCreateModal, setTeamCreateModal] = useState(false);
     const [teamJoinModal, setTeamJoinModal] = useState(false);
     const navigate = useNavigate();
+    const userCode = {
+        'user_code' : sessionStorage.getItem('usercode')
+    }
     const TeamCreateModalOpen = () => {
         setTeamCreateModal(!teamCreateModal);
     }
@@ -18,8 +22,18 @@ const FirstSignup = () => {
         setTeamJoinModal(!teamJoinModal);
     }
     const MovePersonalPage = () => {
-        navigate('/MainPage');
-    }
+        console.log(userCode)
+
+            client.post('/api/V2team/join-personal/',userCode)
+            .then(function(response){
+                alert('개인 가입에 성공했습니다.')
+            })
+            .catch(function(err){
+                console.log(err)
+            })
+            navigate('/MainPage');
+        }
+    
 
     
     return (
