@@ -58,11 +58,12 @@ const LogIn=()=>{
         })
         .catch(function(error){
             setIsLogin(false);
-            alert(error.response.data.error)
+            alert('로그인에 실패했습니다.')
+            console.log(error)
         })
     }
 
-// 유효성 검사 
+
     return (
         <form onSubmit={onAgrooundClick}>
             <div className='background'>

@@ -9,20 +9,14 @@ import MyPage from '../../assets/mypageicon.png';
 const MainPage = () => {
     const [team, setTeam] = useState([]);
     const navigate = useNavigate();
-    const [matchCode, setMatchCode] = useState([]);
+
+    const teamName = sessionStorage.getItem('teamname');
+    const userNickname = sessionStorage.getItem('username');
     
-
-    const userNickname = {
-        'user_nickname' : sessionStorage.getItem('username')
-    }
-    const teamName = sessionStorage.getItem('teamname')
-
-
     useEffect(() => {
-        client.post('/api/V2match/searchbyusernickname/', userNickname)
+        client.post('/api/V2match/searchbyusernickname/', { user_nickname: userNickname })
         .then(function(response){
             setTeam(response.data)
-            console.log(team)
         })
         .catch(function(error){
             console.log(error)

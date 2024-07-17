@@ -14,6 +14,7 @@ import LoadingForLogin from './pages/log_in/loading_for_login';
 import PersonalInfo from './pages/person/personal_info';
 import MyPage from './pages/my-page/my_page';
 import ExtraData from './pages/log_in/extra_data';
+import TeamAnalysis from './pages/team/team_analysis';
 function App() {
   return (
     <BrowserRouter>
@@ -32,6 +33,7 @@ function App() {
         <Route path="/PersonalInfo" element={<PersonalInfo/>}/>
         <Route path="/MyPage" element={<MyPage/>}/>
         <Route path="/ExtraData" element={<ExtraData/>}/>
+        <Route path="/TeamAnalysis" element={<TeamAnalysis/>}/>
       </Routes>
     </BrowserRouter>
   );

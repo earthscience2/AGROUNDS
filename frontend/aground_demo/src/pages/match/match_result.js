@@ -36,6 +36,7 @@ const MatchResults = () => {
                 setTeamList([])
             }else{
                 setTeamList(response.data[0].v2_match_players);
+                console.log(teamList)
             }
             setHome(response.data[0].v2_match_home);
             setAway(response.data[0].v2_match_away);
@@ -94,6 +95,7 @@ const MatchResults = () => {
                         ))}
                     </div>
                 </div>
+                <div style={{marginBottom:'2vh'}}><GeneralBtn color='white' onClick={() => navigate('/TeamAnalysis', {state: {matchCode: matchCode}})}>분석결과 확인</GeneralBtn></div>
                 <GeneralBtn color='black' onClick={deleteBtn}>삭제하기</GeneralBtn>
             </div>
     );
