@@ -15,16 +15,15 @@ const TeamList = () => {
     }
 
     useEffect(() => {
-        
         client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
             console.log(response);
             setTeamName(response.data.v2_team_name);
             setTeamList(response.data.v2_team_players_names);
-            
         })
         .catch(function(error){
             console.log(error)
+            console.log('엥')
         })
     }, [])
     
@@ -38,7 +37,7 @@ const TeamList = () => {
             <div className='teamlist-line'></div>
             <div className='teamlist-largebox'>
                 {teamList.map((player, index) => (
-                    <div key={index} className='teamlist-personbox'>
+                    <div key={index} className='teamlist-personbox' onClick={() => navigate('/PersonalInfo')}>
                         <div className={classNames(`teamlist-personbox-player ${usertype == 0 ? 'minus' : ''}` )}>{player}</div>
                         {usertype == 0 ? <img className='teamlist-personbox-minus'src={minus}/> : ''}
                         

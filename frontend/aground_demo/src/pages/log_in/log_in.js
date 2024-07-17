@@ -28,6 +28,9 @@ const LogIn=()=>{
         window.location.replace("/LoadingForLogin/?code=0");
         // window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
     }
+    const disabledBtn = () => {
+        alert('아이디와 비밀번호를 확인 해주세요.')
+    }
     const onAgrooundClick = (e) => {
         e.preventDefault();
 
@@ -45,9 +48,10 @@ const LogIn=()=>{
             sessionStorage.setItem('teamcode', response.data.team_code);
             sessionStorage.setItem('teamname', response.data.team_name);
             sessionStorage.setItem('logintype', response.data.login_type);
+            sessionStorage.setItem('username', response.data.user_name);
             console.log(response)
-            if (response.data.team_code === ""){
-                navigate('/FirstSignup');
+            if (response.data.user_type === -1){
+                navigate('/ExtraData');
             }else{
                 navigate('/MainPage');
             }
@@ -55,18 +59,19 @@ const LogIn=()=>{
         })
         .catch(function(error){
             setIsLogin(false);
-            alert(error)
+            alert('로그인에 실패했습니다.')
+            console.log(error)
         })
     }
 
-// 유효성 검사 
+
     return (
         <form onSubmit={onAgrooundClick}>
             <div className='background'>
                 <div className='logo'>AGROUNDS</div>
                 <div className='input-div1'><Textinput onChange={handleIdChange} size='large' placeholder='이메일을 입력해주세요' type='email'/></div>
                 <div className='input-div2'><Textinput onChange={handlePwChange} size='large' placeholder='비밀번호를 입력해주세요' type='password'/></div>
-                {isid && isPassword ? <GeneralBtn children="로그인" color='black'onClick={onAgrooundClick}/>: <GeneralBtn color='white' children="로그인" />}
+                {isid && isPassword ? <GeneralBtn children="로그인" color='black'onClick={onAgrooundClick}/>: <GeneralBtn onClick={disabledBtn} color='white' children="로그인" />}
                 <div className='etcbtn'>
                     <div className='createaccount'onClick={()=>navigate('/SignUp')}>계정 생성하기</div>
                     <div className='kakaobtn' onClick={onKakaoClick}><img src={KakaoLogo}/></div>

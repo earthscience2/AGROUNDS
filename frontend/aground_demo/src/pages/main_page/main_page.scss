@@ -33,6 +33,13 @@
             margin-top: 2.5vh;
 
         }
+        .main_page_nav_icon{
+            height: 2.6vh;
+            position: relative;
+            left: 18vh;
+            bottom: 2.6vh;
+            cursor: pointer;
+        }
 
         .main_page_teamlogobox{
             @include centerDisplay(column);
@@ -71,7 +78,7 @@
                 .main_page_title{
                     @include BoldText(2vh);
                     margin-top: 1.5vh;
-                    width: 50%;
+                    width: 70%;
                 }
                 .main_page_nav_addevent{
                     height: 3vh;
@@ -81,7 +88,7 @@
                 }
                 .main_page_nav_team{
                     height: 2.5vh;
-                    margin-left: 8vh;
+                    margin-left: vh;
                     margin-top: 1.4vh;
                     cursor: pointer;
                 }

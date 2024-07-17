@@ -1,0 +1,84 @@
+@mixin centerDisplay($direc){
+    display: flex;
+    flex-direction: $direc;
+    align-items: center;
+    justify-content: center;
+}
+.personal_info_background{
+    @include centerDisplay(column);
+    .personal_info_goback_icon{
+        height: 2vh;
+        position: relative;
+        right: 18.7vh;
+        top: 4.6vh;
+    }
+    .personal_info_logo{
+        font-size: 2.1vh;
+        font-weight: 700;
+        margin-top: 2.5vh;
+    }
+    .personal_info_title{
+        font-size: 2.5vh;
+        font-weight: 700;
+        margin-top: 4vh;
+    }
+    .personal_info_match_title{
+        font-size: 2.1vh;
+        font-weight: 700;
+        margin-top: 2vh;
+    }
+}
+
+
+@mixin centerDisplay($direc){
+    display: flex;
+    flex-direction: $direc;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin font($size,$weight){
+    font-size: $size;
+    font-weight: $weight;
+}
+.mypage_background{
+    @include centerDisplay(column);
+    .mypage_goback_icon{
+        height: 2vh;
+        position: relative;
+        right: 18.7vh;
+        top: 4.6vh;
+    }
+    .mypage_title{
+        @include font(2.1vh, 700);
+        margin-top: 2.5vh;
+    }
+    .mypage_titlename{
+        @include font(2.3vh, 600);
+        margin-top: 8vh;
+        border-bottom: .8px solid black;
+        width: 80%;
+        text-align: center;
+        height: 7vh;
+    }
+    .mypage_contentbox{
+        width: 100%;
+        @include centerDisplay(column);
+        margin-top: 3vh;
+        .mypage_contents{
+            display: flex;
+            text-align: left;
+            width: 70%;
+            margin-top: 3vh;
+            .mypage_content1{
+                @include font(2.1vh, 600);
+                width: 70%;
+            }
+            .mypage_content2{
+                @include font(2vh, 600);
+                width: 30%;
+                text-align: center;
+            }
+        }
+    }
+}

@@ -8,8 +8,7 @@
 
 .personal_match_result_background{
     background-color: rgb(30,31,33);
-    height: 100vh;
-    overflow: hidden;
+    height: 160vh;
     @include centerDisplay(column);
     .personal_match_result_goback_icon{
         height: 2vh;
@@ -36,28 +35,19 @@
         margin-top: 1vh;
     }
     .personal_match_result_imgbox{
-        width: 40vh;
+        width: 80%;
         height: 26vh;
-        display: grid;
+        display: flex;
+        flex-direction: column;
         margin-top: 3vh;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr;
         
         .personal_match_result_imgbox_title{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 1.2vh;
-            color: rgba(255, 255, 255, 0.511);
+            color: white;
+            margin-bottom: 2vh;
         }
         .personal_match_result_imgbox_heatmap{
-            width: 12vh;
-            height: 23vh;
-            .personal_match_result_imgbox_heatmap_img{
-                width: 21vh;
-                transform: rotate(90deg);
-                margin: 6vh 3vh 0 -4.2vh;
-            }
+            
+            
         }
     }
     .personal_match_result_match_division_button{
@@ -86,10 +76,10 @@
     .personal_match_result_detail_box{
         background-color: rgb(0, 0, 0);
         width: 40vh;
-        height: 20vh;
+        height: 28vh;
         border-radius: 1vh;
         grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
         display: grid;
         margin-top: 5vh;
         .personal_match_result_detail_contents_title{

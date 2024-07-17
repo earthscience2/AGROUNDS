@@ -71,7 +71,7 @@ const SignUp = () => {
     
     const saveBirth = event => {
         setBirth(event.target.value);
-        setIsBirth(birth);
+        setIsBirth(event.target.value);
     }
     
     
@@ -92,10 +92,11 @@ const SignUp = () => {
         client.post('/api/V2login/signup/',SignUpData)
         .then(function(response){
             console.log(response);
-            navigate("/") 
+            alert('회원가입에 성공했습니다.');
+            navigate("/")
         })
         .catch(function(error){ 
-            alert(error.response.data.error);
+            alert('회원가입에 실패했습니다.');
             console.log(error)
         })
     }
