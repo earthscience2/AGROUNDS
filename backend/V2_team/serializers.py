@@ -105,7 +105,7 @@ class TeamInfoIncludedPlayersNames(serializers.ModelSerializer):
                 return uesr_info_serializer.data
             else:
                 return user_code
-        if obj.v2_match_players is not None :
+        if obj.v2_team_players is not None :
             players_names = map(getPlayrsDetail, obj.v2_team_players)
         else :
             return None

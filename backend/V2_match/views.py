@@ -74,8 +74,9 @@ class MatchSearchByMatchcodeAPI(APIView):
         v2_match_code = request.data.get('v2_match_code')
         if not v2_match_code:
             return Response({'error': 'v2_match_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
-        match = V2_MatchInfo.objects.filter(v2_match_code=v2_match_code)
-        if not match.exists():
+        try:
+            match = V2_MatchInfo.objects.get(v2_match_code=v2_match_code)
+        except V2_MatchInfo.DoesNotExist:
             return Response({'error': 'No match found with the provided code.'}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = MatchSearchByMatchcode(match)

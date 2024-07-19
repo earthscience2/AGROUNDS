@@ -157,11 +157,9 @@ class MatchSearchByMatchcode(serializers.ModelSerializer):
                 try:
                     uesr_info_serializer = V2_User_info_Serializer_summary(V2_UserInfo.objects.get(user_code = user_code))
                 except V2_UserInfo.DoesNotExist:
-                    print('case 4')
                     raise serializers.ValidationError(f"유저 코드 {user_code}에 해당하는 유저가 존재하지 않습니다.")
                 return uesr_info_serializer.data
             else:
-                print('case 1')
                 return user_code
         if obj.v2_match_players is not None :
             players_names = map(getPlayrsDetail, obj.v2_match_players)
