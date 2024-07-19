@@ -10,6 +10,7 @@ import MyPage from '../../assets/mypageicon.png';
 const MainPage = () => {
     const [team, setTeam] = useState([]);
     const [teamLogo, setTeamLogo] = useState('');
+    const [matchCode, setMatchCode]= useState('')
     const navigate = useNavigate();
 
     const teamName = sessionStorage.getItem('teamname');

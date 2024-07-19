@@ -4,7 +4,8 @@ import './after_match.scss';
 import Textinput from '../../components/textintput/textinput';
 import client from '../../clients';
 import GeneralBtn from '../../components/button/generalBtn';
-import { useNavigate, useLocation } from 'react-router-dom';
+import classNames from 'classnames';
+import { useNavigate, useLocation, UNSAFE_ErrorResponseImpl } from 'react-router-dom';
 import GoBack from '../../assets/go-back-icon.png';
 import SignUpInput from '../../components/textintput/sign_up_input';
 

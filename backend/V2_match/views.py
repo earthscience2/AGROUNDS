@@ -7,12 +7,11 @@ from rest_framework import status
 # from .models import User_info
 from DB.models import MatchInfo, LeagueInfo
 from rest_framework.generics import get_object_or_404
+
 from .serializers import *
 
 from drf_yasg.utils import swagger_auto_schema
 from .swagger_parameters import *
-
-from django.forms.models import model_to_dict
 
 # V2_match 경기 정보 불러오기
 class V2_MatchMain(APIView):
@@ -60,13 +59,6 @@ class V2_After_makematch(APIView):
         serializer = After_Match_info_Serializer(match_info, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            for match_players in match_info.v2_match_players:
-                try:
-                    user = V2_UserInfo.objects.get(user_code = match_players)
-                    
-                except V2_UserInfo.DoesNotExist:
-                    print('경기 참여자 입력 중 에러 발생 : 해당 유저 코드가 존재하지 않습니다.')
-
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -82,11 +74,12 @@ class MatchSearchByMatchcodeAPI(APIView):
         v2_match_code = request.data.get('v2_match_code')
         if not v2_match_code:
             return Response({'error': 'v2_match_code is required.'}, status=status.HTTP_400_BAD_REQUEST)
-        match = V2_MatchInfo.objects.filter(v2_match_code=v2_match_code)
-        if not match.exists():
+        try:
+            match = V2_MatchInfo.objects.get(v2_match_code=v2_match_code)
+        except V2_MatchInfo.DoesNotExist:
             return Response({'error': 'No match found with the provided code.'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = MatchSearchByMatchcode(match, many=True)
+        serializer = MatchSearchByMatchcode(match)
         return Response(serializer.data)
 
 # v2_match_code로 match삭제하기 
