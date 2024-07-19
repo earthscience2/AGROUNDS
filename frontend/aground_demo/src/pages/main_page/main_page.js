@@ -9,14 +9,18 @@ import MyPage from '../../assets/mypageicon.png';
 const MainPage = () => {
     const [team, setTeam] = useState([]);
     const [teamLogo, setTeamLogo] = useState('');
+    const [matchCode, setMatchCode]= useState('')
     const navigate = useNavigate();
 
     const teamName = sessionStorage.getItem('teamname');
     const userNickname = sessionStorage.getItem('username');
-    
+    const teamcode = {
+        "v2_team_code": sessionStorage.getItem('teamcode')
+    }
     useEffect(() => {
         client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
+            console.log(response)
             setMatchCode(response.data.v2_team_match);
             setTeamLogo(response.data.v2_team_logo);
         })
@@ -28,6 +32,7 @@ const MainPage = () => {
         client.post('/api/V2match/searchbyteamcode/', teamcode)
         .then(function(response){
             setTeam(response.data)
+            console.log(response)
         })
         .catch(function(error){
             console.log(error)

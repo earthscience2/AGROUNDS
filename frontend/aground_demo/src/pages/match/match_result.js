@@ -30,13 +30,11 @@ const MatchResults = () => {
     useEffect(()=> {
         client.post('/api/V2match/searchbymatchcode/', matchcode)
         .then(function(response){
-            console.log(response);
             sessionStorage.setItem('matchcode', matchCode);
             if (response.data[0].v2_match_players == null){
                 setTeamList([])
             }else{
                 setTeamList(response.data[0].v2_match_players);
-                console.log(teamList)
             }
             setHome(response.data[0].v2_match_home);
             setAway(response.data[0].v2_match_away);
@@ -67,7 +65,7 @@ const MatchResults = () => {
         if(window.confirm("삭제하시겠습니까?") === true){
             client.post('/api/V2match/deletematch/', matchcode)
             .then(function(response){
-                console.log(response);
+                alert('삭제되었습니다.')
                 navigate('/MainPage')
             })
             .catch(function(error){

@@ -26,7 +26,6 @@ const LogIn=()=>{
     }
     const onKakaoClick = (e) => {
         window.location.replace("/LoadingForLogin/?code=0");
-        // window.location.replace(process.env.REACT_APP_BASE_URL+"/api/V2login/kakao");
     }
     const disabledBtn = () => {
         alert('아이디와 비밀번호를 확인 해주세요.')
@@ -49,7 +48,6 @@ const LogIn=()=>{
             sessionStorage.setItem('teamname', response.data.team_name);
             sessionStorage.setItem('logintype', response.data.login_type);
             sessionStorage.setItem('username', response.data.user_name);
-            console.log(response)
             if (response.data.user_type === -1){
                 navigate('/ExtraData');
             }else{
@@ -60,7 +58,6 @@ const LogIn=()=>{
         .catch(function(error){
             setIsLogin(false);
             alert('로그인에 실패했습니다.')
-            console.log(error)
         })
     }
 
