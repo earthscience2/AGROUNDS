@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import UserIcon from '../../assets/soccer-team-logo.png';
 import addEvent from '../../assets/add-event.png';
 import Team from '../../assets/team.png';
 import client from '../../clients';
 import './main_page.scss';
 import { useNavigate } from 'react-router-dom';
 import MyPage from '../../assets/mypageicon.png';
+
+
 const MainPage = () => {
     const [team, setTeam] = useState([]);
     const [teamLogo, setTeamLogo] = useState('');
-    const [matchCode, setMatchCode]= useState('')
     const navigate = useNavigate();
 
     const teamName = sessionStorage.getItem('teamname');
@@ -20,8 +20,6 @@ const MainPage = () => {
     useEffect(() => {
         client.post('/api/V2team/searchbycode/', teamcode)
         .then(function(response){
-            console.log(response)
-            setMatchCode(response.data.v2_team_match);
             setTeamLogo(response.data.v2_team_logo);
         })
         .catch(function(error){
@@ -32,7 +30,6 @@ const MainPage = () => {
         client.post('/api/V2match/searchbyteamcode/', teamcode)
         .then(function(response){
             setTeam(response.data)
-            console.log(response)
         })
         .catch(function(error){
             console.log(error)

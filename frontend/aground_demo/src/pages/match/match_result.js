@@ -30,26 +30,24 @@ const MatchResults = () => {
     useEffect(()=> {
         client.post('/api/V2match/searchbymatchcode/', matchcode)
         .then(function(response){
-            sessionStorage.setItem('matchcode', matchCode);
-            if (response.data[0].v2_match_players == null){
+            if (response.data.v2_match_players_detail === null){
                 setTeamList([])
             }else{
-                setTeamList(response.data[0].v2_match_players);
+                setTeamList(response.data.v2_match_players_detail);
+                
             }
-            setHome(response.data[0].v2_match_home);
-            setAway(response.data[0].v2_match_away);
-            setPlace(response.data[0].v2_match_location);
-            setDate(response.data[0].v2_match_schedule);
+            setHome(response.data.v2_match_home);
+            setAway(response.data.v2_match_away);
+            setPlace(response.data.v2_match_location);
+            setDate(response.data.v2_match_schedule);
 
-            if (response.data[0].v2_match_result == null){
+            if (response.data.v2_match_result == null){
                 setResult([0,0])
-            }else{
-                setResult(response.data[0].v2_match_result);
-            }
-            if (response.data[0].v2_match_result == null){
                 setGpsList([])
             }else{
-                setGpsList(response.data[0].v2_match_GPSplayers)
+                setResult(response.data.v2_match_result);
+                setGpsList(response.data.v2_match_GPSplayers)
+                
             }
         })
         .catch(function(error){
@@ -58,6 +56,7 @@ const MatchResults = () => {
     },[])
 
     const hasGps = (playerName) => {
+
         return gpsList.includes(playerName);
     };
     
@@ -80,15 +79,15 @@ const MatchResults = () => {
             <div className='match_result_background'>
                 <img className='match_result_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
                 <div className='match_result_title'>AGROUNDS</div>
-                <img className='match_result_edit_icon' src={Edit} onClick={() => navigate('/AfterMatch')}/>
+                <img className='match_result_edit_icon' src={Edit} onClick={() => navigate('/AfterMatch', {state: {matchCode: matchCode}})}/>
                 <MatchPlan myTeam={home} teamName={away} place={place} date={date} homeScore={result[0]} awayScore={result[1]}/>
                 <div className='match_result_score_playerbox'>
                     <div className='match_result_player_title'>참여자 목록</div>
                     <div className='match_result_player_list'>
                         {teamList.map((player, index) => (
-                            <div onClick={()=>navigate('/PersonalInfo')}className='match_result_player' key={index} >
-                                <div  className={classNames(`match_result_player_name ${hasGps(player) && 'gps'} `)}>{player}</div>
-                                {hasGps(player) && <img src={Gps} className='match_result_player_gps' />}
+                            <div onClick={()=>navigate('/PersonalInfo', {state: {userCode: player.user_code }})} className='match_result_player' key={index} >
+                                <div  className={classNames(`match_result_player_name ${hasGps(player) && 'gps'} `)}>{player.user_name}/{player.user_position}/{player.user_height}/{player.user_weight}</div>
+                                {hasGps(player.user_code) && <img src={Gps} className='match_result_player_gps' />}
                             </div>
                         ))}
                     </div>
