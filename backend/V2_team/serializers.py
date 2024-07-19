@@ -84,7 +84,7 @@ class UpdateTeamInfoSerializer(serializers.ModelSerializer):
         return instance
 
     
-## 팀 플레이어의 이름을 포함하여 데이터 직렬화
+## 팀 플레이어의 세부정보를 포함하여 데이터 직렬화
 class TeamInfoIncludedPlayersNames(serializers.ModelSerializer):
     v2_team_players_detail = serializers.SerializerMethodField()
     v2_team_logo = serializers.SerializerMethodField()
@@ -94,8 +94,9 @@ class TeamInfoIncludedPlayersNames(serializers.ModelSerializer):
         fields = ['v2_team_code', 'v2_team_host', 'v2_team_players',
                    'v2_team_logo', 'v2_team_name', 'v2_team_match', 'v2_team_players_detail']
         
+    # 팀 프레이어의 세부 정보를 리턴
     def get_v2_team_players_detail(self, obj):
-        def getName(user_code):
+        def getPlayrsDetail(user_code):
             if user_code.startswith("u_"):
                 try:
                     uesr_info_serializer = V2_User_info_Serializer_summary(V2_UserInfo.objects.get(user_code = user_code))
@@ -104,7 +105,10 @@ class TeamInfoIncludedPlayersNames(serializers.ModelSerializer):
                 return uesr_info_serializer.data
             else:
                 return user_code
-        players_names = map(getName, obj.v2_team_players)
+        if obj.v2_match_players is not None :
+            players_names = map(getPlayrsDetail, obj.v2_team_players)
+        else :
+            return None
         return players_names
     
     # 파일경로로 된 로고를 url로 변환

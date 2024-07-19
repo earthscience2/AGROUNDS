@@ -150,8 +150,9 @@ class MatchSearchByMatchcode(serializers.ModelSerializer):
                   'v2_match_home', 'v2_match_away', 'v2_match_result', 'v2_match_schedule',
                   'v2_match_players_detail', 'v2_match_goalplayers', 'v2_match_GPSplayers', 'v2_match_teamcode']
 
+    # 경기에 참여한 선수들의 세부 정보를 리턴
     def get_v2_match_players_detail(self, obj):
-        def getName(user_code):
+        def getPlayrsDetail(user_code):
             if user_code.startswith("u_"):
                 try:
                     uesr_info_serializer = V2_User_info_Serializer_summary(V2_UserInfo.objects.get(user_code = user_code))
@@ -162,7 +163,10 @@ class MatchSearchByMatchcode(serializers.ModelSerializer):
             else:
                 print('case 1')
                 return user_code
-        players_names = map(getName, obj.v2_match_players)
+        if obj.v2_match_players is not None :
+            players_names = map(getPlayrsDetail, obj.v2_match_players)
+        else :
+            return None
         return players_names
 
 # 팀코드로 매치정보 찾기 

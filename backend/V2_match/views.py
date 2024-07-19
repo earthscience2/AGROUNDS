@@ -78,7 +78,7 @@ class MatchSearchByMatchcodeAPI(APIView):
         if not match.exists():
             return Response({'error': 'No match found with the provided code.'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = MatchSearchByMatchcode(match, many=True)
+        serializer = MatchSearchByMatchcode(match)
         return Response(serializer.data)
 
 # v2_match_code로 match삭제하기 
