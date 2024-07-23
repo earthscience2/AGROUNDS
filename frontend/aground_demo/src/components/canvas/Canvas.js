@@ -1,9 +1,8 @@
 import React from "react";
-import useCanvas from "../../hook/useCanvas";
 import mapBackground from "../../assets/playground.jpeg";
 import { useEffect, useState, useRef } from "react";
-const WIDTH = 400;
-const HEIGHT = 200;
+const WIDTH = 340;
+const HEIGHT = 180;
 const Canvas = ({positions}) => {
     const canvasRef = useRef(null);
 
