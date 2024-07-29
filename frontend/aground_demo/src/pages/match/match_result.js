@@ -8,6 +8,7 @@ import GoBack from '../../assets/go-back-icon.png';
 import Gps from '../../assets/gps.png';
 import classNames from 'classnames';
 import GeneralBtn from '../../components/button/generalBtn';
+import Nav from '../../components/general/nav';
 const MatchResults = () => {
     const [teamList, setTeamList] = useState([]);
     const [gpsList, setGpsList] = useState([]);
@@ -77,8 +78,7 @@ const MatchResults = () => {
     }
     return (
             <div className='match_result_background'>
-                <img className='match_result_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
-                <div className='match_result_title'>AGROUNDS</div>
+                <Nav />
                 <img className='match_result_edit_icon' src={Edit} onClick={() => navigate('/AfterMatch', {state: {matchCode: matchCode}})}/>
                 <MatchPlan myTeam={home} teamName={away} place={place} date={date} homeScore={result[0]} awayScore={result[1]}/>
                 <div className='match_result_score_playerbox'>

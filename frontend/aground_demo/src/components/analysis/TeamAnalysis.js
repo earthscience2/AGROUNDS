@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 const data = [
     {name: '조상우', time: '23회'}, 
     {name: '선동범', time: '2회'},
@@ -9,6 +10,8 @@ const data = [
 
 ]
 const TeamAnalysisC = (props) => {
+    const navigate = useNavigate();
+
     return (
     <table>
         <thead>
@@ -20,13 +23,14 @@ const TeamAnalysisC = (props) => {
             {data.map((item, index) => (
             <tr key={index}>
                 <td>{index+1}등</td>
-                <td>{item.name}</td>
+                <td onClick={() => navigate('/PersonalAnalysis')}>{item.name}</td>
                 <td>{item.time}</td>
             </tr>
             ))}
         </tbody>
     </table>
     );
+    
 };
 
 export default TeamAnalysisC;

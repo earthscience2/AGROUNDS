@@ -15,6 +15,7 @@ import PersonalInfo from './pages/person/personal_info';
 import MyPage from './pages/my-page/my_page';
 import ExtraData from './pages/log_in/extra_data';
 import TeamAnalysis from './pages/team/team_analysis';
+import Video from './pages/team/video';
 function App() {
   return (
     <BrowserRouter>
@@ -34,6 +35,7 @@ function App() {
         <Route path="/MyPage" element={<MyPage/>}/>
         <Route path="/ExtraData" element={<ExtraData/>}/>
         <Route path="/TeamAnalysis" element={<TeamAnalysis/>}/>
+        <Route path="/Video" element={<Video/>}/>
       </Routes>
     </BrowserRouter>
   );

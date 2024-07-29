@@ -5,6 +5,7 @@ import client from '../../clients';
 import { useNavigate } from 'react-router-dom';
 import GoBack from '../../assets/go-back-icon.png';
 import classNames from 'classnames';
+import Nav from '../../components/general/nav';
 
 const TeamList = () => {
     const navigate = useNavigate();
@@ -29,8 +30,7 @@ const TeamList = () => {
     const usertype = sessionStorage.getItem('usertype');
     return (
         <div className='teamlist-background'>
-            <img className='teamlist_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
-            <div className='teamlist-logo'>AGROUNDS</div>
+            <Nav/>
             <div className='teamlist-title'>{teamName} 팀원 목록</div>
             <div className='teamlist-line'></div>
             <div className='teamlist-largebox'>

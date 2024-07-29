@@ -5,6 +5,7 @@ import GeneralBtn from '../../components/button/generalBtn';
 import client from '../../clients';
 import { useNavigate } from 'react-router-dom';
 import GoBack from '../../assets/go-back-icon.png';
+import Nav from '../../components/general/nav';
 const AddMatch = () => {
     const [teamName, setTeamName] = useState('')
     const [time, setTime]= useState(null);
@@ -35,8 +36,7 @@ const AddMatch = () => {
     return (
         <form onSubmit={onSubmitHandler}>
             <div className='add_match_background'>
-            <img className='add_match_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
-                <div className='add_match_logo'>AGROUNDS</div>
+                <Nav />
                 <div className='add_match_matchplan'>
                     <div className='add_match_matchplan_title'>MATCH</div>
                     <div className='add_match_matchplan_teambox'><div className='add_match_matchplan_teamname1'>{myTeamName}</div><div className='add_match_matchplan_vs'>VS</div><div className='add_match_matchplan_teamname2'>{teamName}</div></div>

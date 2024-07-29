@@ -3,6 +3,7 @@ import './personal_match_result.scss';
 import GoBack from '../../assets/go-back-white-icon.png';
 import { useNavigate } from 'react-router-dom';
 import PersonalAnalysis from '../../components/analysis/PersonalAnalysis';
+import Nav from '../../components/general/nav';
 
 const PersonalMatchResult = () => {
     const navigate = useNavigate();
@@ -14,8 +15,7 @@ const PersonalMatchResult = () => {
     
     return (
         <div className='personal_match_result_background'>
-            <img className='personal_match_result_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
-            <div className='personal_match_result-logo'>AGROUNDS</div>
+            <Nav />
             <div className='personal_match_result_nickname'>{nickname} 분석 결과</div>
             <div className='personal_match_result_matchTime'>{matchTime}</div>
             
