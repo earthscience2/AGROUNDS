@@ -9,6 +9,7 @@ import GeneralBtn from '../../components/button/generalBtn';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import GoBack from '../../assets/go-back-icon.png';
+import Nav from '../../components/general/nav';
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password,setPassword] = useState('');
@@ -105,8 +106,7 @@ const SignUp = () => {
     return (
         <form onSubmit={onSubmitHandler}>
             <div className='signupbackground'>
-            <img className='signup_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
-                <div className='signuptitle'>회원가입</div>
+                <Nav/>
                 <SignUpInput title='이름' type='text' onChange={saveName}/>
                 <SignUpInput title='닉네임' type='text' onChange={saveNickname}/>
                 <div className='signupinput'>

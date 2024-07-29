@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { useNavigate, useLocation, UNSAFE_ErrorResponseImpl } from 'react-router-dom';
 import GoBack from '../../assets/go-back-icon.png';
 import SignUpInput from '../../components/textintput/sign_up_input';
+import Nav from '../../components/general/nav';
 
 const AfterMatch = () => {
     const [homeScore, setHomeScore] = useState(0);
@@ -120,8 +121,7 @@ const AfterMatch = () => {
     return (
         <form onSubmit={onSubmitHandler}>
             <div className='after_match_background'>
-                <img className='after_match_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
-                <div className='after_match_title'>AGROUNDS</div>
+                <Nav />
                 <MatchPlan myTeam={home} teamName={away} place={place} date={date} homeScore={homeScore} awayScore={awayScore} />
                 <div className='after_match_score_inputbox'>
                     <div className='after_match_score'>Score<p className='after_match_score_essencial'>*</p></div>

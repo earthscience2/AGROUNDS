@@ -8,7 +8,7 @@
 
 .personal_match_result_background{
     background-color: rgb(30,31,33);
-    height: 160vh;
+    height: 170vh;
     @include centerDisplay(column);
     .personal_match_result_goback_icon{
         height: 2vh;
@@ -35,11 +35,12 @@
         margin-top: 1vh;
     }
     .personal_match_result_imgbox{
-        width: 80%;
+        width: 40vh;
         height: 26vh;
         display: flex;
         flex-direction: column;
-        margin-top: 3vh;
+        margin-top: 6vh;
+
         
         .personal_match_result_imgbox_title{
             color: white;
@@ -73,6 +74,12 @@
         }
         
     }
+    .personal_match_result_detail_box_title{
+        color: white;
+        margin-top: 7vh;
+        // position: relative;
+        // right: 15vh;
+    }
     .personal_match_result_detail_box{
         background-color: rgb(0, 0, 0);
         width: 40vh;
@@ -81,7 +88,7 @@
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
         display: grid;
-        margin-top: 5vh;
+        margin-top: 2vh;
         .personal_match_result_detail_contents_title{
             color: white;
             @include centerDisplay(column);

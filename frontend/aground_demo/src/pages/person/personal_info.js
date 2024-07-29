@@ -4,6 +4,7 @@ import GoBack from '../../assets/go-back-icon.png'
 import { useLocation, useNavigate } from 'react-router-dom';
 import './personal_info.scss';
 import client from '../../clients';
+import Nav from '../../components/general/nav';
 const PersonalInfo = () => {
     const navigate = useNavigate();
     
@@ -40,8 +41,7 @@ const PersonalInfo = () => {
     }, [userCode])
     return (
         <div className='mypage_background'>
-            <img className='mypage_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
-            <div className='mypage_title'>AGROUNDS</div>
+            <Nav />
             <div className='mypage_titlename'>{userName}님의 프로필</div>
             <div className='mypage_contentbox'>
                 <div className='mypage_contents'><div className='mypage_content1'>닉네임</div><div className='mypage_content2'>{userNickname}</div></div>

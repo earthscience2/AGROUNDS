@@ -5,6 +5,7 @@ import './my_page.scss'
 import GeneralBtn from '../../components/button/generalBtn';
 import { useState, useEffect } from 'react';
 import client from '../../clients';
+import Nav from '../../components/general/nav';
 const MyPage = () => {
     const navigate = useNavigate();
     const TeamCode = {
@@ -41,8 +42,7 @@ const MyPage = () => {
     
     return (
         <div className='mypage_background'>
-            <img className='mypage_goback_icon' src={GoBack} onClick={() => navigate(-1)} />
-            <div className='mypage_title'>AGROUNDS</div>
+            <Nav />
             <div className='mypage_titlename'>{userName}님의 프로필</div>
             <div className='mypage_contentbox'>
             <div className='mypage_contents'><div className='mypage_content1'>닉네임</div><div className='mypage_content2'>{userNickname}</div></div>
