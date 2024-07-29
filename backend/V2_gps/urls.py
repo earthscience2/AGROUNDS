@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     # 개인분석
-    path("player_analyze/", views.playerAnalyze.as_view()),
+    path("team_gps_sse/", views.teamGpsSSE.as_view()),
 ]

@@ -7,6 +7,59 @@ import client from '../../clients';
 import { useNavigate } from 'react-router-dom';
 
 const LogIn=()=>{
+    const [events, setEvents] = useState([]);
+    useEffect(()=>{
+        const eventSource = new EventSource('http://localhost:8000/api/V2gps/team_gps_sse');
+
+        eventSource.onmessage = function(event) {
+            console.log(event.data)
+            const newEvent = event.data;
+            setEvents((prevEvents) => [...prevEvents, newEvent]);
+            if(event.data === 'end')
+                eventSource.close();
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('EventSource failed:', error);
+            eventSource.close();
+        };
+
+        const logdata = () => {
+            // console.log(events);
+        }
+
+        const intervalId = setInterval(logdata, 5000);
+
+        // Clean up the event source on component unmount
+        return () => {
+            clearInterval(intervalId);
+            eventSource.close();
+        };
+    }, [])
+
+    // useEffect(()=>{
+    //     const fetchData = async () => {
+    //         try {
+    //           const response = await client.get('/api/V2gps/team_gps_sse');
+    //           const newEvent = response.data;
+    //           setEvents((prevEvents) => [...prevEvents, newEvent]);
+    //         } catch (error) {
+    //           console.error('Error fetching data:', error);
+    //         }
+    //       };
+      
+    //       // Initial fetch
+    //       fetchData();
+      
+    //       // Fetch data every 10 seconds
+    //       const intervalId = setInterval(fetchData, 5000);
+      
+    //       // Clean up the interval on component unmount
+    //       return () => clearInterval(intervalId);
+    // }, [])
+
+
+
     const [userid, setUserid] = useState('');
     const [userpw, setUserpw] = useState('');
     const [isLogin,setIsLogin] = useState('')
@@ -61,6 +114,8 @@ const LogIn=()=>{
         })
     }
 
+    
+
 
     return (
         <form onSubmit={onAgrooundClick}>
@@ -73,6 +128,11 @@ const LogIn=()=>{
                     <div className='createaccount'onClick={()=>navigate('/SignUp')}>계정 생성하기</div>
                     <div className='kakaobtn' onClick={onKakaoClick}><img src={KakaoLogo}/></div>
                 </div>
+            </div>
+            <div id="events">
+                {events.map((event, index) => (
+                <div key={index}>{event}</div>
+                ))}
             </div>
         </form>
     );
