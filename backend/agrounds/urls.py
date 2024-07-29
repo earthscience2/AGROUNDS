@@ -35,7 +35,9 @@ urlpatterns = [
     path("api/user/", include("user.urls")),
     path("api/V2login/", include("V2_login.urls")),
     path("api/V2team/", include("V2_team.urls")),
-    path("api/V2match/", include("V2_match.urls"))
+    path("api/V2match/", include("V2_match.urls")),
+    path("api/V2analyze/", include("V2_analyze.urls")),
+    path("api/V2gps/", include("V2_gps.urls"))
 ]
 
 urlpatterns += [

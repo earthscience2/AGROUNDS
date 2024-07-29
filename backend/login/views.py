@@ -75,7 +75,8 @@ class signup(APIView):
     """
     json 형식
     {
-        "user_id": "jayou1223@gmail.com",
+        "user_id": "jayou1223
+        @gmail.com",
         "password": "1q2w3e4r!",
         "user_birth": "20011223",
         "user_name": "구자유",
