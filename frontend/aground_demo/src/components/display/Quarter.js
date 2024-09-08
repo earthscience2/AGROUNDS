@@ -1,0 +1,40 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+
+const Quarter = ({ activeTab, setActiveTab }) => {
+
+  const handleTabClick = (tab) => {
+    console.log(tab)
+    setActiveTab(tab);
+  }
+  return (
+    <QuarterStyle>
+      <div id='summary'active={activeTab === '요약'} onClick={() => handleTabClick('요약')}>요약</div>
+      <div id='1quarter' active={activeTab === '1쿼터'} onClick={() => handleTabClick('1쿼터')}>1쿼터</div>
+      <div id='2quarter' active={activeTab === '2쿼터'} onClick={() => handleTabClick('2쿼터')}>2쿼터</div>
+      <div id='3quarter' active={activeTab === '3쿼터'} onClick={() => handleTabClick('3쿼터')}>3쿼터</div>
+    </QuarterStyle>
+  );
+};
+
+export default Quarter;
+const QuarterStyle = styled.div`
+  display: flex;
+  width: 48vw;
+  margin-left: 10%;
+  & > div{
+    width: 12vw;
+    height: 4vh;
+    border-radius: 1.5vh 1.5vh 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${(props) => (props.active ? '#F5F5F5' : '#979797')};
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.5vh;
+    &:hover{
+      background-color: #F5F5F5;
+    }
+  }
+`

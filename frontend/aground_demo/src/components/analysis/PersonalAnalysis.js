@@ -1,5 +1,7 @@
 import React from 'react';
 import FullMovePath from '../../assets/full-match/full-move-path.png';
+import Heatmap from '../../assets/full-match/full-heat-map.png'
+import Sprint from '../../assets/full-match/full-sprint-map.png'
 const PersonalAnalysis = () => {
     return (
         <>
@@ -7,10 +9,10 @@ const PersonalAnalysis = () => {
             <div className='personal_match_result_imgbox_title'>이동경로</div><img className='personal_match_result_imgbox_heatmap'src={FullMovePath}/>
             </div>
             <div className='personal_match_result_imgbox'>
-                <div className='personal_match_result_imgbox_title'>스프린트맵</div><img className='personal_match_result_imgbox_heatmap'src={FullMovePath}/>
+                <div className='personal_match_result_imgbox_title'>스프린트맵</div><img className='personal_match_result_imgbox_heatmap'src={Sprint}/>
             </div>
             <div className='personal_match_result_imgbox'>
-                <div className='personal_match_result_imgbox_title'>히트맵</div><img className='personal_match_result_imgbox_heatmap'src={FullMovePath}/>
+                <div className='personal_match_result_imgbox_title'>히트맵</div><img className='personal_match_result_imgbox_heatmap'src={Heatmap}/>
             </div>
             <div className='personal_match_result_detail_box_title'>세부정보</div>
             <div className='personal_match_result_detail_box'>
