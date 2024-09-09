@@ -20,7 +20,7 @@ const MainPage = () => {
       </div>
       <img src={F2} className='f2' />
       <div className='f2Btn'>
-        <RightBtn children='확인하기' bgColor="#333333"/>
+        <RightBtn children='확인하기' bgColor="#333333" onClick={() => navigate('/display/gameanalysis')}/>
       </div>
       <div className='F3Div'>
         <img src={F3} className='f3' />
@@ -31,7 +31,7 @@ const MainPage = () => {
       <div className='F4Div'>
         <img src={F4} className='f4' />
         <div className='f4Btn'>
-          <RightBtn children='팀원소개' bgColor="#A97F7F" onClick={() => navigate('/display/product')}/>
+          <RightBtn children='팀원소개' bgColor="#A97F7F" onClick={() => navigate('/display/team')}/>
         </div>
       </div>
     </MainpageStyle>

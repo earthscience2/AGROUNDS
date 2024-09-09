@@ -24,6 +24,7 @@ import DisplayGps from './pages/display/GpsDisplay';
 import DisplayAnal from './pages/display/Analysis';
 import DisplayAbout from './pages/display/AboutUs';
 import Analysis from './pages/display/GameAnalysis';
+import Team from './pages/display/Team';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
         <Route path="/display/analysis" element={<DisplayAnal/>}/>
         <Route path="/display/aboutus" element={<DisplayAbout/>}/>
         <Route path="/display/gameanalysis" element={<Analysis/>}/>
+        <Route path="/display/team" element={<Team/>}/>
       </Routes>
     </BrowserRouter>
   );
