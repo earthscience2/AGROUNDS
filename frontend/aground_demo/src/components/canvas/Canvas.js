@@ -3,7 +3,7 @@ import mapBackground from "../../assets/playground.jpeg";
 
 const WIDTH = 340;
 const HEIGHT = 180;
-const INTERVAL = 10; 
+const INTERVAL = 100; 
 
 const colors = [
     '#77E4C8', '#36C2CE', '#FFD0D0', '#E2E2B6', '#80C4E9',

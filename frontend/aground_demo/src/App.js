@@ -16,6 +16,16 @@ import MyPage from './pages/my-page/my_page';
 import ExtraData from './pages/log_in/extra_data';
 import TeamAnalysis from './pages/team/team_analysis';
 import Video from './pages/team/video';
+import DisplayMain from './pages/display/MainPage';
+import DisplayProduct from './pages/display/Product';
+import DisplayVest from './pages/display/Vest';
+import DisplayCam from './pages/display/AICam';
+import DisplayGps from './pages/display/GpsDisplay';
+import DisplayAnal from './pages/display/Analysis';
+import DisplayAbout from './pages/display/AboutUs';
+import Analysis from './pages/display/GameAnalysis';
+import Team from './pages/display/Team';
+
 function App() {
   return (
     <BrowserRouter>
@@ -36,6 +46,17 @@ function App() {
         <Route path="/ExtraData" element={<ExtraData/>}/>
         <Route path="/TeamAnalysis" element={<TeamAnalysis/>}/>
         <Route path="/Video" element={<Video/>}/>
+
+
+        <Route path="/display/main" element={<DisplayMain/>}/>
+        <Route path="/display/product" element={<DisplayProduct/>}/>
+        <Route path="/display/vest" element={<DisplayVest/>}/>
+        <Route path="/display/cam" element={<DisplayCam/>}/>
+        <Route path="/display/gps" element={<DisplayGps/>}/>
+        <Route path="/display/analysis" element={<DisplayAnal/>}/>
+        <Route path="/display/aboutus" element={<DisplayAbout/>}/>
+        <Route path="/display/gameanalysis" element={<Analysis/>}/>
+        <Route path="/display/team" element={<Team/>}/>
       </Routes>
     </BrowserRouter>
   );
