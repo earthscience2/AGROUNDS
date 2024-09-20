@@ -30,28 +30,82 @@ const VestStyle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  .img1{
-    width: 90vw;
-    margin: 3vh 0;
+  @media screen and (max-width: 768px) {
+    .img1{
+      width: 90vw;
+      margin: 3vh 0;
+    }
+    .img2{
+      width: 90vw;
+      margin: 2vh 0;
+    }
+    .img3{
+      width: 90vw;
+      margin: 4vh 0;
+    }
+    .img4{
+      width: 90vw;
+      margin: 4vh 0;
+    }
+    .img5{
+      width: 90vw;
+      margin: 4vh 0;
+    }
+    .btnBox{
+      height: 8vh;
+      margin: 2vh 0;
+    }
   }
-  .img2{
-    width: 90vw;
-    margin: 2vh 0;
+  @media (min-width: 769px) and (max-width: 1280px) {
+    .img1{
+      width: 90vw;
+      margin: 3vh 0;
+    }
+    .img2{
+      width: 90vw;
+      margin: 2vh 0;
+    }
+    .img3{
+      width: 90vw;
+      margin: 4vh 0;
+    }
+    .img4{
+      width: 90vw;
+      margin: 4vh 0;
+    }
+    .img5{
+      width: 90vw;
+      margin: 4vh 0;
+    }
+    .btnBox{
+      height: 8vh;
+      margin: 2vh 0;
+    }
   }
-  .img3{
-    width: 90vw;
-    margin: 4vh 0;
-  }
-  .img4{
-    width: 90vw;
-    margin: 4vh 0;
-  }
-  .img5{
-    width: 90vw;
-    margin: 4vh 0;
-  }
-  .btnBox{
-    height: 8vh;
-    margin: 2vh 0;
+  @media screen and (min-width: 1281px){
+    .img1{
+      width: 50vw;
+      margin: 10vh 0;
+    }
+    .img2{
+      width: 50vw;
+      margin: 5vh 0;
+    }
+    .img3{
+      width: 50vw;
+      margin: 4vh 0;
+    }
+    .img4{
+      width: 50vw;
+      margin: 4vh 0;
+    }
+    .img5{
+      width: 35vw;
+      margin: 4vh 0;
+    }
+    .btnBox{
+      height: 8vh;
+      margin: 4vh 0;
+    }
   }
 `

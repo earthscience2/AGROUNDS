@@ -22,7 +22,8 @@ const AICamStyle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  .img{
+  @media screen and (max-width: 768px) {
+    .img{
     width: 100vw;
     position: relative;
     top: -10vh;
@@ -31,4 +32,28 @@ const AICamStyle = styled.div`
     position: relative;
     top: -20vh;
   }
+  }
+  @media (min-width: 769px) and (max-width: 1280px) {
+    .img{
+    width: 100vw;
+    position: relative;
+    top: -10vh;
+  }
+  .back{
+    position: relative;
+    top: -20vh;
+  }
+  }
+  @media screen and (min-width: 1281px){
+    .img{
+    width: 60vw;
+    position: relative;
+    top: -10vh;
+  }
+  .back{
+    position: relative;
+    top: -30vh;
+  }
+  }
+  
 `
