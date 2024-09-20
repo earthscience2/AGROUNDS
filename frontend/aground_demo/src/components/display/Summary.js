@@ -32,7 +32,15 @@ export default Summary;
 
 const SummaryStyle = styled.div`
   background-color: #F5F5F5;
-  padding: 2vh 4vh;
+  @media screen and (max-width: 768px) {
+    padding: 2vh 4vh;
+  }
+  @media (min-width: 769px) and (max-width: 1280px) {
+    padding: 2vh 10vh;
+  }
+  @media screen and (min-width: 1281px){
+    padding: 2vh 40vh;
+  }
   p {
     margin: 2vh 0;
     font-size: 2.5vh;

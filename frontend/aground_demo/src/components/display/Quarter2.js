@@ -71,6 +71,7 @@ const Quarter2 = ({activePosition}) => {
 export default Quarter2;
 
 const Quarter2Style = styled.div`
+  @media screen and (max-width: 768px) {
   .quarter-first{
     padding: 3vh 4vh;
     background-color: #F5F5F5;
@@ -89,4 +90,49 @@ const Quarter2Style = styled.div`
       width: 100%;
     }
   }
+}
+@media (min-width: 769px) and (max-width: 1280px) {
+  .quarter-first{
+    padding: 3vh 4vh;
+    background-color: #F5F5F5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & > img{
+      width: 70%;
+    }
+  }
+
+  .map{
+    padding: 2vh 8vh;
+    background-color: #D9D9D9;
+    display: flex;
+    justify-content: center;
+    & > img {
+      width: 60%;
+    }
+  }
+}
+@media screen and (min-width: 1281px){
+  .quarter-first{
+    padding: 3vh 4vh;
+    background-color: #F5F5F5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & > img{
+      width: 40%;
+    }
+  }
+
+  .map{
+    padding: 2vh 8vh;
+    background-color: #D9D9D9;
+    display: flex;
+    justify-content: center;
+    & > img {
+      width: 30%;
+    }
+  }
+}
 `
