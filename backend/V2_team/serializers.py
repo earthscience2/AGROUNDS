@@ -24,7 +24,7 @@ class Team_info_Serializer(serializers.ModelSerializer):
         extra_kwargs = {
             'v2_team_code': {'required': False}
         }
-
+        
     def create(self, validated_data):
         team_code = make_code('t')  # 먼저 team_code 생성
         validated_data['v2_team_code'] = team_code  # validated_data에 추가
