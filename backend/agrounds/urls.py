@@ -26,13 +26,6 @@ urlpatterns = [
     # admin
     path("admin/", admin.site.urls),
     # 백엔드 api
-    path("api/assist/", include("assist.urls")),
-    path("api/login/", include("login.urls")),
-    path("api/team/", include('team.urls'),),
-    path("api/match/", include("match.urls")),
-    path("api/league/", include("league.urls")),
-    path("api/player/", include("player.urls")),
-    path("api/user/", include("user.urls")),
     path("api/V2login/", include("V2_login.urls")),
     path("api/V2team/", include("V2_team.urls")),
     path("api/V2match/", include("V2_match.urls")),
