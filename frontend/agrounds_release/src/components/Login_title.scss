@@ -1,0 +1,21 @@
+@import '../styles/variable.scss';
+
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+.titlebox{
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  .login_title{
+    margin: 0 0 1vh 0;
+    @include font(24px, 700, $primary-color);
+  }
+  .login_explain{
+    margin: 0 0 4vh 0;
+    @include font(15px, 400, #6F6F6F);
+  }
+}
