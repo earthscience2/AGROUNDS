@@ -25,6 +25,9 @@ import DisplayAnal from './pages/display/Analysis';
 import DisplayAbout from './pages/display/AboutUs';
 import Analysis from './pages/display/GameAnalysis';
 import Team from './pages/display/Team';
+import DemoMain from './pages/demo_distribute/demo_main';
+import PersonalMov from './pages/demo_distribute/PersonalMov';
+import TeamMov from './pages/demo_distribute/TeamMov';
 
 function App() {
   return (
@@ -57,6 +60,13 @@ function App() {
         <Route path="/display/aboutus" element={<DisplayAbout/>}/>
         <Route path="/display/gameanalysis" element={<Analysis/>}/>
         <Route path="/display/team" element={<Team/>}/>
+
+
+        {/* demo 배포 버전 */}
+        <Route path="/demo/main" element={<DemoMain/>}/>
+        <Route path="/demo/teamMov" element={<TeamMov/>}/>
+        <Route path="/demo/personalMov" element={<PersonalMov/>}/>
+
       </Routes>
     </BrowserRouter>
   );
