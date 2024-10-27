@@ -1,28 +1,7 @@
-from DB.models import UserInfo
-from DB.models import PlayerInfo
 from DB.models import TeamInfo
 from DB.models import *
 from rest_framework import serializers
 from datetime import datetime
-def get_user_code_by_user_nickname(nickname):
-    """
-    user nickname을 받아 user_code를 리턴해주는 함수
-    """
-    try:
-        user_code = getattr(UserInfo.objects.get(user_nickname = nickname), 'user_code')
-    except UserInfo.DoesNotExist:
-        user_code = None
-    return user_code
-
-def get_player_info_by_user_code(user_code):
-    """
-    user_code를 받아 player info를 리턴해주는 함수
-    """
-    try:
-        player_info = PlayerInfo.objects.get(user_code=user_code)
-    except PlayerInfo.DoesNotExist:
-        raise ValueError(f"유저 코드 {user_code}에 해당하는 선수 정보가 존재하지 않습니다.")
-    return player_info
 
 def get_team_name_by_team_code(team_code):
     """
