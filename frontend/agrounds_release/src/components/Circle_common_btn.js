@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Circle_common_btn = ({title}) => {
+const Circle_common_btn = ({title, onClick, backgroundColor = '#262626', color = 'white'}) => {
   return (
     <div style={{display:'flex',justifyContent:'center', width: '100vw'}}>
-      <div style={{backgroundColor:'#262626', display:'flex', alignItems: 'center' ,justifyContent: 'center', width: '90%', height: '60px', color: 'white', borderRadius:'4vh', fontWeight:'500'}}>
+      <div style={{backgroundColor: backgroundColor, display:'flex', alignItems: 'center' ,justifyContent: 'center', width: '90%', height: '60px', color: color, borderRadius:'4vh', fontWeight:'500'}} onClick={onClick}>
             {title}
       </div>
     </div>

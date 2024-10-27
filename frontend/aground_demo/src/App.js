@@ -28,6 +28,7 @@ import Team from './pages/display/Team';
 import DemoMain from './pages/demo_distribute/demo_main';
 import PersonalMov from './pages/demo_distribute/PersonalMov';
 import TeamMov from './pages/demo_distribute/TeamMov';
+import DemoAnal from './pages/demo_distribute/demo_anal';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
         <Route path="/demo/main" element={<DemoMain/>}/>
         <Route path="/demo/teamMov" element={<TeamMov/>}/>
         <Route path="/demo/personalMov" element={<PersonalMov/>}/>
+        <Route path="/demo/anal" element={<DemoAnal/>}/>
 
       </Routes>
     </BrowserRouter>
