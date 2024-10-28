@@ -1,0 +1,20 @@
+.login_input {
+  background-color: #F2F4F8;
+  border: none;
+  border-radius: 1vh;
+  width: 80vw;
+  height: 55px;
+  font-size: 16px;
+  padding: 0 5vw;
+  outline: none;
+}
+.login_input::-moz-placeholder {
+  font-size: 17px;
+  font-weight: 600;
+  color: #C1C7CD;
+}
+.login_input::placeholder {
+  font-size: 17px;
+  font-weight: 600;
+  color: #C1C7CD;
+}/*# sourceMappingURL=Login_input.css.map */

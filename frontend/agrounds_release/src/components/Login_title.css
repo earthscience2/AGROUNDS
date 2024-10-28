@@ -1,0 +1,17 @@
+.titlebox {
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+}
+.titlebox .login_title {
+  margin: 0 0 1vh 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: "#262626";
+}
+.titlebox .login_explain {
+  margin: 0 0 4vh 0;
+  font-size: 15px;
+  font-weight: 400;
+  color: #6F6F6F;
+}/*# sourceMappingURL=Login_title.css.map */

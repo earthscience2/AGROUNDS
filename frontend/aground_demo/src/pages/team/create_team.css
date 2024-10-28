@@ -1,0 +1,79 @@
+.create-team-modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+.create-team-modal-bg .create-team-modal-mainbg {
+  width: 36vh;
+  height: 50%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 1.3vh;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-close {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  margin-top: 3vh;
+  text-align: center;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-close:nth-child(1) {
+  font-size: 2vh;
+  font-weight: 700;
+  margin-left: 27%;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-close .modal-close {
+  margin-left: 27%;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-team {
+  display: flex;
+  flex-direction: column;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-team .create-team-modal-team-text {
+  font-size: 1.8vh;
+  font-weight: 500;
+  margin-top: 4vh;
+  margin-left: 1vh;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-team .create-team-modal-input {
+  width: 30vh;
+  height: 5vh;
+  border-radius: 3vh;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1vh;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-team .create-team-modal-input .create-team-modal-inputtext {
+  width: 25vh;
+  height: 4vh;
+  border: none;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-button {
+  width: 10vh;
+  height: 4vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2vh;
+  margin-top: 3.5vh;
+  font-weight: 600;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-button.black {
+  background-color: black;
+  color: white;
+}
+.create-team-modal-bg .create-team-modal-mainbg .create-team-modal-button.white {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border: 1px solid black;
+}/*# sourceMappingURL=create_team.css.map */

@@ -1,0 +1,32 @@
+@media only screen and (min-width: 500px), (min-height: 951px) {
+  body {
+    max-width: 499px;
+    max-height: 950px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+}
+.background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100vh;
+  width: 100%;
+}
+.background .img {
+  width: 100%;
+}
+.background .logo {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2C211A;
+  padding: 8vh 0 2vh 0;
+  margin: 0;
+}
+.background .ment {
+  font-size: 24px;
+  font-weight: 800;
+  color: #262626;
+  margin: 0 0 8vh 0;
+}/*# sourceMappingURL=Onboard.css.map */

@@ -1,0 +1,21 @@
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 37vh;
+  height: 8vh;
+  border: 1px solid #000000;
+  border-radius: 4.1vh;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  font-size: 2vh;
+}
+.button.white {
+  color: rgb(0, 0, 0);
+  background-color: #ffffff;
+}
+.button.black {
+  color: rgb(255, 255, 255);
+  background-color: #000000;
+}/*# sourceMappingURL=generalBtn.css.map */
