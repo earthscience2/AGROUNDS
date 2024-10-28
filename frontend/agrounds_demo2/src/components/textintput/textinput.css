@@ -1,0 +1,29 @@
+.inputbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #cdcdcd;
+  font-weight: 400;
+  color: white;
+}
+.inputbox .input {
+  width: 80%;
+  height: 5vh;
+  border: none;
+}
+.inputbox.large {
+  width: 37vh;
+  height: 7vh;
+  border-radius: 3.5vh;
+}
+.inputbox.medium {
+  width: 28vh;
+  height: 6vh;
+  border-radius: 3.5vh;
+}
+.inputbox.small {
+  width: 18vh;
+  height: 6vh;
+  border-radius: 3.5vh;
+  margin: 0 1vh;
+}/*# sourceMappingURL=textinput.css.map */
