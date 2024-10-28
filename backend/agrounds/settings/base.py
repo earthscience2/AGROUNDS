@@ -24,19 +24,12 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     # Local apps
-    "assist",
-    "login",
     "DB",
-    "player",
-    "user",
+    "test_page",
     # Third party apps
     "rest_framework",
     "drf_yasg",
     "corsheaders",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
     "storages",
     # Django apps
     "django.contrib.admin",
@@ -68,7 +61,6 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -80,11 +72,8 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
+    # "allauth.account.auth_backends.AuthenticationBackend",
 ]
-
-# setting for simple jwt
-# AUTH_USER_MODEL = 'DB.UserInfo'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
