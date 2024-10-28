@@ -25,14 +25,11 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     # Local apps
     "DB",
+    "test_page",
     # Third party apps
     "rest_framework",
     "drf_yasg",
     "corsheaders",
-    # "allauth",
-    # "allauth.account",
-    # "allauth.socialaccount",
-    # "allauth.socialaccount.providers.google",
     "storages",
     # Django apps
     "django.contrib.admin",
