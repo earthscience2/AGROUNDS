@@ -1,11 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
+import client from '../../clients';
 
-const Summary = () => {
+
+const Summary = ({activePosition}) => {
+  const [AttackData, setAttackData] = useState('');
+  const [DefenseData, setDefenseData] = useState('');
+  const [TotalData, setTotalData] = useState('');
+
+  const data = {
+    match_code: "m_001",
+    user_code: "u_001",
+  }
+  client.post('/test_page/ai_summation/', data)
+  .then((response) => 
+    setAttackData(response.attack),
+    setDefenseData(response.defense),
+    setTotalData(response.total)
+  )
+  .catch(error => alert(error))
+
+
+  const summaryContents = () => {
+    switch (activePosition) {
+      case '공격':
+        return AttackData
+      case '수비':
+        return DefenseData
+      case '전체':
+        return TotalData
+      default:
+        return TotalData
+    }
+  }
+
   return (
     <SummaryStyle1>
       <p>AI 요약</p>
-      <span></span>
+      <span>{summaryContents()}</span>
     </SummaryStyle1>
   );
 };

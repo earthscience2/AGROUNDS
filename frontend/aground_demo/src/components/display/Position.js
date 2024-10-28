@@ -17,11 +17,6 @@ const Position = ({ replay, activePosition, setActivePosition }) => {
       <Tab active={activePosition === '수비'} onClick={() => handleTabClick('수비')}>
         수비
       </Tab>
-      {replay && (
-        <Tab active={activePosition === '리플레이'} onClick={() => handleTabClick('리플레이')}>
-          리플레이
-        </Tab>
-      )}
     </PositionStyle>
   );
 };

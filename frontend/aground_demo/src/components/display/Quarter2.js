@@ -48,22 +48,15 @@ const Quarter2 = ({activePosition}) => {
 
   return (
     <Quarter2Style>
-      {
-        activePosition === '리플레이' ? 
-          <Replay activePosition={activePosition}/>
-        : (
-          <>
-          <div className='quarter-first'><img src={Summary} /></div>
-            <div className='map'>
-              <img src={getImage()} />
-            </div>
-            <ImgAnal activePosition={activePosition} imgAnal={imgAnal} setImgAnal={setImgAnal}/>
-            <div>
-              <DataAnal quarter='2쿼터' position={activePosition}/>
-            </div>
-          </>
-        )
-      }
+      <>
+        <div className='map'>
+          <img src={getImage()} />
+        </div>
+        <ImgAnal activePosition={activePosition} imgAnal={imgAnal} setImgAnal={setImgAnal}/>
+        <div>
+          <DataAnal quarter='2쿼터' position={activePosition}/>
+        </div>
+      </>
     </Quarter2Style>
   );
 };

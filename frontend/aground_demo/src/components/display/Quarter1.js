@@ -14,7 +14,6 @@ import DFhitmap from '../../assets/display/playanal/Q1/defence/Q1_defence_fasthi
 import Dchange from '../../assets/display/playanal/Q1/defence/Q1_defence_changeway.png';
 import ImgAnal from './ImgAnal';
 import DataAnal from './DataAnal';
-import Replay from './Replay';
 
 
 const Quarter1 = ({activePosition}) => {
@@ -50,22 +49,16 @@ const Quarter1 = ({activePosition}) => {
 
   return (
     <Quarter1Style>
-      {
-        activePosition === '리플레이' ? 
-          <Replay activePosition={activePosition}/>
-        : (
-          <>
-          <div className='quarter-first'><img src={Summary} /></div>
-            <div className='map'>
-              <img src={getImage()} />
-            </div>
-            <ImgAnal activePosition={activePosition} imgAnal={imgAnal} setImgAnal={setImgAnal}/>
-            <div>
-              <DataAnal quarter='1쿼터' position={activePosition}/>
-            </div>
-          </>
-        )
-      }
+      <>
+        <div className='map'>
+          <img src={getImage()} />
+        </div>
+        <ImgAnal activePosition={activePosition} imgAnal={imgAnal} setImgAnal={setImgAnal}/>
+        <div>
+          <DataAnal quarter='1쿼터' position={activePosition}/>
+        </div>
+      </>
+        
     </Quarter1Style>
   );
 };

@@ -1,0 +1,58 @@
+.team_analysis_background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.team_analysis_background .team_analysis_goback_icon {
+  height: 2vh;
+  position: relative;
+  right: 18.7vh;
+  top: 4.6vh;
+}
+.team_analysis_background .team_analysis_logo {
+  font-size: 2.1vh;
+  font-weight: 700;
+  margin-top: 2.5vh;
+}
+.team_analysis_background .team_analysis_title {
+  font-size: 2.5vh;
+  font-weight: 700;
+  margin-top: 4vh;
+}
+.team_analysis_background .team_analysis_match_title {
+  font-size: 2.1vh;
+  font-weight: 700;
+  margin-top: 2vh;
+}
+.team_analysis_background table {
+  width: 40vh;
+  padding: 5vh 0;
+  margin-top: 4vh;
+  border-collapse: collapse;
+  border-radius: 2vh;
+}
+.team_analysis_background table thead {
+  height: 7vh;
+  font-size: 2.2vh;
+  font-weight: 700;
+  margin-top: 0;
+}
+.team_analysis_background table tbody {
+  text-align: center;
+  font-size: 1.8vh;
+  font-weight: 500;
+  margin-top: 0vh;
+  border-radius: 2vh;
+}
+.team_analysis_background table tbody td {
+  border: 1px solid rgb(96, 96, 96);
+  padding: 1vh 0;
+}
+.team_analysis_background table tbody td:first-child {
+  background-color: rgb(255, 150, 127);
+}
+.team_analysis_background table tbody td:last-child {
+  background-color: rgb(255, 201, 189);
+  width: 30%;
+}/*# sourceMappingURL=team_analysis.css.map */
