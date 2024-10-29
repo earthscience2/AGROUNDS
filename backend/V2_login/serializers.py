@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from DB.models import V2_UserInfo
+from DB.models import UserInfo
 
 from rest_framework import serializers
 
@@ -11,7 +11,7 @@ import re
 class V2_User_info_Serializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
-        model = V2_UserInfo
+        model = UserInfo
         # password 제외하고 리턴
         extra_kwargs = {
     	    'password' : {'write_only' : True },
@@ -64,11 +64,11 @@ class V2_User_info_Serializer(serializers.ModelSerializer):
         self.regexes_all(user_id, password, user_nickname, user_name, user_birth)
         
         # 닉네임 중복 확인
-        if V2_UserInfo.objects.filter(user_nickname=user_nickname).exists():
+        if UserInfo.objects.filter(user_nickname=user_nickname).exists():
             raise serializers.ValidationError({"error" : "이미 존재하는 닉네임입니다."})
 
         # 이메일 중복 확인
-        if V2_UserInfo.objects.filter(user_id=user_id).exists():
+        if UserInfo.objects.filter(user_id=user_id).exists():
             raise serializers.ValidationError({"error" : "이미 가입된 이메일입니다."})
         return data
 
@@ -93,12 +93,12 @@ class V2_User_info_Serializer(serializers.ModelSerializer):
     
 class V2_UpdateUserInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = V2_UserInfo
+        model = UserInfo
         fields = '__all__'
 
 class V2_User_info_Serializer_summary(serializers.ModelSerializer):
     class Meta:
-        model = V2_UserInfo
+        model = UserInfo
         fields = ['user_code', 'user_name', 'user_gender', 
                   'user_nickname', 'user_height', 'user_weight', 'user_position']
     

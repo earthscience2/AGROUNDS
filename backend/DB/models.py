@@ -39,7 +39,7 @@ class TeamInfo(models.Model):
         db_table = 'team_info'
 
 # V2 로그인
-class V2_UserInfo(models.Model):
+class UserInfo(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)
     user_id = models.CharField(max_length=45)
     password = models.CharField(max_length=200)
@@ -48,16 +48,15 @@ class V2_UserInfo(models.Model):
     user_gender = models.CharField(max_length=45)
     user_nickname = models.CharField(max_length=45)
     marketing_agree = models.BooleanField()
-    login_type = models.IntegerField()
-    team_code = models.CharField(max_length=20)
-    user_type = models.IntegerField()
+    login_type = models.CharField(max_length=45)
+    user_type = models.CharField(max_length=45)
     user_height = models.IntegerField()
     user_weight = models.IntegerField()
     user_position = models.CharField(max_length=45)
-    user_match_list = models.JSONField(blank=True, null=True)
+    
     class Meta:
         managed = False
-        db_table = "V2_user_info"
+        db_table = "user_info"
 
 # V2 팀 생성
 class V2_TeamInfo(models.Model):
@@ -87,3 +86,12 @@ class V2_MatchInfo(models.Model):
     class Meta:
         managed = False
         db_table = 'V2_match_info'
+
+class UserMatch(models.Model):
+    match_code = models.CharField(max_length=45, null=False) 
+    user_code = models.CharField(max_length=45, null=False)   
+    player_or_team = models.CharField(max_length=45, null=True, blank=True) 
+
+    class Meta:
+        managed = False
+        db_table = 'UserMatch'
