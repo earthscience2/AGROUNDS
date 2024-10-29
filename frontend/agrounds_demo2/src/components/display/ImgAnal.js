@@ -13,8 +13,8 @@ const ImgAnal = ({ activePosition, imgAnal, setImgAnal}) => {
       <Tab active={imgAnal === '히트맵'} onClick={() => handleTabClick('히트맵')}>히트맵</Tab>
       <Tab active={imgAnal === '고속히트맵'} onClick={() => handleTabClick('고속히트맵')}>고속 히트맵</Tab>
       <Tab active={imgAnal === '방향전환'} onClick={() => handleTabClick('방향전환')}>방향 전환</Tab>
-      <Tab active={imgAnal === '속력변화'} onClick={() => handleTabClick('속력변화')}>속력 변화</Tab> 
-      <Tab active={imgAnal === '가속도변화'} onClick={() => handleTabClick('가속도변화')}>가속도 변화</Tab>
+      {activePosition === '전체' ? <Tab active={imgAnal === '속력변화'} onClick={() => handleTabClick('속력변화')}>속력 변화</Tab> : null}
+      {activePosition === '전체' ? <Tab active={imgAnal === '가속도변화'} onClick={() => handleTabClick('가속도변화')}>가속도 변화</Tab> : null}
     </ImgAnalStyle>
   );
 };
