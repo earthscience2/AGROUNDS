@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from DB.models import V2_UserInfo
+from DB.models import UserInfo
 
 from rest_framework import serializers
 from staticfiles.get_file_url import get_file_url
