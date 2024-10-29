@@ -19,7 +19,7 @@ class SetUserChange(APIView):
         
         user_info = get_object_or_404(UserInfo, user_code=user_code)
         
-        serializer = UserMainPageSerializer(user_info, data=request.data, partial=True, user_code=user_code)
+        serializer = UserChangeSerializer(user_info, data=request.data, partial=True, user_code=user_code)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

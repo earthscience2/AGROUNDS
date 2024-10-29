@@ -1,13 +1,14 @@
 from rest_framework import serializers
 from DB.models import *
 import re
+
 class User_main_page(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
         fields = '__all__'
         
 
-class UserMainPageSerializer(serializers.ModelSerializer):
+class UserChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
         fields = [
