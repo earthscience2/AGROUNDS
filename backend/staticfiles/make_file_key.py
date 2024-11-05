@@ -41,7 +41,7 @@ def getSpeedChangeUrl(user_id, match_date, match_number, quarter):
     return file_url
 
 def getPlayerReplayUrl(type, match_code, user_id, match_date, match_number, quarter):
-    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/player_{type}/{user_id}_{match_date}_{match_number}_{type}/{user_id}_{match_date}_{match_number}_pc.mpd"
+    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/player_{type}/{user_id}_{match_date}_{match_number}_{type}/{user_id}_{match_date}_{match_number}_{type}.mpd"
     return file_url
 
 def getTeamReplayUrl(match_code, match_date, quarter):
