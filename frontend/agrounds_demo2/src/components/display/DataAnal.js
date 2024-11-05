@@ -44,14 +44,14 @@ const DataAnal = ({ quarter, position }) => {
 
 
   const TitleMapping = {
-    AA: "평균 가속도(m/s^2)",
+    AA: "평균 가속도(m/s²)",
     AS: "평균 속력(km/h)",
-    ASA: "평균 스프린트 가속도(m/s^2)",
+    ASA: "평균 스프린트 가속도(m/s²)",
     ASD: "평균 스프린트 거리(m)",
     ASS: "평균 스프린트 속력(km/h)",
     D: "이동거리(km)",
     DPM: "분당 이동거리(m)",
-    HA: "최고 가속도(m/s^2)",
+    HA: "최고 가속도(m/s²)",
     HDT: "135~180도 방향전환 횟수(번)",
     HS: "최고 속력(km/h)",
     HSD: "최고 스프린트 거리(m)",
@@ -62,7 +62,8 @@ const DataAnal = ({ quarter, position }) => {
     SDPD: "총 이동거리 당 스프린트 거리(%)",
     T: "경기시간(분)",
     TSD: "전체 스프린트 거리(m)",
-  };
+};
+
   return (
     <DataAnalStyle>
       <p>수치 분석</p>

@@ -14,12 +14,13 @@ import DemoMain from './pages/demo_distribute/demo_main';
 import PersonalMov from './pages/demo_distribute/PersonalMov';
 import TeamMov from './pages/demo_distribute/TeamMov';
 import DemoAnal from './pages/demo_distribute/demo_anal';
+import TotalMov from './pages/demo_distribute/TotalMov';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/display/main" element={<DisplayMain/>}/>
+        <Route path="/" element={<DisplayMain/>}/>
         <Route path="/display/product" element={<DisplayProduct/>}/>
         <Route path="/display/vest" element={<DisplayVest/>}/>
         <Route path="/display/cam" element={<DisplayCam/>}/>
@@ -31,10 +32,11 @@ function App() {
 
 
         {/* demo 배포 버전 */}
-        <Route path="/" element={<DemoMain/>}/>
-        <Route path="/demo/teamMov" element={<TeamMov/>}/>
-        <Route path="/demo/personalMov" element={<PersonalMov/>}/>
+        <Route path="/demo/main" element={<DemoMain/>}/>
+        <Route path="/demo/teammov" element={<TeamMov/>}/>
+        <Route path="/demo/personalmov" element={<PersonalMov/>}/>
         <Route path="/demo/anal" element={<DemoAnal/>}/>
+        <Route path="/demo/totalmov" element={<TotalMov/>}/>
 
       </Routes>
     </BrowserRouter>
