@@ -56,7 +56,7 @@ const Quarter2 = ({ activePosition }) => {
     }else if (activePosition === '수비' && imgAnal === '고속히트맵'){
       return defense.high_speed_hitmap;
     }else if (activePosition === '수비' && imgAnal === '방향전환'){
-      return defense.speed_change;
+      return defense.change_direction;
     }else if (activePosition === '수비' && imgAnal === '속력변화'){
       return defense.speed_change;
     }else if (activePosition === '수비' && imgAnal === '가속도변화'){
@@ -95,10 +95,15 @@ const Quarter2Style = styled.div`
   }
 
   .map{
-    padding: 2vh 8vh;
+    width: 100%;
+    height: 25vh;
+    padding: 0;
     background-color: #D9D9D9;
+    display: flex;
+    justify-content: center;
+    align-items:center;
     & > img {
-      width: 100%;
+      width: 70%;
     }
   }
 }

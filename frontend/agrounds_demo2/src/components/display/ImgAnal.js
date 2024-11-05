@@ -1,20 +1,32 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 
 const ImgAnal = ({ activePosition, imgAnal, setImgAnal}) => {
+  const availableTabs = activePosition === '전체' 
+    ? ['히트맵', '고속히트맵', '방향전환', '속력변화', '가속도변화']
+    : ['히트맵', '고속히트맵', '방향전환'];
+
+  useEffect(() => {
+    if (!availableTabs.includes(imgAnal)) {
+      setImgAnal('히트맵');
+    }
+  }, [activePosition, imgAnal, setImgAnal, availableTabs]);
 
   const handleTabClick = (tab) => {
     setImgAnal(tab);
   };
-
   return (
     <ImgAnalStyle>
       <p>이미지 분석</p>
-      <Tab active={imgAnal === '히트맵'} onClick={() => handleTabClick('히트맵')}>히트맵</Tab>
-      <Tab active={imgAnal === '고속히트맵'} onClick={() => handleTabClick('고속히트맵')}>고속 히트맵</Tab>
-      <Tab active={imgAnal === '방향전환'} onClick={() => handleTabClick('방향전환')}>방향 전환</Tab>
-      {activePosition === '전체' ? <Tab active={imgAnal === '속력변화'} onClick={() => handleTabClick('속력변화')}>속력 변화</Tab> : null}
-      {activePosition === '전체' ? <Tab active={imgAnal === '가속도변화'} onClick={() => handleTabClick('가속도변화')}>가속도 변화</Tab> : null}
+      {availableTabs.map((tab) => (
+        <Tab 
+          key={tab} 
+          active={imgAnal === tab} 
+          onClick={() => handleTabClick(tab)}
+        >
+          {tab}
+        </Tab>
+      ))}
     </ImgAnalStyle>
   );
 };
