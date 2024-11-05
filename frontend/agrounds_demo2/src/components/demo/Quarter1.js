@@ -96,10 +96,15 @@ const Quarter1Style = styled.div`
   }
 
   .map{
-    padding: 2vh 8vh;
+    width: 100%;
+    height: 25vh;
+    padding: 0;
     background-color: #D9D9D9;
+    display: flex;
+    justify-content: center;
+    align-items:center;
     & > img {
-      width: 100%;
+      width: 70%;
     }
   }
 }
