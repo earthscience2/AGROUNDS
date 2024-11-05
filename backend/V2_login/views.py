@@ -6,7 +6,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from DB.models import V2_UserInfo
+from DB.models import UserInfo
 from DB.models import V2_TeamInfo
 from .serializers import V2_User_info_Serializer
 from rest_framework.permissions import IsAuthenticated
@@ -39,13 +39,13 @@ class nickname(APIView):
         try:
             if nickname is None:
                 return Response({"isAvailable": False})
-            if V2_UserInfo.objects.filter(user_nickname=nickname).exists():
+            if UserInfo.objects.filter(user_nickname=nickname).exists():
                 # 닉네임이 이미 존재하는 경우
                 return Response({"isAvailable": False})
             else:
                 # 사용 가능한 닉네임인 경우
                 return Response({"isAvailable": True})
-        except V2_UserInfo.DoesNotExist:
+        except UserInfo.DoesNotExist:
             return Response(
                 {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
             )
@@ -62,13 +62,13 @@ class id(APIView):
         try:
             if id is None:
                 return Response({"isAvailable": False})
-            if V2_UserInfo.objects.filter(user_id=id).exists():
+            if UserInfo.objects.filter(user_id=id).exists():
                 # 아이디가 이미 존재하는 경우
                 return Response({"isAvailable": False})
             else:
                 # 사용 가능한 아이디인 경우
                 return Response({"isAvailable": True})
-        except V2_UserInfo.DoesNotExist:
+        except UserInfo.DoesNotExist:
             return Response(
                 {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
             )
@@ -131,8 +131,8 @@ class login(APIView):
 
             # 사용자 찾기
             try:
-                user = V2_UserInfo.objects.get(user_id = user_id)
-            except V2_UserInfo.DoesNotExist:
+                user = UserInfo.objects.get(user_id = user_id)
+            except UserInfo.DoesNotExist:
                 return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
 
             # 비밀번호 확인
@@ -210,8 +210,8 @@ class kakaoCallback(APIView):
 
         # 카카오 서버로부터 가져온 유저 이메일이 우리 서비스에 가입되어 있는지 검사 
         try:
-            user = V2_UserInfo.objects.get(user_id = kakao_email)
-        except V2_UserInfo.DoesNotExist: # 가입되어있지 않은 유저의 경우 프런트 카카오 회원가입 페이지로 이동
+            user = UserInfo.objects.get(user_id = kakao_email)
+        except UserInfo.DoesNotExist: # 가입되어있지 않은 유저의 경우 프런트 카카오 회원가입 페이지로 이동
             print("회원가입 진행시켜")
             encrypted_email = cryptographysss.encrypt_aes(kakao_email)
             print(cryptographysss.decrypt_aes(encrypted_email))
@@ -271,8 +271,8 @@ class getUserInfo(APIView):
         
         user_code = decoded_token.get('user_code')
         try:
-            user = V2_UserInfo.objects.get(user_code = user_code)
-        except V2_UserInfo.DoesNotExist:
+            user = UserInfo.objects.get(user_code = user_code)
+        except UserInfo.DoesNotExist:
             return Response(
                 {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
             )
