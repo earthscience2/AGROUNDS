@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImgAnal from '../display/ImgAnal';
 import DataAnal from '../display/DataAnal';
 import styled from 'styled-components';
@@ -16,7 +16,7 @@ const Quarter1 = ({ activePosition }) => {
     user_code: "u_001",
     quarter: 1
   }
-  useState(() => {
+  useEffect(() => {
     client.post('/api/test_page/analyze-data/', data)
     .then((response) => 
       {

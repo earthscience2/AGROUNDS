@@ -1,19 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import arrow from "../../assets/WhiteArrow.png";
 
-const DownBtn = ({bgColor, children, onClick}) => {
+const CommonBtn = ({bgColor, children, onClick, icon}) => {
   return (
-    <DownBtnStyle bgColor={bgColor} onClick={onClick}>
+    <CommonBtnStyle bgColor={bgColor} onClick={onClick}>
       <span>{children}</span>
-      <img src={arrow} className='arrow'/>
-    </DownBtnStyle>
+      <img src={icon} className='icon'/>
+    </CommonBtnStyle>
   );
 };
 
-export default DownBtn;
+export default CommonBtn;
 
-const DownBtnStyle = styled.div`
+const CommonBtnStyle = styled.div`
   @media screen and (max-width: 820px){
     background-color: ${(props) => props.bgColor || 'black'};
     border-radius: 2.5vh;
@@ -21,15 +20,17 @@ const DownBtnStyle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.3vh;
-    width: 8.3vh;
+    font-size: 12px;
+    width: 7vh;
     height: 3vh;
-    .arrow{
-      height: .7vh;
+    margin: 0 5px;
+
+    cursor: pointer;
+    .icon{
+      height: 12px;
       position: relative;
       left: .5vh;
-      transform: rotate(90deg);
-    }
+    }    
   }
   @media screen and (min-width: 821px){
     background-color: ${(props) => props.bgColor || 'black'};
@@ -41,11 +42,12 @@ const DownBtnStyle = styled.div`
     font-size: 1.6vh;
     width: 11vh;
     height: 4vh;
-    .arrow{
-      height: .8vh;
+    cursor: pointer;
+    .icon{
+      height: 1.6vh;
       position: relative;
-      right: -.5vh;
-      transform: rotate(90deg);
-    }
+      left: .5vh;
+    } 
   }
+
 `
