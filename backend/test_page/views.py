@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import TestAnalyzeData
 from .serializers import *
-from staticfiles.makeFileKey import *
+from staticfiles.make_file_key import *
 
 class aiSummation(APIView):
     '''
@@ -190,3 +190,61 @@ class analyzeData(APIView):
         
         except TestAnalyzeData.DoesNotExist:
                 raise serializers.ValidationError(f"매치 코드 {match_code}, 유저코드 {user_code}에 해당하는 데이터가 존재하지 않습니다.")
+
+class playerReplayVideo(APIView):
+    def post(self, request):
+        data = request.data
+        match_code = data.get('match_code')
+        user_code = data.get('user_code')
+        
+        if not match_code or not user_code:
+            raise serializers.ValidationError("match_code와 user_code, quarter가 필요합니다.")
+
+        try:
+            match = TestAnalyzeData.objects.get(match_code=match_code, user_code=user_code)
+
+            urls = {}
+            for i in range(match.quarter) : 
+                urls[f"quarter_{i+1}"] = {
+                     "pc" : getPlayerReplayUrl(match.match_code, match.user_id, match.match_date, match.match_number, i+1),
+                     "mobile" : getPlayerReplayUrl(match.match_code, match.user_id, match.match_date, match.match_number, i+1)
+                }
+
+            return Response(urls, status=status.HTTP_200_OK)
+            
+        except TestAnalyzeData.DoesNotExist:
+                raise serializers.ValidationError(f"매치 코드 {match_code}, 유저코드 {user_code}에 해당하는 데이터가 존재하지 않습니다.")
+
+class teamReplayVideo(APIView):
+    def post(self, request):
+        data = request.data
+        match_code = data.get('match_code')
+
+        try:
+            match = TestAnalyzeData.objects.filter(match_code=match_code).first()
+
+            urls = {}
+            for i in range(match.quarter) : 
+                urls[f"quarter_{i+1}"] = getTeamReplayUrl(match.match_code, match.match_date, i+1)
+
+            return Response(urls, status=status.HTTP_200_OK)
+
+        except TestAnalyzeData.DoesNotExist:
+            raise serializers.ValidationError(f"매치 코드 {match_code}에 해당하는 데이터가 존재하지 않습니다.")
+
+class fullReplayVideo(APIView):
+    def post(self, request):
+        data = request.data
+        match_code = data.get('match_code')
+
+        try:
+            match = TestAnalyzeData.objects.filter(match_code=match_code).first()
+
+            urls = {}
+            for i in range(match.quarter) : 
+                urls[f"quarter_{i+1}"] = getFullReplayUrl(match.match_code, match.match_date, i+1)
+
+            return Response(urls, status=status.HTTP_200_OK)
+
+        except TestAnalyzeData.DoesNotExist:
+            raise serializers.ValidationError(f"매치 코드 {match_code}에 해당하는 데이터가 존재하지 않습니다.")

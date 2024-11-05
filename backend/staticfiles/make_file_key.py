@@ -41,4 +41,13 @@ def getSpeedChangeUrl(user_id, match_date, match_number, quarter):
     return file_url
 
 def getPlayerReplayUrl(match_code, user_id, match_date, match_number, quarter):
-    file_url = f"https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1%EC%BF%BC%ED%84%B0/player_pc/AAAAAA_20241017_1_pc.mp4"
+    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/player_pc/{user_id}_{match_date}_{match_number}_pc/{user_id}_{match_date}_{match_number}_pc.mpd"
+    return file_url
+
+def getTeamReplayUrl(match_code, match_date, quarter):
+    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/team/team.mpd"
+    return file_url
+
+def getFullReplayUrl(match_code, match_date, quarter):
+    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/full/full.mpd"
+    return file_url
