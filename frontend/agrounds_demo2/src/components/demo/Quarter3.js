@@ -24,7 +24,7 @@ const Quarter3 = ({ activePosition }) => {
         setTotal(response.data.total);
       }
     )
-    .catch((error) => alert(error));
+    .catch((error) => {});
   }, [data])
 
 
@@ -34,7 +34,7 @@ const Quarter3 = ({ activePosition }) => {
     }else if (activePosition === '전체' && imgAnal === '고속히트맵'){
       return total.high_speed_hitmap;
     }else if (activePosition === '전체' && imgAnal === '방향전환'){
-      return total.speed_change;
+      return total.change_direction;
     }else if (activePosition === '전체' && imgAnal === '속력변화'){
       return total.speed_change;
     }else if (activePosition === '전체' && imgAnal === '가속도변화'){
@@ -44,7 +44,7 @@ const Quarter3 = ({ activePosition }) => {
     }else if (activePosition === '공격' && imgAnal === '고속히트맵'){
       return attack.high_speed_hitmap;
     }else if (activePosition === '공격' && imgAnal === '방향전환'){
-      return attack.speed_change;
+      return attack.change_direction;
     }else if (activePosition === '공격' && imgAnal === '속력변화'){
       return attack.speed_change;
     }else if (activePosition === '공격' && imgAnal === '가속도변화'){
@@ -54,7 +54,7 @@ const Quarter3 = ({ activePosition }) => {
     }else if (activePosition === '수비' && imgAnal === '고속히트맵'){
       return defense.high_speed_hitmap;
     }else if (activePosition === '수비' && imgAnal === '방향전환'){
-      return defense.speed_change;
+      return defense.change_direction;
     }else if (activePosition === '수비' && imgAnal === '속력변화'){
       return defense.speed_change;
     }else if (activePosition === '수비' && imgAnal === '가속도변화'){
