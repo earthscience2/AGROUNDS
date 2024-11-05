@@ -231,8 +231,8 @@ class playerReplayVideo(APIView):
             urls = {}
             for i in range(match.quarter) : 
                 urls[f"quarter_{i+1}"] = {
-                     "pc" : getPlayerReplayUrl(match.match_code, match.user_id, match.match_date, match.match_number, i+1),
-                     "mobile" : getPlayerReplayUrl(match.match_code, match.user_id, match.match_date, match.match_number, i+1)
+                     "pc" : getPlayerReplayUrl("pc", match.match_code, match.user_id, match.match_date, match.match_number, i+1),
+                     "mobile" : getPlayerReplayUrl("mobile", match.match_code, match.user_id, match.match_date, match.match_number, i+1)
                 }
 
             return Response(urls, status=status.HTTP_200_OK)

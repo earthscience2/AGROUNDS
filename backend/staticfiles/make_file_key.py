@@ -40,8 +40,8 @@ def getSpeedChangeUrl(user_id, match_date, match_number, quarter):
     file_url = f"{base}/demo/gps/{user_id}_{match_date}_{match_number}/img/{quarter}쿼터_speed.png"
     return file_url
 
-def getPlayerReplayUrl(match_code, user_id, match_date, match_number, quarter):
-    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/player_pc/{user_id}_{match_date}_{match_number}_pc/{user_id}_{match_date}_{match_number}_pc.mpd"
+def getPlayerReplayUrl(type, match_code, user_id, match_date, match_number, quarter):
+    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/player_{type}/{user_id}_{match_date}_{match_number}_pc/{user_id}_{match_date}_{match_number}_pc.mpd"
     return file_url
 
 def getTeamReplayUrl(match_code, match_date, quarter):
