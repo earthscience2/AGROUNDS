@@ -20,7 +20,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DisplayMain/>}/>
+        <Route path="/display/main" element={<DisplayMain/>}/>
         <Route path="/display/product" element={<DisplayProduct/>}/>
         <Route path="/display/vest" element={<DisplayVest/>}/>
         <Route path="/display/cam" element={<DisplayCam/>}/>
@@ -32,7 +32,7 @@ function App() {
 
 
         {/* demo 배포 버전 */}
-        <Route path="/demo/main" element={<DemoMain/>}/>
+        <Route path="/" element={<DemoMain/>}/>
         <Route path="/demo/teammov" element={<TeamMov/>}/>
         <Route path="/demo/personalmov" element={<PersonalMov/>}/>
         <Route path="/demo/anal" element={<DemoAnal/>}/>

@@ -27,7 +27,7 @@ const GameAnalysis = () => {
   return (
     <GameAnalysisStyle>
       <Nav arrow='true'/>
-      <Quarter activeTab={activeTab} setActiveTab={setActiveTab}/>
+      {/* <Quarter activeTab={activeTab} setActiveTab={setActiveTab}/> */}
       <Position 
         activePosition={activePosition} 
         setActivePosition={setActivePosition} 
