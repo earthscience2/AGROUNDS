@@ -6,7 +6,7 @@ const DashPlayer = ({ url }) => {
 
   useEffect(() => {
     const player = dashjs.MediaPlayer().create();
-    player.initialize(videoRef.current, url, true);
+    player.initialize(videoRef.current, url, false);
 
     return () => {
       player.destroy();

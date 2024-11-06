@@ -13,7 +13,7 @@ import Dhitmap from '../../assets/display/playanal/Q1/defence/Q1_defence_hitmap.
 import DFhitmap from '../../assets/display/playanal/Q1/defence/Q1_defence_fasthitmap.png';
 import Dchange from '../../assets/display/playanal/Q1/defence/Q1_defence_changeway.png';
 import ImgAnal from './ImgAnal';
-import DataAnal from './DataAnal';
+import DataAnal from './FixedDataAnal';
 
 
 

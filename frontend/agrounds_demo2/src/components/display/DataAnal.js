@@ -20,9 +20,10 @@ const DataAnal = ({ quarter, position }) => {
         return null; 
     }
   };
+  
   const data = {
-    match_code: sessionStorage.getItem('match_code'),
-    user_code: sessionStorage.getItem('user_id'),
+    match_code: sessionStorage.getItem('match_code') || 'm_001',
+    user_code: sessionStorage.getItem('user_id') || 'u_001',
     quarter: quarter
   }
     useState(() => {

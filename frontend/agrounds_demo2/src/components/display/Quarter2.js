@@ -13,8 +13,7 @@ import Dhitmap from '../../assets/display/playanal/Q2/defence/Q2_defence_hitmap.
 import DFhitmap from '../../assets/display/playanal/Q2/defence/Q2_defence_fasthitmap.png';
 import Dchange from '../../assets/display/playanal/Q2/defence/Q2_defence_changeway.png';
 import ImgAnal from './ImgAnal';
-import DataAnal from './DataAnal';
-import Replay from './Replay';
+import DataAnal from './FixedDataAnal';
 
 
 const Quarter2 = ({activePosition}) => {

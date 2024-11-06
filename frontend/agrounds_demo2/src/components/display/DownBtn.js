@@ -38,9 +38,10 @@ const DownBtnStyle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.6vh;
-    width: 11vh;
-    height: 4vh;
+    font-size: 1.3vh;
+    width: 8.3vh;
+    height: 3vh;
+    cursor: pointer;
     .arrow{
       height: .8vh;
       position: relative;

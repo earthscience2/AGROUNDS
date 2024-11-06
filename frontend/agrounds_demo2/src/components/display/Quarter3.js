@@ -13,9 +13,7 @@ import Dhitmap from '../../assets/display/playanal/Q3/defence/Q3_defence_hitmap.
 import DFhitmap from '../../assets/display/playanal/Q3/defence/Q3_defence_fasthitmap.png';
 import Dchange from '../../assets/display/playanal/Q3/defence/Q3_defence_changeway.png';
 import ImgAnal from './ImgAnal';
-import DataAnal from './DataAnal';
-import Replay from './Replay';
-
+import DataAnal from './FixedDataAnal';
 
 const Quarter3 = ({activePosition}) => {
   const [imgAnal, setImgAnal] = useState('히트맵');
