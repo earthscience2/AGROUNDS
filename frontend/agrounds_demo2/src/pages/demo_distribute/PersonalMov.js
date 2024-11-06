@@ -18,8 +18,8 @@ const PersonalMov = () => {
   const [direction, setDirection] = useState('가로');
 
   const data = {
-    match_code: "m_001",
-    user_code: "u_001",
+    match_code: sessionStorage.getItem('match_code'),
+    user_code: sessionStorage.getItem('user_id'),
   }
 
   useEffect(() => {

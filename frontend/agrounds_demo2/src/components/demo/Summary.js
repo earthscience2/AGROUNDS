@@ -8,8 +8,8 @@ const Summary = ({activePosition}) => {
   const [TotalData, setTotalData] = useState('');
 
   const data = {
-    match_code: "m_001",
-    user_code: "u_001",
+    match_code: sessionStorage.getItem('match_code'),
+    user_code: sessionStorage.getItem('user_id'),
   }
   client.post('/api/test_page/ai-summation/', data)
   .then((response) => {

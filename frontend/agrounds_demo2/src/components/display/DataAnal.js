@@ -21,19 +21,17 @@ const DataAnal = ({ quarter, position }) => {
     }
   };
   const data = {
-    match_code: "m_001",
-    user_code: "u_001",
+    match_code: sessionStorage.getItem('match_code'),
+    user_code: sessionStorage.getItem('user_id'),
     quarter: quarter
   }
     useState(() => {
-
       client.post('/api/test_page/analyze-data/', data)
       .then((response) => 
         {
           setAttack(response.data.attack);
           setDefense(response.data.defense);
           setTotal(response.data.total);
-          console.log(response)
         }
       )
       .catch((error) => alert(error));

@@ -16,7 +16,7 @@ const TotalMov = () => {
   const [link, setLink] = useState('');
 
   const data = {
-    match_code: "m_001",
+    match_code: sessionStorage.getItem('match_code'),
   }
 
   useEffect(() => {

@@ -6,15 +6,14 @@ import client from '../../clients';
 
 const Quarter2 = ({ activePosition }) => {
   const [imgAnal, setImgAnal] = useState('히트맵');
-
   const [attack, setAttack] = useState([]);
   const [defense, setDefense] = useState([]);
   const [total, setTotal] = useState([]);
 
   const data = {
-    match_code: "m_001",
-    user_code: "u_001",
-    quarter: 2
+    match_code: sessionStorage.getItem('match_code'),
+    user_code: sessionStorage.getItem('user_id'),
+    quarter: 1
   }
   useEffect(() => {
     client.post('/api/test_page/analyze-data/', data)
@@ -23,7 +22,7 @@ const Quarter2 = ({ activePosition }) => {
         setAttack(response.data.attack);
         setDefense(response.data.defense);
         setTotal(response.data.total);
-        console.log(response)
+
       }
     )
     .catch((error) => {});
