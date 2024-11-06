@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Quarter = ({ activeTab, setActiveTab }) => {
+const Quarter = ({ summary, activeTab, setActiveTab }) => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
   return (
     <QuarterStyle>
-      <Tab active={activeTab === '요약'} onClick={() => handleTabClick('요약')}>
+      { summary ? <Tab active={activeTab === '요약'} onClick={() => handleTabClick('요약')}>
         요약
       </Tab>
+      : null }
       <Tab active={activeTab === '1쿼터'} onClick={() => handleTabClick('1쿼터')}>
         1쿼터
       </Tab>

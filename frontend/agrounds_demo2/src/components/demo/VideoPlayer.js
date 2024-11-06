@@ -18,8 +18,8 @@ const DashPlayer = ({ url }) => {
       <video
         ref={videoRef}
         controls
-        style={{margin: 'auto', width: '90%', maxWidth: '340px', marginTop: '3vh'}}
-      ></video>
+        style={{margin: 'auto', width: '90%', maxWidth: '340px', marginTop: '3vh'}}>
+      </video>
     </div>
   );
 };

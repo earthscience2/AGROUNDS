@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImgAnal from '../display/ImgAnal';
 import DataAnal from '../display/DataAnal';
 import styled from 'styled-components';
@@ -12,11 +12,11 @@ const Quarter1 = ({ activePosition }) => {
 
 
   const data = {
-    match_code: "m_001",
-    user_code: "u_001",
+    match_code: sessionStorage.getItem('match_code'),
+    user_code: sessionStorage.getItem('user_id'),
     quarter: 1
   }
-  useState(() => {
+  useEffect(() => {
     client.post('/api/test_page/analyze-data/', data)
     .then((response) => 
       {

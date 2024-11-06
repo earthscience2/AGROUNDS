@@ -30,7 +30,7 @@ const Demo_anal = () => {
   return (
     <DemoStyle>
       <Nav arrow='true' />
-      <Quarter activeTab={activeTab} setActiveTab={setActiveTab}/>
+      <Quarter summary='true' activeTab={activeTab} setActiveTab={setActiveTab}/>
       <Position 
         activePosition={activePosition} 
         setActivePosition={setActivePosition} 
