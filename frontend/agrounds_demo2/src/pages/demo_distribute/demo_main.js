@@ -29,7 +29,7 @@ const Demo_main = () => {
       <MainLayout imgsrc={main2} bgColor="#616161" onClick={() => navigate('/demo/personalMov')}>확인</MainLayout>
       <MainLayout imgsrc={main3} bgColor="#616161" onClick={() => navigate('/demo/anal')}>확인</MainLayout>
       <MainLayout imgsrc={main4} bgColor="#616161" onClick={() => window.location.href = 'https://forms.gle/qjFGZjtEWr4FfPe67'}>확인</MainLayout>
-      <MainLayout imgsrc={main5} bgColor="#055540" onClick={() => navigate('/display/main')} >둘러보기</MainLayout>
+      <MainLayout imgsrc={main5} bgColor="#055540" onClick={() => navigate('/')} >둘러보기</MainLayout>
     </div>
   );
 };
