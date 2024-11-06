@@ -56,6 +56,17 @@ const TeamMov = () => {
       alert('이 브라우저는 공유 기능을 지원하지 않습니다.');
     }
   };
+
+  const handleDownload = () => {
+    const linkElement = document.createElement('a');
+    linkElement.href = link;
+    linkElement.download = `${activeTab}_팀영상.mp4`; 
+    document.body.appendChild(linkElement);
+    linkElement.click();
+    document.body.removeChild(linkElement);
+  };
+  
+
   return (
     <TeamMovStyle>
       <Nav arrow={true}/>
@@ -66,7 +77,7 @@ const TeamMov = () => {
           <p className='title'>팀 영상</p>
           <div className='buttondiv'>
               <CommonBtn bgColor="#616161" onClick={() => handleShare()} icon={share}>공유</CommonBtn>
-              <DownBtn bgColor="#616161" onClick={() => alert('아직 지원하지 않는 기능입니다.')} >다운로드</DownBtn>
+              <DownBtn bgColor="#616161" onClick={handleDownload} >다운로드</DownBtn>
           </div>
         </div>
         {link ? (

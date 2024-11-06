@@ -20,10 +20,11 @@ const CommonBtnStyle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
-    width: 7vh;
+    font-size: 1.3vh;
+    width: 8.3vh;
     height: 3vh;
     margin: 0 5px;
+
 
     cursor: pointer;
     .icon{
@@ -39,9 +40,9 @@ const CommonBtnStyle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.6vh;
-    width: 11vh;
-    height: 4vh;
+    font-size: 1.3vh;
+    width: 8.3vh;
+    height: 3vh;
     cursor: pointer;
     .icon{
       height: 1.6vh;

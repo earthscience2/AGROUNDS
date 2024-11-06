@@ -74,6 +74,15 @@ const PersonalMov = () => {
     setDirection((prevDirection) => (prevDirection === '가로' ? '세로' : '가로'));
   };
 
+  const handleDownload = () => {
+    const linkElement = document.createElement('a');
+    linkElement.href = link;
+    linkElement.download = `${activeTab}_개인영상.mp4`; 
+    document.body.appendChild(linkElement);
+    linkElement.click();
+    document.body.removeChild(linkElement);
+  };
+
   return (
     <TeamMovStyle>
       <Nav arrow={true}/>
@@ -85,7 +94,7 @@ const PersonalMov = () => {
           <div className='buttondiv'>
             <CommonBtn bgColor="#616161" onClick={toggleDirection} icon={change}>{direction === '가로' ? '세로' : '가로'}</CommonBtn>            
             <CommonBtn bgColor="#616161" onClick={() => handleShare()} icon={share}>공유</CommonBtn>
-            <DownBtn bgColor="#616161" onClick={() => alert('아직 지원하지 않는 기능입니다.')} >다운로드</DownBtn>
+            <DownBtn bgColor="#616161" onClick={handleDownload} >다운로드</DownBtn>
           </div>
         </div>
         {link ? (
