@@ -13,14 +13,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 const Demo_main = () => {
   const navigate = useNavigate();
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const userId = searchParams.get('user_id') || 'u_001';
-  const matchCode = searchParams.get('match_code') || 'm_001';
-
-  sessionStorage.setItem('user_id', userId);
-  sessionStorage.setItem('match_code', matchCode);
-
   return (
     <div>
       <Nav />

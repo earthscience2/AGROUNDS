@@ -6,10 +6,20 @@ import RightBtn from '../../components/display/RightBtn';
 import F2 from '../../assets/display/firstPage/F2.png';
 import F3 from '../../assets/display/firstPage/F3.png';
 import F4 from '../../assets/display/firstPage/F4.png';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 const MainPage = () => {
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const userId = searchParams.get('user_id') || 'u_001';
+  const matchCode = searchParams.get('match_code') || 'm_001';
+
+  sessionStorage.setItem('user_id', userId);
+  sessionStorage.setItem('match_code', matchCode);
+
 
   return (
     <MainpageStyle>
