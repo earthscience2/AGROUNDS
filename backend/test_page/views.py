@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import TestAnalyzeData
 from .serializers import *
-from staticfiles.makeFileKey import *
+from staticfiles.make_file_key import *
 
 class aiSummation(APIView):
     '''
@@ -190,3 +190,116 @@ class analyzeData(APIView):
         
         except TestAnalyzeData.DoesNotExist:
                 raise serializers.ValidationError(f"매치 코드 {match_code}, 유저코드 {user_code}에 해당하는 데이터가 존재하지 않습니다.")
+
+class playerReplayVideo(APIView):
+    '''
+        모든 쿼터의 개인 리플레이 영상 url 불러오기
+
+        필요한 데이터 :
+        {
+            match_code : [매치코드],
+            user_code : [유저코드]
+        }
+
+        리턴하는 값 예시 :
+        {
+            "quarter_1": {
+                "pc": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
+                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd"
+            },
+            "quarter_2": {
+                "pc": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
+                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd"
+            },
+            "quarter_3": {
+                "pc": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
+                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd"
+            }
+        }
+    '''
+    def post(self, request):
+        data = request.data
+        match_code = data.get('match_code')
+        user_code = data.get('user_code')
+        
+        if not match_code or not user_code:
+            raise serializers.ValidationError("match_code와 user_code, quarter가 필요합니다.")
+
+        try:
+            match = TestAnalyzeData.objects.get(match_code=match_code, user_code=user_code)
+
+            urls = {}
+            for i in range(match.quarter) : 
+                urls[f"quarter_{i+1}"] = {
+                     "pc" : getPlayerReplayUrl("pc", match.match_code, match.user_id, match.match_date, match.match_number, i+1),
+                     "mobile" : getPlayerReplayUrl("mobile", match.match_code, match.user_id, match.match_date, match.match_number, i+1)
+                }
+
+            return Response(urls, status=status.HTTP_200_OK)
+            
+        except TestAnalyzeData.DoesNotExist:
+                raise serializers.ValidationError(f"매치 코드 {match_code}, 유저코드 {user_code}에 해당하는 데이터가 존재하지 않습니다.")
+
+class teamReplayVideo(APIView):
+    '''
+        모든 쿼터의 팀 리플레이 영상 url 불러오기
+
+        필요한 데이터 :
+        {
+            match_code : [매치코드],
+        }
+
+        리턴하는 값 예시 :
+        {
+            "quarter_1": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/team/team.mpd",
+            "quarter_2": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/team/team.mpd",
+            "quarter_3": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/team/team.mpd"
+        }
+    '''
+    def post(self, request):
+        data = request.data
+        match_code = data.get('match_code')
+
+        try:
+            match = TestAnalyzeData.objects.filter(match_code=match_code).first()
+
+            urls = {}
+            for i in range(match.quarter) : 
+                urls[f"quarter_{i+1}"] = getTeamReplayUrl(match.match_code, match.match_date, i+1)
+
+            return Response(urls, status=status.HTTP_200_OK)
+
+        except TestAnalyzeData.DoesNotExist:
+            raise serializers.ValidationError(f"매치 코드 {match_code}에 해당하는 데이터가 존재하지 않습니다.")
+
+class fullReplayVideo(APIView):
+    '''
+        모든 쿼터의 full 리플레이 영상 url 불러오기
+
+        필요한 데이터 :
+        {
+            match_code : [매치코드],
+        }
+
+        리턴하는 값 예시 :
+        {
+            "quarter_1": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/full/full.mpd",
+            "quarter_2": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/full/full.mpd",
+            "quarter_3": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/full/full.mpd"
+        }
+    '''
+    def post(self, request):
+        data = request.data
+        match_code = data.get('match_code')
+
+        try:
+            match = TestAnalyzeData.objects.filter(match_code=match_code).first()
+
+            urls = {}
+            for i in range(match.quarter) : 
+                urls[f"quarter_{i+1}"] = getFullReplayUrl(match.match_code, match.match_date, i+1)
+
+            return Response(urls, status=status.HTTP_200_OK)
+
+        except TestAnalyzeData.DoesNotExist:
+            raise serializers.ValidationError(f"매치 코드 {match_code}에 해당하는 데이터가 존재하지 않습니다.")
