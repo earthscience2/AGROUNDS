@@ -12,6 +12,7 @@ import ResetPw from './pages/onboard/js/ResetPw';
 import PwResetComplete from './pages/onboard/js/PwResetComplete';
 import EssencialInfo from './pages/onboard/js/EssencialInfo';
 import ExtraInfo from './pages/onboard/js/ExtraInfo';
+import PreferPosition from './pages/onboard/js/PreferPosition';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,11 @@ const router = createBrowserRouter([
     path: "/extra-info",
     element: <ExtraInfo />,
   },
+  {
+    path: "/prefer-position",
+    element: <PreferPosition />,
+  },
+
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
