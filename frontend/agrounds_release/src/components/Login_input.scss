@@ -1,18 +1,26 @@
 @import '../styles/variable';
-
-.login_input{
+.inputBG{
   background-color: #F2F4F8;
-  border: none;
-  border-radius: 1vh;
-  width: 80vw;
+  width: 90vw;
   height: 55px;
-  font-size: 16px;
-  padding: 0 5vw;
-  outline: none;
-  
-  &::placeholder{
-    font-size: 17px;
-    font-weight: 600;
-    color: #C1C7CD;
+  display: flex;
+  align-items: center;
+  .login_input{
+    background-color: #F2F4F8;
+    border: none;
+    width: 80%;
+    height: 55px;
+    font-size: 16px;
+    padding: 0 4vw 0 4vw;
+    outline: none;
+    
+    &::placeholder{
+      font-size: 17px;
+      font-weight: 600;
+      color: #C1C7CD;
+    }
+  }
+  .eyestyle{
+    height: 20px;
   }
 }

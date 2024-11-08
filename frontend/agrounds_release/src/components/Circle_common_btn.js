@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 
 const Circle_common_btn = ({title, onClick, backgroundColor = '#262626', color = 'white'}) => {
   return (

@@ -1,4 +1,4 @@
-@import '../styles/variable';
+@import '../../../styles/variable';
 
 .NotUserBG{
   display: flex;
@@ -7,7 +7,7 @@
   align-items: center;
   .NoUserImg{
     width: 180px;
-    margin: 10vh 0 20vh 0;
+    margin: 10vh 0 30vh 0;
   }
   .GoBack{
     color: #878D96;

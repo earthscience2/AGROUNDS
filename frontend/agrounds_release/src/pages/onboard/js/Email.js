@@ -1,9 +1,9 @@
 import React from 'react';
-import BackBtn from '../components/Back_btn';
-import LoginTitle from '../components/Login_title';
-import CircleBtn from '../components/Circle_common_btn';
-import './Email.scss';
-import LoginInput from '../components/Login_input';
+import BackBtn from '../../../components/Back_btn';
+import LoginTitle from '../../../components/Login_title';
+import CircleBtn from '../../../components/Circle_common_btn';
+import '../css/Email.scss';
+import LoginInput from '../../../components/Login_input';
 import { useNavigate } from 'react-router-dom';
 
 const Email = () => {

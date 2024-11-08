@@ -1,9 +1,9 @@
 import React from 'react';
-import BackBtn from '../components/Back_btn';
-import LoginTitle from '../components/Login_title';
-import CircleBtn from '../components/Circle_common_btn';
-import illNote from '../assets/ill_note.png';
-import './NotUserMessage.scss';
+import BackBtn from '../../../components/Back_btn';
+import LoginTitle from '../../../components/Login_title';
+import CircleBtn from '../../../components/Circle_common_btn';
+import illNote from '../../../assets/ill_note.png';
+import '../css/NotUserMessage.scss';
 
 const NotUserMessage = () => {
   return (

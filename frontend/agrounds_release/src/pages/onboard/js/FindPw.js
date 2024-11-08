@@ -1,9 +1,9 @@
 import React from 'react';
-import './Password.scss';
-import BackBtn from '../components/Back_btn';
-import LoginInput from '../components/Login_input';
-import LoginTitle from '../components/Login_title';
-import CircleBtn from '../components/Circle_common_btn';
+import '../css/Password.scss';
+import BackBtn from '../../../components/Back_btn';
+import LoginInput from '../../../components/Login_input';
+import LoginTitle from '../../../components/Login_title';
+import CircleBtn from '../../../components/Circle_common_btn';
 
 const FindPw = () => {
   return (

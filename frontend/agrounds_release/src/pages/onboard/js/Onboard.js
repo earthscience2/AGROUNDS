@@ -1,7 +1,7 @@
 import React from 'react';
-import img from '../assets/onboard_bg.png';
-import './Onboard.scss';
-import Circle_common_btn from '../components/Circle_common_btn';
+import img from '../../../assets/onboard_bg.png';
+import '../css/Onboard.scss';
+import Circle_common_btn from '../../../components/Circle_common_btn';
 
 const Onboard = () => {
   return (

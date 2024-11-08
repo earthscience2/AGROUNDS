@@ -1,9 +1,9 @@
 import React from 'react';
-import illCheck from '../assets/ill_check.png';
-import CircleBtn from '../components/Circle_common_btn';
-import BackBtn from '../components/Back_btn';
-import LoginTitle from '../components/Login_title';
-import './CompleteSignup.scss';
+import illCheck from '../../../assets/ill_check.png';
+import CircleBtn from '../../../components/Circle_common_btn';
+import BackBtn from '../../../components/Back_btn';
+import LoginTitle from '../../../components/Login_title';
+import '../css/CompleteSignup.scss';
 
 const CompleteSignup = () => {
   return (
