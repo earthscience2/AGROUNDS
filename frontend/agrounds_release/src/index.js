@@ -11,6 +11,7 @@ import CompleteSignup from './pages/onboard/js/CompleteSignup';
 import ResetPw from './pages/onboard/js/ResetPw';
 import PwResetComplete from './pages/onboard/js/PwResetComplete';
 import EssencialInfo from './pages/onboard/js/EssencialInfo';
+import ExtraInfo from './pages/onboard/js/ExtraInfo';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: "/essencial-info",
     element: <EssencialInfo />,
+  },
+  {
+    path: "/extra-info",
+    element: <ExtraInfo />,
   },
 ]);
 
