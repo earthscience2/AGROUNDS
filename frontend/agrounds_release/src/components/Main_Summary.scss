@@ -1,0 +1,58 @@
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color
+}
+
+@mixin display($dir, $jus, $align){
+  display: flex;
+  flex-direction: $dir;
+  justify-content: $jus;
+  align-items: $align;
+}
+
+.mainsummary{
+  @include display(column, center, center);
+  .infobox{
+    width: 90%;
+    @include display(row, space-between, end);
+    .info{
+      @include display(column, center, start);
+      .age{
+        @include font(18px, 500, #878D96);
+        margin: 5px 0;
+      }
+      .name{
+        @include font(50px, 400, #121619);
+        margin: 5px 0;
+      }
+    }
+    .position{
+      background-color: aqua;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      @include display(row, center, center);
+    }
+  }
+  .playbox{
+    @include display(column, center, start);
+    width: 90%;
+    .datetitle{
+      @include font(16px, 500, #A2A9B0);
+      margin: 10px 0;
+    }
+    .bottombox{
+      width: 100%;
+      @include display(row, space-between, center);
+      .date{
+        @include font(17px, 500, #697077);
+        margin: 0;
+      }
+      .detail{
+        @include font(17px, 500, #A2A9B0);
+        margin: 0;
+      }
+    }
+  }
+}
