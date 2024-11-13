@@ -18,7 +18,7 @@ const ExtraInfo = () => {
       <div style={{height: '0.5vh'}}/>
       <Login_input borderRadius='0' placeholder='키' type='number'/>
       <div style={{height: '0.5vh'}}/>
-      <div className='prefpo' onClick={() => navigate('/')}>
+      <div className='prefpo' onClick={() => navigate('/prefer-position')}>
         <div>선호 포지션</div>
         <img src={right}/>
       </div>

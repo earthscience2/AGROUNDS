@@ -13,6 +13,7 @@ import PwResetComplete from './pages/onboard/js/PwResetComplete';
 import EssencialInfo from './pages/onboard/js/EssencialInfo';
 import ExtraInfo from './pages/onboard/js/ExtraInfo';
 import PreferPosition from './pages/onboard/js/PreferPosition';
+import Main from './pages/main/js/Main';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: "/prefer-position",
     element: <PreferPosition />,
+  },
+  {
+    path: "/main",
+    element: <Main />,
   },
 
 ]);

@@ -1,0 +1,16 @@
+.logobell{
+  width: 100vw;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .logo{
+    padding: 0 2vh;
+    height: 2.2vh;
+  }
+  .bell{
+    padding: 0 2vh;
+    height: 3vh;
+  }
+}
