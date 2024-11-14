@@ -44,10 +44,22 @@ def getPlayerReplayUrl(type, match_code, user_id, match_date, match_number, quar
     file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/player_{type}/{user_id}_{match_date}_{match_number}_{type}/{user_id}_{match_date}_{match_number}_{type}.mpd"
     return file_url
 
+def getPlayerReplayDownloadUrl(type, match_code, user_id, match_date, match_number, quarter):
+    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/player_{type}/{user_id}_{match_date}_{match_number}_{type}.mp4"
+    return file_url
+
 def getTeamReplayUrl(match_code, match_date, quarter):
     file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/team/team.mpd"
     return file_url
 
+def getTeamReplayDownloadUrl(match_code, match_date, quarter):
+    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/team.mp4"
+    return file_url
+
 def getFullReplayUrl(match_code, match_date, quarter):
     file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/full/full.mpd"
+    return file_url
+
+def getFullReplayDownloadUrl(match_code, match_date, quarter):
+    file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/full.mp4"
     return file_url
