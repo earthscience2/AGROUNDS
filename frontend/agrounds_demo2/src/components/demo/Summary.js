@@ -18,7 +18,7 @@ const Summary = ({activePosition}) => {
       setTotalData(response.data.total);
     }
   )
-  .catch((error) => alert(error))
+  .catch((error) => console.log(error))
 
 
   const summaryContents = () => {

@@ -33,7 +33,7 @@ const MainPage = () => {
       <div className='f2back'>
         <img src={F2} className='f2' />
         <div className='f2Btn'>
-          <RightBtn children='확인하기' bgColor="#333333" onClick={() => navigate('/demo/anal')}/>
+          <RightBtn children='확인하기' bgColor="#333333" onClick={() => navigate('/demo/main')}/>
         </div>
       </div>
       <div className='F3Div'>

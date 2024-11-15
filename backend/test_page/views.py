@@ -205,15 +205,21 @@ class playerReplayVideo(APIView):
         {
             "quarter_1": {
                 "pc": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
-                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd"
+                "pc_download_url" : "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/player_pc/AAAAAA_20241017_1_pc.mp4",
+                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
+                "mobile_download_url" : "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/player_pc/AAAAAA_20241017_1_pc.mp4"
             },
             "quarter_2": {
                 "pc": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
-                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd"
+                "pc_download_url : "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/player_pc/AAAAAA_20241017_1_pc.mp4",
+                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
+                "mobile_download_url" : "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/player_pc/AAAAAA_20241017_1_pc.mp4"
             },
             "quarter_3": {
                 "pc": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
-                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd"
+                "pc": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/player_pc/AAAAAA_20241017_1_pc.mp4",
+                "mobile": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/player_pc/AAAAAA_20241017_1_pc/AAAAAA_20241017_1_pc.mpd",
+                "mobile_download_url" : "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/player_pc/AAAAAA_20241017_1_pc.mp4",
             }
         }
     '''
@@ -232,7 +238,9 @@ class playerReplayVideo(APIView):
             for i in range(match.quarter) : 
                 urls[f"quarter_{i+1}"] = {
                      "pc" : getPlayerReplayUrl("pc", match.match_code, match.user_id, match.match_date, match.match_number, i+1),
-                     "mobile" : getPlayerReplayUrl("mobile", match.match_code, match.user_id, match.match_date, match.match_number, i+1)
+                     "pc_download_url" : getPlayerReplayDownloadUrl("pc", match.match_code, match.user_id, match.match_date, match.match_number, i+1),
+                     "mobile" : getPlayerReplayUrl("mobile", match.match_code, match.user_id, match.match_date, match.match_number, i+1),
+                     "mobile_download_url" : getPlayerReplayDownloadUrl("mobile", match.match_code, match.user_id, match.match_date, match.match_number, i+1),
                 }
 
             return Response(urls, status=status.HTTP_200_OK)
@@ -252,8 +260,11 @@ class teamReplayVideo(APIView):
         리턴하는 값 예시 :
         {
             "quarter_1": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/team/team.mpd",
+            "quarter_1_download_url" : "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/team.mp4",
             "quarter_2": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/team/team.mpd",
-            "quarter_3": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/team/team.mpd"
+            "quarter_2_download_url" : "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/team.mp4",
+            "quarter_3": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/team/team.mpd",
+            "quarter_3_download_url" : "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/team.mp4",
         }
     '''
     def post(self, request):
@@ -266,6 +277,7 @@ class teamReplayVideo(APIView):
             urls = {}
             for i in range(match.quarter) : 
                 urls[f"quarter_{i+1}"] = getTeamReplayUrl(match.match_code, match.match_date, i+1)
+                urls[f"quarter_{i+1}_download_url"] = getTeamReplayDownloadUrl(match.match_code, match.match_date, i+1)
 
             return Response(urls, status=status.HTTP_200_OK)
 
@@ -284,8 +296,11 @@ class fullReplayVideo(APIView):
         리턴하는 값 예시 :
         {
             "quarter_1": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/full/full.mpd",
+            "quarter_1_download_url": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/1쿼터/full.mp4",
             "quarter_2": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/full/full.mpd",
-            "quarter_3": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/full/full.mpd"
+            "quarter_2_download_url": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/2쿼터/full.mp4",
+            "quarter_3": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/full/full.mpd",
+            "quarter_3_download_url": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/video/20241017_m_001/3쿼터/full.mp4"
         }
     '''
     def post(self, request):
@@ -298,6 +313,7 @@ class fullReplayVideo(APIView):
             urls = {}
             for i in range(match.quarter) : 
                 urls[f"quarter_{i+1}"] = getFullReplayUrl(match.match_code, match.match_date, i+1)
+                urls[f"quarter_{i+1}_download_url"] = getFullReplayDownloadUrl(match.match_code, match.match_date, i+1)
 
             return Response(urls, status=status.HTTP_200_OK)
 
