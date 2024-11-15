@@ -1,0 +1,15 @@
+@import '../../../styles/variable';
+
+.resetpwBG {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .errormessage{
+    font-size: 14px;
+    color: #8D8D8D;
+    text-align: center;
+    margin: 2vh 0 20vh 0;
+  }
+}

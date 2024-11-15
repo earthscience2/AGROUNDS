@@ -14,6 +14,10 @@ const TotalMov = () => {
   const [link2, setLink2] = useState('');
   const [link3, setLink3] = useState('');
   const [link, setLink] = useState('');
+  const [linkD1, setLinkD1] = useState('');
+  const [linkD2, setLinkD2] = useState('');
+  const [linkD3, setLinkD3] = useState('');
+  const [linkD, setLinkD] = useState('');
 
   const data = {
     match_code: sessionStorage.getItem('match_code'),
@@ -25,6 +29,9 @@ const TotalMov = () => {
       setLink1(response.data.quarter_1);
       setLink2(response.data.quarter_2);
       setLink3(response.data.quarter_3);
+      setLinkD1(response.data.quarter_1_download_url);
+      setLinkD2(response.data.quarter_2_download_url);
+      setLinkD3(response.data.quarter_3_download_url);
   })
     .catch((error) => {});
   }, [data])
@@ -33,10 +40,13 @@ const TotalMov = () => {
   useEffect(() => {
     if (activeTab === '1쿼터') {
       setLink(link1);
+      setLinkD(linkD1);
     } else if (activeTab === '2쿼터') {
       setLink(link2);
+      setLinkD(linkD2);
     } else if (activeTab === '3쿼터') {
       setLink(link3);
+      setLinkD(linkD3);
     }
   }, [activeTab, link1, link2, link3]);
   
@@ -46,7 +56,7 @@ const TotalMov = () => {
         await navigator.share({
           title: '풀 영상',
           text: `${activeTab} 풀 영상을 공유합니다.`,
-          url: link,
+          url: linkD,
         });
       } catch (error) {
 
@@ -55,13 +65,29 @@ const TotalMov = () => {
       alert('이 브라우저는 공유 기능을 지원하지 않습니다.');
     }
   };
-  const handleDownload = () => {
-    const linkElement = document.createElement('a');
-    linkElement.href = link;
-    linkElement.download = `${activeTab}_풀영상.mp4`; 
-    document.body.appendChild(linkElement);
-    linkElement.click();
-    document.body.removeChild(linkElement);
+  const handleDownload = async () => {
+    if (!linkD) {
+      alert('다운로드 링크가 없습니다.');
+      return;
+    }
+    try {
+      const response = await fetch(linkD, { method: 'GET' });
+      if (!response.ok) throw new Error('파일을 가져오는 중 오류가 발생했습니다.');
+  
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+  
+      const linkElement = document.createElement('a');
+      linkElement.href = url;
+      linkElement.download = `${activeTab}_풀영상.mp4`;
+      document.body.appendChild(linkElement);
+      linkElement.click();
+  
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(linkElement);
+    } catch (error) {
+      alert('파일을 다운로드할 수 없습니다.');
+    }
   };
   
   return (

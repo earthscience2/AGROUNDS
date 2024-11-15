@@ -1,0 +1,26 @@
+.ppBG{
+  background-color: black;
+  width: 100vw;
+  height: 100vh;
+  .exitBtn{
+    width: 95vw;
+    height: 100px;
+    position: fixed;
+    center: 0;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+  }
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: auto;             
+    gap: 10px;                            
+    padding: 15px;
+    place-items: center;    
+    & > div:last-child {                  
+      grid-column: 2 / 3;                
+      justify-self: center;
+    }
+  }
+}

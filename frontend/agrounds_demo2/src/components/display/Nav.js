@@ -9,7 +9,7 @@ const Nav = ({ arrow }) => {
   return (
     <NavStyle>
       {arrow ? <img src={GoBack} className='goback' onClick={() => navigate(-1)}/> : ''}
-      <img src={Logo} className='logo'/>
+      <img src={Logo} className='logo' onClick={() => navigate('/demo/main')}/>
     </NavStyle>
   );
 };
@@ -22,12 +22,16 @@ const NavStyle = styled.div`
   align-items: center;
   height: 10vh;
   width: 100vw;
+  z-index: 1999;
   .goback{
     height: 2.5vh;
     position: absolute;
     left: 5vw;
+    cursor: pointer;
+    z-index: 1999;
   }
   .logo{
     height: 7vh;
+    z-index: 1999;
   }
 `
