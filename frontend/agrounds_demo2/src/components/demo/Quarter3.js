@@ -66,7 +66,9 @@ const Quarter3 = ({ activePosition }) => {
     <Quarter1Style>
       <>
         <div className='map'>
-          <img src={getImage()} />
+          <div className='imgwrap'>
+            <img src={getImage()} />
+          </div>
         </div>
         <ImgAnal activePosition={activePosition} imgAnal={imgAnal} setImgAnal={setImgAnal}/>
         <div>
@@ -101,8 +103,16 @@ const Quarter1Style = styled.div`
     display: flex;
     justify-content: center;
     align-items:center;
-    & > img {
+    .imgwrap{
       width: 70%;
+      height: 22vh;
+      border-radius: 2vh;
+      overflow: hidden;
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
     }
   }
 }
@@ -119,12 +129,23 @@ const Quarter1Style = styled.div`
   }
 
   .map{
-    padding: 2vh 8vh;
+    width: 100%;
+    height: 30vh;
+    padding: 0;
     background-color: #D9D9D9;
     display: flex;
     justify-content: center;
-    & > img {
-      width: 60%;
+    align-items:center;
+    .imgwrap{
+      width: 70%;
+      height: 26vh;
+      border-radius: 2vh;
+      overflow: hidden;
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
     }
   }
 }
@@ -141,12 +162,23 @@ const Quarter1Style = styled.div`
   }
 
   .map{
-    padding: 2vh 8vh;
+    width: 100%;
+    height: 40vh;
+    padding: 0;
     background-color: #D9D9D9;
     display: flex;
     justify-content: center;
-    & > img {
+    align-items:center;
+    .imgwrap{
       width: 30%;
+      height: 36vh;
+      border-radius: 2vh;
+      overflow: hidden;
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
     }
   }
 }

@@ -15,6 +15,7 @@ const PersonalMov = () => {
   const [link2, setLink2] = useState('');
   const [link3, setLink3] = useState('');
   const [link, setLink] = useState('');
+  const [linkD, setLinkD] = useState('');
   const [direction, setDirection] = useState('가로');
 
   const data = {
@@ -37,18 +38,24 @@ const PersonalMov = () => {
     if(direction === '가로'){
       if (activeTab === '1쿼터') {
         setLink(link1.pc);
+        setLinkD(link1.pc_download_url);
       } else if (activeTab === '2쿼터') {
         setLink(link2.pc);
+        setLinkD(link2.pc_download_url);
       } else if (activeTab === '3쿼터') {
         setLink(link3.pc);
+        setLinkD(link3.pc_download_url);
       }
     } else if (direction === '세로'){
       if (activeTab === '1쿼터') {
         setLink(link1.mobile);
+        setLinkD(link1.mobile_download_url);
       } else if (activeTab === '2쿼터') {
         setLink(link2.mobile);
+        setLinkD(link2.mobile_download_url);
       } else if (activeTab === '3쿼터') {
         setLink(link3.mobile);
+        setLinkD(link3.mobile_download_url);
       }
     }
     
@@ -60,7 +67,7 @@ const PersonalMov = () => {
         await navigator.share({
           title: '개인 영상',
           text: `${activeTab} 개인 영상을 공유합니다.`,
-          url: link,
+          url: linkD,
         });
       } catch (error) {
 
@@ -74,13 +81,29 @@ const PersonalMov = () => {
     setDirection((prevDirection) => (prevDirection === '가로' ? '세로' : '가로'));
   };
 
-  const handleDownload = () => {
-    const linkElement = document.createElement('a');
-    linkElement.href = link;
-    linkElement.download = `${activeTab}_개인영상.mp4`; 
-    document.body.appendChild(linkElement);
-    linkElement.click();
-    document.body.removeChild(linkElement);
+  const handleDownload = async () => {
+    if (!linkD) {
+      alert('다운로드 링크가 없습니다.');
+      return;
+    }
+    try {
+      const response = await fetch(linkD, { method: 'GET' });
+      if (!response.ok) throw new Error('파일을 가져오는 중 오류가 발생했습니다.');
+  
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+  
+      const linkElement = document.createElement('a');
+      linkElement.href = url;
+      linkElement.download = `${activeTab}_개인영상.mp4`;
+      document.body.appendChild(linkElement);
+      linkElement.click();
+  
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(linkElement);
+    } catch (error) {
+      alert('파일을 다운로드할 수 없습니다.');
+    }
   };
 
   return (

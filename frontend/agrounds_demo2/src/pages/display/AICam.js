@@ -22,37 +22,40 @@ const AICamStyle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+
   @media screen and (max-width: 768px) {
+    height: 210vh;
     .img{
     width: 100vw;
     position: relative;
-    top: -10vh;
   }
   .back{
     position: relative;
-    top: -20vh;
+    top: 10vh;
   }
   }
   @media (min-width: 769px) and (max-width: 1280px) {
+    height: 300vh;
     .img{
     width: 100vw;
     position: relative;
-    top: -10vh;
   }
   .back{
     position: relative;
-    top: -20vh;
+    top: 10vh;
   }
   }
   @media screen and (min-width: 1281px){
+    height: 500vh;
     .img{
     width: 60vw;
     position: relative;
-    top: -10vh;
+
   }
   .back{
     position: relative;
-    top: -30vh;
+    top: 20vh;
   }
   }
   
