@@ -145,7 +145,7 @@ class analyzeData(APIView):
                 raise serializers.ValidationError("quarter가 범위 밖입니다.")
             
             bucket_name = 'aground-aisdfis'
-            file_key = makeResultJsonKey(match.user_id, match.match_date, match.match_number)
+            file_key = makeResultJsonKey(match.user_id, match.match_code, match.match_date, match.match_number)
 
             reader = S3TxtFileReader(bucket_name)
             file_content = reader.read(file_key)
@@ -167,11 +167,11 @@ class analyzeData(APIView):
                 if section not in json_data:
                     continue
                 filtered_data[section] = {}
-                filtered_data[section]["hitmap"] = getHitmapUrl(match.user_id, match.match_date, match.match_number, quarter, section)
-                filtered_data[section]["high_speed_hitmap"] = getHighSpeedHitmapUrl(match.user_id, match.match_date, match.match_number, quarter, section)
-                filtered_data[section]["change_direction"] = getChangeDirectionUrl(match.user_id, match.match_date, match.match_number, quarter, section)
-                filtered_data[section]["speed_change"] = getSpeedChangeUrl(match.user_id, match.match_date, match.match_number, quarter)
-                filtered_data[section]["acceleration_change"] = getAccelerationChangeUrl(match.user_id, match.match_date, match.match_number, quarter)
+                filtered_data[section]["hitmap"] = getHitmapUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter, section)
+                filtered_data[section]["high_speed_hitmap"] = getHighSpeedHitmapUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter, section)
+                filtered_data[section]["change_direction"] = getChangeDirectionUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter, section)
+                filtered_data[section]["speed_change"] = getSpeedChangeUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter)
+                filtered_data[section]["acceleration_change"] = getAccelerationChangeUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter)
 
                 section_id = ""
                 if section == "total" :
