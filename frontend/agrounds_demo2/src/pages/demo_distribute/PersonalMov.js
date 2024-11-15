@@ -8,6 +8,7 @@ import change from '../../assets/demo/change.png';
 import client from '../../clients';
 import Quarter from '../../components/display/Quarter';
 import CommonBtn from '../../components/display/CommonBtn';
+import { Link } from 'react-router-dom';
 
 const PersonalMov = () => {
   const [activeTab, setActiveTab] = useState('1쿼터');
@@ -86,24 +87,6 @@ const PersonalMov = () => {
       alert('다운로드 링크가 없습니다.');
       return;
     }
-    try {
-      const response = await fetch(linkD, { method: 'GET' });
-      if (!response.ok) throw new Error('파일을 가져오는 중 오류가 발생했습니다.');
-  
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-  
-      const linkElement = document.createElement('a');
-      linkElement.href = url;
-      linkElement.download = `${activeTab}_개인영상.mp4`;
-      document.body.appendChild(linkElement);
-      linkElement.click();
-  
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(linkElement);
-    } catch (error) {
-      alert('파일을 다운로드할 수 없습니다.');
-    }
   };
 
   return (
@@ -117,7 +100,7 @@ const PersonalMov = () => {
           <div className='buttondiv'>
             <CommonBtn bgColor="#616161" onClick={toggleDirection} icon={change}>{direction === '가로' ? '세로' : '가로'}</CommonBtn>            
             <CommonBtn bgColor="#616161" onClick={() => handleShare()} icon={share}>공유</CommonBtn>
-            <DownBtn bgColor="#616161" onClick={handleDownload} >다운로드</DownBtn>
+            <Link to={linkD} target='_blank'><DownBtn bgColor="#616161" onClick={handleDownload} >다운로드</DownBtn></Link>
           </div>
         </div>
         {link ? (
