@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Quarter = ({ summary, activeTab, setActiveTab, quarterCount=2 }) => {
+const Quarter = ({ summary, activeTab, setActiveTab, quarterCount }) => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };

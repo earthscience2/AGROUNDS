@@ -21,7 +21,7 @@ class MatchAnalyzeSerializer(serializers.ModelSerializer):
 
     def get_ai_summation(self, obj):
         bucket_name = 'aground-aisdfis'
-        file_key = makeGptJosnKey(obj.user_id, obj.match_date, obj.match_number)
+        file_key = makeGptJosnKey(obj.user_id, obj.match_code, obj.match_date, obj.match_number)
 
         reader = S3TxtFileReader(bucket_name)
         file_content = reader.read(file_key)

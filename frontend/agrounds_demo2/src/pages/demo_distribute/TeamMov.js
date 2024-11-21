@@ -5,73 +5,60 @@ import client from '../../clients';
 import CommonBtn from '../../components/display/CommonBtn';
 import share from '../../assets/demo/share.png';
 import Quarter from '../../components/display/Quarter';
-import styled from 'styled-components';
-import DownBtn from '../../components/display/DownBtn';
 
 const TeamMov = () => {
-  const [activeTab, setActiveTab] = useState('1쿼터' || '전반전');
-  const [videoLinks, setVideoLinks] = useState({});
-  const [downloadLinks, setDownloadLinks] = useState({});
+  const [activeTab, setActiveTab] = useState('1쿼터');
+  const [link1, setLink1] = useState('');
+  const [link2, setLink2] = useState('');
+  const [link3, setLink3] = useState('');
+  const [linkD1, setLinkD1] = useState('');
+  const [linkD2, setLinkD2] = useState('');
+  const [linkD3, setLinkD3] = useState('');
   const [link, setLink] = useState('');
   const [linkD, setLinkD] = useState('');
-  const [quarterCount, setQuarterCount] = useState(3); 
 
   const data = {
     match_code: sessionStorage.getItem('match_code'),
-  };
+  }
 
   useEffect(() => {
-    client.post('/api/test_page/get_quarter_number/', data)
-      .then((response) => {
-        setQuarterCount(response.data.quarter);
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    
     client.post('/api/test_page/team-replay-video/', data)
-      .then((response) => {
-        const videoLinks = {};
-        const downloadLinks = {};
+    .then((response) => {
+      setLink1(response.data.quarter_1);
+      setLink2(response.data.quarter_2);
+      setLink3(response.data.quarter_3);
+      setLinkD1(response.data.quarter_1_download_url);
+      setLinkD2(response.data.quarter_2_download_url);
+      setLinkD3(response.data.quarter_3_download_url);
 
-        for (let i = 1; i <= quarterCount; i++) {
-          videoLinks[`${i}쿼터`] = response.data[`quarter_${i}`];
-          downloadLinks[`${i}쿼터`] = response.data[`quarter_${i}_download_url`];
-        }
+  })
+    .catch((error) => {});
+  }, [data])
 
-        if (quarterCount === 2) {
-          videoLinks['전반전'] = response.data.quarter_1;
-          videoLinks['후반전'] = response.data.quarter_2;
-          downloadLinks['전반전'] = response.data.quarter_1_download_url;
-          downloadLinks['후반전'] = response.data.quarter_2_download_url;
-        }
-
-        setVideoLinks(videoLinks);
-        setDownloadLinks(downloadLinks);
-        setLink(videoLinks[activeTab]);
-        setLinkD(downloadLinks[activeTab]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [data]);
 
   useEffect(() => {
-    setLink(videoLinks[activeTab]);
-    setLinkD(downloadLinks[activeTab]);
-  }, [activeTab, videoLinks, downloadLinks]);
-
+    if (activeTab === '1쿼터') {
+      setLink(link1);
+      setLinkD(linkD1);
+    } else if (activeTab === '2쿼터') {
+      setLink(link2);
+      setLinkD(linkD2);
+    } else if (activeTab === '3쿼터') {
+      setLink(link3);
+      setLinkD(linkD3);
+    }
+  }, [activeTab, link1, link2, link3]);
+  
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
           title: '팀 영상',
-          text: `${activeTab} 팀 영상을 공유합니다.`,
+          text: '${activeTab} 팀 영상을 공유합니다.',
           url: linkD,
         });
       } catch (error) {
-        console.error(error);
+
       }
     } else {
       alert('이 브라우저는 공유 기능을 지원하지 않습니다.');
@@ -86,16 +73,16 @@ const TeamMov = () => {
     try {
       const response = await fetch(linkD, { method: 'GET' });
       if (!response.ok) throw new Error('파일을 가져오는 중 오류가 발생했습니다.');
-
+  
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-
+  
       const linkElement = document.createElement('a');
       linkElement.href = url;
-      linkElement.download = `${activeTab}_팀영상.mp4`;
+      linkElement.download = ${activeTab}_팀영상.mp4;
       document.body.appendChild(linkElement);
       linkElement.click();
-
+  
       window.URL.revokeObjectURL(url);
       document.body.removeChild(linkElement);
     } catch (error) {
@@ -103,33 +90,30 @@ const TeamMov = () => {
     }
   };
 
+  
+  
+
   return (
     <TeamMovStyle>
-      <Nav arrow={true} />
-      <div style={{ width: "100vw" }}>
-        <Quarter
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          quarterCount={quarterCount}
-        />
-      </div>
+      <Nav arrow={true}/>
+      <div style={{width:"100vw"}}><Quarter activeTab={activeTab} setActiveTab={setActiveTab}/></div>
       <div className='greybox'>
         <div className='theme'>TEAM CAM</div>
         <div className='titlebox'>
           <p className='title'>팀 영상</p>
           <div className='buttondiv'>
-            <CommonBtn bgColor="#616161" onClick={handleShare} icon={share}>공유</CommonBtn>
-            <DownBtn bgColor="#616161" onClick={handleDownload}>다운로드</DownBtn>
+              <CommonBtn bgColor="#616161" onClick={() => handleShare()} icon={share}>공유</CommonBtn>
+              <DownBtn bgColor="#616161" onClick={handleDownload} >다운로드</DownBtn>
           </div>
         </div>
         {link ? (
-          <VideoPlayer url={link} />
-        ) : (
-          <p className='ppp'>Loading video...</p>
-        )}
+            <VideoPlayer url={link} />
+          ) : (
+            <p className='ppp'>Loading video...</p>
+          )}
         <p className='content1'>영상은 15일 뒤 자동 삭제됩니다.</p>
         <p className='content2'>삭제일자: 업데이트 일 + 15일</p>
-      </div>
+        </div>
     </TeamMovStyle>
   );
 };
@@ -177,6 +161,9 @@ const TeamMovStyle = styled.div`
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      a {
+        text-decoration: none;
+      }
     }
   }
   .ppp{
