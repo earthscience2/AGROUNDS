@@ -15,8 +15,16 @@ const Demo_main = () => {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const userId = searchParams.get('user_id');
-  const matchCode = searchParams.get('match_code') || 'm_001';
+  
+  let userId = searchParams.get('user_id') || '';
+  let matchCode = searchParams.get('match_code') || '';
+
+  if (!userId && !matchCode) {
+    userId = 'u_001';
+    matchCode = 'm_001';
+  }
+
+
   sessionStorage.setItem('user_id', userId);
   sessionStorage.setItem('match_code', matchCode);
 
