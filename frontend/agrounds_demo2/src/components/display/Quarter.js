@@ -1,26 +1,36 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Quarter = ({ summary, activeTab, setActiveTab }) => {
+const Quarter = ({ summary, activeTab, setActiveTab, quarterCount=2 }) => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
+  const generateTabs = (count) => {
+    if (count === 2) {
+      return ['전반전', '후반전'];
+    }
+    return Array.from({ length: count }, (_, index) => `${index + 1}쿼터`);
+  };
+
+  const tabs = generateTabs(quarterCount);
+
   return (
     <QuarterStyle>
-      { summary ? <Tab active={activeTab === '요약'} onClick={() => handleTabClick('요약')}>
-        요약
-      </Tab>
-      : null }
-      <Tab active={activeTab === '1쿼터'} onClick={() => handleTabClick('1쿼터')}>
-        1쿼터
-      </Tab>
-      <Tab active={activeTab === '2쿼터'} onClick={() => handleTabClick('2쿼터')}>
-        2쿼터
-      </Tab>
-      <Tab active={activeTab === '3쿼터'} onClick={() => handleTabClick('3쿼터')}>
-        3쿼터
-      </Tab>
+      {summary ? (
+        <Tab active={activeTab === '요약'} onClick={() => handleTabClick('요약')}>
+          요약
+        </Tab>
+      ) : null}
+      {tabs.map((tab, index) => (
+        <Tab
+          key={index}
+          active={activeTab === tab}
+          onClick={() => handleTabClick(tab)}
+        >
+          {tab}
+        </Tab>
+      ))}
     </QuarterStyle>
   );
 };
