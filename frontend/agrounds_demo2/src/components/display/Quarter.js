@@ -2,23 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Quarter = ({ summary, activeTab, setActiveTab, quarterCount }) => {
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
+  const handleTabClick = (tabIndex) => {
+    setActiveTab(`${tabIndex + 1}쿼터`);
   };
 
-  const generateTabs = (count) => {
+  const generateDisplayTabs = (count) => {
     if (count === 2) {
       return ['전반전', '후반전'];
     }
     return Array.from({ length: count }, (_, index) => `${index + 1}쿼터`);
   };
 
-  const tabs = generateTabs(quarterCount);
+  const displayTabs = generateDisplayTabs(quarterCount);
+  const tabs = Array.from({ length: quarterCount }, (_, index) => `${index + 1}쿼터`);
 
   return (
     <QuarterStyle>
       {summary ? (
-        <Tab active={activeTab === '요약'} onClick={() => handleTabClick('요약')}>
+        <Tab active={activeTab === '요약'} onClick={() => setActiveTab('요약')}>
           요약
         </Tab>
       ) : null}
@@ -26,9 +27,9 @@ const Quarter = ({ summary, activeTab, setActiveTab, quarterCount }) => {
         <Tab
           key={index}
           active={activeTab === tab}
-          onClick={() => handleTabClick(tab)}
+          onClick={() => handleTabClick(index)}
         >
-          {tab}
+          {displayTabs[index]}
         </Tab>
       ))}
     </QuarterStyle>
@@ -36,7 +37,6 @@ const Quarter = ({ summary, activeTab, setActiveTab, quarterCount }) => {
 };
 
 export default Quarter;
-
 const QuarterStyle = styled.div`
   display: flex;
   width: 48vw;

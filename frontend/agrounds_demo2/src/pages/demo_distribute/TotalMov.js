@@ -11,61 +11,73 @@ import { Link } from 'react-router-dom';
 
 const TotalMov = () => {
   const [activeTab, setActiveTab] = useState('1쿼터');
-  const [link1, setLink1] = useState('');
-  const [link2, setLink2] = useState('');
-  const [link3, setLink3] = useState('');
+  const [videoLinks, setVideoLinks] = useState({});
+  const [downloadLinks, setDownloadLinks] = useState({});
   const [link, setLink] = useState('');
-  const [linkD1, setLinkD1] = useState('');
-  const [linkD2, setLinkD2] = useState('');
-  const [linkD3, setLinkD3] = useState('');
   const [linkD, setLinkD] = useState('');
+  const [quarterCount, setQuarterCount] = useState(3); 
 
   const data = {
     match_code: sessionStorage.getItem('match_code'),
   }
 
   useEffect(() => {
+    client.post('/api/test_page/get-quarter-number/', data)
+      .then((response) => {
+        setQuarterCount(response.data.quarter);
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    
     client.post('/api/test_page/full-replay-video/', data)
-    .then((response) => {
-      setLink1(response.data.quarter_1);
-      setLink2(response.data.quarter_2);
-      setLink3(response.data.quarter_3);
-      setLinkD1(response.data.quarter_1_download_url);
-      setLinkD2(response.data.quarter_2_download_url);
-      setLinkD3(response.data.quarter_3_download_url);
-  })
-    .catch((error) => {});
-  }, [data])
+      .then((response) => {
+        const videoLinks = {};
+        const downloadLinks = {};
+        for (let i = 1; i <= quarterCount; i++) {
+          videoLinks[`${i}쿼터`] = response.data[`quarter_${i}`];
+          downloadLinks[`${i}쿼터`] = response.data[`quarter_${i}_download_url`];
+        }
 
+        if (quarterCount === 2) {
+          videoLinks['1쿼터'] = response.data.quarter_1;
+          videoLinks['2쿼터'] = response.data.quarter_2;
+          downloadLinks['1쿼터'] = response.data.quarter_1_download_url;
+          downloadLinks['2쿼터'] = response.data.quarter_2_download_url;
+        }
+
+
+        setVideoLinks(videoLinks);
+        setDownloadLinks(downloadLinks);
+        setLink(videoLinks[activeTab]);
+        setLinkD(downloadLinks[activeTab]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   useEffect(() => {
-    if (activeTab === '1쿼터') {
-      setLink(link1);
-      setLinkD(linkD1);
-    } else if (activeTab === '2쿼터') {
-      setLink(link2);
-      setLinkD(linkD2);
-    } else if (activeTab === '3쿼터') {
-      setLink(link3);
-      setLinkD(linkD3);
-    }
-  }, [activeTab, link1, link2, link3]);
-  
+    setLink(videoLinks[activeTab]);
+    setLinkD(downloadLinks[activeTab]);
+  }, [activeTab, videoLinks, downloadLinks]);
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: '풀 영상',
-          text: `${activeTab} 풀 영상을 공유합니다.`,
+          title: '팀 영상',
+          text: `${activeTab} 팀 영상을 공유합니다.`,
           url: linkD,
         });
       } catch (error) {
-
+        console.error(error);
       }
     } else {
       alert('이 브라우저는 공유 기능을 지원하지 않습니다.');
     }
   };
+
   const handleDownload = async () => {
     if (!linkD) {
       alert('다운로드 링크가 없습니다.');
@@ -76,7 +88,13 @@ const TotalMov = () => {
   return (
     <TotalMovStyle>
       <Nav arrow={true}/>
-      <div style={{width:"100vw"}}><Quarter activeTab={activeTab} setActiveTab={setActiveTab}/></div>
+      <div style={{width:"100vw"}}>
+        <Quarter
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          quarterCount={quarterCount}
+        />
+      </div>
       <div className='greybox'>
         <div className='theme'>FULL CAM</div>
         <div className='titlebox'>
