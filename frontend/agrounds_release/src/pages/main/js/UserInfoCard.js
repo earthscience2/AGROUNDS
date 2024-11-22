@@ -8,7 +8,7 @@ import { PositionBackColor } from "../../../function/PositionColor";
 const UserInfoCard = () => {
   const navigate = useNavigate();
 
-  const backgroundColor = PositionBackColor["GK"] || "linear-gradient(117.23deg, rgba(92, 139, 245, 0.8), rgba(76, 103, 244) , rgba(114, 192, 250) 80%)";
+  const backgroundColor = PositionBackColor["CM"] || "linear-gradient(117.23deg, rgba(92, 139, 245, 0.8), rgba(76, 103, 244) , rgba(114, 192, 250) 80%)";
 
   return (
     <div className="userinfo" style={{background: backgroundColor}}>
@@ -17,7 +17,7 @@ const UserInfoCard = () => {
           <img className="back" src={LeftWhite} />
         </div>
       </div>
-      <InfoCard position="GK" />
+      <InfoCard position="CM" />
     </div>
   );
 };

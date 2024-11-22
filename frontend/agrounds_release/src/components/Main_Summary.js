@@ -1,10 +1,12 @@
 import React from 'react';
-import './Main_Summary.scss'
+import './Main_Summary.scss';
+import { useNavigate } from 'react-router-dom';
 
 const MainSummary = () => {
+  const navigate = useNavigate();
   return (
     <div className='mainsummary'>
-      <div className='infobox'>
+      <div className='infobox' onClick={() => navigate('/userinfo')}>
         <div className='info'>
           <p className='age'>만 32세</p>
           <p className='name'>손흥민</p>

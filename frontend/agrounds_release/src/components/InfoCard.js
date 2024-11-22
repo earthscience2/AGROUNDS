@@ -6,7 +6,6 @@ import {PositionColor} from "../function/PositionColor";
 const InfoCard = ({ position }) => {
 
   const backgroundColor = PositionColor[position] || "linear-gradient(117.23deg, rgba(92, 139, 245, 0.8), rgba(76, 103, 244) , rgba(114, 192, 250) 80%)";
-  console.log(position)
   return (
     <div className="cardBack" style={{ background: backgroundColor }}>
       <div className="info-item">빛현우<p className="age">만 33세, 남성</p></div>

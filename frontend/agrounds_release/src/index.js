@@ -15,7 +15,7 @@ import ExtraInfo from './pages/onboard/js/ExtraInfo';
 import PreferPosition from './pages/onboard/js/PreferPosition';
 import Main from './pages/main/js/Main';
 import UserInfoCard from './pages/main/js/UserInfoCard';
-
+import TeamList from './pages/main/js/TeamList';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -69,6 +69,11 @@ const router = createBrowserRouter([
     path: "/userinfo",
     element: <UserInfoCard />,
   },
+  {
+    path: "/teamlist",
+    element: <TeamList />,
+  },
+  
 
 ]);
 
