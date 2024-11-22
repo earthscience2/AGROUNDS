@@ -3,6 +3,8 @@ import device from '../assets/device.png';
 import styled from 'styled-components';
 import ovr from '../assets/ovr.png';
 import logo from '../assets/logo_sample.png';
+import location from '../assets/location.png';
+import Image_Comp from '../components/Image_Comp';
 
 const MyTeam = () => {
   return (
@@ -53,8 +55,25 @@ const Device = () => {
   );
 };
 
+const RecentMatchS = ({logo1, logo2}) => {
+  return (
+    <RecentMatchStyle>
+      <p className='date'>09.10(토)</p>
+      <div className='place'><img src={location} />인하대학교 운동장</div>
+      <div className='imgbox'>
+        <Image_Comp width='5vh' img={logo1}/>
+        <div className='secimg'>
+          <Image_Comp  width='5vh' img={logo2}/>
+        </div>
+      </div>
+    </RecentMatchStyle>
+  );
+};
 
-export {MyTeam, MyOvr, MatchPlan, Device};
+
+export {MyTeam, MyOvr, MatchPlan, Device, RecentMatchS};
+
+
 const MyTeamStyle = styled.div`
     display: flex;
     flex-direction: column;
@@ -188,5 +207,37 @@ const DeviceStyle = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+`
+
+const RecentMatchStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 80%;
+  .date{
+    font-size: 1.3vh;
+    font-weight: 400;
+    color: #6F6F6F;
+    margin: .5vh 0;
+  }
+  .place{
+    font-size: 1.5vh;
+    font-weight: 500;
+    color: #6F6F6F;
+    margin: 1vh 0;
+    display: flex;
+    align-items: center;
+    & > img{
+      height: 1.5vh;
+    }
+  }
+  .imgbox{
+    display: flex;
+    margin-top: 8vh;
+    .secimg{
+      position: relative;
+      right: 1.5vh;
+    }
   }
 `

@@ -16,6 +16,8 @@ import PreferPosition from './pages/onboard/js/PreferPosition';
 import Main from './pages/main/js/Main';
 import UserInfoCard from './pages/main/js/UserInfoCard';
 import TeamList from './pages/main/js/TeamList';
+import MyTeam from './pages/main/js/MyTeam';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -73,7 +75,10 @@ const router = createBrowserRouter([
     path: "/teamlist",
     element: <TeamList />,
   },
-  
+  {
+    path: "/myteam",
+    element: <MyTeam />,
+  },
 
 ]);
 
