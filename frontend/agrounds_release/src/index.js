@@ -14,6 +14,7 @@ import EssencialInfo from './pages/onboard/js/EssencialInfo';
 import ExtraInfo from './pages/onboard/js/ExtraInfo';
 import PreferPosition from './pages/onboard/js/PreferPosition';
 import Main from './pages/main/js/Main';
+import UserInfoCard from './pages/main/js/UserInfoCard';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
   {
     path: "/main",
     element: <Main />,
+  },
+  {
+    path: "/userinfo",
+    element: <UserInfoCard />,
   },
 
 ]);
