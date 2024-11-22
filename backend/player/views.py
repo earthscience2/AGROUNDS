@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 # from .models import User_info
-from DB.models import UserInfo, UserMatch
+from DB.models import UserInfo
 from rest_framework.generics import get_object_or_404
 
 from .serializers import *
@@ -29,27 +29,32 @@ class getPlayerInfo(APIView):
         serializers = UserMainPageSerializer(user_info, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-class MatchInfoAPIView(APIView):
+class MatchInfoUserAPIView(APIView):
     def post(self, request):
-        # `user_code`를 POST 요청에서 가져옴
-        user_code = request.data.get('user_code')
+        # MatchProcessSerializer에 데이터 전달
+        serializer = MatchProcessSerializer(data=request.data)
 
-        # `user_code`가 없으면 에러 반환
-        if not user_code:
-            return Response(
-                {"error": "user_code parameter is required."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        # 데이터 검증
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # `UserMatch` 테이블에서 `user_code`로 데이터 조회
-        user_matches = UserMatch.objects.filter(user_code=user_code)
+        # 처리된 데이터 가져오기
+        result = serializer.process()
 
-        if not user_matches.exists():
-            return Response(
-                {"error": "No match found for the given user_code."},
-                status=status.HTTP_404_NOT_FOUND
-            )
+        # 결과 반환
+        return Response(result, status=status.HTTP_200_OK)
 
-        # `UserMatchSerializer`로 직렬화하여 응답 반환
-        serializer = UserMatchSerializer(user_matches, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class MatchInfoAsTeamAPIView(APIView):
+    def post(self, request):
+        # 요청 데이터 처리
+        serializer = MatchProcessTeamSerializer(data=request.data)
+
+        # 데이터 검증
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # 데이터 처리 및 결과 생성
+        result = serializer.process()
+
+        # 결과 반환
+        return Response(result, status=status.HTTP_200_OK)
