@@ -19,6 +19,7 @@ class TestAnalyzeData(models.Model):
     match_date = models.CharField(max_length=20, default='20000101')
     match_number = models.IntegerField(default=0)
     quarter = models.IntegerField(default=0)
+    match_type = models.CharField(max_length=45, default='all')
 
     class Meta:
         managed = False
