@@ -335,3 +335,19 @@ class fullReplayVideo(APIView):
 
         except TestAnalyzeData.DoesNotExist:
             raise serializers.ValidationError(f"매치 코드 {match_code}에 해당하는 데이터가 존재하지 않습니다.")
+
+class getMatchType(APIView):
+    def post(self, request):
+        data = request.data
+        match_code = data.get('match_code')
+
+        if not match_code:
+            raise serializers.ValidationError("match_code가 필요합니다.")
+
+        try:
+            match = TestAnalyzeData.objects.filter(match_code=match_code).first()
+
+            return Response({"quarter" : match.match_type}, status=status.HTTP_200_OK)
+        
+        except TestAnalyzeData.DoesNotExist:
+                raise serializers.ValidationError(f"매치 코드 {match_code}에 해당하는 데이터가 존재하지 않습니다.")
