@@ -1,0 +1,27 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.anal{
+  @include display(flex, column, center, start);
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgb(228,232,237);
+  .anal-title{
+    @include font(3.2vh, 700, #262626);
+    width: 90%;
+    margin: 0 0 3vh 0;
+  }
+  .gap{
+    height: 15vh;
+  }
+}

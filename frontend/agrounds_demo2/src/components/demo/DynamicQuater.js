@@ -72,10 +72,11 @@ const QuarterStyle = styled.div`
         height: 22vh;
         border-radius: 2vh;
         overflow: hidden;
+        background-color: white;
         & > img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
         }
       }
     }
@@ -93,10 +94,11 @@ const QuarterStyle = styled.div`
         height: 26vh;
         border-radius: 2vh;
         overflow: hidden;
+        background-color: white;
         & > img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
         }
       }
     }
@@ -114,10 +116,11 @@ const QuarterStyle = styled.div`
         height: 36vh;
         border-radius: 2vh;
         overflow: hidden;
+        background-color: white;
         & > img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
         }
       }
     }

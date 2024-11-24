@@ -1,0 +1,78 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.totalanal{
+  @include display(flex, column, start, start);
+  width: 90%;
+  .analdate{
+    @include font(1.5vh, 400, rgb(130,134,136));
+  }
+  .analbox{
+    width: 100%;
+    background-color: white;
+    min-height: 22vh;
+    border-radius: 2vh; 
+    @include display(flex, row, center, start);
+    .titlebox{
+      width: 50%;
+      border-right: .2vh solid #F0F0F0;
+      @include display(flex, column, center, center);
+      .imgbox{
+        @include display(flex, row, center, center);
+        position: relative;
+        left: .5vh;
+        width: 100%;
+        .img2{
+          position: relative;
+          right: 1.5vh;
+        }
+      }
+      .place{
+        @include font(1.6vh, 500, #6F6F6F);
+        width: 75%;
+        margin: 3vh 0 .5vh 0;
+      }
+      .fc{
+        @include font(2vh, 700, #262626);
+        width: 75%;
+        margin: 0;
+      }
+    }
+    .analdata{
+      @include display(flex, column, center, center);
+      width: 50%;
+      .detaildatarow{
+        @include display(flex, row, space-between, space-between);
+        width: 70%;
+        .title{
+          margin: .4vh 0;
+          @include font(1.5vh, 500, #6F6F6F);
+        }
+        .data{
+          margin: .4vh 0;
+          @include font(1.4vh, 600, #262626);
+        }
+      }
+      .button{
+        margin-top: 1.5vh;
+        margin-bottom: -.5vh;
+        border: none;
+        background-color: #0EAC6A;
+        color: white;
+        padding: 1.2vh 3.2vh;
+        border-radius: 1vh;
+        @include font(1.5vh, 700,white);
+      }
+    }
+  }
+}

@@ -1,5 +1,28 @@
 .main{
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #eeeff3;
+  
+  .subjectbox{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.2vh;
+    justify-items: baseline;
+    margin-top: 5vh;
+    & > :nth-child(odd) {
+      justify-self: end;
+    }
+  
+    & > :nth-child(even) { 
+      justify-self: start; 
+    }
+  }
+  .recentmatchbox{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2vh;
+  }
 }
