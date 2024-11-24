@@ -347,7 +347,7 @@ class getMatchType(APIView):
         try:
             match = TestAnalyzeData.objects.filter(match_code=match_code).first()
 
-            return Response({"quarter" : match.match_type}, status=status.HTTP_200_OK)
+            return Response({"match_type" : match.match_type}, status=status.HTTP_200_OK)
         
         except TestAnalyzeData.DoesNotExist:
                 raise serializers.ValidationError(f"매치 코드 {match_code}에 해당하는 데이터가 존재하지 않습니다.")
