@@ -87,11 +87,47 @@ class V2_MatchInfo(models.Model):
         managed = False
         db_table = 'V2_match_info'
 
+# user_match 
 class UserMatch(models.Model):
-    match_code = models.CharField(max_length=45, null=False) 
-    user_code = models.CharField(max_length=45, null=False)   
-    player_or_team = models.CharField(max_length=45, null=True, blank=True) 
+    index = models.AutoField(primary_key=True)  # Auto-increment 필드
+    match_code = models.CharField(max_length=45, null=False)  # match_code 필드
+    user_code = models.CharField(max_length=45, null=False)  # user_code 필드
 
     class Meta:
         managed = False
-        db_table = 'UserMatch'
+        db_table = 'user_match'
+
+# user_match_as_team 
+class UserMatchAsTeam(models.Model):
+    index = models.AutoField(primary_key=True)  # Auto-increment 필드
+    match_code = models.CharField(max_length=45, null=False)  # match_code 필드
+    user_code = models.CharField(max_length=45, null=False)  # user_code 필드
+
+    class Meta:
+        managed = False
+        db_table = 'user_match_as_team'
+
+# team_match_info 테이블
+class TeamMatchInfo(models.Model):
+    match_code = models.CharField(primary_key=True, max_length=45)
+    match_team_code = models.CharField(max_length=45, null=True, blank=True)
+    match_quarter_info = models.JSONField(null=True, blank=True)
+    match_name = models.CharField(max_length=45, null=True, blank=True)
+    match_schedule = models.CharField(max_length=45, null=True, blank=True)
+    gps_url = models.JSONField(null=True, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = "team_match_info"
+
+# user_match_info 테이블
+class UserMatchInfo(models.Model):
+    match_code = models.CharField(primary_key=True, max_length=45) 
+    match_quarter_info = models.JSONField(null=True, blank=True)  
+    match_name = models.CharField(max_length=45, null=True, blank=True)
+    match_schedule = models.CharField(max_length=45, null=True, blank=True)
+    gps_url = models.JSONField(null=True, blank=True)  
+
+    class Meta:
+        managed = False  
+        db_table = "user_match_info"
