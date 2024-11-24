@@ -48,14 +48,18 @@ const Demo_main = () => {
     })
   }, [])
 
-
+  const MoreService = () => {
+    sessionStorage.clear();
+    navigate('/demo/main');
+    window.location.reload();
+  }
   const TypeReturn = () => {
     if (type === 'full') {
       return (
         <>
           <MainLayout imgsrc={main6} bgColor="#616161" onClick={() => navigate('/demo/totalmov')}>확인</MainLayout>
           <MainLayout imgsrc={main4} bgColor="#616161" onClick={() => window.location.href = 'https://forms.gle/qjFGZjtEWr4FfPe67'}>확인</MainLayout>
-          <MainLayout imgsrc={main7} bgColor="#616161" onClick={() => navigate('/demo/main')}>확인</MainLayout>
+          <MainLayout imgsrc={main7} bgColor="#616161" onClick={MoreService}>확인</MainLayout>
           <MainLayout imgsrc={main5} bgColor="#055540" onClick={() => navigate('/')} >둘러보기</MainLayout>
         </>
       )
@@ -65,7 +69,7 @@ const Demo_main = () => {
           <MainLayout imgsrc={main6} bgColor="#616161" onClick={() => navigate('/demo/totalmov')}>확인</MainLayout>
           <MainLayout imgsrc={main1} bgColor="#616161" onClick={() => navigate('/demo/teamMov')}>확인</MainLayout>
           <MainLayout imgsrc={main4} bgColor="#616161" onClick={() => window.location.href = 'https://forms.gle/qjFGZjtEWr4FfPe67'}>확인</MainLayout>
-          <MainLayout imgsrc={main7} bgColor="#616161" onClick={() => navigate('/demo/main?user_id=u_001&match_code=m_001')}>확인</MainLayout>
+          <MainLayout imgsrc={main7} bgColor="#616161" onClick={MoreService}>확인</MainLayout>
           <MainLayout imgsrc={main5} bgColor="#055540" onClick={() => navigate('/')} >둘러보기</MainLayout>
         </>
       )
