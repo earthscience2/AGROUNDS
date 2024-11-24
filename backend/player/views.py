@@ -28,3 +28,33 @@ class getPlayerInfo(APIView):
         # 필터링된 데이터를 직렬화
         serializers = UserMainPageSerializer(user_info, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
+
+class MatchInfoUserAPIView(APIView):
+    def post(self, request):
+        # MatchProcessSerializer에 데이터 전달
+        serializer = MatchProcessSerializer(data=request.data)
+
+        # 데이터 검증
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # 처리된 데이터 가져오기
+        result = serializer.process()
+
+        # 결과 반환
+        return Response(result, status=status.HTTP_200_OK)
+
+class MatchInfoAsTeamAPIView(APIView):
+    def post(self, request):
+        # 요청 데이터 처리
+        serializer = MatchProcessTeamSerializer(data=request.data)
+
+        # 데이터 검증
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # 데이터 처리 및 결과 생성
+        result = serializer.process()
+
+        # 결과 반환
+        return Response(result, status=status.HTTP_200_OK)

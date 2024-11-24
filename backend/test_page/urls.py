@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path("get-quarter-number/", views.getQuarterNumber.as_view()),
+    path("get-match-type/", views.getMatchType.as_view()),
     path("ai-summation/", views.aiSummation.as_view()),
     path("analyze-data/", views.analyzeData.as_view()),
     path("player-replay-video/", views.playerReplayVideo.as_view()),
