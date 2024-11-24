@@ -12,7 +12,7 @@ const Main = () => {
   const navigate = useNavigate();
   return (
     <div className='main'>
-      <LogoBellNav />
+      <LogoBellNav logo={true}/>
       <MainSummary/>
       <div className='subjectbox'>
         <Main_Subject title='나의 팀' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={MyTeam()} onClick={() => navigate('/myteam')}/>

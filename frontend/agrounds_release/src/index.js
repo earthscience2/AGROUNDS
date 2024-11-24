@@ -18,6 +18,7 @@ import UserInfoCard from './pages/main/js/UserInfoCard';
 import TeamList from './pages/main/js/TeamList';
 import MyTeam from './pages/main/js/MyTeam';
 import MyOvr from './pages/main/js/MyOvr';
+import Anal from './pages/main/js/Anal';
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
   {
     path: "/myovr",
     element: <MyOvr />,
+  },
+  {
+    path: "/analysis",
+    element: <Anal />,
   },
 
 ]);

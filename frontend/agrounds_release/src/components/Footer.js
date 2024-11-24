@@ -10,16 +10,18 @@ import soccerGrey from '../assets/soccer-grey.png';
 import userGrey from '../assets/user-grey.png';
 import connectGrey from '../assets/connect-grey.png';
 import './Footer.scss';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <div className='footer'>
       <div className='box'>
-        <img className='icon' src={homeGrey} />
+        <img className='icon' src={homeGrey} onClick={() => navigate('/main')}/>
         <p className='title'>홈</p>
       </div>
       <div className='box'>
-        <img className='icon' src={graphGrey} />
+        <img className='icon' src={graphGrey} onClick={() => navigate('/analysis')}/>
         <p className='title'>경기분석</p>
       </div>
       <div className='box'>
