@@ -204,6 +204,7 @@ const MyOvrStyle = styled.div`
 const MatchPlanStyle = styled.div`
   width: 100%;
   height: 60%;
+  margin-top: 10%;
   display: flex;
   justify-content: center;
   .circleline{
