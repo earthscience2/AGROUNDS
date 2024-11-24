@@ -14,6 +14,11 @@ import EssencialInfo from './pages/onboard/js/EssencialInfo';
 import ExtraInfo from './pages/onboard/js/ExtraInfo';
 import PreferPosition from './pages/onboard/js/PreferPosition';
 import Main from './pages/main/js/Main';
+import UserInfoCard from './pages/main/js/UserInfoCard';
+import TeamList from './pages/main/js/TeamList';
+import MyTeam from './pages/main/js/MyTeam';
+import MyOvr from './pages/main/js/MyOvr';
+import Anal from './pages/main/js/Anal';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +68,26 @@ const router = createBrowserRouter([
   {
     path: "/main",
     element: <Main />,
+  },
+  {
+    path: "/userinfo",
+    element: <UserInfoCard />,
+  },
+  {
+    path: "/teamlist",
+    element: <TeamList />,
+  },
+  {
+    path: "/myteam",
+    element: <MyTeam />,
+  },
+  {
+    path: "/myovr",
+    element: <MyOvr />,
+  },
+  {
+    path: "/analysis",
+    element: <Anal />,
   },
 
 ]);

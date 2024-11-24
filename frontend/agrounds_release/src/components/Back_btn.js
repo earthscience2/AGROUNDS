@@ -1,10 +1,13 @@
 import React from 'react';
 import left from '../assets/left.png';
+import { useNavigate } from 'react-router-dom';
 
 const Back_btn = () => {
+  const navigate = useNavigate();
+
   return (
     <div style={{ width:'90vw', padding: '10vw 5vw'}}>
-      <img src={left} style={{width: '25px'}}/>
+      <img src={left} style={{width: '25px'}} onClick={() => navigate(-1)}/>
     </div>
   );
 };

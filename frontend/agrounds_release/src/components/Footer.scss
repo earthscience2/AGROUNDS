@@ -1,7 +1,8 @@
 .footer{
-  width: 100vw;
+  width: 100%;
+  max-width: 60vh;
   height: 10vh;
-  background-color: white;
+  background-color: rgb(253,253,255);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   position: fixed;

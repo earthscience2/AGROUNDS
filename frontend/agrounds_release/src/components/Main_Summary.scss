@@ -28,11 +28,12 @@
       }
     }
     .position{
-      background-color: aqua;
+      background: linear-gradient(to top, rgb(113, 152, 246 ) ,  rgb(122, 194, 249) 90%, rgb(124, 205, 250) );
       border-radius: 50%;
       width: 80px;
       height: 80px;
       @include display(row, center, center);
+      @include font(2vh, 700, white)
     }
   }
   .playbox{
@@ -40,7 +41,7 @@
     width: 90%;
     .datetitle{
       @include font(16px, 500, #A2A9B0);
-      margin: 10px 0;
+      margin: 5px 0;
     }
     .bottombox{
       width: 100%;
