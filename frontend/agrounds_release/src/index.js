@@ -17,6 +17,7 @@ import Main from './pages/main/js/Main';
 import UserInfoCard from './pages/main/js/UserInfoCard';
 import TeamList from './pages/main/js/TeamList';
 import MyTeam from './pages/main/js/MyTeam';
+import MyOvr from './pages/main/js/MyOvr';
 
 const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
   {
     path: "/myteam",
     element: <MyTeam />,
+  },
+  {
+    path: "/myovr",
+    element: <MyOvr />,
   },
 
 ]);

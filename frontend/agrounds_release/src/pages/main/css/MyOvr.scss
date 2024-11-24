@@ -1,0 +1,26 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+.myovr{
+  @include display(flex, column, center, start);
+  background-color: rgb(247, 248,250);
+  min-height: 100vh;
+  width: 100%;
+  .avescorebox{
+    @include display(flex, row, center, center);
+    gap: 1.5vh;
+    width: 90%;
+    margin-top: 5vh;
+  }
+  .myovrchartbox{
+    @include display(flex, row, center, center);
+    width: 100%;
+    height:20vh;
+    margin-top: 5vh;
+    margin-bottom: 10vh;
+  }
+}

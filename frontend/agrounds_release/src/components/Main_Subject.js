@@ -3,16 +3,15 @@ import './Main_Subject.scss';
 import blackarrow from '../assets/left.png';
 import whitearrow from '../assets/left-white.png';
 
-const Main_Subject = ({title, BG, color, children, onClick}) => {
+const Main_Subject = ({title, BG, color, children, arrow, arrowC, onClick}) => {
   return (
     <div className='subject' style={{backgroundColor: BG, color:color}} onClick={onClick}>
-      {title='' ? null : 
+      {arrow===true ? 
         <div className='titlebox'>
           <p className='title'>{title}</p>
-          { color='#FFFFFF' ? 
-          <img className='rightarrow' src={whitearrow} /> : 
-          <img className='rightarrow' src={blackarrow} /> }
-        </div>
+          { arrowC==='black' ? <img className='rightarrow' src={blackarrow} />  : <img className='rightarrow' src={whitearrow} /> }
+        </div> : 
+        null
       }
       {children}
     </div>

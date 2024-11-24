@@ -15,10 +15,10 @@ const Main = () => {
       <LogoBellNav />
       <MainSummary/>
       <div className='subjectbox'>
-        <Main_Subject title='나의 팀' BG='#FFFFFF' color='#262626' children={MyTeam()} onClick={() => navigate('/myteam')}/>
-        <Main_Subject title='나의 OVR' BG='#10CC7E' color='#262626' children={MyOvr()}/>
-        <Main_Subject title='경기 일정' BG='#1C3E71' color='#FFFFFF' children={MatchPlan()}/>
-        <Main_Subject BG='#262626' children={Device()}/>
+        <Main_Subject title='나의 팀' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={MyTeam()} onClick={() => navigate('/myteam')}/>
+        <Main_Subject title='나의 OVR' BG='#10CC7E' color='#262626' arrowC='black' arrow={true}children={MyOvr()} onClick={() => navigate('/myovr')}/>
+        <Main_Subject title='경기 일정' BG='#1C3E71' color='#FFFFFF' arrowC='white' arrow={true}children={MatchPlan()}/>
+        <Main_Subject BG='#262626' arrow={false} children={Device()}/>
       </div>
       <div className='recentmatchbox'>
         <RecentMatch />

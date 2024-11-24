@@ -5,6 +5,7 @@ import ovr from '../assets/ovr.png';
 import logo from '../assets/logo_sample.png';
 import location from '../assets/location.png';
 import Image_Comp from '../components/Image_Comp';
+import BarChart from '../components/BarChart';
 
 const MyTeam = () => {
   return (
@@ -71,7 +72,70 @@ const RecentMatchS = ({logo1, logo2}) => {
 };
 
 
-export {MyTeam, MyOvr, MatchPlan, Device, RecentMatchS};
+const AverageScore = () => {
+  return(
+    <AverageScoreStyle>
+      <p className='title'>평점지수 추이</p>
+      <div className='scorebox'>
+        <p className='score'>7.2</p>
+        <p className='scoretitle'>평균 평점</p>
+      </div>
+      <div className='allteambox'>
+        <div className='teambox'>
+          <div className='teambbox'>
+            <Image_Comp width="4vh" img={logo}/>
+            <p className='date'>09.22</p>
+          </div>
+          <div className='colorbbox'>
+            <div className='colorbox'></div>
+            <p className='colorscore'>6.8</p>
+          </div>
+        </div>
+        <div className='teambox'>
+          <div className='teambbox'>
+            <Image_Comp width="4vh" img={logo}/>
+            <p className='date'>09.22</p>
+          </div>
+          <div className='colorbbox'>
+            <div className='colorbox'></div>
+            <p className='colorscore'>6.8</p>
+          </div>
+        </div>
+        <div className='teambox'>
+          <div className='teambbox'>
+            <Image_Comp width="4vh" img={logo}/>
+            <p className='date'>09.22</p>
+          </div>
+          <div className='colorbbox'>
+            <div className='colorbox'></div>
+            <p className='colorscore'>6.8</p>
+          </div>
+        </div>
+      </div>
+    </AverageScoreStyle>
+  )
+}
+
+const AttackAve = () => {
+  return(
+    <AttackAveStyle>
+      <p className='title'>공격지수 추이</p>
+      <div className='chart'></div>
+      <p className='title'>수비지수 추이</p>
+      <div className='chart'></div>
+    </AttackAveStyle>
+  )
+}
+
+const OvrBarChart = () => {
+  return(
+    <OvrBarChartStyle>
+      <BarChart />
+    </OvrBarChartStyle> 
+  )
+}
+
+export {MyTeam, MyOvr, MatchPlan, Device, RecentMatchS, AverageScore, AttackAve, OvrBarChart};
 
 
 const MyTeamStyle = styled.div`
@@ -189,12 +253,13 @@ const MatchPlanStyle = styled.div`
 `
 const DeviceStyle = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   .deviceimg{
-    width: 40%;
+    height: 45%;
     margin-bottom: 2vh;
   }
   .button{
@@ -240,4 +305,94 @@ const RecentMatchStyle = styled.div`
       right: 1.5vh;
     }
   }
+`
+
+const AverageScoreStyle = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .title {
+    font-size: 1.8vh;
+    font-weight: 700;
+    width: 80%;
+  }
+  .scorebox{
+    display: flex;
+    width: 80%;
+    align-items: end;
+    .score{
+      font-size: 3.5vh;
+      font-weight: 700;
+      margin: 0;
+    }
+    .scoretitle{
+      font-size: 1.5vh;
+      font-weight: 500;
+      color: #A8A8A8;
+      margin: 0 1vh; 
+    }
+  }
+  .allteambox{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-top: 2vh;
+    .teambox{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .teambbox{
+        display: flex;
+        align-items: center;
+        .date{
+          font-size: 1.5vh;
+          font-weight: 500;
+          color: #8D8D8D;
+          margin: 1.2vh 0 1vh 1vh;
+        }
+      }
+      .colorbbox{
+        display: flex;
+        align-items: center;
+        .colorbox{
+          width: .7vh;
+          height: .7vh;
+          background-color: #20CBAD;
+          margin: auto;
+        }
+        .colorscore{
+          margin: 1.2vh 0 1vh .7vh;
+          font-size: 1.7vh;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+`
+
+const AttackAveStyle = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .title{
+    font-size: 1.8vh;
+    font-weight: 700;
+    width: 80%;
+  }
+  .chart{
+    width: 80%;
+    height: 20%;
+  }
+`
+
+const OvrBarChartStyle = styled.div`
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
