@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Quarter_Tab.scss';
 
 const Quarter_Tab = ({quarters}) => {
-  const [activeTab, setActiveTab] = useState("요약");
+  const [activeTab, setActiveTab] = useState("summary");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);

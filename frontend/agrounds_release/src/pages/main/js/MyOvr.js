@@ -15,7 +15,6 @@ const MyOvr = () => {
     rating: 44,
   };
 
-  // 데이터 배열로 변환
   const chartData = [
     data.stamina,
     data.sprint,

@@ -4,14 +4,14 @@ import rightBtn from '../assets/right.png';
 
 const HorizontalSwiper = ({ items }) => {
   const [isFullView, setIsFullView] = useState(false);
-  const [activeItem, setActiveItem] = useState(null); // 선택된 항목의 인덱스를 관리
+  const [activeItem, setActiveItem] = useState(0); 
 
   const handleFullView = () => {
     setIsFullView(true);
   };
 
   const handleItemClick = (index) => {
-    setActiveItem(index); // 클릭된 항목의 인덱스를 상태로 설정
+    setActiveItem(index); 
   };
 
   const visibleItems = isFullView ? items : items.slice(0, 5);
@@ -22,8 +22,8 @@ const HorizontalSwiper = ({ items }) => {
         {visibleItems.map((item, index) => (
           <div
             key={index}
-            className={`swiper-item ${activeItem === index ? "active" : ""}`} // 클릭된 항목에 "active" 클래스 추가
-            onClick={() => handleItemClick(index)} // 클릭 이벤트
+            className={`swiper-item ${activeItem === index ? "active" : ""}`} 
+            onClick={() => handleItemClick(index)} 
           >
             <div
               className={`datebox ${activeItem === index ? "active" : ""}`}
