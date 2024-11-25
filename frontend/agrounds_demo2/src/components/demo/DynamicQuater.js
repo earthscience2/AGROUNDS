@@ -113,7 +113,7 @@ const QuarterStyle = styled.div`
       align-items: center;
       .imgwrap {
         width: 30%;
-        height: 36vh;
+        height: 30vh;
         border-radius: 2vh;
         overflow: hidden;
         background-color: white;
