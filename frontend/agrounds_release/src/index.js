@@ -91,7 +91,7 @@ const router = createBrowserRouter([
     element: <Anal />,
   },
   {
-    path: "/personal-analysis",
+    path: "/personalanalysis",
     element: <PersonalAnalysis />,
   },
 

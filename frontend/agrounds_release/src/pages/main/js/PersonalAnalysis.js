@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/PersonalAnalysis.scss';
 import Back_btn from '../../../components/Back_btn';
 import Login_title from '../../../components/Login_title';
@@ -8,6 +8,8 @@ import Anal_Position_Nav from '../../../components/Anal_Position_Nav';
 import RayderChart from '../../../components/RayderChart';
 import Anal_Detail from '../../../components/Anal_Detail';
 import { ActivityLevel, Speed, Sprint } from '../../../function/AnalysisData';
+import { GetDetailAnal } from '../../../api/analysis';
+import Loading from '../../../components/Loading';
 
 const data = {
   stamina: 65,
@@ -60,7 +62,24 @@ const stats = {
     "activity_range_percentage": 19.69
 }
 const PersonalAnalysis = () => {
+  const [apiData, setApiData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await GetDetailAnal();
+      setApiData(data);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <Loading />; 
+  }
+
+  console.log(apiData);
   return (
     <div className='personalanal'>
       <Back_btn />
