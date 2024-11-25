@@ -1,5 +1,14 @@
 base = "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com"
 
+def getQurterName(num_of_quarter, quarter):
+    if num_of_quarter == 2 :
+        if(quarter == 1) :
+            return "전반전"
+        else :
+            return "후반전"
+    else :
+        return f"{quarter}쿼터"
+
 def makeGpsMatchDir(user_id, match_code, match_date, match_number):
     return f"demo/gps/{match_date}_{match_code}/{user_id}_{match_date}_{match_number}"
 
@@ -11,8 +20,8 @@ def makeResultJsonKey(user_id, match_code, match_date, match_number):
     file_key = f"{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/result.json"
     return file_key
 
-def getHitmapUrl(user_id, match_code, match_date, match_number, quarter, section):
-    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter}쿼터_{section}_"
+def getHitmapUrl(user_id, match_code, match_date, match_number, quarter_name, section):
+    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter_name}_{section}_"
     if(section == "total"):
         file_url += "TI_H.png"
     elif(section == "attack"):
@@ -21,8 +30,8 @@ def getHitmapUrl(user_id, match_code, match_date, match_number, quarter, section
         file_url += "DI_H.png"
     return file_url
 
-def getHighSpeedHitmapUrl(user_id, match_code, match_date, match_number, quarter, section):
-    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter}쿼터_{section}_"
+def getHighSpeedHitmapUrl(user_id, match_code, match_date, match_number, quarter_name, section):
+    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter_name}_{section}_"
     if(section == "total"):
         file_url += "TI_HH.png"
     elif(section == "attack"):
@@ -31,17 +40,19 @@ def getHighSpeedHitmapUrl(user_id, match_code, match_date, match_number, quarter
         file_url += "DI_HH.png"
     return file_url
 
-def getChangeDirectionUrl(user_id, match_code, match_date, match_number, quarter, section):
-    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter}쿼터_{section}_direction.png"
+def getChangeDirectionUrl(user_id, match_code, match_date, match_number, quarter_name, section):
+    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter_name}_{section}_direction.png"
     return file_url
 
-def getAccelerationChangeUrl(user_id, match_code, match_date, match_number, quarter):
-    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter}쿼터_acceleration.png"
+def getAccelerationChangeUrl(user_id, match_code, match_date, match_number, quarter_name):
+    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter_name}_acceleration.png"
     return file_url
 
-def getSpeedChangeUrl(user_id, match_code, match_date, match_number, quarter):
-    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter}쿼터_speed.png"
+def getSpeedChangeUrl(user_id, match_code, match_date, match_number, quarter_name):
+    file_url = f"{base}/{makeGpsMatchDir(user_id, match_code, match_date, match_number)}/img/{quarter_name}_speed.png"
     return file_url
+
+# 영상
 
 def getPlayerReplayUrl(type, match_code, user_id, match_date, match_number, quarter):
     file_url = f"{base}/demo/video/{match_date}_{match_code}/{quarter}쿼터/player_{type}/{user_id}_{match_date}_{match_number}_{type}/{user_id}_{match_date}_{match_number}_{type}.mpd"
