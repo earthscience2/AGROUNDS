@@ -31,7 +31,7 @@ const BarContainer = styled.div`
 const Bar = styled.div`
   display: flex;
   width: 100%;
-  height: 4vh;
+  height: 4.5vh;
   border-radius: 1vh;
   overflow: hidden;
   background-color: #e6e6e6;
@@ -47,7 +47,7 @@ const Attack = styled.div`
   background-color: #F54444;
   color: white;
   text-align: start;
-  line-height: 3;
+  display: flex;
   & > p {
     font-size: 12px;
     font-weight: 600;
@@ -58,8 +58,8 @@ const Attack = styled.div`
 const Defense = styled.div`
   background-color: #7099FF;
   color: white;
-  text-align: right;
-  line-height: 3;
+  display: flex;
+  justify-content: end;
   & > p {
     font-size: 12px;
     font-weight: 600;
