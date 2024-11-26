@@ -1,0 +1,116 @@
+.horizontal-swiper {
+  overflow-x: auto; 
+  white-space: nowrap; 
+  height: 14vh;
+  width: 100%;
+
+  .swiper-container {
+    display: flex;
+    gap: 0vh;
+
+    .swiper-item {
+      margin: 0 1vh;
+      flex: 0 0 auto; 
+      max-width: 13vh; 
+      height: 8vh;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      &:first-child{
+        margin-left: 2vh;
+      }
+      
+      .datebox{
+        background-color: rgb(229,233,237);
+        border-radius: 1vh 1vh 0 0;
+        padding: .6vh 1.5vh;
+        &.active {
+          background-color: rgb(24,172,110);
+          color: white;
+        }
+        .date {
+          font-size: 1.3vh;
+          color: #697077;
+          margin: .2vh 0;
+          &.active {
+            color: white;
+          }
+        }
+      }
+      
+      .locteambox {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        background-color: rgb(242, 244, 248);
+        border-radius: 0 0 1vh 1vh;
+        margin-top: 0.15vh;
+        padding: 1vh 2vh;
+      
+        &.active {
+          background-color: rgb(17, 152, 95); 
+          color: white; 
+        }
+        .team, .location {
+          overflow: hidden; 
+          text-overflow: ellipsis; 
+          white-space: nowrap;
+          width: 100%; 
+        }
+        .team {
+          font-size: 1.5vh;
+          font-weight: 600;
+          margin: 0.5vh 0 0 0;
+      
+          &.active {
+            color: white; 
+          }
+        }
+  
+        .location {
+          font-size: 1.3vh;
+          color: #6F6F6F;
+          margin: 0.5vh 0;
+      
+          &.active {
+            color: white !important; 
+          }
+        }
+      }
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    .view-more {
+      background-color: rgb(242,244,248);
+      border: none;
+      border-radius: 1vh;
+      font-size: 1.1vh;
+      cursor: pointer;
+      text-align: center;
+      width: 7vh;
+      height: 10vh;
+      flex: 0 0 auto;
+      display: flex;
+      margin-left: 1vh;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .img{
+        height: 2vh;
+        padding: 1vh;
+      }
+
+      &:hover {
+        background-color: #f4f4f4;
+      }
+    }
+  }
+
+  &::-webkit-scrollbar {
+    height: 1px; 
+  }
+
+}

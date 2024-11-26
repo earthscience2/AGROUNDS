@@ -19,8 +19,8 @@ const MyTeam = () => {
       </div>
       <div className='fc'>FC Bayern Munchen</div>
       <div className='subjectbox'>
-        <Main_Subject title='최근 경기' BG='#FFFFFF' color='#262626' children={<RecentMatchS logo1={logo} logo2={logo} />}/>
-        <Main_Subject title='경기 일정' BG='#1C3E71' color='#FFFFFF' children={MatchPlan()}/>
+        <Main_Subject title='최근 경기' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={<RecentMatchS logo1={logo} logo2={logo} />}/>
+        <Main_Subject title='경기 일정' BG='#1C3E71' color='#FFFFFF' arrowC='white' arrow={true}children={MatchPlan()}/>
       </div>
       <div className='teambox'>
         <div className='teamtitle' onClick={() => navigate('/teamlist')}>

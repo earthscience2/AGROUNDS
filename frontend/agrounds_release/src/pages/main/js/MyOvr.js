@@ -15,7 +15,6 @@ const MyOvr = () => {
     rating: 44,
   };
 
-  // 데이터 배열로 변환
   const chartData = [
     data.stamina,
     data.sprint,
@@ -32,9 +31,9 @@ const MyOvr = () => {
         title="나의 OVR"
         explain="경기 데이터를 기반으로 설정된 현재 나의 능력치를 확인하고 더 발전해보세요"
       />
-      {/* Radar Chart */}
+      
       <RayderChart data={chartData} rate="88" />
-      {/* Main Subjects */}
+    
       <div className="avescorebox">
         <Main_Subject BG="white" color="black" arrow={false}>
           <AverageScore />
@@ -43,7 +42,7 @@ const MyOvr = () => {
           <AttackAve />
         </Main_Subject>
       </div>
-      {/* Bar Chart */}
+   
       <div className="myovrchartbox">
         <Main_Subject title="OVR지수 추세" BG="white" color="black" arrow={true}>
           <OvrBarChart />

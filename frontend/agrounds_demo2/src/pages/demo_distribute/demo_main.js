@@ -43,10 +43,10 @@ const Demo_main = () => {
   }
 
   useEffect (() => {
-    if(!tmp && userId !== "u_000") {
-      setType('all');
-      return;
-    }
+    // if(!tmp && userId !== "u_001") {
+    //   setType('all');
+    //   return;
+    // }
     client.post('/api/test_page/get-match-type/', data)
     .then((response) => {
       setType(response.data.match_type);
