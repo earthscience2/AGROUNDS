@@ -342,12 +342,20 @@ class getMatchType(APIView):
     def post(self, request):
         data = request.data
         match_code = data.get('match_code')
+        user_code = data.get('user_code')
 
         if not match_code:
             raise serializers.ValidationError("match_code가 필요합니다.")
 
         try:
-            match = TestAnalyzeData.objects.filter(match_code=match_code).first()
+            if not user_code:
+                match = TestAnalyzeData.objects.filter(match_code=match_code).first()
+                if match is None :
+                    raise serializers.ValidationError(f"매치 코드 {match_code}에 해당하는 데이터가 존재하지 않습니다.") 
+            else : 
+                match = TestAnalyzeData.objects.filter(match_code=match_code, user_code=user_code).first()
+                if match is None :
+                    raise serializers.ValidationError(f"매치 코드 {match_code}, 유저코드 {user_code}에 해당하는 데이터가 존재하지 않습니다.") 
 
             return Response({"match_type" : match.match_type}, status=status.HTTP_200_OK)
         
