@@ -24,6 +24,12 @@ const Demo_main = () => {
   let userId = searchParams.get('user_id') || '';
   let matchCode = searchParams.get('match_code') || '';
 
+  let tmp = false;
+
+  if(!userId) {
+    tmp = true; // 유저 코드가 안들어옴
+  }
+
   if (!userId && !matchCode) {
     userId = 'u_001';
     matchCode = 'm_001';
@@ -37,6 +43,10 @@ const Demo_main = () => {
   }
 
   useEffect (() => {
+    if(!tmp && userId !== "u_000") {
+      setType('all');
+      return;
+    }
     client.post('/api/test_page/get-match-type/', data)
     .then((response) => {
       setType(response.data.match_type);
