@@ -165,8 +165,10 @@ class analyzeData(APIView):
 
             reader = S3TxtFileReader(bucket_name)
             file_content = reader.read(file_key)
+
+            quarter_name = getQurterName(match.quarter, quarter)
             json_data = json.loads(file_content) if file_content else {}
-            json_data = json_data[f'{quarter}쿼터']
+            json_data = json_data[quarter_name]
 
             fields_to_extract = [
                  "T", "D", "DPM", "LDT", "HDT", "MR", "AS", "HS",
@@ -183,11 +185,11 @@ class analyzeData(APIView):
                 if section not in json_data:
                     continue
                 filtered_data[section] = {}
-                filtered_data[section]["hitmap"] = getHitmapUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter, section)
-                filtered_data[section]["high_speed_hitmap"] = getHighSpeedHitmapUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter, section)
-                filtered_data[section]["change_direction"] = getChangeDirectionUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter, section)
-                filtered_data[section]["speed_change"] = getSpeedChangeUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter)
-                filtered_data[section]["acceleration_change"] = getAccelerationChangeUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter)
+                filtered_data[section]["hitmap"] = getHitmapUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter_name, section)
+                filtered_data[section]["high_speed_hitmap"] = getHighSpeedHitmapUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter_name, section)
+                filtered_data[section]["change_direction"] = getChangeDirectionUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter_name, section)
+                filtered_data[section]["speed_change"] = getSpeedChangeUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter_name)
+                filtered_data[section]["acceleration_change"] = getAccelerationChangeUrl(match.user_id, match.match_code, match.match_date, match.match_number, quarter_name)
 
                 section_id = ""
                 if section == "total" :
