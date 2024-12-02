@@ -20,6 +20,10 @@ import MyTeam from './pages/main/js/MyTeam';
 import MyOvr from './pages/main/js/MyOvr';
 import Anal from './pages/main/js/Anal';
 import PersonalAnalysis from './pages/main/js/PersonalAnalysis';
+import Video from './pages/main/js/Video';
+import PersonalVideo from './pages/video/js/PersonalVideo';
+import TeamVideo from './pages/video/js/TeamVideo';
+import FullVideo from './pages/video/js/FullVideo';
 
 const router = createBrowserRouter([
   {
@@ -93,6 +97,22 @@ const router = createBrowserRouter([
   {
     path: "/personalanalysis",
     element: <PersonalAnalysis />,
+  },
+  {
+    path: "/video",
+    element: <Video />,
+  },
+  {
+    path: "/personalvideo",
+    element: <PersonalVideo />,
+  },
+  {
+    path: "/teamvideo",
+    element: <TeamVideo />,
+  },
+  {
+    path: "/fullvideo",
+    element: <FullVideo />,
   },
 
 ]);

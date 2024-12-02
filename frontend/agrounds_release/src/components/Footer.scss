@@ -21,6 +21,11 @@
       font-weight: 500;
       margin: 8px 0;
       color: #A2A9B0;
+      &.active {
+        color: #000; 
+        font-weight: bold;
+      }
     }
+    
   }
 }

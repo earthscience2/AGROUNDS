@@ -16,10 +16,30 @@
   width: 100%;
   min-height: 100vh;
   background-color: rgb(228,232,237);
-  .anal-title{
-    @include font(3.2vh, 700, #262626);
+  .anal-box{
+    display: flex;
+    justify-content: space-between;
     width: 90%;
-    margin: 0 0 3vh 0;
+    .anal-title{
+      @include font(3.2vh, 700, #262626);
+      width: 90%;
+      margin: 0 0 3vh 0;
+    }
+  }
+  .line{
+    width: 100%;
+    height: 1.5px;
+    background-color: #DADFE5;
+    margin-bottom: 2vh;
+  }
+  .total-play{
+    width: 90%;
+    @include display(flex, row, start, start);
+    @include font(1.7vh, 400, #262626);
+    & > p {
+      margin: 0;
+      @include font(1.8vh, 700, #262626);
+    }
   }
   .gap{
     height: 15vh;

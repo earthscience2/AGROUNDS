@@ -1,0 +1,35 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.teamvideo{
+  width: 100%;
+  @include display(flex, column, center, start);
+  &:last-child {
+    margin-bottom: 5vh;
+  }
+
+  .line {
+    width: 90%;
+    height: 1px;
+    background-color: #DADFE5;
+  }
+  .totalnum{
+    @include display(flex, row, start, start);
+    width: 90%;
+    margin: 2vh;
+    & > p{
+      margin: 0;
+      @include font(1.8vh, 700, #262626);
+    }
+  }
+}
