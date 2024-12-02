@@ -24,6 +24,7 @@ import Video from './pages/main/js/Video';
 import PersonalVideo from './pages/video/js/PersonalVideo';
 import TeamVideo from './pages/video/js/TeamVideo';
 import FullVideo from './pages/video/js/FullVideo';
+import VideoByQuarter from './pages/video/js/VideoByQuarter';
 
 const router = createBrowserRouter([
   {
@@ -113,6 +114,10 @@ const router = createBrowserRouter([
   {
     path: "/fullvideo",
     element: <FullVideo />,
+  },
+  {
+    path: "/videobyquarter",
+    element: <VideoByQuarter />,
   },
 
 ]);
