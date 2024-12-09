@@ -29,6 +29,8 @@ import My from './pages/mypage/js/My';
 import SelectReason from './pages/mypage/js/secession/SelectReason';
 import SecessionLast from './pages/mypage/js/secession/SecessionLast';
 import Complete from './pages/mypage/js/secession/Complete';
+import MakeTeam from './pages/team/js/MakeTeam';
+import CompMakeTeam from './pages/team/js/CompMakeTeam';
 
 const router = createBrowserRouter([
   {
@@ -138,6 +140,14 @@ const router = createBrowserRouter([
   {
     path: "/secessioncomplete",
     element: <Complete />,
+  },
+  {
+    path: "/maketeam",
+    element: <MakeTeam />,
+  },
+  {
+    path: "/completemaketeam",
+    element: <CompMakeTeam />,
   },
 ]);
 
