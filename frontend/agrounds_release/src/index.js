@@ -25,6 +25,10 @@ import PersonalVideo from './pages/video/js/PersonalVideo';
 import TeamVideo from './pages/video/js/TeamVideo';
 import FullVideo from './pages/video/js/FullVideo';
 import VideoByQuarter from './pages/video/js/VideoByQuarter';
+import My from './pages/mypage/js/My';
+import SelectReason from './pages/mypage/js/secession/SelectReason';
+import SecessionLast from './pages/mypage/js/secession/SecessionLast';
+import Complete from './pages/mypage/js/secession/Complete';
 
 const router = createBrowserRouter([
   {
@@ -119,7 +123,22 @@ const router = createBrowserRouter([
     path: "/videobyquarter",
     element: <VideoByQuarter />,
   },
-
+  {
+    path: "/mypage",
+    element: <My />,
+  },
+  {
+    path: "/reason",
+    element: <SelectReason />,
+  },
+  {
+    path: "/secessionlast",
+    element: <SecessionLast />,
+  },
+  {
+    path: "/secessioncomplete",
+    element: <Complete />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -12,9 +12,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
+    img{
+      display: block;
+    }
     .icon{
       height: 3.3vh;
+      width: 3.3vh;
     }
     .title{
       font-size: 13px;

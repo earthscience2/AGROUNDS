@@ -52,13 +52,13 @@ const Footer = () => {
         />
         <p className={`title ${isActive('/info') ? 'active' : ''}`}>경기영상</p>
       </div>
-      <div className='box' onClick={() => navigate('/my')}>
+      <div className='box' onClick={() => navigate('/mypage')}>
         <img
           className='icon'
-          src={isActive('/my') ? userBlack : userGrey}
+          src={isActive('/mypage') ? userBlack : userGrey}
           alt='마이'
         />
-        <p className={`title ${isActive('/my') ? 'active' : ''}`}>마이</p>
+        <p className={`title ${isActive('/mypage') ? 'active' : ''}`}>마이</p>
       </div>
     </div>
   );
