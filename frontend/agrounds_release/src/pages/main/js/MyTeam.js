@@ -17,7 +17,7 @@ const MyTeam = () => {
     <div className='myteam'>
       <div className='teamnav'>
         <img src={left} className='leftbtn' onClick={() => navigate(-1)}/>
-        <img src={cog} className='cogbtn' onClick={() => navigate('/')}/>
+        <img src={cog} className='cogbtn' onClick={() => navigate('/teamsetting')}/>
       </div>
       <div className='logo'>
         <Image_Comp img={logo} width='8vh' />

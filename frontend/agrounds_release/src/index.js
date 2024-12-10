@@ -32,6 +32,9 @@ import Complete from './pages/mypage/js/secession/Complete';
 import MakeTeam from './pages/team/js/MakeTeam';
 import CompMakeTeam from './pages/team/js/CompMakeTeam';
 import TeamSetting from './pages/team/js/TeamSetting';
+import ChangeTeamName from './pages/team/js/ChangeTeamName';
+import CompChangeName from './pages/team/js/CompChangeName';
+import CompChangeLogo from './pages/team/js/CompChangeLogo';
 
 const router = createBrowserRouter([
   {
@@ -153,6 +156,18 @@ const router = createBrowserRouter([
   {
     path: "/teamsetting",
     element: <TeamSetting />,
+  },
+  {
+    path: "/changeteamname",
+    element: <ChangeTeamName />,
+  },
+  {
+    path: "/completechangename",
+    element: <CompChangeName />,
+  },
+  {
+    path: "/completechangelogo",
+    element: <CompChangeLogo />,
   },
 ]);
 
