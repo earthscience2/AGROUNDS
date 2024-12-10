@@ -1,0 +1,24 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.compmaketeam{
+  @include display(flex, column, center, center);
+  width: 100%;
+
+  .tab1{
+    margin-top: 15vh;
+  }
+  .tab2{
+    margin-top: 38vh;
+  }
+}

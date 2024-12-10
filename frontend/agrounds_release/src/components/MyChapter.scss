@@ -1,0 +1,43 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.my-chapter{
+  @include display(flex, column, start, center);
+  width: 90%;
+  border-bottom: 1px solid #999999;
+  .chapter-title{
+    @include font(2.4vh, 700, #000000);
+    margin: 5vh 0 2vh 0;
+  }
+  .titlebox{
+    @include display(flex, row, center, space-between);
+    width: 100%;
+    &:last-child{
+      margin-bottom: 3vh;
+    }
+    .title{
+      @include font(2vh, 500, #333333);
+      margin: 1.5vh 0;
+    }
+    .email{
+      position: relative;
+      left: 4vh;
+      @include font(1.8vh, 500, #8A8A8A);
+      margin: 1.5vh 0;
+    }
+    .arrow{
+      width: 2.8vh;
+      rotate: 180deg;
+    }
+  }
+}

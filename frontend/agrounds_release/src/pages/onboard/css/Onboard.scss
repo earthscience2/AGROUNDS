@@ -31,5 +31,30 @@
     color: #262626;
     margin: 0 0 8vh 0;
   }
+  .modal-inner{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    text-align: start;
+    width: 90%;
+    
+    .symbol{
+      width: 7vh;
+      height: 7vh;
+
+    }
+    .modal-title{
+      font-size: 3vh;
+      font-weight: 700;
+      margin: 2vh 0 1vh 0;
+    }
+    .modal-description{
+      font-size: 1.8vh;
+      font-weight: 500;
+      margin: 0 0 3vh 0;
+      color: #6F6F6F;
+    }
+  }
 }
 

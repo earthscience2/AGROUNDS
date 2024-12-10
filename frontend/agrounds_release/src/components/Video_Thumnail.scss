@@ -1,0 +1,28 @@
+.video-thumnail{
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  gap: 2vh;
+  margin: 2vh 0;
+  .imgbox{
+    width: 55%;
+    height: 13vh;
+    background-color: rgb(178, 178, 178);
+  }
+  .infobox{
+    display: flex;
+    width: 40%;
+    flex-direction: column;
+    .fc{
+      font-size: 1.8vh;
+      font-weight: 500;
+      margin: 1vh 0;
+    }
+    .date{
+      font-size: 1.6vh;
+      font-weight: 500;
+      color:#AFAFAF;
+      margin: 0;
+    }
+  }
+}

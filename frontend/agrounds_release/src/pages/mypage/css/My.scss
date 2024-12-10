@@ -1,0 +1,38 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.mypage{
+  @include display(flex, column, center, start);
+  &:last-child{
+    margin-bottom: 10vh;
+  }
+  .my-infobox{
+    @include display(flex, row, center, start);
+    width: 90%;
+    .infotext{
+      margin-left: 3vh;
+      .ename{
+        @include font(3vh, 600, #333333);
+        margin: 0;
+      }
+      .kname{
+        @include font(1.5vh, 500, #AFAFAF);
+        margin: 0;
+      }
+      .fc{
+        @include font(1.8vh, 600, #333333);
+        margin: 1vh 0 0 0;
+      }
+    }
+  }
+}
