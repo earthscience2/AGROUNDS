@@ -1,0 +1,43 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.basicinfo{
+  @include display(flex, column, center, center);
+  width: 90%;
+  border: 1px solid #c5c5c5;
+  margin-top: 4vh;
+  
+  .titlebox{
+    @include display(flex, row, center, space-between);
+    width: 90%;
+    .basicinfotitle{
+      @include font(2.5vh, 600, #333333);
+    }
+    .basicfix{
+      @include font(2vh, 600, #929292);
+      border-bottom: 1px solid #929292;
+    }
+  }
+  .basiccontentsbox{
+    @include display(flex, row, center, space-between);
+    width: 90%;
+    .contenttitle{
+      @include font(1.9vh, 500, #929292);
+      margin: 0 0 2vh 0;
+    }
+    .contentinfo{
+      @include font(1.9vh, 500, #333333);
+      margin: 0 0 2vh 0;
+    }
+  }
+}

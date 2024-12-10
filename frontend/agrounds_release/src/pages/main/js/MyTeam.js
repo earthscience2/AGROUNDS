@@ -8,12 +8,17 @@ import Member from '../../../components/Member';
 import Image_Comp from '../../../components/Image_Comp';
 import { MatchPlan, RecentMatchS } from '../../../function/SubjectContents';
 import { useNavigate } from 'react-router-dom';
+import left from '../../../assets/left.png';
+import cog from '../../../assets/cog.png';
 
 const MyTeam = () => {
   const navigate = useNavigate();
   return (
     <div className='myteam'>
-      <BackBtn />
+      <div className='teamnav'>
+        <img src={left} className='leftbtn' onClick={() => navigate(-1)}/>
+        <img src={cog} className='cogbtn' onClick={() => navigate('/')}/>
+      </div>
       <div className='logo'>
         <Image_Comp img={logo} width='8vh' />
       </div>

@@ -21,8 +21,12 @@ const Anal = () => {
   return (
     <div className='anal'>
       <LogoBellNav />
-      <p className='anal-title'>경기 분석</p>
-      <Personal_Team_Tab />
+      <div className='anal-box'>
+        <p className='anal-title'>경기 분석</p>
+        <Personal_Team_Tab />
+      </div>
+      <div className='line'></div>
+      <div className='total-play'>총 <p> 3개</p>의 경기</div>
       <TotalAnal data={data}/>
       <TotalAnal data={data}/>
       <TotalAnal data={data}/>

@@ -1,0 +1,21 @@
+.summary{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  .contents{
+    width: 88%;
+    & > p{
+      font-size: 2vh;
+      font-weight: 700;
+      margin-top: 5vh;
+    }
+    & > span{
+      font-size: 1.7vh;
+      font-weight: 400;
+      color: #393939;
+      line-height: 1.5;
+    }
+  }
+}

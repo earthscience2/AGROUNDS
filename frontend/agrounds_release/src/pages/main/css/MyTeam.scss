@@ -9,6 +9,19 @@
   @include display(flex, column, center, start);
   background-color: #eeeff3;
   width: 100%;
+  .teamnav{
+    @include display(flex, row, center, space-between);
+    height: 10vh;
+    width: 85%;
+    .leftbtn{
+      width: 3vh;
+      height: 3vh;
+    }
+    .cogbtn{
+      width: 3vh;
+      height: 3vh;
+    }
+  }
   .logo {
     width: 85%;
   }

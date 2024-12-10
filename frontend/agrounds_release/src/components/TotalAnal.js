@@ -2,9 +2,12 @@ import React from 'react';
 import './TotalAnal.scss';
 import Image_Comp from './Image_Comp';
 import logo1 from '../assets/logo_sample.png';
+import { useNavigate } from 'react-router-dom';
 
 
 const TotalAnal = ({data}) => {
+  const navigate = useNavigate();
+
   return (
     <div className='totalanal'>
       <p className='analdate'>{data.date}</p>
@@ -34,7 +37,7 @@ const TotalAnal = ({data}) => {
             <p className='title'>스프린트</p>
             <p className='data'>{data.score}점</p>
           </div>
-          <button className='button'>경기 상세 분석</button>
+          <button className='button' onClick={()=> navigate('/personalanalysis')}>경기 상세 분석</button>
         </div>
       </div>
     </div>

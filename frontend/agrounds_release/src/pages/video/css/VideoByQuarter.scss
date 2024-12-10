@@ -1,0 +1,95 @@
+.videobyquarter{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5vh 0;
+    width: 90%;
+    .centerinfo{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-right: -5vh;
+      .fc{
+        font-size: 2vh;
+        font-weight: 600;
+        color: #333333;
+        margin: 0;
+      }
+      .date{
+        font-size: 1.5vh;
+        font-weight: 600;
+        color: #AFAFAF;
+        margin:1vh 0;
+      }
+    }
+    .rightbuttons{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .btn{
+        width: 3vh;
+        height: 3vh;
+        border-radius: 50%;
+        background-color: #F6F6F6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #C5C5C5;
+        margin: 0 .5vh;
+
+        & > img {
+          height: 2vh;
+          margin: auto;
+        }
+      }
+    }
+  }
+  .quarter-tabs {
+    width: 100%;
+    margin: 0 auto;
+  
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      justify-content: space-between;
+      border-bottom: 1px solid #DADFE5;
+  
+      .tab {
+        color: #C6C6C6;
+        font-size: 1.8vh;
+        font-weight: bold;
+        padding: .7vh 0;
+        margin: 0 2% 0 6%;
+        border: none;
+        border-radius: 5px 5px 0 0;
+        cursor: pointer;
+        outline: none;
+        background-color: white;
+        transition: background-color 0.3s, color 0.3s;
+  
+        &:hover {
+          border-bottom: .4vh solid #262626;
+          color: #262626;
+        }
+  
+        &.active {
+          border-bottom: .4vh solid #262626;
+          color: #262626;
+        }
+      }
+    }
+  
+  }
+  .video{
+    width: 100%;
+    height: 25vh;
+    background-color: #AFAFAF;
+  }
+  
+}

@@ -20,6 +20,18 @@ import MyTeam from './pages/main/js/MyTeam';
 import MyOvr from './pages/main/js/MyOvr';
 import Anal from './pages/main/js/Anal';
 import PersonalAnalysis from './pages/main/js/PersonalAnalysis';
+import Video from './pages/main/js/Video';
+import PersonalVideo from './pages/video/js/PersonalVideo';
+import TeamVideo from './pages/video/js/TeamVideo';
+import FullVideo from './pages/video/js/FullVideo';
+import VideoByQuarter from './pages/video/js/VideoByQuarter';
+import My from './pages/mypage/js/My';
+import SelectReason from './pages/mypage/js/secession/SelectReason';
+import SecessionLast from './pages/mypage/js/secession/SecessionLast';
+import Complete from './pages/mypage/js/secession/Complete';
+import MakeTeam from './pages/team/js/MakeTeam';
+import CompMakeTeam from './pages/team/js/CompMakeTeam';
+import TeamSetting from './pages/team/js/TeamSetting';
 
 const router = createBrowserRouter([
   {
@@ -94,7 +106,54 @@ const router = createBrowserRouter([
     path: "/personalanalysis",
     element: <PersonalAnalysis />,
   },
-
+  {
+    path: "/video",
+    element: <Video />,
+  },
+  {
+    path: "/personalvideo",
+    element: <PersonalVideo />,
+  },
+  {
+    path: "/teamvideo",
+    element: <TeamVideo />,
+  },
+  {
+    path: "/fullvideo",
+    element: <FullVideo />,
+  },
+  {
+    path: "/videobyquarter",
+    element: <VideoByQuarter />,
+  },
+  {
+    path: "/mypage",
+    element: <My />,
+  },
+  {
+    path: "/reason",
+    element: <SelectReason />,
+  },
+  {
+    path: "/secessionlast",
+    element: <SecessionLast />,
+  },
+  {
+    path: "/secessioncomplete",
+    element: <Complete />,
+  },
+  {
+    path: "/maketeam",
+    element: <MakeTeam />,
+  },
+  {
+    path: "/completemaketeam",
+    element: <CompMakeTeam />,
+  },
+  {
+    path: "/teamsetting",
+    element: <TeamSetting />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
