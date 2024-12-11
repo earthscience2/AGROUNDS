@@ -188,13 +188,13 @@ class kakaoCallback(APIView):
         try:
             user = UserInfo.objects.get(user_id = kakao_email)
         except UserInfo.DoesNotExist: # 가입되어있지 않은 유저의 경우 프런트 카카오 회원가입 페이지로 이동
-            print("회원가입 진행시켜")
+            print("회원가입 진행")
             encrypted_email = cryptographysss.encrypt_aes(kakao_email)
             print(cryptographysss.decrypt_aes(encrypted_email))
             return redirect(CLIENT_URL+"/KakaoSignUp/?id=" + encrypted_email)
         
         # 가입되어있는 경우 토큰을 url파라메터로 전송해줌.
-        return redirect(CLIENT_URL+"/LoadingForLogin/?code="+login.getTokensForUser(login, user)['access'])
+        return redirect(CLIENT_URL+"/LoadingF   orLogin/?code="+login.getTokensForUser(login, user)['access'])
 
 # 카카오 로그인 - 회원가입
 class kakaoSignup(APIView):
