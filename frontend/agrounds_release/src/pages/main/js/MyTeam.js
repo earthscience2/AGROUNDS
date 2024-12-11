@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '../css/MyTeam.scss';
-import BackBtn from '../../../components/Back_btn';
 import logo from '../../../assets/logo_sample.png';
 import Main_Subject from '../../../components/Main_Subject';
 import righbtn from '../../../assets/right.png';
@@ -14,7 +13,7 @@ import dots from '../../../assets/dots.png';
 
 const MyTeam = () => {
   const navigate = useNavigate();
-  const [isManager, setIsManager] = useState(true);
+  const [isManager, setIsManager] = useState(false);
 
   return (
     <div className='myteam'>
@@ -40,18 +39,18 @@ const MyTeam = () => {
         <Main_Subject title='경기 일정' BG='#1C3E71' color='#FFFFFF' arrowC='white' arrow={true}children={MatchPlan()}/>
       </div>
       <div className='teambox'>
-        <div className='teamtitle' onClick={() => navigate('/teamlist')}>
+        <div className='teamtitle' >
           <p>팀원</p>
-          {isManager ? <div className='managerbtn'>관리하기</div> : <img src={righbtn} />}
+          {isManager ? <div className='managerbtn' onClick={() => navigate('/managemember')}>관리하기</div> : <img src={righbtn} onClick={() => navigate('/teamlist')}/>}
         </div>
         <div className='detail'>
           <p className='t1'>총</p>
           <p className='t2'>6명</p>
         </div>
         <div className='list'>
-          <Member img={logo} player='조규성' age='만 26세' color='red' position='ST' onClick={() => navigate('/userinfo')}/>
-          <Member img={logo} player='조규성' age='만 26세' color='#FD7759' position='RWF' onClick={() => navigate('/userinfo')}/>
-          <Member img={logo} player='조규성' age='만 26세' color='#FD7759' position='LWM' onClick={() => navigate('/userinfo')}/>
+          <Member img={logo} isManager={isManager} player='조규성' age='만 26세' color='red' position='ST' onClick={() => navigate('/userinfo')}/>
+          <Member img={logo} isManager={isManager} player='조규성' age='만 26세' color='#FD7759' position='RWF' onClick={() => navigate('/userinfo')}/>
+          <Member img={logo} isManager={isManager} player='조규성' age='만 26세' color='#FD7759' position='LWM' onClick={() => navigate('/userinfo')}/>
           
         </div>
         

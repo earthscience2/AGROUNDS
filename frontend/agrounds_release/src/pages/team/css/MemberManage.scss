@@ -1,0 +1,41 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.membermanage{
+  @include display(flex, column, center, center);
+  width: 100%;
+  .managecontents{
+    width: 100%;
+    @include display(flex, column, center, start);
+    .detail{
+      @include display(flex, row, center, start);
+      width: 80%;
+      .t1{
+        font-size: 1.7vh;
+        font-weight: 500;
+        margin: 1vh 0;
+      }
+      .t2 {
+        font-size: 1.9vh;
+        font-weight: 700;
+        margin: 1vh 0;
+        margin-left: .5vh;
+      }
+    }
+    .list{
+      overflow-y: auto;
+      @include display(flex, column, center, start);
+      width: 100%;
+    }
+  }
+}
