@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/MyTeam.scss';
 import BackBtn from '../../../components/Back_btn';
 import logo from '../../../assets/logo_sample.png';
@@ -10,15 +10,27 @@ import { MatchPlan, RecentMatchS } from '../../../function/SubjectContents';
 import { useNavigate } from 'react-router-dom';
 import left from '../../../assets/left.png';
 import cog from '../../../assets/cog.png';
+import dots from '../../../assets/dots.png';
 
 const MyTeam = () => {
   const navigate = useNavigate();
+  const [isManager, setIsManager] = useState(true);
+
   return (
     <div className='myteam'>
-      <div className='teamnav'>
+      {isManager ? (
+        <div className='teamnav'>
         <img src={left} className='leftbtn' onClick={() => navigate(-1)}/>
         <img src={cog} className='cogbtn' onClick={() => navigate('/teamsetting')}/>
       </div>
+        ): (
+        <div className='teamnav'>
+          <img src={left} className='leftbtn' onClick={() => navigate(-1)}/>
+          <img src={dots} className='cogbtn' onClick={() => navigate('/')}/>
+        </div>
+        )
+      }
+      
       <div className='logo'>
         <Image_Comp img={logo} width='8vh' />
       </div>
@@ -30,7 +42,7 @@ const MyTeam = () => {
       <div className='teambox'>
         <div className='teamtitle' onClick={() => navigate('/teamlist')}>
           <p>팀원</p>
-          <img src={righbtn} />
+          {isManager ? <div className='managerbtn'>관리하기</div> : <img src={righbtn} />}
         </div>
         <div className='detail'>
           <p className='t1'>총</p>
