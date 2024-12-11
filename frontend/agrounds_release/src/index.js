@@ -35,6 +35,7 @@ import TeamSetting from './pages/team/js/TeamSetting';
 import ChangeTeamName from './pages/team/js/ChangeTeamName';
 import CompChangeName from './pages/team/js/CompChangeName';
 import CompChangeLogo from './pages/team/js/CompChangeLogo';
+import ChangeTeamLogo from './pages/team/js/ChangeTeamLogo';
 
 const router = createBrowserRouter([
   {
@@ -168,6 +169,10 @@ const router = createBrowserRouter([
   {
     path: "/completechangelogo",
     element: <CompChangeLogo />,
+  },
+  {
+    path: "/changeteamlogo",
+    element: <ChangeTeamLogo />,
   },
 ]);
 

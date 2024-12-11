@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import agroundslogo from '../assets/agrounds_circle_logo.png';
 
 const UserProfile = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -25,7 +26,7 @@ const UserProfile = () => {
             style={styles.image}
           />
         ) : (
-          <div style={styles.placeholder}>업로드</div>
+          <img src={agroundslogo} style={styles.defaultimg}/>
         )}
       </div>
       <input
@@ -61,6 +62,11 @@ const styles = {
   image: {
     width: '100%',
     height: '100%',
+    objectFit: 'cover',
+  },
+  defaultimg: {
+    width: '60%',
+    height: '60%',
     objectFit: 'cover',
   },
   placeholder: {

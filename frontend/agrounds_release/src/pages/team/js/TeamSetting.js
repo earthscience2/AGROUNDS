@@ -13,8 +13,8 @@ const TeamSetting = () => {
         <p className='settitle'>팀명 변경하기</p>
         <img src={left} className='arrow'/>
       </div>
-      <div className='setbox'>
-        <p className='settitle'>팀 로고 변경하기</p>
+      <div className='setbox' onClick={() => navigate('/changeteamname')}>
+        <p className='settitle' >팀 로고 변경하기</p>
         <img src={left} className='arrow'/>
       </div>
       <div className='setbox'>
