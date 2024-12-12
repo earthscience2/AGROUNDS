@@ -19,17 +19,24 @@
     @include display(flex, column, center, start);
     .detail{
       @include display(flex, row, center, start);
-      width: 80%;
+      width: 90%;
       .t1{
         font-size: 1.7vh;
         font-weight: 500;
         margin: 1vh 0;
+        color: #6F6F6F;
       }
       .t2 {
         font-size: 1.9vh;
         font-weight: 700;
         margin: 1vh 0;
         margin-left: .5vh;
+      }
+      .t3{
+        font-size: 1.7vh;
+        font-weight: 500;
+        margin: 1vh 0;
+        color: #6F6F6F;
       }
     }
     .list{

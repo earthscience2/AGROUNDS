@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const Member_Tab = () => {
-  const [activeTab, setActiveTab] = useState("팀원");
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-
+const Member_Tab = ({ activeTab, onTabChange }) => {
   return (
     <MemberTabStyle>
       <div className="tabs">
         <button
           className={`tab ${activeTab === "팀원" ? "active" : ""}`}
-          onClick={() => handleTabClick("팀원")}
+          onClick={() => onTabChange("팀원")}
         >
           팀원
         </button>
         <button
           className={`tab ${activeTab === "신규" ? "active" : ""}`}
-          onClick={() => handleTabClick("신규")}
+          onClick={() => onTabChange("신규")}
         >
           신규
         </button>

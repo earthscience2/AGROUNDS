@@ -13,16 +13,16 @@ const TeamSetting = () => {
         <p className='settitle'>팀명 변경하기</p>
         <img src={left} className='arrow'/>
       </div>
-      <div className='setbox' onClick={() => navigate('/changeteamname')}>
+      <div className='setbox' onClick={() => navigate('/changeteamlogo')}>
         <p className='settitle' >팀 로고 변경하기</p>
         <img src={left} className='arrow'/>
       </div>
-      <div className='setbox'>
-        <p className='settitle'>팀원 관리하기</p>
+      <div className='setbox' onClick={() => navigate('/managemember')}>
+        <p className='settitle' >팀원 관리하기</p>
         <img src={left} className='arrow'/>
       </div>
-      <div className='setbox'>
-        <p className='settitle'>팀 경기 영상</p>
+      <div className='setbox' onClick={() => navigate('/teamvideo')}>
+        <p className='settitle' >팀 경기 영상</p>
         <img src={left} className='arrow'/>
       </div>
       <div className='exitteam'>팀 해체하기</div>

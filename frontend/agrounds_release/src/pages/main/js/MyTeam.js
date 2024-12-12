@@ -13,7 +13,7 @@ import dots from '../../../assets/dots.png';
 
 const MyTeam = () => {
   const navigate = useNavigate();
-  const [isManager, setIsManager] = useState(false);
+  const [isManager, setIsManager] = useState(true);
 
   return (
     <div className='myteam'>
