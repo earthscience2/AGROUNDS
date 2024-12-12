@@ -9,6 +9,7 @@ import Image_Comp from '../../../components/Image_Comp';
 import Modal from '../../../components/Modal';
 import Small_Common_Btn from '../../../components/Small_Common_Btn';
 import { useNavigate } from 'react-router-dom';
+import { SearchPlayerByNameAPI } from '../../../function/TeamApi';
 
 const JoinTeam = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,7 +23,7 @@ const JoinTeam = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchSearchResults = async () => {
+    const SearchResult = async () => {
       if (searchTerm.trim() === '') {
         setSearchResults([]);
         setIsSearching(false);
@@ -30,14 +31,19 @@ const JoinTeam = () => {
       }
 
       setIsSearching(true);
-      // API 로직
-      setTimeout(() => {
-        // API 호출 시뮬레이션
-        setSearchResults([]); // 검색 결과 없음
+      
+      try {
+        const response = await SearchPlayerByNameAPI({ team_name: searchTerm });
+        setSearchResults(response.data.result || []);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+        setSearchResults([]);
+      } finally {
         setIsSearching(false);
-      }, 1000);
+      }
+      
     };
-    fetchSearchResults();
+    SearchResult();
   }, [searchTerm]);
 
   const application = () => {
@@ -53,22 +59,24 @@ const JoinTeam = () => {
           <img src={reload} alt="새로고침" /> 새로고침
         </div>
       </div>
-      <div className="contentsbox">
-        <Image_Comp width="8vh" img={logo} />
+      {searchResults.map((team) => (
+        <div className="contentsbox" key={team.team_code}>
+        <Image_Comp width="8vh" img={team.team_logo} />
         <div className="textbox">
-          <div className="fcname">Agrounds FC</div>
-          <div className="minitext">
+          <div className="fcname">{team.team_name}</div>
+          {/* <div className="minitext">
             <div className="greytext">성남시</div>
             <div className="greybar" />
             <div className="greytext">44명</div>
             <div className="greybar" />
             <div className="greytext">24.09.21</div>
-          </div>
+          </div> */}
         </div>
         <button className="application" onClick={openModal}>
           가입신청
         </button>
       </div>
+      ))}
     </>
   );
 
@@ -96,17 +104,17 @@ const JoinTeam = () => {
           <p>{searchResults.length}</p>개의 검색 결과
         </div>
         {searchResults.map((team) => (
-          <div key={team.id} className="contentsbox">
-            <Image_Comp width="8vh" img={team.logo || logo} />
+          <div key={team.team_code} className="contentsbox">
+            <Image_Comp width="8vh" img={team.team_logo || logo} />
             <div className="textbox">
-              <div className="fcname">{team.name}</div>
-              <div className="minitext">
+              <div className="fcname">{team.team_name}</div>
+              {/* <div className="minitext">
                 <div className="greytext">{team.location}</div>
                 <div className="greybar" />
                 <div className="greytext">{team.members}명</div>
                 <div className="greybar" />
                 <div className="greytext">{team.createdAt}</div>
-              </div>
+              </div> */}
             </div>
             <button className="application" onClick={openModal}>
               가입신청
@@ -124,7 +132,6 @@ const JoinTeam = () => {
       <Search
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
-        onSearchSubmit={() => console.log('Search submitted:', searchTerm)}
       />
       {isSearching ? (
         <p className="t1">검색 중...</p>
