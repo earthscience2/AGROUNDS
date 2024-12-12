@@ -1,0 +1,112 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.jointeam{
+  @include display(flex, column, center, center);
+  width: 100%;
+  .recommend{
+    @include display(flex, row, center, space-between);
+    width: 90%;
+    .team{
+      @include font(2vh, bold, #333333);
+
+    }
+    .reload{
+      @include display(flex, row, center, space-between);
+      width: 20%;
+      height: 4vh;
+      border-radius: 1vh;
+      background-color: #F2F4F8;
+      @include font(1.7vh, 500, #333333);
+      padding: 0 1vh;
+      & > img {
+        height: 2vh;
+      }
+    }
+  }
+  .no-results{
+    @include display(flex, column, center, center);
+    height: 50vh;
+    & > p{
+      @include font(1.4vh, 500, #333333);
+      margin: 0 0;
+    }
+    .create-team-btn{
+      width: 18vh;
+      border: none;
+      height: 5vh;
+      border-radius: 3vh;
+      margin: 5vh;
+      background-color: #343A3F;
+      color: white;
+      @include font(1.6vh, 700, white);
+    }
+  }
+  .resultnum{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 90%;
+    & > p {
+      @include font(2vh, 600, #333333);
+    }
+  }
+  .contentsbox{
+    @include display(flex, row, center, space-between);
+    width: 90%;
+    height: 12vh;
+    border-bottom: 1px solid #E5E9ED;
+    .textbox{
+      @include display(flex, column, start, center);
+      width: 50%;
+      .fcname{
+        @include font(2vh, 600, #333333);
+        margin: 0 0 .5vh 0;
+      }
+      .minitext{
+        @include display(flex, row, center, center);
+        .greytext{
+          @include font(1.5vh, 500, #B0B0B0);
+        }
+        .greybar{
+          width: 1px;
+          height: 1.5vh;
+          background-color: #B0B0B0;
+          margin: 0 .5vh;
+        }
+      }
+    }
+    .application{
+      width: 8vh;
+      height: 4vh;
+      border-radius: 2vh;
+      background-color: #343A3F;
+      @include font(1.5vh, 600, white);
+    }
+  }
+  .errorment{
+    font-size: 2vh;
+    font-weight: 700;
+    color: black;
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: -3vh;
+  }
+  .buttonbox{
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+  }
+}

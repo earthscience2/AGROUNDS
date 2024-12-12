@@ -37,6 +37,7 @@ import CompChangeName from './pages/team/js/CompChangeName';
 import CompChangeLogo from './pages/team/js/CompChangeLogo';
 import ChangeTeamLogo from './pages/team/js/ChangeTeamLogo';
 import MemberManage from './pages/team/js/MemberManage';
+import JoinTeam from './pages/team/js/JoinTeam';
 
 const router = createBrowserRouter([
   {
@@ -178,6 +179,10 @@ const router = createBrowserRouter([
   {
     path: "/managemember",
     element: <MemberManage />,
+  },
+  {
+    path: "/jointeam",
+    element: <JoinTeam />,
   },
 ]);
 

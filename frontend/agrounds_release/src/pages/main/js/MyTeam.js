@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import left from '../../../assets/left.png';
 import cog from '../../../assets/cog.png';
 import dots from '../../../assets/dots.png';
+import MemberPrev from '../../../components/MemberPrev';
 
 const MyTeam = () => {
   const navigate = useNavigate();
@@ -48,9 +49,9 @@ const MyTeam = () => {
           <p className='t2'>6명</p>
         </div>
         <div className='list'>
-          <Member img={logo} isManager={isManager} player='조규성' age='만 26세' color='red' position='ST' onClick={() => navigate('/userinfo')}/>
-          <Member img={logo} isManager={isManager} player='조규성' age='만 26세' color='#FD7759' position='RWF' onClick={() => navigate('/userinfo')}/>
-          <Member img={logo} isManager={isManager} player='조규성' age='만 26세' color='#FD7759' position='LWM' onClick={() => navigate('/userinfo')}/>
+          <MemberPrev img={logo} isManager={isManager} player='조규성' age='만 26세' color='red' position='ST' onClick={() => navigate('/userinfo')}/>
+          <MemberPrev img={logo} isManager={isManager} player='조규성' age='만 26세' color='#FD7759' position='RWF' onClick={() => navigate('/userinfo')}/>
+          <MemberPrev img={logo} isManager={isManager} player='조규성' age='만 26세' color='#FD7759' position='LWM' onClick={() => navigate('/userinfo')}/>
           
         </div>
         
