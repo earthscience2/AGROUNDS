@@ -9,4 +9,8 @@ const SearchPlayerByNameAPI = (data) => {
   return client.post('api/player/searchPlayerByname/', data)
 }
 
-export {MakeTeamApi, SearchPlayerByNameAPI};
+const ApplyTeamApi = () => {
+  return client.post('api/player/joinTeam/', data)
+}
+
+export {MakeTeamApi, SearchPlayerByNameAPI, ApplyTeamApi};

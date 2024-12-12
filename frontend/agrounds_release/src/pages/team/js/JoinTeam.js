@@ -9,16 +9,24 @@ import Image_Comp from '../../../components/Image_Comp';
 import Modal from '../../../components/Modal';
 import Small_Common_Btn from '../../../components/Small_Common_Btn';
 import { useNavigate } from 'react-router-dom';
-import { SearchPlayerByNameAPI } from '../../../function/TeamApi';
+import { ApplyTeamApi, SearchPlayerByNameAPI } from '../../../function/TeamApi';
 
 const JoinTeam = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+
+  const openModal = ({team}) => {
+    setSelectedTeam(team);
+    setIsModalOpen(true);
+  }
+  const closeModal = () => {
+    setSelectedTeam(null);
+    setIsModalOpen(false);
+  }
 
   const navigate = useNavigate();
 
@@ -47,8 +55,16 @@ const JoinTeam = () => {
   }, [searchTerm]);
 
   const application = () => {
-    alert('가입신청이 완료되었습니다');
-    closeModal();
+    if (selectedTeam) {
+      ApplyTeamApi({'user_code': sessionStorage.getItem('userId'), 'team_code': selectedTeam.team_code})
+      .then(() => {
+        alert('가입신청이 완료되었습니다.');
+        closeModal();
+      })
+      .catch(() => {
+        alert('신청 중 오류가 발생했습니다.')
+      })
+    }
   };
 
   const renderRecommendedTeams = () => (
@@ -72,7 +88,7 @@ const JoinTeam = () => {
             <div className="greytext">24.09.21</div>
           </div> */}
         </div>
-        <button className="application" onClick={openModal}>
+        <button className="application" onClick={openModal(team)}>
           가입신청
         </button>
       </div>
@@ -116,7 +132,7 @@ const JoinTeam = () => {
                 <div className="greytext">{team.createdAt}</div>
               </div> */}
             </div>
-            <button className="application" onClick={openModal}>
+            <button className="application" onClick={openModal(team)}>
               가입신청
             </button>
           </div>
