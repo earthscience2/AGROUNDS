@@ -12,6 +12,10 @@ const Onboard = () => {
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
 
+  const kakaoLogin = () => { // 카카오 로그인 처리를 위해 서버 측 url로 redirect
+    window.location.replace(process.env.REACT_APP_BASE_URL + "/api/login/kakao/");
+  };
+
   return (
     <div className='background'>
       <img src={img} className='img'/>
@@ -26,7 +30,7 @@ const Onboard = () => {
           <p className="modal-description">
             GPS와 AI CAM을 통해 나의 경기 데이터를 <br/>분석하고 더 높이 성장해보세요.
           </p>
-          <Rec_Common_btn backgroundColor='#F7DE0C' title='카카오로 시작하기' color='black'></Rec_Common_btn>
+          <Rec_Common_btn onClick={kakaoLogin} backgroundColor='#F7DE0C' title='카카오로 시작하기' color='black'></Rec_Common_btn>
         </div>
       </LoginModal>
     </div>

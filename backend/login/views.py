@@ -9,9 +9,6 @@ from rest_framework import status
 from DB.models import UserInfo
 from DB.models import V2_TeamInfo
 from .serializers import V2_User_info_Serializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import UntypedToken
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from django.contrib.auth.hashers import check_password
 
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -22,51 +19,30 @@ import json
 import requests
 
 # 클라이언트 / 서버 주소
-# CLIENT_URL = "http://localhost:3000"
-# SERVER_URL = "http://localhost:8000"
+CLIENT_URL = "http://localhost:3000"
+SERVER_URL = "http://localhost:8000"
 
-CLIENT_URL = "http://agrounds.com"
-SERVER_URL = "http://agrounds.com"
+# CLIENT_URL = "http://agrounds.com"
+# SERVER_URL = "http://agrounds.com"
 
-KAKAO_CALLBACK_URI = SERVER_URL + "/api/V2login/kakao/callback/"
-KAKAO_REDIRECT_URI = SERVER_URL + "/api/V2login/kakao/"
+KAKAO_CALLBACK_URI = SERVER_URL + "/api/login/kakao/callback/"
+KAKAO_REDIRECT_URI = SERVER_URL + "/api/login/kakao/"
 KAKAO_CLIENT_ID = "31b5a921fbd3a1e8f96e06d992364864"
 
 # 닉네임 중복확인
 class nickname(APIView):
     def get(self, request, format=None):
-        nickname = request.query_params.get("nickname")
+        nickname = request.query_params.get("user_nickname")
         try:
             if nickname is None:
-                return Response({"isAvailable": False})
+                return Response(
+                    {"error": "user_nickname 필드는 필수입니다."}, status=status.HTTP_404_NOT_FOUND
+                )
             if UserInfo.objects.filter(user_nickname=nickname).exists():
                 # 닉네임이 이미 존재하는 경우
                 return Response({"isAvailable": False})
             else:
                 # 사용 가능한 닉네임인 경우
-                return Response({"isAvailable": True})
-        except UserInfo.DoesNotExist:
-            return Response(
-                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
-            )
-        except (TypeError, ValueError):
-            # 유효하지 않은 입력 처리
-            return Response(
-                {"error": "Invalid input"}, status=status.HTTP_400_BAD_REQUEST
-            )
-
-# 아이디 중복확인
-class id(APIView):
-    def get(self, request, format=None):
-        id = request.query_params.get("id")
-        try:
-            if id is None:
-                return Response({"isAvailable": False})
-            if UserInfo.objects.filter(user_id=id).exists():
-                # 아이디가 이미 존재하는 경우
-                return Response({"isAvailable": False})
-            else:
-                # 사용 가능한 아이디인 경우
                 return Response({"isAvailable": True})
         except UserInfo.DoesNotExist:
             return Response(
@@ -212,13 +188,13 @@ class kakaoCallback(APIView):
         try:
             user = UserInfo.objects.get(user_id = kakao_email)
         except UserInfo.DoesNotExist: # 가입되어있지 않은 유저의 경우 프런트 카카오 회원가입 페이지로 이동
-            print("회원가입 진행시켜")
+            print("회원가입 진행")
             encrypted_email = cryptographysss.encrypt_aes(kakao_email)
             print(cryptographysss.decrypt_aes(encrypted_email))
             return redirect(CLIENT_URL+"/KakaoSignUp/?id=" + encrypted_email)
         
         # 가입되어있는 경우 토큰을 url파라메터로 전송해줌.
-        return redirect(CLIENT_URL+"/LoadingForLogin/?code="+login.getTokensForUser(login, user)['access'])
+        return redirect(CLIENT_URL+"/LoadingF   orLogin/?code="+login.getTokensForUser(login, user)['access'])
 
 # 카카오 로그인 - 회원가입
 class kakaoSignup(APIView):
@@ -241,7 +217,7 @@ class kakaoSignup(APIView):
             data["login_type"] = 1
             serializer = V2_User_info_Serializer(data=request.data)
         except:
-            JsonResponse({'error' : '카카오로부터 로그인 오류'}, status=402)
+            JsonResponse({'error' : '카카오로부터 로그인 오류 발생'}, status=402)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             new_user = serializer.data

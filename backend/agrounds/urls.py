@@ -26,15 +26,13 @@ urlpatterns = [
     # admin
     path("admin/", admin.site.urls),
     # 백엔드 api
-    path("api/V2login/", include("V2_login.urls")),
-    path("api/V2team/", include("V2_team.urls")),
-    path("api/V2match/", include("V2_match.urls")),
-    path("api/V2analyze/", include("V2_analyze.urls")),
-    path("api/V2gps/", include("V2_gps.urls")),
+
+    # test page
     path("api/test_page/", include("test_page.urls")),
-    path("api/player/",include("player.urls")),
+
+    # app
     path("api/user/", include("user.urls")),
-    
+    path("api/login/", include("login.urls")),
 ]
 
 urlpatterns += [

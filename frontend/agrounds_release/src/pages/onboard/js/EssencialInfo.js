@@ -15,7 +15,9 @@ const EssencialInfo = () => {
       <LoginTitle title='필수정보 입력' explain='다양한 정보 분석을 제공해드려요.' />
       <LoginInput borderRadius='15px 15px 0 0' placeholder='이름 입력' type='text'/>
       <div style={{height: '0.5vh'}} />
-      <LoginInput borderRadius='0 0 15px 15px'placeholder='닉네임 입력' type='text'/>
+      <LoginInput borderRadius='0 0 0 0' placeholder='닉네임 입력' type='text'/>
+      <div style={{height: '0.5vh'}} />
+      <LoginInput borderRadius='0 0 15px 15px'placeholder='생년월일 입력' type='date'/>
       <div className='genderBox'>
         <Gender gender='man' isSelected={selectedGender === 'man'} onClick={() => setSelectedGender('man')}/>
         <Gender gender='woman' isSelected={selectedGender === 'woman'} onClick={() => setSelectedGender('woman')}/>

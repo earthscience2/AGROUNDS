@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     # Local apps
     "DB",
     "test_page",
+    "login",
     # Third party apps
     "rest_framework",
     "drf_yasg",
