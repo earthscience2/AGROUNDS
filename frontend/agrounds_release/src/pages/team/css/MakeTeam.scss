@@ -14,8 +14,14 @@
 .maketeam{
   @include display(flex, column, center, center);
   width: 100%;
-
-  .tab{
-    margin-top: 35vh;
+  .error-message{
+    @include font(1.5vh, 500, red);
+    width: 90%;
+    margin-top: 2vh;
+  }
+  .circletab{
+    width: 100%;
+    position: absolute;
+    bottom: 8vh;
   }
 }

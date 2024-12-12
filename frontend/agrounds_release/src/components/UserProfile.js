@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import agroundslogo from '../assets/agrounds_circle_logo.png';
+import pencil from '../assets/pencil.png';
 
-const UserProfile = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-
+const UserProfile = ({selectedImage, setSelectedImage}) => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileURL = URL.createObjectURL(file); 
+      const fileURL = URL.createObjectURL(file);
       setSelectedImage(fileURL);
     }
   };
@@ -17,65 +17,79 @@ const UserProfile = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.preview} onClick={handleClick}>
+    <Container>
+      <Preview onClick={handleClick}>
+        <EditBox>
+          <Pencil src={pencil} />
+        </EditBox>
         {selectedImage ? (
-          <img
-            src={selectedImage}
-            alt="프로필 미리보기"
-            style={styles.image}
-          />
+          <ProfileImage src={selectedImage} alt="프로필 미리보기" />
         ) : (
-          <img src={agroundslogo} style={styles.defaultimg}/>
+          <DefaultImage src={agroundslogo} />
         )}
-      </div>
-      <input
+      </Preview>
+      <FileInput
         id="fileInput"
         type="file"
         accept="image/*"
         onChange={handleImageChange}
-        style={styles.fileInput}
       />
-    </div>
+    </Container>
   );
 };
 
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
-  },
-  preview: {
-    width: '130px',
-    height: '130px',
-    borderRadius: '50%',
-    overflow: 'hidden',
-    backgroundColor: '#f0f0f0',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: '10px',
-    cursor: 'pointer',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-  defaultimg: {
-    width: '60%',
-    height: '60%',
-    objectFit: 'cover',
-  },
-  placeholder: {
-    color: '#111111',
-    textAlign: 'center',
-  },
-  fileInput: {
-    display: 'none', 
-  },
-};
-
 export default UserProfile;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+`;
+
+const Preview = styled.div`
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  position: relative;
+`;
+
+const EditBox = styled.div`
+  background-color: #343a3f;
+  width: 130px;
+  height: 50px;
+  position: absolute;
+  border-radius: 0 0 55px 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.8;
+  bottom: 0;
+`;
+
+const Pencil = styled.img`
+  height: 3vh;
+`;
+
+const ProfileImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const DefaultImage = styled.img`
+  width: 60%;
+  height: 60%;
+  object-fit: cover;
+`;
+
+const FileInput = styled.input`
+  display: none;
+`;

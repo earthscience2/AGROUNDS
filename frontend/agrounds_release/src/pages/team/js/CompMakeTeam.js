@@ -15,8 +15,9 @@ const CompMakeTeam = () => {
       <Login_title title='팀 생성 완료' explain='새로운 팀원들을 모집하고 팀원들과 함께 축구를 즐겨보세요!'/>
       <div className='tab1'/>
       <Image_Comp img={check} width= '22vh'/>
-      <div className='tab2'/>
-      <Circle_common_btn title='팀 보러가기' onClick={() => navigate('/teamsetting')}/>
+      <div className='circletab'>
+        <Circle_common_btn title='팀 보러가기' onClick={() => navigate('/teamsetting')}/>
+      </div>
     </div>
   );
 };
