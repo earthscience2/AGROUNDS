@@ -42,7 +42,7 @@ class makeTeam(APIView):
                 except Exception as e:
                     return Response({"error": f"fail to upload file : {e}"}, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
-            return Response(serializer.data)
+            return Response({"result" : "success"})
         else:
             # 유효성 검사 오류 메시지
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -62,6 +62,23 @@ class getTeamInfo(APIView):
 
         return Response(serializer.data)
     
+class searchTeamByName(APIView):
+    def post(self, request):
+        team_name = request.data.get('team_name')
+        if not team_name:
+            return Response({'error': 'Missing required field: team_name'}, status=400)
+
+        teams = TeamInfo.objects.filter(team_name__icontains=team_name)
+        if not teams.exists():
+            return Response({'error': 'No teams found with the provided name.'}, status=404)
+
+        serializer = Team_Info_Serializer(teams, many=True)
+        return Response({"result" : serializer.data})
+
+        
+
+
+    
 
 
 ## V2_team 전체 DB정보
@@ -69,57 +86,7 @@ class V2_TeamMainAPI(APIView):
     def get(self, request):
         team_info = V2_TeamInfo.objects.all()
         serializer = Team_main_page(team_info, many=True)
-        return Response(serializer.data)
-
-## V2_team 팀 생성 
-class V2_TeamMakeTeamAPI(APIView):
-    """
-    json 형식
-    {
-    "v2_team_host" : "u_1sa95ior6ijpr",
-    "v2_team_logo": "asdfasfd",
-    "v2_team_name": "test"
-    }
-    """
-    def post(self, request, *args, **kwargs):
-        logo = request.FILES.get('v2_team_logo')
-        request_data = request.data.copy()
-        uploader = None
-
-        if logo is not None:
-            try:
-                image = Image.open(logo)
-                image.verify()
-            except (IOError, SyntaxError) as e:
-                return Response({"error": "Invalid image file"}, status=status.HTTP_400_BAD_REQUEST)
-            # uploader 객체 생성, url 추출
-            filedir = "img/teamlogo/"
-            uploader = S3ImgUploader(logo, filedir)
-            filename = uploader.filename
-        else : 
-            return Response('팀로고 : 파일 업로드 실패.', status=status.HTTP_400_BAD_REQUEST)
-
-        request_data['v2_team_logo'] = filename
-
-        serializer = Team_info_Serializer(data=request_data)
-
-        if serializer.is_valid():
-            # 모든 값이 유효하면 이미지 업로드 수행
-            if uploader is not None:
-                try:
-                    uploader.upload()
-                except ValueError as e:
-                    return Response({"error": f"fail to upload file : {e}"}, status=status.HTTP_400_BAD_REQUEST)
-                except Exception as e:
-                    return Response({"error": f"fail to upload file : {e}"}, status=status.HTTP_400_BAD_REQUEST)
-                serializer.save()
-                return Response(serializer.data)
-            else:
-                return Response('팀로고 : 파일 업로드 실패. uploader가 None입니다.', status=status.HTTP_400_BAD_REQUEST)
-        else:
-            # 유효성 검사 오류 메시지를 확인하여 반환합니다.
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response({"result" : serializer.data})
 
 ## V2_team 업데이트 
 class V2_TeamUpdateTeamAPI(APIView):
