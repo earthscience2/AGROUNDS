@@ -127,7 +127,7 @@ const EssencialInfo = () => {
         placeholder='이름 입력'
         type='text'
         value={userName}
-        setVale={setUesrName}
+        onChange={(event)=>setUesrName(event.target.value)}
         borderColor={errorNum === 1 ? 'red' : '#F2F4F8'}
         />
       <div style={{height: '0.5vh'}} />
@@ -137,7 +137,7 @@ const EssencialInfo = () => {
         placeholder='닉네임 입력' 
         type='text' 
         value={userNickname} 
-        setVale={setUserNickname}
+        onChange={(event)=>setUserNickname(event.target.value)}
         borderColor={errorNum === 2 || nicknameCheck==='fail' ? 'red' : '#F2F4F8'}
         />
       <div style={{height: '0.5vh'}} />
@@ -146,7 +146,7 @@ const EssencialInfo = () => {
         placeholder='생년월일 입력' 
         type='date'
         value={uesrBirth}
-        setVale={setUserBirth}
+        onChange={(event)=>setUserBirth(event.target.value)}
         borderColor={errorNum === 3 ? 'red' : '#F2F4F8'}
         />
       <div className='genderBox'>

@@ -69,9 +69,9 @@ const ExtraInfo = () => {
     <div className='extraBG'>
       <Back_btn />
       <Login_title title='추가정보 입력' explain='분석을 위해 필요한 정보로 외부에 공개되지 않아요.' />
-      <Login_input borderRadius='15px 15px 0 0' placeholder='몸무게' type='number' value={userWeight} setVale={setUserWeight}/>
+      <Login_input borderRadius='15px 15px 0 0' placeholder='몸무게' type='number' value={userWeight} onChange={(event)=>setUserWeight(event.target.value)}/>
       <div style={{height: '0.5vh'}}/>
-      <Login_input borderRadius='0' placeholder='키' type='number' value={userHeight} setVale={setUserHeight}/>
+      <Login_input borderRadius='0' placeholder='키' type='number' value={userHeight} onChange={(event)=>setUserHeight(event.target.value)}/>
       <div style={{height: '0.5vh'}}/>
       <div className='prefpo' onClick={() => setViewPosition(true)}>
         <div style={selectedPosition ? {} : {color:'#C1C7CD'}}>{selectedPosition || '선호 포지션'}</div>
