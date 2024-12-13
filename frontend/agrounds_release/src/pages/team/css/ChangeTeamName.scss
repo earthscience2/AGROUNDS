@@ -10,18 +10,10 @@
   font-weight: $weight;
   color: $color;
 }
-
-.maketeam{
+.changeteamname{
   @include display(flex, column, center, center);
   width: 100%;
-  .error-message{
-    @include font(1.5vh, 500, red);
-    width: 90%;
-    margin-top: 2vh;
-  }
-  .circletab{
-    width: 100%;
-    position: absolute;
-    bottom: 8vh;
+  .gap{
+    height: 55vh;
   }
 }

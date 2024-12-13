@@ -6,7 +6,9 @@ const Video_Thumnail = () => {
   const navigate = useNavigate();
   return (
     <div className='video-thumnail' onClick={() => navigate('/videobyquarter')}>
-      <div className='imgbox'></div>
+      <div className='imgbox'>
+        <img />
+      </div>
       <div className='infobox'>
         <p className='fc'>인하대학교 FC</p>
         <p className='date'>2024.11.10(수)</p>

@@ -23,13 +23,13 @@ const BackTitleNav = styled.div`
   padding: 5vh 0;
   width: 90%;
   & > img{
-    width: 25px;
+    width: 3vh;
   }
   & > div {
-    font-size: 1.6vh;
+    font-size: 2vh;
     font-weight: 600;
     margin: auto;
     position: relative;
-    left: -25px;
+    left: -1vh;
   }
 `
