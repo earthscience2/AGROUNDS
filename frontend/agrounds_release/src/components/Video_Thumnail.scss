@@ -5,13 +5,14 @@
   gap: 2vh;
   margin: 2vh 0;
   .imgbox{
-    width: 55%;
-    height: 13vh;
+    width: 45%;
+    height: 12vh;
     background-color: rgb(178, 178, 178);
+    border-radius: 1vh;
   }
   .infobox{
     display: flex;
-    width: 40%;
+    width: 55%;
     flex-direction: column;
     .fc{
       font-size: 1.8vh;
