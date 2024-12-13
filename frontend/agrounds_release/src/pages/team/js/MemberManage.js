@@ -7,6 +7,8 @@ import Member from '../../../components/Member';
 import logo from '../../../assets/logo_sample.png';
 import { useNavigate } from 'react-router-dom';
 import Search from '../../../components/Search';
+import { getJoinRequestListApi, SearchPlayerByNameAPI, TeamMemberApi } from '../../../function/TeamApi';
+import { PositionDotColor } from '../../../function/PositionColor';
 
 const MemberManage = () => {
   const navigate = useNavigate();
@@ -15,6 +17,8 @@ const MemberManage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [member, setMember] = useState([]);
+  const [requestMember, setRequestMember] = useState([]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -30,11 +34,11 @@ const MemberManage = () => {
 
       setIsSearching(true);
       try {
-        const response = await fetch(`https://api.example.com/search?query=${searchTerm}`);
-        const data = await response.json();
-        setSearchResults(data);
+        setMember(TeamMemberApi() || []);
+        setSearchResults(SearchPlayerByNameAPI(searchTerm) || []);
+        setRequestMember(getJoinRequestListApi() || []);
       } catch (error) {
-        console.error("Error fetching search results:", error);
+        console.log(error)
       } finally {
         setIsSearching(false);
       }
@@ -52,12 +56,12 @@ const MemberManage = () => {
         <div className="managecontents">
           <div className="detail">
             <p className="t1">총</p>
-            <p className="t2">6명</p>
+            <p className="t2">{searchResults.length}명</p>
           </div>
           <div className="list">
-            <Member img={logo} player="조규성" searchTerm={searchTerm}age="만 26세" color="red" position="ST" activeTab={activeTab} onClick={() => navigate('/userinfo')} />
-            <Member img={logo} player="조규성" searchTerm={searchTerm}age="만 26세" color="#FD7759" position="RWF" activeTab={activeTab} onClick={() => navigate('/userinfo')} />
-            <Member img={logo} player="조규성" searchTerm={searchTerm}age="만 26세" color="#FD7759" position="LWM" activeTab={activeTab} onClick={() => navigate('/userinfo')} />
+            {searchResults.map((player) => (
+              <Member key={player.user_code} img={logo} searchTerm={searchTerm} player={player.user_nickname} age={player.user_age} color={PositionDotColor(player.user_position)} position={player.user_position} activeTab={activeTab} onClick={() => navigate('/userinfo', {state: { userCode: player.user_code}})} />
+            ))}
           </div>
         </div>
       ) : (
@@ -69,27 +73,27 @@ const MemberManage = () => {
             <>
               <div className="detail">
                 <p className="t1">총</p>
-                <p className="t2">6명</p>
+                <p className="t2">{requestMember.length}명</p>
                 <p className="t3">의 가입 신청자</p>
               </div>
               <div className="list">
-                <Member img={logo} searchTerm={searchTerm}player="조규성" age="만 26세" color="red" position="ST" activeTab={activeTab} onClick={() => navigate('/userinfo')} />
-                <Member img={logo} searchTerm={searchTerm}player="조규성" age="만 26세" color="#FD7759" position="RWF" activeTab={activeTab} onClick={() => navigate('/userinfo')} />
-                <Member img={logo} searchTerm={searchTerm}player="조규성" age="만 26세" color="#FD7759" position="LWM" activeTab={activeTab} onClick={() => navigate('/userinfo')} />
+              {requestMember.map((player) => (
+                <Member key={player.user_code} img={logo} player={player.user_nickname} age={player.user_email} color={PositionDotColor(player.user_position)} position={player.user_position} activeTab={activeTab} onClick={() => navigate('/userinfo', {state: { userCode: player.user_code}})} />
+              ))}
               </div>
             </>
           ) : (
             
-            searchResults.map((member, index) => (
+            searchResults.map((player) => (
               <Member
-                key={index}
-                img={member.img || logo}
-                player={member.player}
-                age={member.age}
-                color={member.color}
-                position={member.position}
+                key={player.user_code}
+                img={player.img || logo}
+                player={player.user_nickname}
+                age={player.user_age} 
+                color={PositionDotColor(player.user_position)} 
+                position={player.user_position} 
                 activeTab={activeTab}
-                onClick={() => navigate('/userinfo')}
+                onClick={() => navigate('/userinfo', {state: { userCode: player.user_code}})}
                 searchTerm={searchTerm}
               />
             ))

@@ -4,9 +4,10 @@ import Image_Comp from './Image_Comp';
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import Small_Common_Btn from './Small_Common_Btn';
+import { AcceptPlayerApi, InvitePlayerApi, RemovePlayerApi } from '../function/TeamApi';
 
 
-const Member = ({ img, player, age, position, color, onClick, name = '조규성', activeTab, searchTerm }) => {
+const Member = ({ key, img, player, age, position, color, onClick, name = '조규성', activeTab, searchTerm }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('');
   const navigate = useNavigate();
@@ -21,15 +22,19 @@ const Member = ({ img, player, age, position, color, onClick, name = '조규성'
   const handleConfirm = () => {
     switch (modalType) {
       case 'kickout':
+        RemovePlayerApi({"team_code" : sessionStorage.getItem('teamCode'), "user_code" : key});
         alert(`${name}님을 팀에서 추방했습니다.`);
         break;
       case 'invite':
+        InvitePlayerApi({"team_code" : sessionStorage.getItem('teamCode'), "user_code" : key});
         alert(`${name}님을 팀에 초대했습니다.`);
         break;
       case 'accept':
+        AcceptPlayerApi({"team_code" : sessionStorage.getItem('teamCode'), "user_code" : key, "accept" : true});
         alert(`${name}님의 요청을 수락했습니다.`);
         break;
       case 'refuse':
+        AcceptPlayerApi({"team_code" : sessionStorage.getItem('teamCode'), "user_code" : key, "accept" : false});
         alert(`${name}님의 요청을 거절했습니다.`);
         break;
       default:
