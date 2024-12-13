@@ -63,6 +63,7 @@ class V2_MatchInfo(models.Model):
     v2_match_goalplayers = models.JSONField(blank=True, null=True)
     v2_match_GPSplayers = models.JSONField(blank=True, null=True)
     v2_match_teamcode = models.JSONField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = 'V2_match_info'
@@ -119,6 +120,14 @@ class UserMatchInfo(models.Model):
     class Meta:
         managed = False  
         db_table = "user_match_info"
+
+class UserTeam(models.Model):
+    user_code = models.CharField(max_length=45, null=False)
+    team_code = models.CharField(primary_key=True, max_length=45)
+
+    class Meta:
+        managed = False
+        db_table = "user_team"
 
 # team_info
 class TeamInfo(models.Model):
