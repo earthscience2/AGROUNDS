@@ -8,7 +8,7 @@ from staticfiles.make_code import make_code
 
 import re
 
-class User_info_Serializer(serializers.ModelSerializer):
+class User_Info_Serializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = UserInfo

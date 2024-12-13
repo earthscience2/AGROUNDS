@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from DB.models import UserInfo
 from DB.models import V2_TeamInfo
-from .serializers import User_info_Serializer
+from .serializers import User_Info_Serializer
 from django.contrib.auth.hashers import check_password
 from types import SimpleNamespace
 
@@ -118,7 +118,7 @@ class kakaoSignup(APIView):
             data["user_id"] = cryptographysss.decrypt_aes(data["user_id"])
             data["password"] = "0"
             data["login_type"] = "kakao"
-            serializer = User_info_Serializer(data=data)
+            serializer = User_Info_Serializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             new_user = serializer.data
