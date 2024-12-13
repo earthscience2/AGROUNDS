@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.http import JsonResponse
 
 import jwt
+import environ
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -20,12 +21,11 @@ from staticfiles import cryptographysss
 import json
 import requests
 
-# 클라이언트 / 서버 주소
-CLIENT_URL = "http://localhost:3000"
-SERVER_URL = "http://localhost:8000"
+env = environ.Env(DEBUG=(bool, True)) #환경변수를 불러올 수 있는 상태로 세팅
 
-# CLIENT_URL = "http://agrounds.com"
-# SERVER_URL = "http://agrounds.com"
+# 클라이언트 / 서버 주소
+CLIENT_URL = env("CLIENT_URL")
+SERVER_URL = env("SERVER_URL")
 
 KAKAO_CALLBACK_URI = SERVER_URL + "/api/login/kakao/callback/"
 KAKAO_REDIRECT_URI = SERVER_URL + "/api/login/kakao/"
