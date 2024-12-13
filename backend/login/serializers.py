@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.hashers import make_password
 from staticfiles.make_code import make_code
+from datetime import datetime
 
 import re
 
@@ -83,6 +84,25 @@ class User_Info_Serializer(serializers.ModelSerializer):
                     return None
                 raise serializers.ValidationError({"error" : "올바르지 않은 " + massges[i] +" 형식입니다."})
         return None
+    
+class Essecial_User_Info(serializers.ModelSerializer):
+    user_age = serializers.SerializerMethodField()  # 사용자 정의 필드 추가
+
+    class Meta:
+        model = UserInfo
+        fields = ['user_code', 'user_nickname', 'user_id', 'user_age', 'user_position']
+
+    def get_user_age(self, obj):
+        if hasattr(obj, 'user_birth') and obj.user_birth:
+            try:
+                birth_date = datetime.strptime(obj.user_birth, '%Y-%m-%d').date()
+                today = datetime.today().date()
+                age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+                return age
+            except ValueError:
+                raise serializers.ValidationError("user_birth의 형식이 잘못되었습니다. 'yyyy-mm-dd' 형식이어야 합니다.")
+        return None  # user_birth가 없거나 유효하지 않은 경우
+    
     
 # class Login_Serializer(serializers.Serializer):
 #     user_id = serializers.CharField(required = True)

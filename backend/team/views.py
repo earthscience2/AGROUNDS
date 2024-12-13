@@ -8,6 +8,7 @@ from DB.models import V2_TeamInfo
 from PIL import Image
 from DB.forms import ImageUploadForm
 from .serializers import *
+from login.serializers import Essecial_User_Info
 from staticfiles.image_uploader import S3ImgUploader
 
 class makeTeam(APIView):
@@ -74,6 +75,28 @@ class searchTeamByName(APIView):
 
         serializer = Team_Info_Serializer(teams, many=True)
         return Response({"result" : serializer.data})
+    
+class getTeamPlayerList(APIView):
+    def post(self, request):
+        team_code = request.data.get('team_code')
+        if not team_code:
+            return Response({'error': 'Missing required field: team_code'}, status=400)
+        
+        try:
+            # 팀에 소속된 유저들의 정보를 가져오기
+            user_codes = UserTeam.objects.filter(team_code=team_code).values_list('user_code', flat=True)
+
+            players = UserInfo.objects.filter(user_code__in=user_codes)
+
+            if not players.exists():
+                return Response({'message': 'No players found for this team'}, status=404)
+            
+            serializer = Essecial_User_Info(players, many=True)
+
+            return Response({'result' : serializer.data}, status=200)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
 
         
 
