@@ -7,7 +7,7 @@ import './Gender.scss';
 const Gender = ({ gender, isSelected, onClick }) => {
 
   const genderSelect = () => {
-    if (gender==='man') {
+    if (gender==='male') {
       return (
         <div className='genderBG'>
           <img className='gendericon' src={man}/>
@@ -27,8 +27,8 @@ const Gender = ({ gender, isSelected, onClick }) => {
   }
   return (
     <div className='genderBG' onClick={onClick} style={{ cursor: 'pointer' }}>
-    <img className='gendericon' src={gender === 'man' ? man : woman} alt={gender} />
-    <p className='gendertext'>{gender === 'man' ? '남자' : '여자'}</p>
+    <img className='gendericon' src={gender === 'male' ? man : woman} alt={gender} />
+    <p className='gendertext'>{gender === 'male' ? '남자' : '여자'}</p>
     <div className='circle' style={{ backgroundColor: isSelected ? '#00B268' : 'rgba(229,233,236)' }}>
       <img className='gendercheck' src={check} alt='check' />
     </div>

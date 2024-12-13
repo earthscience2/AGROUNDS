@@ -15,5 +15,5 @@ urlpatterns = [
     path("kakao/", views.kakao.as_view()),
     path("kakao/callback/", views.kakaoCallback.as_view()),
     path("kakao/signup/", views.kakaoSignup.as_view()),
-    # path("get-user-info/", views.getUserInfo.as_view()),
+    path("get-user-info/", views.getUserInfo.as_view()),
 ]

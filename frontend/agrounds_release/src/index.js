@@ -32,11 +32,16 @@ import Complete from './pages/mypage/js/secession/Complete';
 import MakeTeam from './pages/team/js/MakeTeam';
 import CompMakeTeam from './pages/team/js/CompMakeTeam';
 import TeamSetting from './pages/team/js/TeamSetting';
+import LoadingPage from './function/login/loading_for_login';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Onboard />,
+  },
+  {
+    path: "/loading-for-login",
+    element: <LoadingPage />
   },
   {
     path: "/email",
@@ -73,10 +78,6 @@ const router = createBrowserRouter([
   {
     path: "/extra-info",
     element: <ExtraInfo />,
-  },
-  {
-    path: "/prefer-position",
-    element: <PreferPosition />,
   },
   {
     path: "/main",

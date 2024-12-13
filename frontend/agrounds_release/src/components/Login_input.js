@@ -2,7 +2,11 @@ import React from 'react';
 import './Login_input.scss';
 import eye from '../assets/eye-off.png';
 
-const Login_input = ({ placeholder, type, borderRadius='15px' }) => {
+const Login_input = ({ placeholder, type, borderRadius='15px', borderColor='#F2F4F8', value='', setVale=()=>{} }) => {
+
+  const onInputChange = event => {
+    setVale(event.target.value);
+  }
   
   const icon = () => {
     if (placeholder==='몸무게'){
@@ -17,8 +21,15 @@ const Login_input = ({ placeholder, type, borderRadius='15px' }) => {
   }
 
   return (
-    <div className='inputBG' style={{ borderRadius }}>
-      <input className='login_input' style={{ borderRadius }} placeholder={placeholder} type={type} />
+    <div className='inputBG' style={{ borderRadius, border:'solid 1px', borderColor}}>
+      <input 
+        className='login_input'
+        style={{ borderRadius }} 
+        placeholder={placeholder} 
+        type={type}
+        value={value}
+        onChange={onInputChange}
+      />
       {icon()}
     </div>
   );

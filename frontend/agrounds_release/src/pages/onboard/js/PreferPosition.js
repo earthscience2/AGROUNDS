@@ -4,9 +4,7 @@ import Exit_btn from '../../../components/Exit_btn';
 import Prefer_posi from '../../../components/Prefer_posi';
 import Circle_common_btn from '../../../components/Circle_common_btn';
 
-const PreferPosition = () => {
-  const [selectedPosition, setSelectedPosition] = useState(null);
-
+const PreferPosition = ({selectedPosition, setSelectedPosition, exit}) => {
   const handlePositionSelect = (position) => {
     if (selectedPosition === position) {
       setSelectedPosition(null);
@@ -36,7 +34,7 @@ const PreferPosition = () => {
 
   return (
     <div className='ppBG'>
-      <div className='exitBtn'><Exit_btn /></div>
+      <div className='exitBtn'><Exit_btn exit={exit}/></div>
       <div className='grid'>
         {positions.map((pos) => (
           <Prefer_posi
@@ -50,7 +48,9 @@ const PreferPosition = () => {
           </Prefer_posi>
         ))}
       </div>
-      <Circle_common_btn title='포지션 선택을 완료하세요' />
+      {selectedPosition ? 
+      <Circle_common_btn title='완료' onClick={exit} color='#000000' backgroundColor='#FFFFFF' style={{position:'fixed', bottom:'5vh'}}/> :
+      <Circle_common_btn title='포지션 선택을 완료하세요' style={{position:'fixed', bottom:'5vh'}} />}
     </div>
   );
 };

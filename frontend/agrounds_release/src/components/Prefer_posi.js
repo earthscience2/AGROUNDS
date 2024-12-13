@@ -6,7 +6,7 @@ const Prefer_posi = ({ backgroundColor, children, onClick, isDimmed, isSelected 
     <div
       className={`preferPosi ${isDimmed ? 'dimmed' : ''} ${isSelected ? 'selected' : ''}`}
       onClick={onClick}
-      style={{backgroundColor, width: '120px',height: '120px', borderRadius: '50%', display:'flex', justifyContent:'center',alignItems:'center', fontWeight:'700'}}
+      style={{backgroundColor, width: '100px',height: '100px', borderRadius: '50%', display:'flex', justifyContent:'center',alignItems:'center', fontWeight:'700'}}
 
     >
       {children}

@@ -8,7 +8,7 @@ from staticfiles.make_code import make_code
 
 import re
 
-class V2_User_info_Serializer(serializers.ModelSerializer):
+class User_info_Serializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = UserInfo
@@ -16,26 +16,19 @@ class V2_User_info_Serializer(serializers.ModelSerializer):
         extra_kwargs = {
     	    'password' : {'write_only' : True },
             'user_code' : {'required' : False},
-            'team_code' : {'required' : False},
             'user_type' : {'required' : False},
-            'user_height' : {'required' : False},
-            'user_weight' : {'required' : False},
-            'user_position' : {'required' : False},
+            'marketing_agree' : {'required' : False},
 	    }
-        
-    
+
     def create(self,validated_data):
         password = validated_data.pop('password',None)
         instance = self.Meta.model(**validated_data)
-        if password is not None:
-            # hashing password
-            if password == "0":
-                instance.password = "0"
-            else:
-                instance.password = make_password(password)
+
+        if instance.login_type == "common":
+            instance.password = make_password(password)
 
         instance.user_code = make_code('u')
-        instance.user_type = -1
+        instance.user_type = "-1"
 
         instance.save()
         return instance
@@ -85,22 +78,11 @@ class V2_User_info_Serializer(serializers.ModelSerializer):
         massges = ['이메일', '패스워드', '닉네임', '이름', '생년월일']
 
         for i in range (0, 5):
-            if (self.regexes(patterns[i], items[i]) == None):
+            if (self.regexes(patterns[i], items[i]) == None): # 소셜 회원가입의 경우 password가 0, 유효성검사 건너뜀
                 if (i == 1 and items[i] == "0"):
                     return None
                 raise serializers.ValidationError({"error" : "올바르지 않은 " + massges[i] +" 형식입니다."})
         return None
-    
-class V2_UpdateUserInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserInfo
-        fields = '__all__'
-
-class V2_User_info_Serializer_summary(serializers.ModelSerializer):
-    class Meta:
-        model = UserInfo
-        fields = ['user_code', 'user_name', 'user_gender', 
-                  'user_nickname', 'user_height', 'user_weight', 'user_position']
     
 # class Login_Serializer(serializers.Serializer):
 #     user_id = serializers.CharField(required = True)

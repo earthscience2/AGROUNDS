@@ -77,7 +77,7 @@ class UserInfo(models.Model):
     user_name = models.CharField(max_length=45)
     user_gender = models.CharField(max_length=45)
     user_nickname = models.CharField(max_length=45)
-    marketing_agree = models.BooleanField()
+    marketing_agree = models.BooleanField(default=0)
     login_type = models.CharField(max_length=45)
     user_type = models.CharField(max_length=45)
     user_height = models.IntegerField()
