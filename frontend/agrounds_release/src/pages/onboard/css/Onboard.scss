@@ -18,12 +18,18 @@
   .img{
     width: 100%;
   }
+  .img-gradation{
+    width: 100%;
+    height: 3vh;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.9);
+  }
   .logo{
     font-size: 16px;
     font-weight: 700;
     color: #2C211A;
     padding: 8vh 0 2vh 0;
-    margin: 0;
+    margin-top: -4vh;
   }
   .ment{
     font-size: 24px;

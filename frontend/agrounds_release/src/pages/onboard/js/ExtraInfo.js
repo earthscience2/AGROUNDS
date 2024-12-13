@@ -8,6 +8,9 @@ import right from '../../../assets/right.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PreferPosition from './PreferPosition';
 import client from '../../../client';
+import Modal from '../../../components/Modal';
+import logo from '../../../assets/symbol.png';
+import TermsAgreement from '../../../components/TermsAgreement';
 
 const ExtraInfo = () => {
   const navigate = useNavigate();
@@ -19,6 +22,12 @@ const ExtraInfo = () => {
   const [selectedPosition, setSelectedPosition] = useState(null);
 
   const [errorNum, setErrorNum] = useState(1); //0: 정상, 1: 몸무게 에러, 2: 신장 에러, 3: 포지션 에러
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [marketingAgree, setMarketingAgree] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const location = useLocation();
   const receivedFormData = location.state;
@@ -48,23 +57,25 @@ const ExtraInfo = () => {
       const formData = {
         "user_weight" : userWeight,
         "user_height" : userHeight,
-        "user_position" : selectedPosition
+        "user_position" : selectedPosition,
+        "marketing_agree" : marketingAgree
       };
   
       const mergedFormData = {...receivedFormData, ...formData};
   
       console.log(mergedFormData);
 
-      client.post('/api/login/kakao/signup/', mergedFormData).then((res)=>{
+      client.post('/api/login/kakao/signup/', mergedFormData)
+      .then((res)=>{
         console.log(res);
-        navigate('/completesignup')
+        window.location.replace(process.env.REACT_APP_BASE_URL + "/api/login/kakao/")
       }).catch((err)=>{
         console.log(err);
         alert("회원가입 실패. agronds 팀에 문의부탁드립니다.");
       });
     }
   }
-  
+
   return (
     <div className='extraBG'>
       <Back_btn />
@@ -77,7 +88,7 @@ const ExtraInfo = () => {
         <div style={selectedPosition ? {} : {color:'#C1C7CD'}}>{selectedPosition || '선호 포지션'}</div>
         <img src={right}/>
       </div>
-      {errorNum===0 && selectedPosition ? <CircleBtn title='다음' style={{position:'fixed', bottom:'5vh'}} onClick={onNext}/> : 
+      {errorNum===0 && selectedPosition ? <CircleBtn title='다음' style={{position:'fixed', bottom:'5vh'}} onClick={openModal}/> : 
       <CircleBtn title='다음' backgroundColor='#F4F4F4' color='C6C6C6' style={{position:'fixed', bottom:'5vh'}}/>}
 
       {viewPosition ? <PreferPosition 
@@ -85,6 +96,15 @@ const ExtraInfo = () => {
         selectedPosition={selectedPosition}
         setSelectedPosition={setSelectedPosition}
         /> : null}
+
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className='modal-inner'>
+         <img src={logo} className='symbol'/>
+         <p className='modal-title'>에이그라운즈를 사용하기 위해 <br/>약관을 동의해주세요.</p>
+         <TermsAgreement onClick={onNext} setMarketingAgree={setMarketingAgree}/>
+        </div>
+      </Modal>
     </div>
   );
 };

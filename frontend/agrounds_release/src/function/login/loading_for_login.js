@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import './loading.scss'
 import client from '../../client';
+import { useNavigate } from 'react-router-dom';
 
 const LoadingPage = () => {
     const token = new URL(window.location.href).searchParams.get('code');
 
+    const navigate = useNavigate();
     // 카카오 로그인 시 token이 url parameter로 들어오는지 검사하고,
     // 들어오고 있으면 token을 api에 전송하여 유저 정보 불러옴
     useEffect(()=>{
@@ -41,7 +43,11 @@ const LoadingPage = () => {
                 sessionStorage.setItem('userNickname', response.data.user_nickname);
                 sessionStorage.setItem('teamCode', response.data.team_code);
                 sessionStorage.setItem('teamName', response.data.team_name);
-                window.location.replace('/main');
+                if(response.data.user_type === '-1') {
+                    navigate('/completesignup');
+                } else {
+                    navigate('/main');
+                }
             })
             .catch(function(error){
                 alert('로그인 실패');
