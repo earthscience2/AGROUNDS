@@ -11,7 +11,7 @@ from .serializers import *
 from drf_yasg.utils import swagger_auto_schema
 
 class SetUserChange(APIView):
-    def put(self, request):
+    def patch(self, request):
         user_code = request.data.get('user_code')
         
         if not user_code:

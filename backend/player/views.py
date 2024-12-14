@@ -4,8 +4,8 @@ from rest_framework import status
 # from .models import User_info
 from DB.models import UserInfo
 from login.serializers import Essecial_User_Info
-
 from .serializers import *
+from staticfiles.get_user_info_from_token import get_user_code_from_token
 
 class joinTeam(APIView):
     def post(self, request):
@@ -22,15 +22,32 @@ class joinTeam(APIView):
         else:
             return Response(serializer.errors, status=400)
 
-class searchPlayerByNickname(APIView):
+class searchIndividualPlayerByNickname(APIView):
     def post(self, request):
+        auth_header = request.headers.get('Authorization')
+        if auth_header is None:
+            return Response({'detail': 'Authorization header missing or invalid'}, status=status.HTTP_401_UNAUTHORIZED)
+        token = auth_header.split(' ')[0]
+
+        user_code = get_user_code_from_token(token)
+        if user_code is None:
+            return Response({'error' : '토큰 만료 : 다시 로그인해주세요'}, status=403)
+        
+
         user_nickname = request.data.get('user_nickname')
         if not user_nickname:
             return Response({'error': 'Missing required field: user_nickname'}, status=400)
 
-        players = UserInfo.objects.filter(user_nickname__icontains=user_nickname)
+        players = UserInfo.objects.filter(
+            user_nickname__icontains=user_nickname,
+        ).exclude(
+            user_code=user_code
+        ).filter(
+            user_type="individual"
+        )
 
         serializer = Essecial_User_Info(players, many=True)
+        
         return Response({"result" : serializer.data})
     
 class withdrawTeam(APIView):
