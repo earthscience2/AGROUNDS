@@ -31,6 +31,6 @@
   }
   .buttonbox{
     @include display(flex, row, center, start);
-    width: 100%;
+    width: 90%;
   }
 }

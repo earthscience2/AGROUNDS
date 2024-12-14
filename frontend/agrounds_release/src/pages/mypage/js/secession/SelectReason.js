@@ -28,7 +28,7 @@ const SelectReason = () => {
       <Contents title='보안이 걱정돼요' onClick='/secessionlast' />
       <Contents title='개인정보가 불안해요' onClick='/secessionlast' />
       <Contents title='특별한 이유 없음' onClick='/secessionlast' />
-      <Contents title='기타' onClick='/secessionlast' />
+      <Contents title='기타' onClick='/secession-other-reason' />
     </div>
   );
 };

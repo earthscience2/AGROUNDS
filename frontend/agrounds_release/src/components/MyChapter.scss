@@ -14,7 +14,7 @@
 .my-chapter{
   @include display(flex, column, start, center);
   width: 90%;
-  border-bottom: 1px solid #999999;
+  border-bottom: .5px solid #e6e6e6;
   .chapter-title{
     @include font(2.4vh, 700, #000000);
     margin: 5vh 0 2vh 0;

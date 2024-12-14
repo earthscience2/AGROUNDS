@@ -15,7 +15,6 @@ const SecessionLast = () => {
   const navigate = useNavigate();
 
   const secessionbtn = () => {
-    console.log('바이');
     navigate('/secessioncomplete')  
   }
 
@@ -46,8 +45,8 @@ const SecessionLast = () => {
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <p style={{margin:'2vh 0 1vh 0'}}>정말로 서비스 탈퇴하시겠습니까?</p>
-        <p style={{margin:'0 0 4vh 0'}}>탈퇴 시 되돌릴 수 없습니다</p>
+        <p style={{margin:'2vh 0 1vh 0', fontSize:'1.8vh', fontWeight:'600'}}>정말로 서비스 탈퇴하시겠습니까?</p>
+        <p style={{margin:'0 0 3vh 0', fontSize:'1.8vh', fontWeight:'600'}}>탈퇴 시 되돌릴 수 없습니다</p>
         <div className='buttonbox'>
           <Small_Common_Btn onClick={closeModal} title='취소' backgroundColor='#F2F4F8' color='black'></Small_Common_Btn>
           <Small_Common_Btn  onClick={secessionbtn} title='탈퇴하기' backgroundColor='#262626' color='white'></Small_Common_Btn>

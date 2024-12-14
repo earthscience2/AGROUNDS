@@ -13,12 +13,14 @@
 
 .mypage{
   @include display(flex, column, center, start);
+  background-color: rgb(247,248,250);
   &:last-child{
     margin-bottom: 10vh;
   }
   .my-infobox{
     @include display(flex, row, center, start);
     width: 90%;
+    
     .infotext{
       margin-left: 3vh;
       .ename{

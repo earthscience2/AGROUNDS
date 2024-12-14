@@ -20,10 +20,10 @@ const My = () => {
         </div>
       </div>
       <BasicInfo />
-      <MyChapter chapter="계정"/>
-      <MyChapter chapter="알림"/>
+      {/* <MyChapter chapter="알림"/> */}
       <MyChapter chapter="일반"/>
       <MyChapter chapter="약관"/>
+      <MyChapter chapter="계정"/>
       <Footer />
     </div>
   );

@@ -11,7 +11,7 @@ const MyChapter = ({chapter}) => {
       case '계정':
         return (
           <>
-            <div className='titlebox' onClick={navigate('/reason')}>
+            {/* <div className='titlebox' onClick={navigate('/reason')}>
               <p className='title'>이메일 변경</p>
               <p className='email'>agrounds@aground.com</p>
               <img className='arrow' src={rightarrow}></img>
@@ -19,7 +19,7 @@ const MyChapter = ({chapter}) => {
             <div className='titlebox' onClick={navigate('/reason')}>
               <p className='title'>비밀번호 변경</p>
               <img className='arrow' src={rightarrow}></img>
-            </div>
+            </div> */}
             <div className='titlebox' onClick={() => navigate('/reason')}>
               <p className='title'>서비스 탈퇴</p>
               <img className='arrow' src={rightarrow}></img>

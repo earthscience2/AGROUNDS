@@ -39,6 +39,7 @@ import ChangeTeamLogo from './pages/team/js/ChangeTeamLogo';
 import MemberManage from './pages/team/js/MemberManage';
 import JoinTeam from './pages/team/js/JoinTeam';
 import LoadingPage from './function/login/loading_for_login';
+import SecessionOtherReason from './components/SecessionOtherReason';
 
 const router = createBrowserRouter([
   {
@@ -184,6 +185,10 @@ const router = createBrowserRouter([
   {
     path: "/jointeam",
     element: <JoinTeam />,
+  },
+  {
+    path: "/secession-other-reason",
+    element: <SecessionOtherReason />,
   },
 ]);
 
