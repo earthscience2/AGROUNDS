@@ -122,12 +122,21 @@ class UserMatchInfo(models.Model):
         db_table = "user_match_info"
 
 class UserTeam(models.Model):
-    user_code = models.CharField(max_length=45, null=False)
-    team_code = models.CharField(primary_key=True, max_length=45)
+    user_code = models.CharField(primary_key=True, max_length=45)
+    team_code = models.CharField(max_length=45)
 
     class Meta:
         managed = False
         db_table = "user_team"
+
+class PendingInviteTeam(models.Model):
+    user_code = models.CharField(max_length=45)
+    team_code = models.CharField(max_length=45)
+    direction = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = "pending_invite_team"
 
 # team_info
 class TeamInfo(models.Model):
