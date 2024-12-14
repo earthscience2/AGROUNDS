@@ -8,4 +8,5 @@ urlpatterns = [
     path("search-team-by-name/", views.searchTeamByName.as_view()),
     path("get-team-player-list/", views.getTeamPlayerList.as_view()),
     path("invite-player/", views.invitePlayer.as_view()),
+    path("accept-player/", views.acceptPlayer.as_view()),
 ]

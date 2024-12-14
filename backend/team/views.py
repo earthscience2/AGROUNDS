@@ -107,12 +107,47 @@ class invitePlayer(APIView):
         if not user_code:
             return Response({'error': 'Missing required field: user_code'}, status=400)
         
-        
         serializer = User_Team_Serializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
+
+            pending_invite_teams = PendingInviteTeam.objects.filter(user_code=user_code)
+            # 유저가 팀 가입 신청을 걸어 놓은 상태라면, 모든 요청들을 삭제
+            if pending_invite_teams.exists():
+                pending_invite_teams.delete()
+
             return Response({"result" : "success"})
         else:
             return Response(serializer.errors, status=400)
 
+class acceptPlayer(APIView):
+    def post(self, request):
+        data = request.data.copy()
+
+        required_fields = ['team_code', 'user_code', 'accept']
+        errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
+        if errors:
+            return Response(errors, status=400)
+
+        pending_invite_team = PendingInviteTeam.objects.filter(team_code = data['team_code'], user_code = data['user_code']).first()
+        if pending_invite_team is None:
+            return Response({"error" : f"해당 요청이 존재하지 않습니다. : {data['user_code']} to {data['team_code']}"})
+        
+        pending_invite_teams = PendingInviteTeam.objects.filter(user_code = data['user_code'])
+
+        if data['accept'] == 'true' :
+            data.pop('accept')
+            serializer = User_Team_Serializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+
+                # 가입 승인시 해당 유저의 모든 가입 요청 삭제
+                pending_invite_teams.delete()
+                return Response({"result" : "accepted"}, status=200)
+            else:
+                return Response(serializer.errors, status=400)
+        else:
+            # 가입 거절 시 해당 유저의 해당 가입 요청만 삭제
+            pending_invite_team.delete()
+            return Response({"result": "denied"}, status=200)

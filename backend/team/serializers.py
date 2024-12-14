@@ -69,7 +69,7 @@ class User_Team_Serializer(serializers.ModelSerializer):
     def validate(self, data):
         # 필수 항목 확인
         required_fields = ['team_code', 'user_code']
-        errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in dat}
+        errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
         if errors:
             raise serializers.ValidationError(errors)
         return data
