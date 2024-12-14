@@ -118,6 +118,11 @@ class invitePlayer(APIView):
             # 유저가 팀 가입 신청을 걸어 놓은 상태라면, 모든 요청들을 삭제
             if pending_invite_teams.exists():
                 pending_invite_teams.delete()
+            
+            # 팀에 가입시킨 유저의 user_type을 player로 변경
+            user = UserInfo.objects.get(user_code=user_code)
+            user.user_type = 'player'
+            user.save()  # 변경 사항 저장
 
             return Response({"result" : "success"})
         else:

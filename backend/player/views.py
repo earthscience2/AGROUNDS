@@ -32,6 +32,27 @@ class searchPlayerByNickname(APIView):
 
         serializer = Essecial_User_Info(players, many=True)
         return Response({"result" : serializer.data})
+    
+class withdrawTeam(APIView):
+    def delete(self, request):
+        data = request.data.copy()
+
+        required_fields = ['team_code', 'user_code']
+        errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
+        if errors:
+            return Response(errors, status=400)
+        
+        user_team = UserTeam.objects.filter(user_code = data['user_code'])
+        if not user_team.exists():
+            return Response({'error' : '유저가 속한 팀이 없습니다.'}, status=400)
+        user_team.delete()
+
+        user = UserInfo.objects.filter(user_code = data['user_code']).first()
+        if user is not None:
+            user.user_type = 'individual'
+            user.save()
+
+        return Response({'result' : 'success'}, status=200)
 
 
 
