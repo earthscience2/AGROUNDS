@@ -56,8 +56,7 @@ const ExtraInfo = () => {
       console.log(mergedFormData);
 
       client.post('/api/login/kakao/signup/', mergedFormData).then((res)=>{
-        console.log(res);
-        navigate('/completesignup')
+        window.location.replace(process.env.REACT_APP_BASE_URL + "/api/login/kakao/")
       }).catch((err)=>{
         console.log(err);
         alert("회원가입 실패. agronds 팀에 문의부탁드립니다.");

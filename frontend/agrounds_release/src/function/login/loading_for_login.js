@@ -41,7 +41,10 @@ const LoadingPage = () => {
                 sessionStorage.setItem('userPosition', response.data.user_position);
                 sessionStorage.setItem('teamCode', response.data.team_code);
 
-                window.location.replace('/main');
+                if(response.data.user_type === '-1') // 가입 후 첫 로그인시 팀 가입 유도 페이지로 이동
+                    window.location.replace('/completesignup');
+                else
+                    window.location.replace('/main');
             })
             .catch(function(error){
                 alert('로그인 실패');

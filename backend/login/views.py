@@ -164,12 +164,17 @@ class getUserInfo(APIView):
             if user.user_type == 'coach' : 
                 user_team = TeamInfo.objects.filter(team_host = user_code).first()
             elif user.user_type == 'player' :
-                user_team = UserTeam.objects.filter(user_code=user_code).first()
+                user_team = UserTeam.objects.filter(user_code = user_code).first()
             
             if user_team is None:
                 user_dict['team_code'] = ''
             else:
                 user_dict['team_code'] = user_team.team_code
+
+            # 가입 후 첫 로그인 시 uesr_type을 individual로 변경
+            if user.user_type == '-1':
+                user.user_type = 'individual'
+                user.save()
 
         except UserInfo.DoesNotExist:
             return Response(
