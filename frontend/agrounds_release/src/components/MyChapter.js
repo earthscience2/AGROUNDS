@@ -43,11 +43,11 @@ const MyChapter = ({chapter}) => {
       case '일반':
         return (
           <>
-            <div className='titlebox' onClick={navigate('/reason')}>
+            <div className='titlebox' onClick={() => navigate('/announcement-list')}>
               <p className='title'>공지사항</p>
               <img className='arrow' src={rightarrow}></img>
             </div>
-            <div className='titlebox' onClick={navigate('/reason')}>
+            <div className='titlebox' onClick={() => navigate('/eventlist')}>
               <p className='title'>이벤트</p>
               <img className='arrow' src={rightarrow}></img>
             </div>

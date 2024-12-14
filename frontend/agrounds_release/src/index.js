@@ -40,6 +40,10 @@ import MemberManage from './pages/team/js/MemberManage';
 import JoinTeam from './pages/team/js/JoinTeam';
 import LoadingPage from './function/login/loading_for_login';
 import SecessionOtherReason from './components/SecessionOtherReason';
+import AnnouncementList from './pages/mypage/js/announcement/AnnouncementList';
+import Announcement from './pages/mypage/js/announcement/Announcement';
+import EventList from './pages/mypage/js/announcement/EventList';
+import Event from './pages/mypage/js/announcement/Event';
 
 const router = createBrowserRouter([
   {
@@ -189,6 +193,22 @@ const router = createBrowserRouter([
   {
     path: "/secession-other-reason",
     element: <SecessionOtherReason />,
+  },
+  {
+    path: "/announcement-list",
+    element: <AnnouncementList />,
+  },
+  {
+    path: "/announcement",
+    element: <Announcement />,
+  },
+  {
+    path: "/eventlist",
+    element: <EventList />,
+  },
+  {
+    path: "/event",
+    element: <Event />,
   },
 ]);
 

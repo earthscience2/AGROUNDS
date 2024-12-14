@@ -14,9 +14,9 @@ const My = () => {
       <div className='my-infobox'>
         <Image_Comp width="12vh" img={logo}/>
         <div className='infotext'>
-          <p className='ename'>Sonny</p>
-          <p className='kname'>손흥민</p>
-          <p className='fc'>FC 동백</p>
+          <p className='ename'>{sessionStorage.getItem('userNickname')}</p>
+          <p className='kname'>{sessionStorage.getItem('userName')}</p>
+          <p className='fc'>{sessionStorage.getItem('userPosition')}</p>
         </div>
       </div>
       <BasicInfo />

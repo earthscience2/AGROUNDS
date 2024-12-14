@@ -37,8 +37,8 @@ const LoadingPage = () => {
                 sessionStorage.setItem('userGender', response.data.user_gender);
                 sessionStorage.setItem('loginType', response.data.login_type);
                 sessionStorage.setItem('userType', response.data.user_type);
-                sessionStorage.setItem('userHeight', response.data.user_Height);
-                sessionStorage.setItem('userWeight', response.data.user_Weight);
+                sessionStorage.setItem('userHeight', response.data.user_height);
+                sessionStorage.setItem('userWeight', response.data.user_weight);
                 sessionStorage.setItem('userPosition', response.data.user_position);
                 sessionStorage.setItem('userNickname', response.data.user_nickname);
                 sessionStorage.setItem('teamCode', response.data.team_code);

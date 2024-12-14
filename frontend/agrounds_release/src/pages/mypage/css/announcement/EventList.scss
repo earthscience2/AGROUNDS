@@ -11,15 +11,15 @@
   align-items: $align;
 }
 
-.announcementList{
+.eventList{
   @include display(column, start, center);
   width: 100%;
-  .announcebox{
+  .eventebox{
     width: 90%;
     height: 8vh;
     @include display(column, center, start);
     border-bottom: .5px solid #E5E9ED;
-    .anntitle{
+    .eventtitle{
       margin: 0;
       width: 90%;
       @include font(1.8vh, 500, #333333);
@@ -27,12 +27,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .anndate{
+    .eventdate{
       margin: 1vh 0;
       @include font(1.5vh, 500, #A8A8A8);
     }
   }
-  .noannounce{
+  .noevent{
     width: 90%;
     height: 70vh;
     display: flex;

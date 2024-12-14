@@ -14,7 +14,6 @@ const SecessionLast = () => {
   const location = useLocation();
 
   const selectedReason = location.state?.reason || '선택된 이유가 없습니다.'
-  console.log(selectedReason);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

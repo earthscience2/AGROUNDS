@@ -8,4 +8,14 @@ const withdrawApi = ({data}) => {
   client.delete('/api/user/withdraw/', data)
 }
 
-export {reasonForWithdrawApi, withdrawApi}
+const announcementApi = () => {
+  client.get('/api/manage/announcement/')
+  .then((response) => {
+    return response.data.result;
+  })
+  .then(() => {
+    return 'error 발생';
+  })
+}
+
+export {reasonForWithdrawApi, withdrawApi, announcementApi}

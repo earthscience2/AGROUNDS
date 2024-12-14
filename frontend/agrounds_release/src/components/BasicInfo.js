@@ -1,7 +1,12 @@
 import React from 'react';
 import './BasicInfo.scss';
+import AgeConversion from '../function/AgeConversion';
 
 const BasicInfo = () => {
+  const gender = () => {
+    return sessionStorage.getItem('userGender') === 'male' ? '남자' : '여자';
+  }
+  console.log(sessionStorage.getItem('userWeight'))
   return (
     <div className='basicinfo'>
       <div className='titlebox'>
@@ -10,23 +15,23 @@ const BasicInfo = () => {
       </div>
       <div className='basiccontentsbox'>
         <p className='contenttitle'>성별</p>
-        <p className='contentinfo'>남자</p>
+        <p className='contentinfo'>{gender()}</p>
       </div>
       <div className='basiccontentsbox'>
         <p className='contenttitle'>나이</p>
-        <p className='contentinfo'>1992.08.08 (32세)</p>
+        <p className='contentinfo'>{AgeConversion(sessionStorage.getItem('userBirth'))}</p>
       </div>
       <div className='basiccontentsbox'>
         <p className='contenttitle'>키</p>
-        <p className='contentinfo'>183cm</p>
+        <p className='contentinfo'>{sessionStorage.getItem('userHeight')}</p>
       </div>
       <div className='basiccontentsbox'>
         <p className='contenttitle'>몸무게</p>
-        <p className='contentinfo'>78kg</p>
+        <p className='contentinfo'>{sessionStorage.getItem('userWeight')}</p>
       </div>
       <div className='basiccontentsbox'>
         <p className='contenttitle'>선호포지션</p>
-        <p className='contentinfo'>LWF</p>
+        <p className='contentinfo'>{sessionStorage.getItem('userPosition')}</p>
       </div>
       
     </div>
