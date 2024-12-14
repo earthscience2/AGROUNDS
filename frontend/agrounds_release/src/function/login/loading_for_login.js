@@ -29,18 +29,18 @@ const LoadingPage = () => {
                 sessionStorage.setItem('token', response.data.token)
                 sessionStorage.setItem('userCode', response.data.user_code);
                 sessionStorage.setItem('userId', response.data.user_id);
-                sessionStorage.setItem('userCode', response.data.user_code);
                 sessionStorage.setItem('userBirth', response.data.user_birth);
                 sessionStorage.setItem('userName', response.data.user_name);
                 sessionStorage.setItem('userGender', response.data.user_gender);
+                sessionStorage.setItem('userNickname', response.data.user_nickname);
+                sessionStorage.setItem('marketingAgree', response.data.marketing_agree);
                 sessionStorage.setItem('loginType', response.data.login_type);
                 sessionStorage.setItem('userType', response.data.user_type);
-                sessionStorage.setItem('userHeight', response.data.user_Height);
-                sessionStorage.setItem('userWeight', response.data.user_Weight);
+                sessionStorage.setItem('userHeight', response.data.user_height);
+                sessionStorage.setItem('userWeight', response.data.user_weight);
                 sessionStorage.setItem('userPosition', response.data.user_position);
-                sessionStorage.setItem('userNickname', response.data.user_nickname);
                 sessionStorage.setItem('teamCode', response.data.team_code);
-                sessionStorage.setItem('teamName', response.data.team_name);
+
                 window.location.replace('/main');
             })
             .catch(function(error){

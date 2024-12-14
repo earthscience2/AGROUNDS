@@ -155,8 +155,10 @@ class getUserInfo(APIView):
         try:
             user = UserInfo.objects.get(user_code = user_code)
             user_dict = model_to_dict(user)
+            new_token = login.getTokensForUser(login, user)
             user_dict.pop('password')
-            
+            user_dict['token'] = new_token['access']
+
             user_team = None
 
             if user.user_type == 'coach' : 
@@ -165,9 +167,10 @@ class getUserInfo(APIView):
                 user_team = UserTeam.objects.filter(user_code=user_code).first()
             
             if user_team is None:
-                user_dict['user_team'] = ''
+                user_dict['team_code'] = ''
             else:
-                user_dict['user_team'] = user_team.team_code
+                user_dict['team_code'] = user_team.team_code
+
         except UserInfo.DoesNotExist:
             return Response(
                 {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
