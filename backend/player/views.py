@@ -1,14 +1,11 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 # from .models import User_info
 from DB.models import UserInfo
-from rest_framework.generics import get_object_or_404
+from login.serializers import Essecial_User_Info
 
 from .serializers import *
-
-from drf_yasg.utils import swagger_auto_schema
 
 class joinTeam(APIView):
     def post(self, request):
@@ -24,6 +21,18 @@ class joinTeam(APIView):
             return Response({"result" : "success"})
         else:
             return Response(serializer.errors, status=400)
+
+class searchPlayerByNickname(APIView):
+    def post(self, request):
+        user_nickname = request.data.get('user_nickname')
+        if not user_nickname:
+            return Response({'error': 'Missing required field: user_nickname'}, status=400)
+
+        players = UserInfo.objects.filter(user_nickname__icontains=user_nickname)
+
+        serializer = Essecial_User_Info(players, many=True)
+        return Response({"result" : serializer.data})
+
 
 
 # class getPlayerInfo(APIView):

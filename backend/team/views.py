@@ -92,9 +92,6 @@ class getTeamPlayerList(APIView):
             user_codes = UserTeam.objects.filter(team_code=team_code).values_list('user_code', flat=True)
 
             players = UserInfo.objects.filter(user_code__in=user_codes)
-
-            if not players.exists():
-                return Response({'message': 'No players found for this team'}, status=404)
             
             serializer = Essecial_User_Info(players, many=True)
 
