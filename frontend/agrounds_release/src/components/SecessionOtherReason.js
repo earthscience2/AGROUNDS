@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import BackTitle_Btn from './BackTitle_Btn';
 import Circle_common_btn from './Circle_common_btn';
+import { useNavigate } from 'react-router-dom';
 
 const SecessionOtherReason = () => {
   const [inputValue, setInputValue] = useState('');
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -12,10 +15,7 @@ const SecessionOtherReason = () => {
 
   const handleSubmit = () => {
     if (inputValue.trim()) {
-      console.log('Submitted Reason:', inputValue);
-     
-    } else {
-      alert('내용을 입력해주세요.');
+      navigate('/secessionlast', {state: { reason: inputValue}})
     }
   };
 

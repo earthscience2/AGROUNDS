@@ -5,17 +5,30 @@ import Login_title from '../../../../components/Login_title';
 import Circle_common_btn from '../../../../components/Circle_common_btn';
 import Modal from '../../../../components/Modal';
 import Small_Common_Btn from '../../../../components/Small_Common_Btn';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { reasonForWithdrawApi, withdrawApi } from '../../../../function/MyPageApi';
 
 const SecessionLast = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const location = useLocation();
+
+  const selectedReason = location.state?.reason || '선택된 이유가 없습니다.'
+  console.log(selectedReason);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const navigate = useNavigate();
 
   const secessionbtn = () => {
-    navigate('/secessioncomplete')  
+    reasonForWithdrawApi({"user_code" : sessionStorage.getItem("userCode"), "reason": selectedReason});
+    withdrawApi({"user_code": sessionStorage.getItem("userCode")})
+    .then(() => {
+      navigate('/secessioncomplete');
+    })
+    .catch((error) => {
+      alert('회원탈퇴에 실패했습니다.');
+    })
   }
 
   return (
