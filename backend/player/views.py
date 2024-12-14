@@ -42,12 +42,18 @@ class withdrawTeam(APIView):
         if errors:
             return Response(errors, status=400)
         
-        user_team = UserTeam.objects.filter(user_code = data['user_code'])
+        team_code = data['team_code']
+        user_code = data['user_code']
+        
+        if TeamInfo.objects.filter(team_code = team_code, team_host = user_code).exists() :
+            return Response({"error" : "감독은 탈퇴 할 수 없습니다."}, status=400)
+        
+        user_team = UserTeam.objects.filter(user_code = user_code)
         if not user_team.exists():
             return Response({'error' : '유저가 속한 팀이 없습니다.'}, status=400)
         user_team.delete()
 
-        user = UserInfo.objects.filter(user_code = data['user_code']).first()
+        user = UserInfo.objects.filter(user_code = user_code).first()
         if user is not None:
             user.user_type = 'individual'
             user.save()
