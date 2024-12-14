@@ -155,3 +155,30 @@ class acceptPlayer(APIView):
             # 가입 거절 시 해당 유저의 해당 가입 요청만 삭제
             pending_invite_team.delete()
             return Response({"result": "denied"}, status=200)
+        
+class getJoinRequestList(APIView):
+    def post(self, request):
+        data = request.data
+
+        required_fields = ['team_code']
+        errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
+        if errors:
+            return Response(errors, status=400)
+        
+        team_code = data['team_code']
+        
+        try:
+            # 팀에 가입 요청을 보낸 유저들의 정보를 가져오기
+            user_codes = PendingInviteTeam.objects.filter(team_code=team_code, direction='user_to_team').values_list('user_code', flat=True)
+
+            players = UserInfo.objects.filter(user_code__in=user_codes)
+
+            if not players.exists():
+                return Response({'result' : []}, status=200)
+            
+            serializer = Essecial_User_Info(players, many=True)
+
+            return Response({'result' : serializer.data}, status=200)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
