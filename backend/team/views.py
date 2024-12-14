@@ -31,7 +31,7 @@ class makeTeam(APIView):
         else : 
             filename = 'img/teamlogo/default-team-logo.png'
         
-        request_data['v2_team_logo'] = filename
+        request_data['team_logo'] = filename
 
         serializer = Team_Info_Serializer(data=request_data)
 
@@ -42,6 +42,15 @@ class makeTeam(APIView):
                     uploader.upload()
                 except Exception as e:
                     return Response({"error": f"fail to upload file : {e}"}, status=status.HTTP_400_BAD_REQUEST)
+                
+            try:
+                team_host = request_data['team_host']
+                user = UserInfo.objects.get(user_code=team_host)
+                user.user_type = 'coach'
+                user.save()  # 변경 사항 저장
+            except UserInfo.DoesNotExist:
+                return Response({"error": f"user with user_code {team_host} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            
             serializer.save()
             return Response({"result" : "success"})
         else:
