@@ -10,24 +10,81 @@ import left from '../../../assets/left.png';
 import cog from '../../../assets/cog.png';
 import dots from '../../../assets/dots.png';
 import MemberPrev from '../../../components/MemberPrev';
-import { getTeamInfoApi, TeamMemberApi } from '../../../function/TeamApi';
+import { getTeamInfoApi, getTeamPlayerListApi, TeamMemberApi, withdrawTeamApi } from '../../../function/TeamApi';
 import { PositionDotColor } from '../../../function/PositionColor';
+import Modal from '../../../components/Modal';
+import Small_Common_Btn from '../../../components/Small_Common_Btn';
+import client from '../../../client';
 
 const MyTeam = () => {
   const navigate = useNavigate();
   const [isManager, setIsManager] = useState(true);
   const [member, setMember] = useState([]);
   const [team, setTeam] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBoxOpen, setIsBoxOpen] = useState(false);
+
+  const openCloseBox = () => {
+    setIsBoxOpen((prev)=> !prev)
+  }
+
+  const openModal = ({team}) => {
+    setIsModalOpen(true);
+  }
+  const closeModal = () => {
+    setIsModalOpen(false);
+  }
 
   useEffect(() => {
-    setMember(TeamMemberApi() || []);
-    setTeam(getTeamInfoApi() || []);
+    getTeamPlayerListApi({'team_code': sessionStorage.getItem('teamCode')})
+    .then((response) => {
+      setMember(response.data.result);
+      console.log(response.data);
+    })
+    .catch(error => console.log(error));
     
-    sessionStorage.getItem('userId') === team.team_host
-    ? setIsManager(true)
-    : setIsManager(false);
+    getTeamInfoApi({'team_code': sessionStorage.getItem('teamCode') })
+    .then((response) => {
+      setTeam(response.data)
+      
+      if (sessionStorage.getItem('userCode') === response.data.team_host) {
+        setIsManager(true);
+      } else {
+        setIsManager(false);
+      }
+    })
+    .catch(error => console.log(error));
     
+    console.log(team)
+    console.log(member)
+    if (sessionStorage.getItem('userCode') === team.team_host) {
+      setIsManager(true);
+    } else {
+      setIsManager(false);
+    }
+    console.log(team.team_host)
   }, [])
+
+  const exitTeam = () => {
+    withdrawTeamApi()
+    .then((response) => {
+      alert('팀 탈퇴에 성공했습니다.');
+      navigate('/main');
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    
+  }
+  const exit = () => {
+    openCloseBox();
+    openModal()
+  }
+  const declair = () => {
+    alert('성공적으로 팀을 신고했습니다.');
+    openCloseBox();
+  }
+
 
   return (
     <div className='myteam'>
@@ -39,7 +96,13 @@ const MyTeam = () => {
         ): (
         <div className='teamnav'>
           <img src={left} className='leftbtn' onClick={() => navigate(-1)}/>
-          <img src={dots} className='cogbtn' onClick={() => navigate('/')}/>
+          <img src={dots} className='cogbtn' onClick={openCloseBox}/>
+          {isBoxOpen && (
+            <div className='myteam-noneadvisor'>
+              <div className='exitteam' onClick={exit}> 팀 탈퇴하기</div>
+              <div className='declair' onClick={declair}>신고하기</div>
+            </div>
+          )}
         </div>
         )
       }
@@ -66,9 +129,29 @@ const MyTeam = () => {
             <MemberPrev key={player.user_code} img={team.team_logo} isManager={isManager} player={player.user_nickname} age={player.user_age} color={PositionDotColor(player.user_position)} position={player.user_position} onClick={() => navigate('/userinfo', {state: { userCode: player.user_code}})}/>
           ))}
         </div>
-        
       </div>
-    
+
+      {isModalOpen && (
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <div className="myteamMment">
+            팀에서 탈퇴하시겠습니까?
+          </div>
+          <div className="myteam-buttonbox">
+            <Small_Common_Btn
+              onClick={closeModal}
+              title="취소"
+              backgroundColor="#F2F4F8"
+              color="black"
+            />
+            <Small_Common_Btn
+              onClick={exitTeam}
+              title="확인"
+              backgroundColor="#262626"
+              color="white"
+            />
+          </div>
+        </Modal>
+        )}
     </div>
   );
 };

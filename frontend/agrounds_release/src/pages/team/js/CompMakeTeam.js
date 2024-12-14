@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CompMakeTeam = () => {
   const navigate = useNavigate();
+
   return (
     <div className='compmaketeam'>
       <Back_btn />
@@ -16,7 +17,7 @@ const CompMakeTeam = () => {
       <div className='tab1'/>
       <Image_Comp img={check} width= '22vh'/>
       <div className='circletab'>
-        <Circle_common_btn title='팀 보러가기' onClick={() => navigate('/teamsetting')}/>
+        <Circle_common_btn title='팀 보러가기' onClick={() => navigate('/myteam')}/>
       </div>
     </div>
   );

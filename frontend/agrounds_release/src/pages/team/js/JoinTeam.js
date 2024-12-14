@@ -9,7 +9,7 @@ import Image_Comp from '../../../components/Image_Comp';
 import Modal from '../../../components/Modal';
 import Small_Common_Btn from '../../../components/Small_Common_Btn';
 import { useNavigate } from 'react-router-dom';
-import { ApplyTeamApi, SearchPlayerByNameAPI } from '../../../function/TeamApi';
+import { ApplyTeamApi, SearchPlayerByNicknameAPI } from '../../../function/TeamApi';
 
 const JoinTeam = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,7 +41,7 @@ const JoinTeam = () => {
       setIsSearching(true);
       
       try {
-        const response = await SearchPlayerByNameAPI({ team_name: searchTerm });
+        const response = await SearchPlayerByNicknameAPI({ team_name: searchTerm });
         setSearchResults(response.data.result || []);
       } catch (error) {
         console.error('Error fetching search results:', error);

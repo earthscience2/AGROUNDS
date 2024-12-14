@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { act, useState } from 'react';
 import styled from 'styled-components';
 import Image_Comp from './Image_Comp';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,7 @@ import Small_Common_Btn from './Small_Common_Btn';
 import { AcceptPlayerApi, InvitePlayerApi, RemovePlayerApi } from '../function/TeamApi';
 
 
-const Member = ({ key, img, player, age, position, color, onClick, name = '조규성', activeTab, searchTerm }) => {
+const Member = ({ userCode, img, player, age, position, color, onClick, activeTab, searchTerm="" }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('');
   const navigate = useNavigate();
@@ -16,26 +16,34 @@ const Member = ({ key, img, player, age, position, color, onClick, name = '조�
     setModalType(type);
     setIsModalOpen(true);
   };
+  console.log(activeTab)
 
   const closeModal = () => setIsModalOpen(false);
+
+  const teamCode = sessionStorage.getItem("teamCode");
+  const payload = { team_code: teamCode, user_code: userCode };
 
   const handleConfirm = () => {
     switch (modalType) {
       case 'kickout':
-        RemovePlayerApi({"team_code" : sessionStorage.getItem('teamCode'), "user_code" : key});
-        alert(`${name}님을 팀에서 추방했습니다.`);
+        RemovePlayerApi(payload);
+        alert(`${player}님을 팀에서 추방했습니다.`);
+        window.location.reload();
         break;
       case 'invite':
-        InvitePlayerApi({"team_code" : sessionStorage.getItem('teamCode'), "user_code" : key});
-        alert(`${name}님을 팀에 초대했습니다.`);
+        InvitePlayerApi(payload);
+        alert(`${player}님을 팀에 초대했습니다.`);
+        window.location.reload();
         break;
       case 'accept':
-        AcceptPlayerApi({"team_code" : sessionStorage.getItem('teamCode'), "user_code" : key, "accept" : true});
-        alert(`${name}님의 요청을 수락했습니다.`);
+        AcceptPlayerApi({...payload, accept: true});
+        alert(`${player}님의 요청을 수락했습니다.`);
+        window.location.reload();
         break;
       case 'refuse':
-        AcceptPlayerApi({"team_code" : sessionStorage.getItem('teamCode'), "user_code" : key, "accept" : false});
-        alert(`${name}님의 요청을 거절했습니다.`);
+        AcceptPlayerApi({...payload, accept: false});
+        alert(`${player}님의 요청을 거절했습니다.`);
+        window.location.reload();
         break;
       default:
         break;
@@ -55,50 +63,72 @@ const Member = ({ key, img, player, age, position, color, onClick, name = '조�
           <p className="position">{position}</p>
         </div>
       </div>
-      {activeTab === '팀원' ? (
-        <button className="getoutBtn" onClick={() => openModal('kickout')}>추방하기</button>
-      ) : searchTerm.trim() === '' ? (
-        <div className="newteam">
-          <p className="time">1분 전</p>
-          <div className="refuse-accept">
-            <button className="refuse" onClick={() => openModal('refuse')}>거절</button>
-            <button className="accept" onClick={() => openModal('accept')}>수락</button>
-          </div>
-        </div>
-      ) : (
-        <button className="inviteBtn" onClick={() => openModal('invite')}>초대하기</button>
-      )}
+      {renderActionButton(activeTab, searchTerm, openModal)}
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="errorment">
-          {modalType === 'kickout' && (
-            <>
-              <span style={{ color: "#0EAC6A" }}>{name}</span>님을 팀에서 내보내시겠습니까?
-            </>
-          )}
-          {modalType === 'invite' && (
-            <>
-              <span style={{ color: "#0EAC6A" }}>{name}</span>님을 팀에 초대하시겠습니까?
-            </>
-          )}
-          {modalType === 'accept' && (
-            <>
-              <span style={{ color: "#0EAC6A" }}>{name}</span>님을 팀원으로 받으시겠습니까?
-            </>
-          )}
-          {modalType === 'refuse' && (
-            <>
-              <span style={{ color: "#0EAC6A" }}>{name}</span>님의 가입신청을 거절하시겠습니까?
-            </>
-          )}
+          {renderModalMessage(modalType, player)}
         </div>
         <div className="buttonbox">
-          <Small_Common_Btn onClick={closeModal} title="취소" backgroundColor="#F2F4F8" color="black" />
-          <Small_Common_Btn onClick={handleConfirm} title="확인" backgroundColor="#262626" color="white" />
+          <Small_Common_Btn
+            onClick={closeModal}
+            title="취소"
+            backgroundColor="#F2F4F8"
+            color="black"
+          />
+          <Small_Common_Btn
+            onClick={handleConfirm}
+            title="확인"
+            backgroundColor="#262626"
+            color="white"
+          />
         </div>
       </Modal>
     </MemberStyle>
   );
+};
+
+const renderActionButton = (activeTab, searchTerm, openModal) => {
+  console.log(activeTab)
+  if (activeTab === "팀원") {
+    return (
+      <button className="getoutBtn" onClick={() => openModal("kickout")}>
+        추방하기
+      </button>
+    );
+  }
+
+  if (activeTab === "신규" && searchTerm.trim() !== "") {
+    return (
+      <button className="inviteBtn" onClick={() => openModal("invite")}>
+        초대하기
+      </button>
+    );
+  } else {
+    return (
+      <div className="newteam">
+        {/* <p className="time">1분 전</p> */}
+        <div className="refuse-accept">
+          <button className="refuse" onClick={() => openModal("refuse")}>
+            거절
+          </button>
+          <button className="accept" onClick={() => openModal("accept")}>
+            수락
+          </button>
+        </div>
+      </div>
+    );
+  }
+};
+
+const renderModalMessage = (modalType, player) => {
+  const messages = {
+    kickout: `${player}님을 팀에서 내보내시겠습니까?`,
+    invite: `${player}님을 팀에 초대하시겠습니까?`,
+    accept: `${player}님을 팀원으로 받으시겠습니까?`,
+    refuse: `${player}님의 가입신청을 거절하시겠습니까?`,
+  };
+  return <span style={{ color: "black" }}>{messages[modalType]}</span>;
 };
 
 export default Member;

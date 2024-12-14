@@ -37,9 +37,9 @@ const PositionBackColor = {
   GK: "linear-gradient(97.23deg, rgba(209,198, 81, 0.2), rgba(186, 162, 64, 0.3) , rgba(226, 207, 84, 0.1) 80%)",
 };
 
-const PositionDotColor = ({ position }) => {
+const PositionDotColor = (position) => {
   let color;
-  
+
   switch (position) {
     case 'LWF':
     case 'ST':
@@ -62,15 +62,17 @@ const PositionDotColor = ({ position }) => {
     case 'RB':
       color = '#33CAFE';
       break;
-    case 'CK':
+    case 'GK':
       color = '#F7E46D';
       break;
     default:
-      color = '#FD6C4F'; 
+      color = '#000000'; 
   }
-  
+
   return color;
 };
+
+export default PositionDotColor;
 
 
 export {PositionColor, PositionBackColor, PositionDotColor};

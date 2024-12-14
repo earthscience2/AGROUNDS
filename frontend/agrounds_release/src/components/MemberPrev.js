@@ -2,17 +2,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Image_Comp from './Image_Comp';
+import AgeConversion from '../function/AgeConversion';
 
 const MemberPrev = ({ key, img, player, age, position, email, color, onClick, name = '조규성'}) => {
   const navigate = useNavigate();
 
   return (
     <MemberPrevStyle onClick={onClick}>
-      <Image_Comp width="8vh" img={img}  />
+      <Image_Comp width="7vh" img={img}  />
       <div className="playerdetail" >
         <p className="t3">{player}</p>
         <p className="t4">{email}</p>
-        <p className="t5">{age}</p>
+        <p className="t5">만 {age}세</p>
       </div>
       <div className="posi">
           <div className="dot" style={{ backgroundColor: color }} />
@@ -52,6 +53,7 @@ const MemberPrevStyle = styled.div`
     .t5{
       font-size: 1.5vh;
       font-weight: 500;
+      color: #6F6F6F;
       margin: 0;
     }
   }

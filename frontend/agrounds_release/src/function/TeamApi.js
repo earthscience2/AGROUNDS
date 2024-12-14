@@ -2,81 +2,49 @@ import client from "../client";
 
 
 const MakeTeamApi = (data) => {
-  return client.post('/api/team/makeTeam/', data)
+  return client.post('/api/team/make-team/', data)
 }
 
-const SearchPlayerByNameAPI = (data) => {
-  client.post('/api/player/searchPlayerByname/', data)
-  .then((response) => {
-    return response.data.result;
-  })
-  .catch(() => {
-    return '데이터를 불러오던 중 에러가 발생했습니다.'
-  })
+const SearchPlayerByNicknameAPI = (data) => {
+  return client.post('/api/player/search-player-by-nickname/', data)
 }
 
-const ApplyTeamApi = ({data}) => {
-  return client.post('/api/player/joinTeam/', data)
+const ApplyTeamApi = (data) => {
+  return client.post('/api/player/join-team/', data)
 }
 
-const TeamMemberApi = () => {
-  client.post('/api/team/getTeamPlayerList/', {"team_code": sessionStorage.getItem('teamCode')})
-  .then((response) => {
-    return response.data.result;
-  })
-  .catch(() => {
-    return '데이터를 불러오던 중 에러가 발생했습니다.'
-  })
+
+const RemovePlayerApi = (data) => {
+  return client.post('/api/team/remove-player/', data)
 }
 
-const RemovePlayerApi = ({data}) => {
-  client.post('/api/team/removePlayer/', data)
-  .then((response) => {
-    return response.data.result;
-  })
-  .catch(() => {
-    return '데이터를 불러오던 중 에러가 발생했습니다.'
-  })
+const InvitePlayerApi = (data) => {
+  return client.post('/api/team/invite-player/', data)
 }
 
-const InvitePlayerApi = ({data}) => {
-  client.post('/api/team/invitePlayer/', data)
-  .then((response) => {
-    return response.data.result;
-  })
-  .catch(() => {
-    return '데이터를 불러오던 중 에러가 발생했습니다.'
-  })
-}
-
-const AcceptPlayerApi = ({data}) => {
-  client.post('/api/team/acceptPlayer/', data)
-  .then((response) => {
-    return response.data.result;
-  })
-  .catch(() => {
-    return '데이터를 불러오던 중 에러가 발생했습니다.'
-  })
+const AcceptPlayerApi = (data) => {
+  return client.post('/api/team/accept-player/', data)
 }
 
 const getJoinRequestListApi = () => {
-  client.post('/api/team/getJoinRequestList/', {"team_code": sessionStorage.getItem('teamCode')})
-  .then((response) => {
-    return response.data.result;
-  })
-  .catch(() => {
-    return '데이터를 불러오던 중 에러가 발생했습니다.'
-  })
+  return client.post('/api/team/get-join-request-list/', {"team_code": sessionStorage.getItem('teamCode')})
 }
 
-const getTeamInfoApi = () => {
-  client.post('/api/team/getTeamInfo/', {"team_code": sessionStorage.getItem('teamCode')})
-  .then((response) => {
-    return response.data;
-  })
-  .catch(() => {
-    return '데이터를 불러오던 중 에러가 발생했습니다.'
-  })
+const getTeamInfoApi = (data) => {
+  return client.post('/api/team/get-team-info/', data)
 }
 
-export {MakeTeamApi, SearchPlayerByNameAPI, ApplyTeamApi, TeamMemberApi, RemovePlayerApi, InvitePlayerApi, AcceptPlayerApi, getJoinRequestListApi, getTeamInfoApi};
+
+const withdrawTeamApi = () => {
+  return client.delete('/api/player/withdraw-team/', {"team_code" : sessionStorage.getItem('teamCode'), "user_code": sessionStorage.getItem('userCode')})
+}
+
+
+const getTeamPlayerListApi = (data) => {
+  return client.post('/api/team/get-team-player-list/', data)
+}
+
+
+
+
+export {MakeTeamApi, SearchPlayerByNicknameAPI, ApplyTeamApi, RemovePlayerApi, InvitePlayerApi, AcceptPlayerApi, getJoinRequestListApi, getTeamInfoApi, withdrawTeamApi, getTeamPlayerListApi};
