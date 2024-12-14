@@ -32,6 +32,8 @@ class Team_Info_Serializer(serializers.ModelSerializer):
     def validate_team_host(self, value):
         if not UserInfo.objects.filter(user_code=value).exists():
             raise serializers.ValidationError(f"team_host({value})에 해당하는 유저가 존재하지 않습니다.")
+        if UserTeam.objects.filter(user_code=value).exists():
+            raise serializers.ValidationError(f"team_host({value})는 이미 팀에 소속되어 있습니다.")
         return value
 
     def validate(self, data):

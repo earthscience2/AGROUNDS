@@ -47,7 +47,7 @@ class makeTeam(APIView):
                 return Response({"error": f"user with user_code {team_host} does not exist"}, status=status.HTTP_404_NOT_FOUND)
             
             serializer.save()
-            return Response({"result" : "success"})
+            return Response({"result" : "success", "team_code" : serializer.data['team_code']})
         else:
             # 유효성 검사 오류 메시지
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
