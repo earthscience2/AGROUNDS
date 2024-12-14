@@ -81,7 +81,7 @@ const MemberManage = () => {
           <div className="list">
             {member.map((player) => (
               <Member
-                key={player.user_code}
+                userCode={player.user_code}
                 img={player.user_logo || logo}
                 player={player.user_nickname}
                 age={`만 ${player.user_age}세`}
@@ -105,7 +105,7 @@ const MemberManage = () => {
           {searchResults.length > 0 ? (
             searchResults.map((player) => (
               <Member
-                key={player.user_code}
+                userCode={player.user_code}
                 img={player.user_logo || logo}
                 player={player.user_nickname}
                 age={player.user_id}
@@ -128,7 +128,7 @@ const MemberManage = () => {
               <div className="list">
                 {requestMember.map((player) => (
                   <Member
-                    key={player.user_code}
+                    userCode={player.user_code}
                     img={player.user_logo || logo}
                     player={player.user_nickname}
                     age={player.user_id}

@@ -16,32 +16,36 @@ const Member = ({ userCode, img, player, age, position, color, onClick, activeTa
     setModalType(type);
     setIsModalOpen(true);
   };
-  console.log(activeTab)
 
   const closeModal = () => setIsModalOpen(false);
 
   const teamCode = sessionStorage.getItem("teamCode");
-  const payload = { team_code: teamCode, user_code: userCode };
 
   const handleConfirm = () => {
     switch (modalType) {
       case 'kickout':
-        RemovePlayerApi(payload);
+        RemovePlayerApi({"team_code": teamCode, "user_code": userCode});
         alert(`${player}님을 팀에서 추방했습니다.`);
         window.location.reload();
         break;
       case 'invite':
-        InvitePlayerApi(payload);
+        InvitePlayerApi({"team_code": teamCode, "user_code": userCode});
         alert(`${player}님을 팀에 초대했습니다.`);
         window.location.reload();
         break;
       case 'accept':
-        AcceptPlayerApi({...payload, accept: true});
-        alert(`${player}님의 요청을 수락했습니다.`);
-        window.location.reload();
+        AcceptPlayerApi({"team_code": teamCode, "user_code": userCode, "accept": "true"})
+        .then((response) => {
+          alert(`${player}님의 요청을 수락했습니다.`);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+        
         break;
       case 'refuse':
-        AcceptPlayerApi({...payload, accept: false});
+        AcceptPlayerApi({"team_code": teamCode, "user_code": userCode, "accept": "false"});
         alert(`${player}님의 요청을 거절했습니다.`);
         window.location.reload();
         break;
