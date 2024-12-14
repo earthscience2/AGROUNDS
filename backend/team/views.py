@@ -39,6 +39,7 @@ class makeTeam(APIView):
                     return Response({"error": f"fail to upload file : {e}"}, status=status.HTTP_400_BAD_REQUEST)
                 
             try:
+                # 팀을 생성한 유저 타입을 coach로 변경
                 team_host = request_data['team_host']
                 user = UserInfo.objects.get(user_code=team_host)
                 user.user_type = 'coach'
@@ -182,3 +183,30 @@ class getJoinRequestList(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=500)
+
+class removePlayer(APIView):
+    def post(self, request):
+        data = request.data
+
+        required_fields = ['team_code', 'user_code']
+        errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
+        if errors:
+            return Response(errors, status=400)
+        
+        team_code = data['team_code']
+        user_code = data['user_code']
+
+        if TeamInfo.objects.filter(team_code = team_code, team_host = user_code).exists() :
+            return Response({"error" : "감독은 추방할 수 없습니다."}, status=400)
+
+        user_team = UserTeam.objects.filter(team_code = team_code, user_code = user_code)
+        if not user_team.exists():
+            return Response({"error" : "팀에 해당하는 유저가 없습니다."}, status=404)
+        user_team.delete()
+
+        user_info = UserInfo.objects.filter(user_code=user_code).first()
+        if user_info is not None:
+            # 팀 추방 후 해당 유저의 type을 individual로 변경
+            user_info.user_type = 'individual'
+            user_info.save()
+        return Response({"result" : "success"}, status=200)

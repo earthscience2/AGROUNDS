@@ -10,4 +10,5 @@ urlpatterns = [
     path("invite-player/", views.invitePlayer.as_view()),
     path("accept-player/", views.acceptPlayer.as_view()),
     path("get-join-request-list/", views.getJoinRequestList.as_view()),
+    path("remove-player/", views.removePlayer.as_view())
 ]
