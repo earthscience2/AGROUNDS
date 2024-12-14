@@ -1,12 +1,7 @@
-from django.shortcuts import render
-# 함수추가 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-# from .models import User_info
-from DB.models import V2_TeamInfo
 from PIL import Image
-from DB.forms import ImageUploadForm
 from .serializers import *
 from login.serializers import Essecial_User_Info
 from staticfiles.image_uploader import S3ImgUploader

@@ -9,7 +9,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from DB.models import UserInfo
-from DB.models import V2_TeamInfo
+from DB.models import UserTeam
+from DB.models import TeamInfo
 from .serializers import User_Info_Serializer
 from django.contrib.auth.hashers import check_password
 from types import SimpleNamespace
@@ -155,35 +156,24 @@ class getUserInfo(APIView):
             user = UserInfo.objects.get(user_code = user_code)
             user_dict = model_to_dict(user)
             user_dict.pop('password')
+            
+            user_team = None
+
+            if user.user_type == 'coach' : 
+                user_team = TeamInfo.objects.filter(team_host = user_code).first()
+            elif user.user_type == 'player' :
+                user_team = UserTeam.objects.filter(user_code=user_code).first()
+            
+            if user_team is None:
+                user_dict['user_team'] = ''
+            else:
+                user_dict['user_team'] = user_team.team_code
         except UserInfo.DoesNotExist:
             return Response(
                 {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
             )
         return JsonResponse(user_dict, status=200)
     
-# 회원가입
-class signup(APIView):
-    """
-    json 형식
-    {
-        "user_id": "jayou1223@gmail.com",
-        "password": "1q2w3e4r!",
-        "user_birth": "20011223",
-        "user_name": "구자유",
-        "user_gender": "male",
-        "user_nickname": "jayou",
-        "marketing_agree": false
-    }
-    """
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        data['login_type'] = 0
-        user_info_serializer = User_info_Serializer(data=data)
-        
-        user_info_serializer.is_valid(raise_exception=True)
-        user_info_serializer.save()
-        return Response(user_info_serializer.data, status=status.HTTP_200_OK)
-        
 # 로그인
 class login(APIView):
     """
@@ -263,3 +253,27 @@ class login(APIView):
                                 'user_type' : user.user_type,
                                 'team_name' : team_name,
                                 }, status=200)
+
+# # 회원가입
+# class signup(APIView):
+#     """
+#     json 형식
+#     {
+#         "user_id": "jayou1223@gmail.com",
+#         "password": "1q2w3e4r!",
+#         "user_birth": "20011223",
+#         "user_name": "구자유",
+#         "user_gender": "male",
+#         "user_nickname": "jayou",
+#         "marketing_agree": false
+#     }
+#     """
+#     def post(self, request, *args, **kwargs):
+#         data = request.data
+#         data['login_type'] = 0
+#         user_info_serializer = User_info_Serializer(data=data)
+        
+#         user_info_serializer.is_valid(raise_exception=True)
+#         user_info_serializer.save()
+#         return Response(user_info_serializer.data, status=status.HTTP_200_OK)
+        
