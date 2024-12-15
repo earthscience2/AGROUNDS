@@ -83,6 +83,13 @@
       @include display(flex, column, center, start);
       width: 100%;
     }
+    .empty-message{
+      font-size: 1.5vh;
+      font-weight: 500;
+      color:#878D96;
+      margin-top: 10vh;
+      text-align: center;
+    }
   }
   .myteam-noneadvisor{
     background-color: white;

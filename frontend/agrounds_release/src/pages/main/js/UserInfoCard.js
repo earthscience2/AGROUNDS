@@ -1,16 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LeftWhite from "../../../assets/left-white.png";
 import "../css/UserInfoCard.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import InfoCard from "../../../components/InfoCard"; 
 import { PositionBackColor } from "../../../function/PositionColor";
+import { getPlayerInfoApi } from "../../../function/TeamApi";
 
 const UserInfoCard = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [userData, setUserData] = useState([]);
 
-  const position = location.state.position;
-  const backgroundColor = PositionBackColor[position] || "linear-gradient(117.23deg, rgba(92, 139, 245, 0.8), rgba(76, 103, 244) , rgba(114, 192, 250) 80%)";
+  const userCode = location.state.userCode;
+
+  useEffect(() => {
+    getPlayerInfoApi({"user_code" : userCode})
+    .then((response) => {
+      setUserData(response.data);
+    })
+    .catch((error) => console.log(error));
+  }, [userCode])
+  
+  const backgroundColor = PositionBackColor[userData.user_position] || "linear-gradient(117.23deg, rgba(92, 139, 245, 0.2), rgba(76, 103, 244, 0.2) , rgba(114, 192, 250, 0.2) 80%)";
 
   return (
     <div className="userinfo" style={{background: backgroundColor}}>
@@ -19,7 +30,7 @@ const UserInfoCard = () => {
           <img className="back" src={LeftWhite} />
         </div>
       </div>
-      <InfoCard position={position} />
+      <InfoCard userData={userData} />
     </div>
   );
 };

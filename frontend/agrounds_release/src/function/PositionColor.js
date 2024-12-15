@@ -75,4 +75,26 @@ const PositionDotColor = (position) => {
 export default PositionDotColor;
 
 
-export {PositionColor, PositionBackColor, PositionDotColor};
+const PositionCoordinates = {
+  LWF: { top: "10%", left: "20%" },
+  ST: { top: "10%", left: "50%" },
+  RWF: { top: "10%", left: "80%" },
+  LWM: { top: "30%", left: "20%" },
+  CAM: { top: "30%", left: "50%" },
+  RWM: { top: "30%", left: "80%" },
+  LM: { top: "50%", left: "20%" },
+  CM: { top: "50%", left: "50%" },
+  RM: { top: "50%", left: "80%" },
+  LWB: { top: "70%", left: "20%" },
+  CDM: { top: "70%", left: "50%" },
+  RWB: { top: "70%", left: "80%" },
+  LB: { top: "90%", left: "20%" },
+  CB: { top: "90%", left: "50%" },
+  RB: { top: "90%", left: "80%" },
+  GK: { top: "110%", left: "50%" },
+};
+
+
+
+
+export {PositionColor, PositionBackColor, PositionDotColor, PositionCoordinates};

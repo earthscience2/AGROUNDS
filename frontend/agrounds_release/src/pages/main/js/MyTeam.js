@@ -14,7 +14,6 @@ import { getTeamInfoApi, getTeamPlayerListApi, TeamMemberApi, withdrawTeamApi } 
 import { PositionDotColor } from '../../../function/PositionColor';
 import Modal from '../../../components/Modal';
 import Small_Common_Btn from '../../../components/Small_Common_Btn';
-import client from '../../../client';
 
 const MyTeam = () => {
   const navigate = useNavigate();
@@ -124,11 +123,20 @@ const MyTeam = () => {
           <p className='t1'>총</p>
           <p className='t2'>{member.length}명</p>
         </div>
-        <div className='list'>
-          {member.map((player) => (
-            <MemberPrev key={player.user_code} img={team.team_logo} isManager={isManager} player={player.user_nickname} age={player.user_age} color={PositionDotColor(player.user_position)} position={player.user_position} onClick={() => navigate('/userinfo', {state: { userCode: player.user_code}})}/>
-          ))}
-        </div>
+
+        {member.length > 0 ? (
+          <div className='list'>
+            {member.map((player) => (
+              <MemberPrev userCode={player.user_code} img={team.team_logo} isManager={isManager} player={player.user_nickname} age={player.user_age} color={PositionDotColor(player.user_position)} position={player.user_position} onClick={() => navigate('/userinfo', {state: { userCode: player.user_code}})}/>
+            ))}
+          </div>
+        ) : (
+          <div className="empty-message">
+            팀원을 모집하고 추가해보세요.
+          </div>
+
+        )}
+        
       </div>
 
       {isModalOpen && (
