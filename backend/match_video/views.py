@@ -118,7 +118,7 @@ class getPlayerVideoList(APIView):
             },
         ]
 
-        return Response(result)
+        return Response({'result':result})
     
 class getTeamVideoList(APIView):
     def post(self, request):
@@ -181,7 +181,7 @@ class getTeamVideoList(APIView):
             },
         ]
 
-        return Response(result)
+        return Response({'result':result})
 
 class getFullVideoList(APIView):
     def post(self, request):
@@ -244,7 +244,7 @@ class getFullVideoList(APIView):
             },
         ]
 
-        return Response(result)
+        return Response({'result':result})
 
 class getMatchVideoInfo(APIView):
     def post(self, request):
@@ -257,7 +257,7 @@ class getMatchVideoInfo(APIView):
         
         team_code = data['team_code']
         user_code = data['user_code']
-        
+
         type = data['type']
         types = ['player', 'team', 'full']
 
