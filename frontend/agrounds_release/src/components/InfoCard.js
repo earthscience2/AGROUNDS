@@ -38,7 +38,7 @@ const InfoCard = ({ userData }) => {
     <div className="cardBack" style={{ background: backgroundColor }}>
       <div className="row1">
         <div className="info-nick">
-          <p className="usernickname">adfaslkdfjas;djfdfk</p>
+          <p className="usernickname">{userData.user_nickname}</p>
           <p className="age">만 {userData.user_age}세, {genderConversion(userData.user_gender)}</p></div>
         <div className="nhwbox">
           <div className="info-name">
@@ -61,10 +61,10 @@ const InfoCard = ({ userData }) => {
       <div className="row3">
         <div className="info-recent">
           <div className="recenttitle">최근 경기</div>
-          <div className="date">{dateConversion(userData.recent_match) || '-'}</div>
+          <div className="date">{dateConversion(userData.recent_match_date) || '-'}</div>
         </div>
         <div className="info-team">
-          <p className="teamname">{teamData.team_name || 'FC Bayern Munchen' }</p>
+          <p className="teamname">{teamData.team_name || '-' }</p>
           <div className="img"><img src={teamData.team_logo || sample} /></div>
         </div>
       </div>

@@ -1,15 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../css/VideoByQuarter.scss';
 import left from '../../../assets/left.png';
 import download from '../../../assets/download.png';
 import share from '../../../assets/share.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import notice from '../../../assets/exclamation-circle.png';
 import Video_Thumnail from '../../../components/Video_Thumnail';
 
 const VideoByQuarter = ({quarters=[1,2,3]}) => {
-  
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const matchCode = location.state?.matchCode || "";
+  useEffect(() => {
+    //video관련 쿼터
+  }, [])
 
   const [activeTab, setActiveTab] = useState('quarter1');
 

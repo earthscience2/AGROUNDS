@@ -6,6 +6,9 @@ import logo from '../assets/logo_sample.png';
 import location from '../assets/location.png';
 import Image_Comp from '../components/Image_Comp';
 import BarChart from '../components/BarChart';
+import { useNavigate } from 'react-router-dom';
+import playlist from '../assets/playlist.png';
+import polygon from '../assets/polygon.png';
 
 const MyTeam = () => {
   return (
@@ -13,8 +16,8 @@ const MyTeam = () => {
       <div className='imgbox'><img className='img' src={logo} /></div>
       <div className='title'>Tottenham</div>
       <div className='detailbox'>
-        <p className='detail'>성남시</p>
-        <div className='detailline'/>
+        {/* <p className='detail'>성남시</p>
+        <div className='detailline'/> */}
         <p className='detail'>17명</p>
         <div className='detailline'/>
         <p className='detail'>24.09.21</p>
@@ -22,6 +25,16 @@ const MyTeam = () => {
     </MyTeamStyle>
   );
 };
+const NoTeam = () => {
+  const navigate = useNavigate();
+
+  return (
+    <NoTeamStyle>
+      <div className='noteamment'>함께할 팀을 찾고<br/>합류해보세요</div>
+      <div className='noteambtn' onClick={() => navigate('/jointeam')}>팀 찾기</div>
+    </NoTeamStyle>
+  )
+}
 
 const MyOvr = () => {
   return (
@@ -47,6 +60,18 @@ const MatchPlan = () => {
     </MatchPlanStyle>
   );
 };
+
+const MatchVideo = () => {
+  return (
+    <MatchVideoStyle>
+      <div className='videobox'>
+        <div className='smallvideobox'/>
+        <div className='bigvideobox'><img src={polygon} /></div>
+      </div>
+      <div className='videocount'><img src={playlist} />3</div>
+    </MatchVideoStyle>
+  )
+}
 const Device = () => {
   return (
     <DeviceStyle>
@@ -135,9 +160,63 @@ const OvrBarChart = () => {
   )
 }
 
-export {MyTeam, MyOvr, MatchPlan, Device, RecentMatchS, AverageScore, AttackAve, OvrBarChart};
+export {MyTeam, MyOvr, MatchPlan, Device, RecentMatchS, AverageScore, AttackAve, OvrBarChart, NoTeam, MatchVideo};
 
-
+const MatchVideoStyle = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    .videobox{
+      width: 100%;
+      height: 90%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 2vh;
+      .bigvideobox{
+        width: 90%;
+        height: 10vh;
+        background-color: #697077;
+        border-radius: 1vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          height: 2.5vh;
+        }
+      }
+      .smallvideobox{
+        width: 80%;
+        height: 1vh;
+        background-color: #697077;
+        margin-bottom: 3px;
+        border-radius: 2vh 2vh 0 0;
+      }
+    }
+    .videocount{
+      width: 6vh;
+      height: 4vh;
+      background-color: #00000080;
+      border-radius: 1vh;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: 700;
+      font-size: 2.1vh;
+      position: relative;
+      margin-top: 1vh;
+      left: 30%;
+      img{
+        width: 2.1vh;
+        margin-right: .3vh;
+      }
+    }
+`
 const MyTeamStyle = styled.div`
     display: flex;
     flex-direction: column;
@@ -182,6 +261,39 @@ const MyTeamStyle = styled.div`
     }
   }
 `
+
+const NoTeamStyle = styled.div`
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .noteamment{
+    font-size: 1.5vh;
+    font-weight: 500;
+    color: #333333;
+    text-align: center;
+    
+  }
+  .noteambtn{
+    background-color: #0EAC6A;
+    color: white;
+    font-weight: 600;
+    font-size: 1.8vh;
+    margin-top: 3vh;
+    margin-bottom: -3vh;
+    border-radius: 3vh;
+    height: 4vh;
+    width: 80%;
+    font-size: 1.3vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+  }
+
+`
 const MyOvrStyle = styled.div`
   width: 100%;
   height: 90%;
@@ -194,10 +306,12 @@ const MyOvrStyle = styled.div`
     color: #21272A;
     font-size: 1.4vh;
     font-weight: 400;
-    margin: -2vh 0 2vh 0;
+    color:#E5E9ED;
+    margin: -1vh 0 2vh 0;
   }
   .ovr{
-    height: 15vh;
+    height: 14vh;
+    margin-top: -1vh;;
   }
 `
 
@@ -254,25 +368,31 @@ const MatchPlanStyle = styled.div`
 `
 const DeviceStyle = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .title{
+    color: white;
+    font-size: 1.6vh;
+  }
   .deviceimg{
-    height: 45%;
-    margin-bottom: 2vh;
+    height: 40%;
+    
   }
   .button{
-    background-color: #393939;
-    color: white;
+    background-color: white;
+    color: black;
     border-radius: 3vh;
     height: 4vh;
-    width: 60%;
+    width: 80%;
     font-size: 1.3vh;
+    font-weight: 600;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 2vh;
   }
 `
 

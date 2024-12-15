@@ -2,16 +2,18 @@ import React from 'react';
 import './Video_Thumnail.scss';
 import { useNavigate } from 'react-router-dom';
 
-const Video_Thumnail = () => {
+const Video_Thumnail = ({list}) => {
   const navigate = useNavigate();
+
+  const matchCode = list?.matchCode || "";
   return (
-    <div className='video-thumnail' onClick={() => navigate('/videobyquarter')}>
+    <div className='video-thumnail' onClick={() => navigate('/videobyquarter', { state : { matchCode }})}>
       <div className='imgbox'>
-        <img />
+        <img src={list?.thumbnail}/>
       </div>
       <div className='infobox'>
-        <p className='fc'>인하대학교 FC</p>
-        <p className='date'>2024.11.10(수)</p>
+        <p className='fc'>{list?.title}</p>
+        <p className='date'>{list?.date}</p>
       </div>
     </div>
   );

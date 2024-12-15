@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Image_Comp from './Image_Comp';
 import AgeConversion from '../function/AgeConversion';
 
-const MemberPrev = ({ key, img, player, age, position, email, color, onClick, name = '조규성'}) => {
+const MemberPrev = ({ userCode, img, player, age, position, email, color, onClick, name = '조규성'}) => {
   const navigate = useNavigate();
 
   return (

@@ -41,11 +41,17 @@
         @include font(1.6vh, 500, #6F6F6F);
         width: 75%;
         margin: 3vh 0 .5vh 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       .fc{
         @include font(2vh, 700, #262626);
         width: 75%;
         margin: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
     .analdata{

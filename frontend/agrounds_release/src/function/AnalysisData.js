@@ -13,7 +13,7 @@ const Map = () => {
 const ActivityLevel = ({ data }) => {
   return (
     <ActivityLevelStyle>
-      <SpecificGravity attack='72' defence='28'/>
+      <SpecificGravity attack='72%' defence='28%'/>
       <div className='datarow'>
         <p className='datatitle'>경기시간</p>
         <p className='datadetail'>{data.play_time_minutes}m</p>

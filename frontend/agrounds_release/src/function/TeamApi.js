@@ -49,4 +49,9 @@ const getPlayerInfoApi = (data) => {
 }
 
 
-export {MakeTeamApi, SearchPlayerByNicknameAPI, ApplyTeamApi, RemovePlayerApi, InvitePlayerApi, AcceptPlayerApi, getJoinRequestListApi, getTeamInfoApi, withdrawTeamApi, getTeamPlayerListApi, getPlayerInfoApi};
+const searchTeamByNameApi = (data) => {
+  return client.post('/api/team/search-team-by-name/', data)
+}
+
+
+export {MakeTeamApi, SearchPlayerByNicknameAPI, ApplyTeamApi, RemovePlayerApi, InvitePlayerApi, AcceptPlayerApi, getJoinRequestListApi, getTeamInfoApi, withdrawTeamApi, getTeamPlayerListApi, getPlayerInfoApi, searchTeamByNameApi};
