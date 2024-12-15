@@ -14,7 +14,8 @@ class Team_Info_Serializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'team_code': {'required': False},
-            'team_logo': {'required': False}
+            'team_logo': {'required': False},
+            'created_at' : {'required': False}
         }
 
     def to_representation(self, instance): # serializer.data 값 사용자 정의

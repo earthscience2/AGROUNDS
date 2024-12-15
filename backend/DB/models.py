@@ -144,6 +144,7 @@ class TeamInfo(models.Model):
     team_host = models.CharField(max_length=45, null=True, blank=True)
     team_logo = models.CharField(max_length=200, null=True, blank=True)
     team_name = models.CharField(max_length=45)
+    created_at = models.DateTimeField()
 
     class Meta:
         managed = False
