@@ -3,16 +3,29 @@ from rest_framework.response import Response
 from rest_framework import status
 # from .models import User_info
 from DB.models import UserInfo
-from login.serializers import Essecial_User_Info
 from .serializers import *
 from staticfiles.get_user_info_from_token import get_user_code_from_token
+
+class getPlayerInfo(APIView):
+    def post(self, request):
+        data = request.data
+        try:
+            user_code = data['user_code']
+            user_info = UserInfo.objects.get(user_code=user_code)
+        except KeyError as e :
+            return Response({"error": f"Missing required field: {str(e)}"}, status=400)
+        except UserInfo.DoesNotExist :
+            return Response({"error": f"user_code({user_code})에 해당하는 유저가 존재하지 않습니다."}, status=404)
+        
+        serializer = Essencial_Player_Info(user_info)
+
+        return Response(serializer.data)
+
 
 class joinTeam(APIView):
     def post(self, request):
         request_data = request.data.copy()
         request_data['direction'] = 'user_to_team'
-
-        print(request_data)
         
         serializer = Pending_Invite_Team_Serializer(data = request_data)
         
@@ -46,7 +59,7 @@ class searchIndividualPlayerByNickname(APIView):
             user_type="individual"
         )
 
-        serializer = Essecial_User_Info(players, many=True)
+        serializer = Essencial_User_Info(players, many=True)
         
         return Response({"result" : serializer.data})
     

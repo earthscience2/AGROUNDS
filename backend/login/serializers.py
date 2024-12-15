@@ -1,15 +1,11 @@
 from rest_framework import serializers
 from DB.models import UserInfo
-from DB.models import UserTeam
-from DB.models import TeamInfo
+
 
 from rest_framework import serializers
 
 from django.contrib.auth.hashers import make_password
 from staticfiles.make_code import make_code
-from datetime import datetime
-
-from staticfiles.get_file_url import get_file_url 
 
 import re
 
@@ -88,34 +84,6 @@ class User_Info_Serializer(serializers.ModelSerializer):
                     return None
                 raise serializers.ValidationError({"error" : "올바르지 않은 " + massges[i] +" 형식입니다."})
         return None
-    
-class Essecial_User_Info(serializers.ModelSerializer):
-    user_age = serializers.SerializerMethodField()  # 사용자 정의 필드 추가
-    user_logo = serializers.SerializerMethodField()
-
-    class Meta:
-        model = UserInfo
-        fields = ['user_code', 'user_nickname', 'user_id', 'user_age', 'user_logo', 'user_position', 'user_type']
-
-    def get_user_age(self, obj):
-        if hasattr(obj, 'user_birth') and obj.user_birth:
-            try:
-                birth_date = datetime.strptime(obj.user_birth, '%Y-%m-%d').date()
-                today = datetime.today().date()
-                age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
-                return age
-            except ValueError:
-                raise serializers.ValidationError("user_birth의 형식이 잘못되었습니다. 'yyyy-mm-dd' 형식이어야 합니다.")
-        return None  # user_birth가 없거나 유효하지 않은 경우
-    
-    def get_user_logo(self, obj):
-        user_team = UserTeam.objects.filter(user_code = obj.user_code)
-        if user_team.exists():
-            team = TeamInfo.objects.filter(team_code = user_team.first().team_code)
-            if team.exists():
-                return get_file_url(team.first().team_logo)
-        return get_file_url('img/teamlogo/default-team-logo.png')
-            
     
     
 # class Login_Serializer(serializers.Serializer):

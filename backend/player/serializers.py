@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from DB.models import *
 
+from datetime import datetime
+
+from staticfiles.get_file_url import get_file_url 
+
 class Pending_Invite_Team_Serializer(serializers.ModelSerializer):
     class Meta:
         model = PendingInviteTeam
@@ -36,6 +40,72 @@ class Pending_Invite_Team_Serializer(serializers.ModelSerializer):
             raise serializers.ValidationError(f"user_code({value})에 해당하는 유저가 존재하지 않습니다.")
         return value
     
+class Essencial_User_Info(serializers.ModelSerializer):
+    user_age = serializers.SerializerMethodField()  # 사용자 정의 필드 추가
+    user_logo = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserInfo
+        fields = ['user_code', 'user_nickname', 'user_id', 'user_age', 'user_logo', 'user_position', 'user_type']
+
+    def get_user_age(self, obj):
+        if hasattr(obj, 'user_birth') and obj.user_birth:
+            try:
+                birth_date = datetime.strptime(obj.user_birth, '%Y-%m-%d').date()
+                today = datetime.today().date()
+                age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+                return age
+            except ValueError:
+                raise serializers.ValidationError("user_birth의 형식이 잘못되었습니다. 'yyyy-mm-dd' 형식이어야 합니다.")
+        return None  # user_birth가 없거나 유효하지 않은 경우
+    
+    def get_user_logo(self, obj):
+        user_team = UserTeam.objects.filter(user_code = obj.user_code)
+        if user_team.exists():
+            team = TeamInfo.objects.filter(team_code = user_team.first().team_code)
+            if team.exists():
+                return get_file_url(team.first().team_logo)
+        return get_file_url('img/teamlogo/default-team-logo.png')
+
+class Essencial_Player_Info(serializers.ModelSerializer):
+    user_age = serializers.SerializerMethodField()  # 사용자 정의 필드 추가
+    user_team = serializers.SerializerMethodField()
+    recent_match = serializers.SerializerMethodField()
+    recent_match_date = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserInfo
+        fields = ['user_name', 'user_gender','user_nickname', 
+                  'user_type', 'user_height', 'user_weight', 'user_position', 
+                  'user_age', 'user_team', 'recent_match', 'recent_match_date']
+        
+    def get_user_age(self, obj):
+        if hasattr(obj, 'user_birth') and obj.user_birth:
+            try:
+                birth_date = datetime.strptime(obj.user_birth, '%Y-%m-%d').date()
+                today = datetime.today().date()
+                age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+                return age
+            except ValueError:
+                raise serializers.ValidationError("user_birth의 형식이 잘못되었습니다. 'yyyy-mm-dd' 형식이어야 합니다.")
+        return None  # user_birth가 없거나 유효하지 않은 경우
+    
+    def get_user_team(self, obj):
+        user_team = UserTeam.objects.filter(user_code = obj.user_code)
+        if user_team.exists():
+            team = TeamInfo.objects.filter(team_code = user_team.first().team_code)
+            if team.exists():
+                return team.first().team_code
+        return ''
+    
+    # 수정 필요
+    def get_recent_match(self, obj):
+        return 'm_0001'
+    
+    # 수정 필요
+    def get_recent_match_date(self, obj):
+        return '2024-12-25'
+        
 
 
 # class User_main_page(serializers.ModelSerializer):
