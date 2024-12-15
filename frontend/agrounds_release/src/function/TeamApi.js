@@ -6,7 +6,7 @@ const MakeTeamApi = (data) => {
 }
 
 const SearchPlayerByNicknameAPI = (data) => {
-  return client.post('/api/player/search-player-by-nickname/', data)
+  return client.post('/api/player/search-individual-player-by-nickname/', data)
 }
 
 const ApplyTeamApi = (data) => {
