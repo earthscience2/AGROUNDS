@@ -21,7 +21,6 @@ class getPlayerInfo(APIView):
 
         return Response(serializer.data)
 
-
 class joinTeam(APIView):
     def post(self, request):
         request_data = request.data.copy()
