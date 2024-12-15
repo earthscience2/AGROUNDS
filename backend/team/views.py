@@ -71,12 +71,12 @@ class getTeamInfo(APIView):
 class searchTeamByName(APIView):
     def post(self, request):
         team_name = request.data.get('team_name')
-        if not team_name:
-            return Response({'error': 'Missing required field: team_name'}, status=400)
-
-        teams = TeamInfo.objects.filter(team_name__icontains=team_name)
-        if not teams.exists():
-            return Response({'error': 'No teams found with the provided name.'}, status=404)
+        teams = None
+        # 팀 이름이 공백인 경우 5개 이하의 무작위 팀 반환
+        if not team_name or team_name == '' :
+            teams = TeamInfo.objects.order_by('?')[:5]
+        else:
+            teams = TeamInfo.objects.filter(team_name__icontains=team_name)
 
         serializer = Team_Info_Serializer(teams, many=True)
         return Response({"result" : serializer.data})
