@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "team",
     "player",
     "match",
+    "match_video",
     # Third party apps
     "rest_framework",
     "drf_yasg",

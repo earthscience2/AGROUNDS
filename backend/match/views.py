@@ -66,8 +66,6 @@ class getMatchList(APIView):
                 ]
 
         return Response({'result' : result})
-    
-
 
 class getTeamMatchList(APIView):
     def post(self, response):
