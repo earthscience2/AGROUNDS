@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     "test_page",
     "login",
     "team",
+    "player",
+    "match",
     # Third party apps
     "rest_framework",
     "drf_yasg",
