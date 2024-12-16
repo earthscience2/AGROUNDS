@@ -250,12 +250,12 @@ class getMatchVideoInfo(APIView):
     def post(self, request):
         data = request.data.copy()
 
-        required_fields = ['team_code', 'user_code', 'type']
+        required_fields = ['match_code', 'user_code', 'type']
         errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
         if errors:
             return Response(errors, status=400)
         
-        team_code = data['team_code']
+        match_code = data['match_code']
         user_code = data['user_code']
 
         type = data['type']
