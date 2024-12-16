@@ -1,5 +1,5 @@
 {
-    "summation" : {
+    "ai-summation" : {
         "total": "지난 경기에서는 선수분이 정말 열심히 뛰어주셨고, 전체적인 활동량이 좋았습니다! 1쿼터에서 2.49km를 이동하며 23분 동안 뛰었고, 평균 속도도 6.5km/h로 아주 좋았어요. 특히, 1쿼터에서는 27회의 방향 전환을 하며 활발한 모습을 보여주셨습니다. 다만, 후반으로 갈수록 이동 거리와 활동 범위가 조금 줄어들었던 점은 아쉬웠습니다. 전반적으로 수비와 공격에서 고른 성과를 보여주어 기쁘답니다!",
         "attack": "공격 측면에서는 1쿼터 동안 1.41km를 뛰며 12분 동안 공격에 집중했습니다. 평균 속도가 6.76km/h로 나쁘지 않았고, 방향 전환도 19회나 하며 공격 만전을 다했습니다. 특히 1쿼터에서 최고 속도가 나왔다고 칭찬해주고 싶어요! 그러나 2쿼터와 3쿼터에서 공격 세부 수치들이 다소 떨어진 걸 볼 수 있어서, 다음에는 더 많은 공격 기회를 가져가길 바랍니다. 전체적으로 나름의 역량을 발휘한 점은 정말 훌륭했어요!",
         "defense": "수비 쪽에서도 꾸준한 모습을 보여주셨습니다! 1쿼터에서 1.08km를 수비하며 10분 동안 집중력을 유지했어요. 다만, 방향 전환 수가 조금 적은 점이 아쉬웠습니다. 특히 2쿼터와 3쿼터 동안 수비의 활동량이 줄어드는데, 다음 경기에서는 이 부분을 다시 한번 보강하면 좋겠어요. 그러나 전반적으로 꾸준한 수비는 칭찬할 부분이니, 자신감을 갖고 더욱 열심히 해주셨으면 좋겠어요!"
@@ -7,6 +7,16 @@
     "analyze" : [
         {
             "quarter" : "1쿼터",
+            "point": {
+                    "total": 6.7,
+                    "attack": 4.0,
+                    "defense": 2.3,
+                    "stamina": 5.8,
+                    "positiveness": 8.4,
+                    "speed": 7.9,
+                    "acceleration": 4.7,
+                    "sprint": 6.1
+            },
             "total" : {
                 "hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/JJJJJJ_20241017_1/img/1쿼터_total_TI_H.png",
                 "high_speed_hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/JJJJJJ_20241017_1/img/1쿼터_total_TI_HH.png",
@@ -86,6 +96,16 @@
         },
         {
             "quarter": "2쿼터",
+            "point": {
+                "total": 8.7,
+                "attack": 5.8,
+                "defense": 3.2,
+                "stamina": 5.0,
+                "positiveness": 8.4,
+                "speed": 7.2,
+                "acceleration": 3.1,
+                "sprint": 5.4
+            },
             "total": {
                 "hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/2쿼터_total_TI_H.png",
                 "high_speed_hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/2쿼터_total_TI_HH.png",
@@ -165,6 +185,16 @@
         },
         {
             "quarter": "3쿼터",
+            "point": {
+                "total": 6.4,
+                "attack": 2.9,
+                "defense": 3.2,
+                "stamina": 5.3,
+                "positiveness": 7.5,
+                "speed": 7.8,
+                "acceleration": 3.5,
+                "sprint": 5.9
+            },
             "total": {
                 "hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/3쿼터_total_TI_H.png",
                 "high_speed_hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/3쿼터_total_TI_HH.png",
