@@ -54,8 +54,7 @@ const MyTeam = () => {
     })
     .catch(error => console.log(error));
     
-    console.log(team)
-    console.log(member)
+
     if (sessionStorage.getItem('userCode') === team.team_host) {
       setIsManager(true);
     } else {

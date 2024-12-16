@@ -22,7 +22,6 @@ const MemberManage = () => {
 
 
   const teamCode = sessionStorage.getItem('teamCode');
-  const userNickname = sessionStorage.getItem('userNickname');
   
   const handleTabChange = (tab) => {
     setActiveTab(tab);
