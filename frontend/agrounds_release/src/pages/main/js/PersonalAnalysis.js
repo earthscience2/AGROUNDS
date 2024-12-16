@@ -23,6 +23,7 @@ const PersonalAnalysis = () => {
   const initialMatchCode = location.state?.matchCode;
   const userCode = sessionStorage.getItem('userCode');
 
+
   useEffect(() => {
     if (!selectedMatch && initialMatchCode) {
       setLoading(true);
@@ -53,15 +54,12 @@ const PersonalAnalysis = () => {
       });
     }
     }, [selectedMatch]);
-    console.log('--------')
-    console.log(summary.total)
 
 
-  // if (loading) {
-  //   return <Loading />; 
-  // }
+  if (loading) {
+    return <Loading />; 
+  }
 
-  // console.log(currentIndex)
 
   const positionData = () => {
     if (currentIndex === 0) {
@@ -82,7 +80,7 @@ const PersonalAnalysis = () => {
     return null; 
   };
 
-  // console.log(quarterPositionData())
+  console.log(quarterPositionData())
   return (
     <div className='personalanal'>
       <div className='greybackground'>
