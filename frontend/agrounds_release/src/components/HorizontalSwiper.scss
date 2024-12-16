@@ -6,13 +6,12 @@
 
   .swiper-container {
     display: flex;
-    gap: 0vh;
 
     .swiper-item {
       margin: 0 1vh;
-      flex: 0 0 auto; 
-      max-width: 13vh; 
+      flex: 0; 
       height: 8vh;
+      width: 14vh;
       cursor: pointer;
       transition: transform 0.3s ease;
       &:first-child{
@@ -22,7 +21,10 @@
       .datebox{
         background-color: rgb(229,233,237);
         border-radius: 1vh 1vh 0 0;
-        padding: .6vh 1.5vh;
+        width: 14vh;
+        height: 3vh;
+        display: flex;
+        align-items: center;
         &.active {
           background-color: rgb(24,172,110);
           color: white;
@@ -30,7 +32,8 @@
         .date {
           font-size: 1.3vh;
           color: #697077;
-          margin: .2vh 0;
+          font-weight: 600;
+          margin-left: 1vh;
           &.active {
             color: white;
           }
@@ -40,12 +43,13 @@
       .locteambox {
         display: flex;
         flex-direction: column;
-        justify-content: start;
+        justify-content: center;
         align-items: start;
         background-color: rgb(242, 244, 248);
         border-radius: 0 0 1vh 1vh;
-        margin-top: 0.15vh;
-        padding: 1vh 2vh;
+        margin-top: 0.2vh;
+        width: 14vh;
+        height: 7vh;
       
         &.active {
           background-color: rgb(17, 152, 95); 
@@ -55,12 +59,14 @@
           overflow: hidden; 
           text-overflow: ellipsis; 
           white-space: nowrap;
-          width: 100%; 
+          width: 90%; 
+          
         }
         .team {
           font-size: 1.5vh;
           font-weight: 600;
           margin: 0.5vh 0 0 0;
+          margin-left: 1vh;
       
           &.active {
             color: white; 
@@ -69,11 +75,12 @@
   
         .location {
           font-size: 1.3vh;
-          color: #6F6F6F;
+          // color: #6F6F6F;
           margin: 0.5vh 0;
+          margin-left: 1vh;
       
           &.active {
-            color: white !important; 
+            color: white; 
           }
         }
       }

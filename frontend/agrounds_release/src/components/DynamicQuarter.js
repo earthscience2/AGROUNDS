@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Anal_Detail from './Anal_Detail';
 import Anal_Position_Nav from './Anal_Position_Nav';
 import RayderChart from './RayderChart';
-import { Sprint, ActivityLevel,Speed } from '../function/AnalysisData';
+import { Sprint, ActivityLevel,Speed, Map } from '../function/AnalysisData';
 
 const DynamicQuarter = ({data, currentIndex, setCurrentIndex}) => {
   
@@ -31,10 +31,10 @@ const DynamicQuarter = ({data, currentIndex, setCurrentIndex}) => {
     <div style={{width: '100%', display:'flex',flexDirection: 'column',justifyContent:'center', alignItems:'center'}}>
       <Anal_Position_Nav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex}/>
       <RayderChart data={chartPoints} rate={rate}/>
-      {/* <Anal_Detail title="히트맵" />
-      <Anal_Detail title="활동량" detail={<ActivityLevel data={stats}/>}/>
-      <Anal_Detail title="속도 및 가속도" detail={<Speed data={speed}/>}/>
-      <Anal_Detail title="스프린트" detail={<Sprint data={sprint}/>}/> */}
+      <Anal_Detail title="히트맵" detail={<Map data={positionData()}/>}/>
+      {/* // <Anal_Detail title="활동량" detail={<ActivityLevel data={stats}/>}/>
+      // <Anal_Detail title="속도 및 가속도" detail={<Speed data={speed}/>}/>
+      // <Anal_Detail title="스프린트" detail={<Sprint data={sprint}/>}/>  */}
     </div>
   );
 };

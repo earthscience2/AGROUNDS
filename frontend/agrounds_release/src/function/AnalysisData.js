@@ -2,11 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import SpecificGravity from '../components/SpecificGravity';
 
-const Map = () => {
+const Map = ({data}) => {
+  const img = data.hitmap;
   return (
-    <div>
-      
-    </div>
+    <MapStyle>
+      <img src={img} />
+    </MapStyle>
   );
 };
 
@@ -103,6 +104,23 @@ const Sprint = ({data}) => {
 
 export { Map, ActivityLevel, Speed, Sprint };
 
+
+const MapStyle = styled.div`
+width: 85%;
+height: 20vh;
+display: flex;
+justify-content: center;
+align-items: center;
+border-radius: 1vh;
+overflow: hidden;
+margin-bottom: 5vh;
+margin-top: 1vh;
+& > img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+`
 const ActivityLevelStyle = styled.div`
   width: 85%;
   display: flex;
