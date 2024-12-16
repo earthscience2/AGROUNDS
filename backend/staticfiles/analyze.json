@@ -17,6 +17,10 @@
                     "acceleration": 4.7,
                     "sprint": 6.1
             },
+            "active_ratio": {
+                "A_TPT" : 54,
+                "D_TPT" : 45
+            },
             "total": {
                 "hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/1쿼터_total_TI_H.png",
                 "high_speed_hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/1쿼터_total_TI_HH.png",
@@ -105,6 +109,10 @@
                 "acceleration": 3.1,
                 "sprint": 5.4
             },
+            "active_ratio": {
+                "A_TPT" : 31,
+                "D_TPT" : 68
+            },
             "total": {
                 "hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/2쿼터_total_TI_H.png",
                 "high_speed_hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/2쿼터_total_TI_HH.png",
@@ -192,6 +200,10 @@
                 "speed": 7.8,
                 "acceleration": 3.5,
                 "sprint": 5.9
+            },
+            "active_ratio": {
+                "A_TPT" : 39,
+                "D_TPT" : 60
             },
             "total": {
                 "hitmap": "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com/demo/gps/20241017_m_001/AAAAAA_20241017_1/img/3쿼터_total_TI_H.png",
