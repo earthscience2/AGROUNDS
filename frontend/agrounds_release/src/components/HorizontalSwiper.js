@@ -13,20 +13,9 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
     getMatchListApi({'user_code' : sessionStorage.getItem('userCode')})
     .then((response) => {
       const matches = response.data.result || [];
-        setItems(matches);
-      
-      const initialIndex = matches.findIndex(
-        (match) => match.match_code === matchCode
-      );
-
-      if (initialIndex !== -1) {
-        setActiveItem(initialIndex);
-          onSelectMatch(matches[initialIndex]);
-      } else if (matches.length > 0) {
-        setActiveItem(0); 
-        onSelectMatch(matches[0]);
-      }
+      setItems(matches);
     })
+  
     .catch((error) => console.error(error));
   }, [matchCode, onSelectMatch]);
 

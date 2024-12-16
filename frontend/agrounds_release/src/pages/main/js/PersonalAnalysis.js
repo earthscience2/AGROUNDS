@@ -20,13 +20,28 @@ const PersonalAnalysis = () => {
 
   const location = useLocation();
 
-  const matchCode = location.state?.matchCode;
+  const initialMatchCode = location.state?.matchCode;
   const userCode = sessionStorage.getItem('userCode');
 
   useEffect(() => {
-    if (!selectedMatch) {
+    if (!selectedMatch && initialMatchCode) {
       setLoading(true);
-      getAnalyzeResultApi({'match_code': matchCode, 'user_code': userCode})
+
+      getAnalyzeResultApi({'match_code': initialMatchCode, 'user_code': userCode})
+      .then((response) => {
+        setQuarterData(response.data.analyze || [])
+        setSummary(response.data.ai_summation || [])
+        setSelectedMatch(initialMatchCode);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+    } else if(selectedMatch) {
+      setLoading(true);
+
+      getAnalyzeResultApi({'match_code': selectedMatch, 'user_code': userCode})
       .then((response) => {
         setQuarterData(response.data.analyze || [])
         setSummary(response.data.ai_summation || [])
@@ -37,19 +52,10 @@ const PersonalAnalysis = () => {
         setLoading(false);
       });
     }
-    //selectedmatch 달라지면 값 return 하는 값달라지게 구현
-    setLoading(true);
-    getAnalyzeResultApi({'match_code': selectedMatch, 'user_code': userCode})
-    .then((response) => {
-      setQuarterData(response.data.analyze || [])
-      setSummary(response.data.ai_summation || [])
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error(error);
-      setLoading(false);
-    });
-  }, [selectedMatch]);
+    }, [selectedMatch]);
+    console.log('--------')
+    console.log(summary.total)
+
 
   // if (loading) {
   //   return <Loading />; 
@@ -82,7 +88,7 @@ const PersonalAnalysis = () => {
       <div className='greybackground'>
         <Back_btn />
         <Login_title title="개인 상세 분석" explain="경기 데이터를 기반으로 설정된 현재 나의 능력치를 확인하고 더 발전해보세요" />
-        <HorizontalSwiper matchCode={matchCode} onSelectMatch={setSelectedMatch}/>
+        <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
 
       <Quarter_Tab quarters={quarterData?.length} activeTab={activeTab} setActiveTab={setActiveTab}/>

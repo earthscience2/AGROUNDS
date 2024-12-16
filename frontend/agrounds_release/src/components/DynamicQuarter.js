@@ -9,12 +9,12 @@ const DynamicQuarter = ({data, currentIndex, setCurrentIndex}) => {
   const rate = data.point.total
   
   const chartPoints = [
-    data.point.total, // 평점
-    data.point.sprint, // 스프린트
-    data.point.acceleration, // 가속도
-    data.point.speed, // 스피드
-    data.point.positiveness, // 적극성
-    data.point.stamina, // 체력
+    data.point.total, 
+    data.point.sprint, 
+    data.point.acceleration, 
+    data.point.speed, 
+    data.point.positiveness, 
+    data.point.stamina,
   ];
 
   // console.log(point)
