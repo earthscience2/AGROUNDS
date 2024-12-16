@@ -63,6 +63,48 @@ class getMatchList(APIView):
                         "away_team" : "t_0004",
                         "away_team_logo" : default_team_logo
                     },
+                    {
+                        "match_code" : "m_0001",
+                        "match_schedule" : "2024-10-10",
+                        "match_location" : "인하대운동장",
+                        "match_title" : "인하대학교 FC",
+                        "match_time" : "20",
+                        "distance" : "1.89",
+                        "top_speed" : "25",
+                        "rating" : "7.3",
+                        "home_team" : "t_0001",
+                        "home_team_logo" : default_team_logo,
+                        "away_team" : "t_0002",
+                        "away_team_logo" : default_team_logo
+                    },
+                    {
+                        "match_code" : "m_0002",
+                        "match_schedule" : "2024-10-11",
+                        "match_location" : "부천축구경기장",
+                        "match_title" : "동백 FC",
+                        "match_time" : "20",
+                        "distance" : "1.89",
+                        "top_speed" : "25",
+                        "rating" : "7.3",
+                        "home_team" : "t_0001",
+                        "home_team_logo" : default_team_logo,
+                        "away_team" : "t_0003",
+                        "away_team_logo" : default_team_logo
+                    },
+                    {
+                        "match_code" : "m_0003",
+                        "match_schedule" : "2024-10-12",
+                        "match_location" : "대야미월드컵경기장",
+                        "match_title" : "FC 제주",
+                        "match_time" : "20",
+                        "distance" : "1.89",
+                        "top_speed" : "25",
+                        "rating" : "7.3",
+                        "home_team" : "t_0001",
+                        "home_team_logo" : default_team_logo,
+                        "away_team" : "t_0004",
+                        "away_team_logo" : default_team_logo
+                    }
                 ]
 
         return Response({'result' : result})
@@ -122,6 +164,48 @@ class getTeamMatchList(APIView):
                 "away_team" : "t_0002",
                 "away_team_logo" : default_team_logo
             },
+            {
+                "match_code" : "m_0001",
+                "match_schedule" : "2024-10-10",
+                "match_location" : "인하대운동장",
+                "match_title" : "인하대학교 FC",
+                "match_time" : 20,
+                "match_mom" : "김민재",
+                "match_result" : "승",
+                "participation" : 13,
+                "home_team" : "t_0001",
+                "home_team_logo" : default_team_logo,
+                "away_team" : "t_0002",
+                "away_team_logo" : default_team_logo
+            },
+            {
+                "match_code" : "m_0002",
+                "match_schedule" : "2024-10-12",
+                "match_location" : "부천축구경기장",
+                "match_title" : "동백 FC",
+                "match_time" : 19,
+                "match_mom" : "손흥민",
+                "match_result" : "승",
+                "participation" : 13,
+                "home_team" : "t_0001",
+                "home_team_logo" : default_team_logo,
+                "away_team" : "t_0002",
+                "away_team_logo" : default_team_logo
+            },
+            {
+                "match_code" : "m_0003",
+                "match_schedule" : "2024-10-13",
+                "match_location" : "대야미월드컵경기장",
+                "match_title" : "FC 제주",
+                "match_time" : 40,
+                "match_mom" : "문소영",
+                "match_result" : "패",
+                "participation" : 3,
+                "home_team" : "t_0001",
+                "home_team_logo" : default_team_logo,
+                "away_team" : "t_0002",
+                "away_team_logo" : default_team_logo
+            }
 	    ]
 
         return Response({'result' : result})
