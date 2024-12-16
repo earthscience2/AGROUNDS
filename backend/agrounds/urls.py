@@ -36,7 +36,8 @@ urlpatterns = [
     path("api/team/", include("team.urls")),
     path("api/player/", include("player.urls")),
     path("api/match/", include("match.urls")),
-    path("api/video/", include("match_video.urls"))
+    path("api/video/", include("match_video.urls")),
+    path("api/analyze/", include("analyze.urls")),
 ]
 
 urlpatterns += [

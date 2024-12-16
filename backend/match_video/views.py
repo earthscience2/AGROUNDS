@@ -1,9 +1,5 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from DB.models import MatchInfo
-from rest_framework.generics import get_object_or_404
-
 from staticfiles.get_file_url import get_file_url
 
 from .serializers import *

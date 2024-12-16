@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "player",
     "match",
     "match_video",
+    "analyze",
     # Third party apps
     "rest_framework",
     "drf_yasg",
@@ -179,6 +180,8 @@ TIME_ZONE = "Asia/Seoul"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [  # 리액트 앱 빌드 디렉토리
