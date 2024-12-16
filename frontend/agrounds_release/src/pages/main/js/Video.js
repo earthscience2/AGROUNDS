@@ -13,7 +13,6 @@ const Video = () => {
     getVideoSummationApi({"user_code" : sessionStorage.getItem('userCode')})
     .then((response) => {
       setVideoData(response.data)
-      console.log(response.data)
     })
     .catch((error) => console.log(error));
 

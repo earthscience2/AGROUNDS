@@ -46,7 +46,7 @@ const Anal = () => {
           <div className='total-play'>총 <p style={{marginLeft:'.5vh'}}>{personalMatchData.length}개</p>의 경기</div>
           <div className='list'>
             {personalMatchData.map((data) => (
-              <TotalAnal data={data}/>
+              <TotalAnal data={data} type="personal"/>
             ))}
         </div>
         </>
@@ -67,7 +67,7 @@ const Anal = () => {
               <div className='total-play'>총 <p style={{marginLeft:'.5vh'}}>{teamMatchData.length}개</p>의 경기</div>
               <div className='list'>
                 {teamMatchData.map((data) => (
-                  <TotalAnal data={data}/>
+                  <TotalAnal data={data} type="team"/>
                 ))}
               </div>
             </>

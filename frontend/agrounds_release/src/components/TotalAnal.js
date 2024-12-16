@@ -5,9 +5,11 @@ import logo1 from '../assets/logo_sample.png';
 import { useNavigate } from 'react-router-dom';
 
 
-const TotalAnal = ({data}) => {
+const TotalAnal = ({data, type}) => {
   const navigate = useNavigate();
  
+  const matchCode = data.match_code;
+  
   return (
     <div className='totalanal'>
       <p className='analdate'>{data.match_schedule}</p>
@@ -37,7 +39,11 @@ const TotalAnal = ({data}) => {
             <p className='title'>스프린트</p>
             <p className='data'>{data.rating}점</p>
           </div>
-          <button className='button' onClick={()=> navigate('/personalanalysis')}>경기 상세 분석</button>
+          {type === "personal" ? (
+            <button className='button' onClick={()=> navigate('/personalanalysis', {state :{matchCode}})}>경기 상세 분석</button>
+          ) : (
+            <button className='button' onClick={()=> navigate('/teamanalysis', {state : {matchCode}})}>경기 상세 분석</button>
+          )}
         </div>
       </div>
     </div>

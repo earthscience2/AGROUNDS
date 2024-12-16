@@ -44,6 +44,7 @@ import AnnouncementList from './pages/mypage/js/announcement/AnnouncementList';
 import Announcement from './pages/mypage/js/announcement/Announcement';
 import EventList from './pages/mypage/js/announcement/EventList';
 import Event from './pages/mypage/js/announcement/Event';
+import TeamAnalysis from './pages/main/js/TeamAnalysis';
 
 const router = createBrowserRouter([
   {
@@ -209,6 +210,10 @@ const router = createBrowserRouter([
   {
     path: "/event",
     element: <Event />,
+  },
+  {
+    path: "/teamanalysis",
+    element: <TeamAnalysis />,
   },
 ]);
 

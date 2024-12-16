@@ -13,7 +13,6 @@ const FullVideo = () => {
     getFullVideoListApi({"user_code" : sessionStorage.getItem('userCode')})
     .then((response) => {
       setVideoList(response.data.result || []);
-      console.log(response.data.result)
     })
     .catch(error => console.log(error));
 
@@ -25,9 +24,13 @@ const FullVideo = () => {
       <Login_title title="풀 경기영상" explain="경기장 전체를 한 눈에 확인해보세요"/>
       <div className='line'/>
       <div className='totalnum'>총 <p>{videoList.length}개</p>의 동영상</div>
-      {videoList.map((list) => (
-        <Video_Thumnail list={list}/>
-      ))}
+      {videoList.length === 0 ? (
+        <p className='nomatchvideo'>경기영상이 없습니다.</p>
+      ) : (
+        videoList.map((list) => (
+          <Video_Thumnail list={list} type="full"/>
+        ))
+      )}
     </div>
   );
 };
