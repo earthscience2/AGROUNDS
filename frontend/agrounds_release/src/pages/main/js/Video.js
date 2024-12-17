@@ -39,7 +39,7 @@ const Video = () => {
   };
 
   return (
-    <div className='video'>
+    <div className='videoback'>
       <LogoBellNav />
       <p className='videotitle'>경기 영상</p>
       <div className='contents'>

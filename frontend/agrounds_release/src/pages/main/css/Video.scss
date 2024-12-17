@@ -11,10 +11,11 @@
   color: $color;
 }
 
-.video{
+.videoback{
   @include display(flex, column, center, start);
   width: 100%;
   background-color: rgb(244,245,248);
+  height: 100vh;
   .videotitle{
     width: 90%;
     @include font(3vh, 700, #262626);

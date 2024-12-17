@@ -1,15 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import SpecificGravity from '../components/SpecificGravity';
 
-const Map = ({data}) => {
-  const img = data.hitmap;
+const Map = ({ data }) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [data.hitmap, data.high_speed_hitmap, data.change_direction];
+
+  const handleDotClick = (index) => {
+    setCurrentSlide(index);
+  };
   return (
-    <MapStyle>
-      <img src={img} />
-    </MapStyle>
+    <SwiperContainer>
+      <SwiperWrapper currentSlide={currentSlide}>
+        <SwiperItem>
+          <img src={slides[0]} alt="Heatmap" />
+        </SwiperItem>
+        <SwiperItem>
+          <img src={slides[1]} alt="Accel" />
+        </SwiperItem>
+        <SwiperItem>
+          <img src={slides[2]} alt="High Heatmap" />
+        </SwiperItem>
+      </SwiperWrapper>
+      <DotsContainer>
+        {[0, 1, 2].map((index) => (
+          <Dot
+            key={index}
+            active={currentSlide === index}
+            onClick={() => handleDotClick(index)}
+          />
+        ))}
+      </DotsContainer>
+    </SwiperContainer>
   );
 };
+  
 
 const ActivityLevel = ({ data, attack,defence }) => {
   return (
@@ -117,23 +143,53 @@ const Sprint = ({data}) => {
 
 export { Map, ActivityLevel, Speed, Sprint };
 
+const SwiperContainer = styled.div`
+  position: relative;
+  width: 85%;
+  height: 28vh;
+  overflow: hidden;
+  margin-top: 2vh;
+`;
 
-const MapStyle = styled.div`
-width: 85%;
-height: 20vh;
-display: flex;
-justify-content: center;
-align-items: center;
-border-radius: 1vh;
-overflow: hidden;
-margin-bottom: 5vh;
-margin-top: 1vh;
-& > img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-`
+const SwiperWrapper = styled.div`
+  display: flex;
+  transform: translateX(${({ currentSlide }) => -100 * currentSlide}%);
+  transition: transform 0.3s ease-in-out;
+`;
+
+const SwiperItem = styled.div`
+  flex: 0 0 100%;
+  height: 22vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius:1vh;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+`;
+
+const DotsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+`;
+
+const Dot = styled.div`
+  width: 6px;
+  height: 6px;
+  background-color: ${({ active }) => (active ? '#333' : '#ccc')};
+  border-radius: 50%;
+  margin: 0 3px;
+  cursor: pointer;
+`;
+
+
+
 const ActivityLevelStyle = styled.div`
   width: 85%;
   display: flex;
