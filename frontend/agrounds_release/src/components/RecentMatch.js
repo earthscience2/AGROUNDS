@@ -4,9 +4,13 @@ import location from '../assets/location.png';
 import logo from '../assets/logo_sample.png';
 import { getMatchListApi } from '../function/MatchApi';
 import arrow from '../assets/left.png';
+import { useNavigate } from 'react-router-dom';
 
 const RecentMatch = () => {
   const [data, setData] = useState([]);
+  
+  const navigate = useNavigate();
+  
   useEffect(() => {
     getMatchListApi({'user_code' : sessionStorage.getItem('userCode')})
     .then((response) => {
@@ -15,7 +19,7 @@ const RecentMatch = () => {
     .catch((error) => console.log(error));
   }, [])
   return (
-    <div className='recentmatch'>
+    <div className='recentmatch' onClick={() => navigate('/recentmatch')}>
       <div className='recentmatch_arrowtitle'>
           <p className='title'>최근 경기</p>
           <img src={arrow} />

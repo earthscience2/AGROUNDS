@@ -1,0 +1,148 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.recentmatchback {
+  width: 100%;
+  @include display(flex, column, center, start);
+
+  .recenttitle{
+    width: 90%;
+    @include font(2.5vh, 700, black);
+    margin: 0;
+  }
+  .tab-background {
+    width: 100%;
+    margin: 4vh auto 0 auto;
+
+    .tabs-back {
+      display: flex;
+      border-bottom: 1px solid #DADFE5;
+      margin-bottom: 20px;
+
+      .tab {
+        color: #C6C6C6;
+        font-size: 1.8vh;
+        font-weight: bold;
+        padding: .7vh 0;
+        margin: 0 2% 0 6%;
+        border: none;
+        border-radius: 5px 5px 0 0;
+        cursor: pointer;
+        outline: none;
+        background-color: white;
+        transition: background-color 0.3s, color 0.3s;
+
+        &:hover {
+          border-bottom: .4vh solid #262626;
+          color: #262626;
+        }
+
+        &.active {
+          border-bottom: .4vh solid #262626;
+          color: #262626;
+        }
+      }
+    }
+  }
+  .recentlist{
+    @include display(flex, column, center, start);
+    width: 100%;
+    .anal-nocontents{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 60vh;
+      img{
+        width: 15%;
+      }
+      .anal-contenttitle{
+        @include font(2.1vh, 600, black);
+      }
+      .anal-content{
+        @include font(1.7vh, 400, #878D96);
+      }
+    }
+    .recent-contentbox{
+      @include display(flex, row, start, space-between);
+      width: 85%;
+      margin-top: 2vh;
+      .datebox{
+        width: 20%;
+        .monthbox{
+          width: 100%;
+          height: 4vh;
+          background-color: #E5E9ED;
+          border-radius: 1.2vh 1.2vh 0 0;
+          @include display(flex, column, center, center);
+          @include font(1.8vh, 500, black);
+        }
+        .daybox{
+          @include display(flex, column, center, center);
+          background-color: #F2F4F8;
+          border-radius: 0 0 1.2vh 1.2vh;
+          width: 100%;
+          height: 7vh;
+          .daybox-day{
+            @include font(2.5vh, 600, #0EAC6A);
+          }
+          .daybox-week{
+            @include font(1.6vh, 500, #878D96);
+          }
+        }
+      }
+      .extrabox{
+        @include display(flex, column, center, start);
+        width: 75%;
+        border-bottom: 2px solid #F2F4F8;
+        margin-bottom: 2vh;
+        height: max-content;
+
+        .matchthumbnail{
+          width: 100%;
+          height: 18vh;
+          overflow: hidden;
+          border-radius: 1vh;
+          & > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        .matchlocationbox{
+          @include display(flex, row, center, start);
+          width: 100%;
+          .matchlocationdot{
+            background-color:#0EAC6A;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+          }
+          .matchlocation{
+            margin-left: 1vh;
+            @include font(1.8vh, 500, #4D5358);
+            margin-bottom: 1vh;
+          }
+        }
+        .matchtitle{
+          @include font(2.2vh, 700, #343A3F);
+          margin: 0;
+          width: 100%;
+          margin-bottom: 2vh;
+        }
+      }
+      
+    }
+  }
+}

@@ -26,7 +26,7 @@ const Main = () => {
         <Main_Subject title='GPS 기기' BG='#10CC7E' color='#FFFFFF'arrow={true} arrowC='white'children={Device()}/>
       </div>
       <div className='recentmatchbox'>
-        <RecentMatch />
+        <RecentMatch/>
       </div>
       <Footer />
     </div>
