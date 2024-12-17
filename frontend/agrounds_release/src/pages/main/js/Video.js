@@ -5,49 +5,71 @@ import Footer from '../../../components/Footer';
 import { useNavigate } from 'react-router-dom';
 import { getVideoSummationApi } from '../../../function/MatchApi';
 import list from '../../../assets/playlist.png';
+
 const Video = () => {
   const navigate = useNavigate();
   const [videoData, setVideoData] = useState({});
 
   useEffect(() => {
-    getVideoSummationApi({"user_code" : sessionStorage.getItem('userCode')})
-    .then((response) => {
-      setVideoData(response.data)
-    })
-    .catch((error) => console.log(error));
+    getVideoSummationApi({ "user_code": sessionStorage.getItem('userCode') })
+      .then((response) => {
+        setVideoData(response.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
-  }, [])
+  // ThumbnailStack 컴포넌트
+  const ThumbnailStack = ({ thumbnails = [] }) => {
+    const placeholders = Array.from({ length: 3 - thumbnails.length }, () => null);
+    const displayThumbnails = [...thumbnails.slice(0, 3), ...placeholders];
+
+    return (
+      <div className="thumbnail-stack">
+        {displayThumbnails.map((thumbnail, index) => (
+          <div
+            key={index}
+            className={`thumbnail-layer ${thumbnail ? "image" : "placeholder"}`}
+            style={{
+              backgroundImage: thumbnail ? `url(${thumbnail})` : "none",
+            }}
+          ></div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className='video'>
       <LogoBellNav />
       <p className='videotitle'>경기 영상</p>
-      <div className='contents' >
+      <div className='contents'>
         <div className='contentbox' onClick={() => navigate('/personalvideo')}>
-          <div className='content1'>
-            <div className='firstthum'><img src={videoData.player_cam?.thumbnail[0]} /></div>
-            <div className='secondthum'><img src={videoData.player_cam?.thumbnail[1]} /></div>
-            <div className='thirdthum'><img src={videoData.player_cam?.thumbnail[2]} /></div>
-          </div>
+          <ThumbnailStack thumbnails={videoData.player_cam?.thumbnail || []} />
           <p className='contenttitle'>Player Cam</p>
-          <p className='contentnumber'>{videoData.player_cam?.number_of_videos}개의 영상</p>
+          <p className='contentnumber'>{videoData.player_cam?.number_of_videos || 0}개의 영상</p>
         </div>
+
         <div className='contentbox' onClick={() => navigate('/teamvideo')}>
-          <div className='content2'></div>
+          <ThumbnailStack thumbnails={videoData.team_cam?.thumbnail || []} />
           <p className='contenttitle'>Team Cam</p>
-          <p className='contentnumber'>{videoData.team_cam?.number_of_videos}개의 영상</p>
+          <p className='contentnumber'>{videoData.team_cam?.number_of_videos || 0}개의 영상</p>
         </div>
+
         <div className='contentbox' onClick={() => navigate('/fullvideo')}>
-          <div className='content3'></div>
+          <ThumbnailStack thumbnails={videoData.full_cam?.thumbnail || []} />
           <p className='contenttitle'>Full Cam</p>
-          <p className='contentnumber'>{videoData.full_cam?.number_of_videos}개의 영상</p>
+          <p className='contentnumber'>{videoData.full_cam?.number_of_videos || 0}개의 영상</p>
         </div>
+
         <div className='contentbox' onClick={() => alert('동영상 준비중입니다.')}>
-          <div className='content4'><img src={list} /></div>
+          <div className='content4'>
+            <img src={list} alt="Highlight" />
+          </div>
           <p className='contenttitle'>Highlight</p>
-          <p className='contentnumber'>{videoData.highlight_cam?.number_of_videos}개의 영상</p>
+          <p className='contentnumber'>{videoData.highlight_cam?.number_of_videos || 0}개의 영상</p>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

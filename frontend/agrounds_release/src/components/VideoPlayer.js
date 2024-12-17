@@ -14,7 +14,7 @@ const VideoPlayer = ({ url }) => {
   }, [url]);
 
   return (
-    <div style={{maxWidth: '500px', width: '100%', display: 'flex', justifyContent:'center', alignItems: 'center'}}>
+    <div style={{maxWidth: '500px', height: 'maxContent', width: '100%', display: 'flex', justifyContent:'center', alignItems: 'center'}}>
       <video
         ref={videoRef}
         controls

@@ -96,7 +96,8 @@ const VideoByQuarter = () => {
           <div className='video' key={video.video_code}>
             <VideoPlayer url={video.link} />
           </div>
-        ))}
+        ))
+      }
      
       <div className='notice'><img src={notice} />영상은 업로드 날짜를 기준으로 15일 뒤 자동으로 삭제됩니다.</div>
       <div className='noticetitle'>
