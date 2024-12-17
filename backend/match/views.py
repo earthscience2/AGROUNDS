@@ -19,13 +19,14 @@ class getMatchList(APIView):
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
         default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
+        default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
         
         result = [
                     {
                         "match_code" : "m_0001",
                         "match_schedule" : "2024-10-10",
                         "match_location" : "인하대운동장",
-                        "thumbnail" : "https://aws.s3...",
+                        "thumbnail" : default_thumbnail,
                         "match_title" : "인하대학교 FC",
                         "match_time" : "20",
                         "distance" : "1.89",
@@ -40,7 +41,7 @@ class getMatchList(APIView):
                         "match_code" : "m_0002",
                         "match_schedule" : "2024-10-11",
                         "match_location" : "부천축구경기장",
-                        "thumbnail" : "https://aws.s3...",
+                        "thumbnail" : default_thumbnail,
                         "match_title" : "동백 FC",
                         "match_time" : "20",
                         "distance" : "1.89",
@@ -55,7 +56,7 @@ class getMatchList(APIView):
                         "match_code" : "m_0003",
                         "match_schedule" : "2024-10-12",
                         "match_location" : "대야미월드컵경기장",
-                        "thumbnail" : "https://aws.s3...",
+                        "thumbnail" : default_thumbnail,
                         "match_title" : "FC 제주",
                         "match_time" : "20",
                         "distance" : "1.89",
@@ -70,7 +71,7 @@ class getMatchList(APIView):
                         "match_code" : "m_0001",
                         "match_schedule" : "2024-10-10",
                         "match_location" : "인하대운동장",
-                        "thumbnail" : "https://aws.s3...",
+                        "thumbnail" : default_thumbnail,
                         "match_title" : "인하대학교 FC",
                         "match_time" : "20",
                         "distance" : "1.89",
@@ -85,7 +86,7 @@ class getMatchList(APIView):
                         "match_code" : "m_0002",
                         "match_schedule" : "2024-10-11",
                         "match_location" : "부천축구경기장",
-                        "thumbnail" : "https://aws.s3...",
+                        "thumbnail" : default_thumbnail,
                         "match_title" : "동백 FC",
                         "match_time" : "20",
                         "distance" : "1.89",
@@ -100,7 +101,7 @@ class getMatchList(APIView):
                         "match_code" : "m_0003",
                         "match_schedule" : "2024-10-12",
                         "match_location" : "대야미월드컵경기장",
-                        "thumbnail" : "https://aws.s3...",
+                        "thumbnail" : default_thumbnail,
                         "match_title" : "FC 제주",
                         "match_time" : "20",
                         "distance" : "1.89",
@@ -126,13 +127,14 @@ class getTeamMatchList(APIView):
             return Response({'error': f'team_code({team_code})에 해당하는 팀이 존재하지 않습니다.'})
         
         default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
+        default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
         
         result = [
             {
                 "match_code" : "m_0001",
                 "match_schedule" : "2024-10-10",
                 "match_location" : "인하대운동장",
-                "thumbnail" : "https://aws.s3...",
+                "thumbnail" : default_thumbnail,
                 "match_title" : "인하대학교 FC",
                 "match_time" : 20,
                 "match_mom" : "김민재",
@@ -147,7 +149,7 @@ class getTeamMatchList(APIView):
                 "match_code" : "m_0002",
                 "match_schedule" : "2024-10-12",
                 "match_location" : "부천축구경기장",
-                "thumbnail" : "https://aws.s3...",
+                "thumbnail" : default_thumbnail,
                 "match_title" : "동백 FC",
                 "match_time" : 19,
                 "match_mom" : "손흥민",
@@ -162,7 +164,7 @@ class getTeamMatchList(APIView):
                 "match_code" : "m_0003",
                 "match_schedule" : "2024-10-13",
                 "match_location" : "대야미월드컵경기장",
-                "thumbnail" : "https://aws.s3...",
+                "thumbnail" : default_thumbnail,
                 "match_title" : "FC 제주",
                 "match_time" : 40,
                 "match_mom" : "문소영",
@@ -177,7 +179,7 @@ class getTeamMatchList(APIView):
                 "match_code" : "m_0001",
                 "match_schedule" : "2024-10-10",
                 "match_location" : "인하대운동장",
-                "thumbnail" : "https://aws.s3...",
+                "thumbnail" : default_thumbnail,
                 "match_title" : "인하대학교 FC",
                 "match_time" : 20,
                 "match_mom" : "김민재",
@@ -192,7 +194,7 @@ class getTeamMatchList(APIView):
                 "match_code" : "m_0002",
                 "match_schedule" : "2024-10-12",
                 "match_location" : "부천축구경기장",
-                "thumbnail" : "https://aws.s3...",
+                "thumbnail" : default_thumbnail,
                 "match_title" : "동백 FC",
                 "match_time" : 19,
                 "match_mom" : "손흥민",
@@ -207,7 +209,7 @@ class getTeamMatchList(APIView):
                 "match_code" : "m_0003",
                 "match_schedule" : "2024-10-13",
                 "match_location" : "대야미월드컵경기장",
-                "thumbnail" : "https://aws.s3...",
+                "thumbnail" : default_thumbnail,
                 "match_title" : "FC 제주",
                 "match_time" : 40,
                 "match_mom" : "문소영",
