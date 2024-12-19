@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('DB', '0008_teammatchinfo_userinfo_usermatch_usermatchasteam_and_more'),
+        ('DB', '0008_teammatchinfo_userinfo_usermatch_and_more'),
     ]
 
     operations = [

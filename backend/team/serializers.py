@@ -85,4 +85,6 @@ class User_Team_Serializer(serializers.ModelSerializer):
     def validate_user_code(self, value):
         if not UserInfo.objects.filter(user_code=value).exists():
             raise serializers.ValidationError(f"user_code({value})에 해당하는 유저가 존재하지 않습니다.")
+        if UserTeam.objects.filter(user_code=value).exists():
+            raise serializers.ValidationError(f"user_code({value})는 이미 팀에 소속되어 있습니다.")
         return value
