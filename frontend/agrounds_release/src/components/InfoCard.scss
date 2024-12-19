@@ -150,6 +150,7 @@
     .info-team{
       height: 15vh;
       width: 60%;
+      
       .teamname{
         font-size: 1.8vh;
         font-weight: 700;
@@ -163,9 +164,9 @@
         text-overflow: ellipsis;
       }
       .img{
-        position: absolute;
-        bottom: 27vh;
-        left: 33vh;
+        
+        margin-top: 3vh;
+        margin-left: 14vh;  
         width: 6vh;
         height: 6vh;
         border-radius: 50%;

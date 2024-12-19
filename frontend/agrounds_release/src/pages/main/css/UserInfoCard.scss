@@ -8,9 +8,9 @@
 .userinfo {
   @include display(flex, column, center, center);
   min-height: 100vh;
+  width: 100%;
 
   .backdiv {
-    position: fixed;
     width: 90%;
     top: 5vh;
 

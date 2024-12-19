@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import device from '../assets/device.png';
 import styled from 'styled-components';
 import ovr from '../assets/ovr.png';
@@ -9,18 +9,44 @@ import BarChart from '../components/BarChart';
 import { useNavigate } from 'react-router-dom';
 import playlist from '../assets/playlist.png';
 import polygon from '../assets/polygon.png';
+import { getTeamInfoApi, getTeamPlayerListApi } from './TeamApi';
 
 const MyTeam = () => {
+  const [info, setInfo] = useState([]);
+  const [length, setLenght] = useState('');
+
+  useEffect(() => {
+    getTeamInfoApi({'team_code' : sessionStorage.getItem('teamCode')})
+    .then((response) => {
+      setInfo(response.data)
+    })
+    .catch(error => console.log(error));
+
+    getTeamPlayerListApi({'team_code' : sessionStorage.getItem('teamCode')})
+    .then((response) => {
+      setLenght(response.data.result)
+    })
+    .catch(error => console.log(error));
+
+  }, [sessionStorage.getItem('teamCode')])
+
+  function formatDate(input) {
+    const date = new Date(input);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}.${month}.${day}`;
+}
   return (
     <MyTeamStyle>
-      <div className='imgbox'><img className='img' src={logo} /></div>
-      <div className='title'>Tottenham</div>
+      <div className='imgbox'><img className='img' src={info.team_logo} /></div>
+      <div className='title'>{info.team_name}</div>
       <div className='detailbox'>
         {/* <p className='detail'>성남시</p>
         <div className='detailline'/> */}
-        <p className='detail'>17명</p>
+        <p className='detail'>{length.length}명</p>
         <div className='detailline'/>
-        <p className='detail'>24.09.21</p>
+        <p className='detail'>{formatDate(info.created_at)}</p>
       </div>
     </MyTeamStyle>
   );
