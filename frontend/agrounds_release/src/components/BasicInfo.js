@@ -6,7 +6,7 @@ const BasicInfo = () => {
   const gender = () => {
     return sessionStorage.getItem('userGender') === 'male' ? '남자' : '여자';
   }
-  console.log(sessionStorage.getItem('userWeight'))
+
   return (
     <div className='basicinfo'>
       <div className='titlebox'>

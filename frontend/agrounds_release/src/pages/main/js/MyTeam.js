@@ -4,7 +4,7 @@ import logo from '../../../assets/logo_sample.png';
 import Main_Subject from '../../../components/Main_Subject';
 import righbtn from '../../../assets/right.png';
 import Image_Comp from '../../../components/Image_Comp';
-import { MatchPlan, RecentMatchS } from '../../../function/SubjectContents';
+import { MatchPlan, MatchVideo, RecentMatchS } from '../../../function/SubjectContents';
 import { useNavigate } from 'react-router-dom';
 import left from '../../../assets/left.png';
 import cog from '../../../assets/cog.png';
@@ -38,7 +38,7 @@ const MyTeam = () => {
     getTeamPlayerListApi({'team_code': sessionStorage.getItem('teamCode')})
     .then((response) => {
       setMember(response.data.result);
-      console.log(response.data);
+      console.log(response.data.result);
     })
     .catch(error => console.log(error));
     
@@ -111,7 +111,7 @@ const MyTeam = () => {
       <div className='fc'>{team.team_name}</div>
       <div className='subjectbox'>
         <Main_Subject title='최근 경기' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={<RecentMatchS logo1={logo} logo2={logo} />}/>
-        <Main_Subject title='경기 일정' BG='#1C3E71' color='#FFFFFF' arrowC='white' arrow={true}children={MatchPlan()}/>
+        <Main_Subject title='경기 영상' BG='#DADFE5' color='#000000' arrowC='black' arrow={true}children={MatchVideo()} onClick={() => navigate('/video')}/>
       </div>
       <div className='teambox'>
         <div className='teamtitle' >

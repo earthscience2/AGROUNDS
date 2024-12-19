@@ -435,12 +435,14 @@ const RecentMatchStyle = styled.div`
   .date{
     font-size: 1.3vh;
     font-weight: 400;
+    font-family: 'Pretendard-Regular';
     color: #6F6F6F;
     margin: .5vh 0;
   }
   .place{
     font-size: 1.5vh;
     font-weight: 500;
+    font-family: 'Pretendard-Regular';
     color: #6F6F6F;
     margin: 1vh 0;
     display: flex;

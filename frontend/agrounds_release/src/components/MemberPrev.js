@@ -41,18 +41,21 @@ const MemberPrevStyle = styled.div`
     min-width: 55%;
     .t3{
       font-size: 1.9vh;
-      font-weight: 500;
+      font-weight: 600;
+      font-family: 'Pretendard-Regular';
       margin: 0;
     }
     .t4{
       font-size: 1.4vh;
-      font-weight: 500;
+      font-weight: 600;
+      font-family: 'Pretendard-Regular';
       color: #6F6F6F;
       margin: .5vh 0;
     }
     .t5{
       font-size: 1.5vh;
-      font-weight: 500;
+      font-weight: 600;
+      font-family: 'Pretendard-Regular';
       color: #6F6F6F;
       margin: 0;
     }
@@ -69,6 +72,7 @@ const MemberPrevStyle = styled.div`
     .position{
       font-size: 1.6vh;
       font-weight: 600;
+      font-family: 'Pretendard-Regular';
       margin: 0 .5vh 0 .5vh;
     }
   }
@@ -78,6 +82,7 @@ const MemberPrevStyle = styled.div`
     width: 8vh;
     border-radius: 3vh;
     font-size: 1.5vh;
+    font-family: 'Pretendard-Regular';
     font-weight: 600;
     margin-left: 13%;
   }
@@ -87,6 +92,7 @@ const MemberPrevStyle = styled.div`
     width: 8vh;
     border-radius: 3vh;
     font-size: 1.5vh;
+    font-family: 'Pretendard-Regular';
     font-weight: 600;
     margin-left: 13%;
     background-color: #343A3F;
@@ -113,6 +119,7 @@ const MemberPrevStyle = styled.div`
       border-radius: 1vh;
       font-size: 1.6vh;
       font-weight: 700;
+      font-family: 'Pretendard-Regular';
       color: #343A3F;
       background-color: #F2F4F8;
       margin: 0 .3vh;
@@ -124,6 +131,7 @@ const MemberPrevStyle = styled.div`
       border-radius: 1vh;
       font-size: 1.6vh;
       font-weight: 700;
+      font-family: 'Pretendard-Regular';
       color: white;
       background-color: #343A3F;
       margin: 0 .3vh;
@@ -134,6 +142,7 @@ const MemberPrevStyle = styled.div`
   .errorment{
     font-size: 2vh;
     font-weight: 700;
+    font-family: 'Pretendard-Regular';
     color: black;
     height: 15vh;
     display: flex;
