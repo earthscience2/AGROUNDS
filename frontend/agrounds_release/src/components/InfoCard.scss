@@ -20,6 +20,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      font-family: 'Pretendard-Regular';
 
       .usernickname{
         margin: 0;
@@ -28,12 +29,13 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         margin-left: 2vh;
+        font-family: 'Pretendard-Regular';
       }
       .age{
         font-size: 1.7vh;
         font-weight: 500;
         margin: 1vh 0 0 2vh;
-        
+        font-family: 'Pretendard-Regular';
       }
     }
     .nhwbox{
@@ -46,6 +48,7 @@
       border-left: .5px solid white;
       font-size: 1.8vh;
       font-weight: 700;
+      font-family: 'Pretendard-Regular';
       .info-name{
         width: 100%;
         height: 5vh;
@@ -129,6 +132,7 @@
         font-weight: 600;
         color: rgba(255, 255, 255, 0.743);
         margin-left: 2vh;
+        font-family: 'Pretendard-Regular';
       }
       .date{
         font-size: 1.8vh;
@@ -139,6 +143,8 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        font-family: 'Pretendard-Regular';
+        
       }
     }
     .info-team{
@@ -147,6 +153,7 @@
       .teamname{
         font-size: 1.8vh;
         font-weight: 700;
+        font-family: 'Pretendard-Regular';
         margin: 2vh 0 0 2vh;
         display: -webkit-box;
         -webkit-line-clamp: 2; 

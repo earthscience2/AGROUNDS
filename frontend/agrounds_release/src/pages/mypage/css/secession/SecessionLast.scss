@@ -20,6 +20,7 @@
     .explain{
       @include display(flex, row, center, start);
       margin-top: 1vh;
+      font-family: 'Pretendard-Regular';
       .dot{
         background-color: black;
         width: 3px;

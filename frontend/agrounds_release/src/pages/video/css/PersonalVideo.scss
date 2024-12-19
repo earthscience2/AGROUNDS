@@ -27,9 +27,11 @@
     @include display(flex, row, start, start);
     width: 90%;
     margin: 2vh;
+    font-family: 'Pretendard-Regular';
     & > p{
       margin: 0;
       @include font(1.8vh, 700, #262626);
+      font-family: 'Pretendard-Regular';
     }
   }
   .nomatchvideo{

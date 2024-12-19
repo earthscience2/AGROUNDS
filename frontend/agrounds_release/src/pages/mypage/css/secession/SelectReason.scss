@@ -22,8 +22,9 @@
     width: 90%;
   
     .title1{
-      @include font(2vh, 500, #333333);
+      @include font(2vh, 600, #333333);
       margin: 1.5vh 0;
+      font-family: 'Pretendard-Regular';
     }
     .arrow1{
       width: 2.8vh;

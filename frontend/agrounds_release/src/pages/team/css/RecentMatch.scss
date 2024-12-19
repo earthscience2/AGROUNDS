@@ -69,9 +69,11 @@
       }
       .anal-contenttitle{
         @include font(2.1vh, 600, black);
+        font-family: 'Pretendard-Regular';
       }
       .anal-content{
         @include font(1.7vh, 400, #878D96);
+        font-family: 'Pretendard-Regular';
       }
     }
     .recent-contentbox{
@@ -86,7 +88,8 @@
           background-color: #E5E9ED;
           border-radius: 1.2vh 1.2vh 0 0;
           @include display(flex, column, center, center);
-          @include font(1.8vh, 500, black);
+          @include font(1.8vh, 600, black);
+          font-family: 'Pretendard-Regular';
         }
         .daybox{
           @include display(flex, column, center, center);
@@ -96,9 +99,11 @@
           height: 7vh;
           .daybox-day{
             @include font(2.5vh, 600, #0EAC6A);
+            font-family: 'Pretendard-Regular';
           }
           .daybox-week{
-            @include font(1.6vh, 500, #878D96);
+            @include font(1.6vh, 600, #878D96);
+            font-family: 'Pretendard-Regular';
           }
         }
       }
@@ -131,12 +136,14 @@
           }
           .matchlocation{
             margin-left: 1vh;
-            @include font(1.8vh, 500, #4D5358);
+            @include font(1.8vh, 600, #4D5358);
+            font-family: 'Pretendard-Regular';
             margin-bottom: 1vh;
           }
         }
         .matchtitle{
           @include font(2.2vh, 700, #343A3F);
+          font-family: 'Pretendard-Regular';
           margin: 0;
           width: 100%;
           margin-bottom: 2vh;

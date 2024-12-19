@@ -200,19 +200,20 @@ const MatchVideoStyle = styled.div`
       width: 6vh;
       height: 4vh;
       background-color: #00000080;
-      border-radius: 1vh;
+      border-radius: .8vh;
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
       color: white;
       font-weight: 700;
-      font-size: 2.1vh;
+      font-size: 2vh;
       position: relative;
+      font-family: 'Pretendard-Regular';
       margin-top: 1vh;
       left: 30%;
       img{
-        width: 2.1vh;
+        width: 1.8vh;
         margin-right: .3vh;
       }
     }
@@ -241,6 +242,7 @@ const MyTeamStyle = styled.div`
     font-size: 1.8vh;
     font-weight: 600;
     margin: 1vh;
+    font-family: 'Pretendard-Regular';
   }
   .detailbox{
     display: flex;
@@ -252,6 +254,7 @@ const MyTeamStyle = styled.div`
       margin: 0;
       color: #6F6F6F;
       font-weight: 500;
+      font-family: 'Pretendard-Regular';
     }
     .detailline{
       width: .1vh;
@@ -274,16 +277,17 @@ const NoTeamStyle = styled.div`
     font-weight: 500;
     color: #333333;
     text-align: center;
-    
+    font-family: 'Pretendard-Regular';
   }
   .noteambtn{
     background-color: #0EAC6A;
     color: white;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.8vh;
     margin-top: 3vh;
     margin-bottom: -3vh;
     border-radius: 3vh;
+    font-family: 'Pretendard-Regular';
     height: 4vh;
     width: 80%;
     font-size: 1.3vh;
@@ -305,9 +309,10 @@ const MyOvrStyle = styled.div`
     width: 80%;
     color: #21272A;
     font-size: 1.4vh;
-    font-weight: 400;
+    font-weight: 500;
     color:#E5E9ED;
     margin: -1vh 0 2vh 0;
+    font-family: 'Pretendard-Regular';
   }
   .ovr{
     height: 14vh;

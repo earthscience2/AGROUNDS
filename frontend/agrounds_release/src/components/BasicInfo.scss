@@ -24,10 +24,12 @@
     width: 90%;
     .basicinfotitle{
       @include font(2.5vh, 700, #333333);
+      font-family: 'Pretendard-Regular';
     }
     .basicfix{
       @include font(1.8vh, 600, #0EAC6A);
       border-bottom: 1px solid #0EAC6A;
+      font-family: 'Pretendard-Regular';
     }
   }
   .basiccontentsbox{
@@ -36,10 +38,12 @@
     .contenttitle{
       @include font(1.9vh, 600, #929292);
       margin: 0 0 2vh 0;
+      font-family: 'Pretendard-Regular';
     }
     .contentinfo{
       @include font(1.9vh, 600, #333333);
       margin: 0 0 2vh 0;
+      font-family: 'Pretendard-Regular';
     }
   }
 }

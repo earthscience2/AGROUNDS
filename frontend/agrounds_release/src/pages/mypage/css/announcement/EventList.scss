@@ -23,6 +23,7 @@
       margin: 0;
       width: 90%;
       @include font(1.8vh, 500, #333333);
+      font-family: 'Pretendard-Regular';
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -30,6 +31,7 @@
     .eventdate{
       margin: 1vh 0;
       @include font(1.5vh, 500, #A8A8A8);
+      font-family: 'Pretendard-Regular';
     }
   }
   .noevent{
@@ -45,7 +47,7 @@
     & > div{
       font-size: 1.6vh;
       font-weight: 500;
-      
+      font-family: 'Pretendard-Regular';
       margin-top: 2vh;
     }
   }
