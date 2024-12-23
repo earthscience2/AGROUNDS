@@ -32,18 +32,29 @@ class getVideoSummation(APIView):
         if not UserInfo.objects.filter(user_code=user_code).exists():
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
+        player_videos_number = VideoInfo.objects.filter(user_code = user_code, type = 'player').count()
+        team_videos_number = 0
+        full_videos_number = 0
+        
+        user_info = UserInfo.objects.get(user_code = user_code)
+        if user_info.user_type == 'coach' or user_info.user_type == 'player':
+            team_code = UserTeam.objects.filter(user_code = user_code).first().team_code
+            if team_code is not None :
+                team_videos_number = VideoInfo.objects.filter(team_code = team_code, type = 'team').count()
+                full_videos_number = VideoInfo.objects.filter(team_code = team_code, type = 'player').count()
+        
         result = {
             "player_cam" : {
                 "thumbnail" : thumnails,
-                "number_of_videos" : 8
+                "number_of_videos" : player_videos_number
             },
             "team_cam" : {
                 "thumbnail" : thumnails,
-                "number_of_videos" : 9
+                "number_of_videos" : team_videos_number
             },
             "full_cam" : {
                 "thumbnail" : thumnails,
-                "number_of_videos" : 10
+                "number_of_videos" : full_videos_number
             },
             "highlight_cam" : {
                 "thumbnail" : [],
@@ -115,7 +126,7 @@ class getPlayerVideoList(APIView):
         ]
 
         return Response({'result':result})
-    
+
 class getTeamVideoList(APIView):
     def post(self, request):
         user_code = request.data.get('user_code')

@@ -77,6 +77,14 @@ class TeamInfo(models.Model):
         managed = False
         db_table = "team_info"
 
+class TeamMatch(models.Model):
+    match_code = models.CharField(max_length=45)
+    team_code = models.CharField(max_length=45)
+
+    class Meta:
+        managed = False
+        db_table = 'team_match'
+
 # team_match_info 테이블
 class TeamMatchInfo(models.Model):
     match_code = models.CharField(max_length=45, primary_key=True)
