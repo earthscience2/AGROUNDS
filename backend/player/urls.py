@@ -3,7 +3,8 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path("main/", views.getPlayerInfo.as_view()),
-    path("SearchUsermatchInfoByUsercode/", views.MatchInfoUserAPIView.as_view()),
-    path("SearchTeammatchInfoByUsercode/", views.MatchInfoAsTeamAPIView.as_view()),
+    path("get-player-info/", views.getPlayerInfo.as_view()),
+    path("join-team/", views.joinTeam.as_view()),
+    path("search-individual-player-by-nickname/", views.searchIndividualPlayerByNickname.as_view()),
+    path("withdraw-team/", views.withdrawTeam.as_view()),
 ]

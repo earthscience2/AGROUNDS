@@ -60,18 +60,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='UserMatchAsTeam',
-            fields=[
-                ('index', models.AutoField(primary_key=True, serialize=False)),
-                ('match_code', models.CharField(max_length=45)),
-                ('user_code', models.CharField(max_length=45)),
-            ],
-            options={
-                'db_table': 'user_match_as_team',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
             name='UserMatchInfo',
             fields=[
                 ('match_code', models.CharField(max_length=45, primary_key=True, serialize=False)),

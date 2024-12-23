@@ -1,5 +1,118 @@
 from django.db import models
 
+##================ 앱 개발 ==================
+
+class UserInfo(models.Model):
+    user_code = models.CharField(primary_key=True, max_length=45)
+    user_id = models.CharField(max_length=45)
+    password = models.CharField(max_length=200)
+    user_birth = models.CharField(max_length=45)
+    user_name = models.CharField(max_length=45)
+    user_gender = models.CharField(max_length=45)
+    user_nickname = models.CharField(max_length=45)
+    marketing_agree = models.BooleanField(default=0)
+    login_type = models.CharField(max_length=45)
+    user_type = models.CharField(max_length=45)
+    user_height = models.IntegerField()
+    user_weight = models.IntegerField()
+    user_position = models.CharField(max_length=45)
+    
+    class Meta:
+        managed = False
+        db_table = "user_info"
+
+# user_match 
+class UserMatch(models.Model):
+    match_code = models.CharField(max_length=45)
+    user_code = models.CharField(max_length=45)
+    match_schedule = models.DateField()
+    service_type = models.CharField(max_length=20)
+    match_type = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = 'user_match'
+
+# user_match_info 테이블
+class UserMatchInfo(models.Model):
+    match_code = models.CharField(max_length=45)
+    user_code = models.CharField(max_length=45)
+    ground_name = models.CharField(max_length=45)
+    away_team = models.CharField(max_length=45, null=True, blank=True)
+    away_team_name = models.CharField(max_length=45, null=True, blank=True)
+    match_time = models.IntegerField(null=True, blank=True)
+    match_name = models.CharField(max_length=45)
+    match_schedule = models.DateField() 
+
+    class Meta:
+        managed = False
+        db_table = "user_match_info"
+
+class UserTeam(models.Model):
+    user_code = models.CharField(max_length=45)
+    team_code = models.CharField(max_length=45)
+
+    class Meta:
+        managed = False
+        db_table = "user_team"
+
+class PendingInviteTeam(models.Model):
+    user_code = models.CharField(max_length=45)
+    team_code = models.CharField(max_length=45)
+    direction = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = "pending_invite_team"
+
+# team_info
+class TeamInfo(models.Model):
+    team_code = models.CharField(primary_key=True, max_length=45)
+    team_host = models.CharField(max_length=45, null=True, blank=True)
+    team_logo = models.CharField(max_length=200, null=True, blank=True)
+    team_name = models.CharField(max_length=45)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = "team_info"
+
+# team_match_info 테이블
+class TeamMatchInfo(models.Model):
+    match_code = models.CharField(max_length=45, primary_key=True)
+    ground_name = models.CharField(max_length=45)
+    away_team = models.CharField(max_length=45, null=True, blank=True)
+    away_team_name = models.CharField(max_length=45, null=True, blank=True)
+    match_time = models.IntegerField()
+    match_name = models.CharField(max_length=45)
+    match_schedule = models.CharField(max_length=45)
+
+    class Meta:
+        managed = False
+        db_table = "team_match_info"
+
+class VideoInfo(models.Model):
+    match_code = models.CharField(max_length=45, null=True, blank=True)
+    user_code = models.CharField(max_length=45, null=True, blank=True)
+    quarter_name = models.CharField(max_length=45, null=True, blank=True)
+    type = models.CharField(max_length=20, null=True, blank=True)
+    title = models.CharField(max_length=45)
+    date = models.DateField()
+    path = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = "video_info"
+
+
+
+
+# ===========================================
+
+# =============== old version ===============
+
+# ===========================================
+
 # 경기 정보 
 class MatchInfo(models.Model):
     match_code = models.CharField(max_length=50, unique=True, primary_key=True)
@@ -63,84 +176,9 @@ class V2_MatchInfo(models.Model):
     v2_match_goalplayers = models.JSONField(blank=True, null=True)
     v2_match_GPSplayers = models.JSONField(blank=True, null=True)
     v2_match_teamcode = models.JSONField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = 'V2_match_info'
 
-##================ 앱 개발 ==================
-
-class UserInfo(models.Model):
-    user_code = models.CharField(primary_key=True, max_length=45)
-    user_id = models.CharField(max_length=45)
-    password = models.CharField(max_length=200)
-    user_birth = models.CharField(max_length=45)
-    user_name = models.CharField(max_length=45)
-    user_gender = models.CharField(max_length=45)
-    user_nickname = models.CharField(max_length=45)
-    marketing_agree = models.BooleanField(default=0)
-    login_type = models.CharField(max_length=45)
-    user_type = models.CharField(max_length=45)
-    user_height = models.IntegerField()
-    user_weight = models.IntegerField()
-    user_position = models.CharField(max_length=45)
-    
-    class Meta:
-        managed = False
-        db_table = "user_info"
-
-# user_match 
-class UserMatch(models.Model):
-    id = models.AutoField(primary_key=True)  # Auto-increment 필드
-    match_code = models.CharField(max_length=45, null=False)  # match_code 필드
-    user_code = models.CharField(max_length=45, null=False)  # user_code 필드
-
-    class Meta:
-        managed = False
-        db_table = 'user_match'
-
-# user_match_as_team 
-class UserMatchAsTeam(models.Model):
-    id = models.AutoField(primary_key=True)  # Auto-increment 필드
-    match_code = models.CharField(max_length=45, null=False)  # match_code 필드
-    user_code = models.CharField(max_length=45, null=False)  # user_code 필드
-
-    class Meta:
-        managed = False
-        db_table = 'user_match_as_team'
-
-# user_match_info 테이블
-class UserMatchInfo(models.Model):
-    match_code = models.CharField(primary_key=True, max_length=45) 
-    match_quarter_info = models.JSONField(null=True, blank=True)  
-    match_name = models.CharField(max_length=45, null=True, blank=True)
-    match_schedule = models.CharField(max_length=45, null=True, blank=True)
-    gps_url = models.JSONField(null=True, blank=True)  
-
-    class Meta:
-        managed = False  
-        db_table = "user_match_info"
-
-# team_info
-class TeamInfo(models.Model):
-    team_code = models.CharField(primary_key=True, max_length=45)
-    team_host = models.CharField(max_length=45, null=True, blank=True)
-    team_logo = models.CharField(max_length=200, null=True, blank=True)
-    team_name = models.CharField(max_length=45)
-
-    class Meta:
-        managed = False
-        db_table = "team_info"
-
-# team_match_info 테이블
-class TeamMatchInfo(models.Model):
-    match_code = models.CharField(primary_key=True, max_length=45)
-    match_team_code = models.CharField(max_length=45, null=True, blank=True)
-    match_quarter_info = models.JSONField(null=True, blank=True)
-    match_name = models.CharField(max_length=45, null=True, blank=True)
-    match_schedule = models.CharField(max_length=45, null=True, blank=True)
-    gps_url = models.JSONField(null=True, blank=True)
-
-    class Meta:
-        managed = False
-        db_table = "team_match_info"
 

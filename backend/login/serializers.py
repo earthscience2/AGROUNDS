@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from DB.models import UserInfo
 
+
 from rest_framework import serializers
 
 from django.contrib.auth.hashers import make_password
@@ -83,6 +84,7 @@ class User_Info_Serializer(serializers.ModelSerializer):
                     return None
                 raise serializers.ValidationError({"error" : "올바르지 않은 " + massges[i] +" 형식입니다."})
         return None
+    
     
 # class Login_Serializer(serializers.Serializer):
 #     user_id = serializers.CharField(required = True)

@@ -33,6 +33,11 @@ urlpatterns = [
     # app
     path("api/user/", include("user.urls")),
     path("api/login/", include("login.urls")),
+    path("api/team/", include("team.urls")),
+    path("api/player/", include("player.urls")),
+    path("api/match/", include("match.urls")),
+    path("api/video/", include("match_video.urls")),
+    path("api/analyze/", include("analyze.urls")),
 ]
 
 urlpatterns += [
