@@ -39,6 +39,13 @@ import ChangeTeamLogo from './pages/team/js/ChangeTeamLogo';
 import MemberManage from './pages/team/js/MemberManage';
 import JoinTeam from './pages/team/js/JoinTeam';
 import LoadingPage from './function/login/loading_for_login';
+import SecessionOtherReason from './components/SecessionOtherReason';
+import AnnouncementList from './pages/mypage/js/announcement/AnnouncementList';
+import Announcement from './pages/mypage/js/announcement/Announcement';
+import EventList from './pages/mypage/js/announcement/EventList';
+import Event from './pages/mypage/js/announcement/Event';
+import TeamAnalysis from './pages/main/js/TeamAnalysis';
+import RecentMatch from './pages/team/js/RecentMatch';
 
 const router = createBrowserRouter([
   {
@@ -184,6 +191,34 @@ const router = createBrowserRouter([
   {
     path: "/jointeam",
     element: <JoinTeam />,
+  },
+  {
+    path: "/secession-other-reason",
+    element: <SecessionOtherReason />,
+  },
+  {
+    path: "/announcement-list",
+    element: <AnnouncementList />,
+  },
+  {
+    path: "/announcement",
+    element: <Announcement />,
+  },
+  {
+    path: "/eventlist",
+    element: <EventList />,
+  },
+  {
+    path: "/event",
+    element: <Event />,
+  },
+  {
+    path: "/teamanalysis",
+    element: <TeamAnalysis />,
+  },
+  {
+    path: "/recentmatch",
+    element: <RecentMatch />,
   },
 ]);
 

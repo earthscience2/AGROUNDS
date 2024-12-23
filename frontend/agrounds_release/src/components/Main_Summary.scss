@@ -14,44 +14,50 @@
 .mainsummary{
   @include display(column, center, center);
   .infobox{
-    width: 90%;
+    width: 85%;
     @include display(row, space-between, end);
     .info{
       @include display(column, center, start);
       .age{
-        @include font(18px, 500, #878D96);
-        margin: 5px 0;
+        @include font(1.8vh, 500, #878D96);
+        margin: 1vh 0;
+        font-family: 'Pretendard-Regular';
       }
       .name{
         @include font(50px, 400, #121619);
         margin: 5px 0;
+        font-family: 'Pretendard-Regular';
       }
     }
     .position{
-      background: linear-gradient(to top, rgb(113, 152, 246 ) ,  rgb(122, 194, 249) 90%, rgb(124, 205, 250) );
+
       border-radius: 50%;
       width: 80px;
       height: 80px;
       @include display(row, center, center);
-      @include font(2vh, 700, white)
+      @include font(2vh, 700, white);
+      font-family: 'Pretendard-Regular';
     }
   }
   .playbox{
     @include display(column, center, start);
-    width: 90%;
+    width: 85%;
     .datetitle{
-      @include font(16px, 500, #A2A9B0);
-      margin: 5px 0;
+      @include font(1.7vh, 500, #9ca2a8);
+      margin: 1vh 0 0 0;
+      font-family: 'Pretendard-Regular';
     }
     .bottombox{
       width: 100%;
       @include display(row, space-between, center);
       .date{
-        @include font(17px, 500, #697077);
-        margin: 0;
+        @include font(1.5vh, 700, #697077);
+        font-family: 'Pretendard-Regular';
+        margin: .5vh 0 0 0;
       }
       .detail{
-        @include font(16px, 500, #A2A9B0);
+        @include font(1.6vh, 700, #A2A9B0);
+        font-family: 'Pretendard-Regular';
         margin: 0;
       }
     }

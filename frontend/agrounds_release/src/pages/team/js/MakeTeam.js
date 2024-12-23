@@ -39,7 +39,7 @@ const MakeTeam = () => {
 
   const handleSubmit = () => {
     const NewTeamData = {
-      team_host: sessionStorage.getItem('userId'),
+      team_host: sessionStorage.getItem('userCode'),
       team_name: teamName,
       team_logo: selectedImage,
     };
@@ -48,8 +48,9 @@ const MakeTeam = () => {
       .then(() => {
         navigate('/completemaketeam');
       })
-      .catch(() => {
-        alert('팀 생성에 실패했습니다.');
+      .catch((error) => {
+        console.log(error)
+        // alert('팀 생성에 실패했습니다.');
       });
   };
 

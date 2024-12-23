@@ -2,8 +2,7 @@ import React from 'react';
 import './Personal_Team_Tab.scss';
 import { useState } from 'react';
 
-const Personal_Team_Tab = () => {
-  const [activeTab, setActiveTab] = useState("personal");
+const Personal_Team_Tab = ({activeTab, setActiveTab}) => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);

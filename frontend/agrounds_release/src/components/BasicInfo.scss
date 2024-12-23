@@ -14,30 +14,36 @@
 .basicinfo{
   @include display(flex, column, center, center);
   width: 90%;
-  border: 1px solid #c5c5c5;
+  border-radius: 2vh;
   margin-top: 4vh;
+  background-color: white;
+  box-shadow: 0 10px 10px #f3f3f3;
   
   .titlebox{
     @include display(flex, row, center, space-between);
     width: 90%;
     .basicinfotitle{
-      @include font(2.5vh, 600, #333333);
+      @include font(2.5vh, 700, #333333);
+      font-family: 'Pretendard-Regular';
     }
     .basicfix{
-      @include font(2vh, 600, #929292);
-      border-bottom: 1px solid #929292;
+      @include font(1.8vh, 600, #0EAC6A);
+      border-bottom: 1px solid #0EAC6A;
+      font-family: 'Pretendard-Regular';
     }
   }
   .basiccontentsbox{
     @include display(flex, row, center, space-between);
     width: 90%;
     .contenttitle{
-      @include font(1.9vh, 500, #929292);
+      @include font(1.9vh, 600, #929292);
       margin: 0 0 2vh 0;
+      font-family: 'Pretendard-Regular';
     }
     .contentinfo{
-      @include font(1.9vh, 500, #333333);
+      @include font(1.9vh, 600, #333333);
       margin: 0 0 2vh 0;
+      font-family: 'Pretendard-Regular';
     }
   }
 }

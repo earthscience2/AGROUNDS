@@ -16,6 +16,7 @@
   width: 90%;
   .analdate{
     @include font(1.5vh, 400, rgb(130,134,136));
+    font-family: 'Pretendard-Regular';
   }
   .analbox{
     width: 100%;
@@ -39,13 +40,21 @@
       }
       .place{
         @include font(1.6vh, 500, #6F6F6F);
+        font-family: 'Pretendard-Regular';
         width: 75%;
         margin: 3vh 0 .5vh 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       .fc{
         @include font(2vh, 700, #262626);
+        font-family: 'Pretendard-Regular';
         width: 75%;
         margin: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
     .analdata{
@@ -57,10 +66,12 @@
         .title{
           margin: .4vh 0;
           @include font(1.5vh, 500, #6F6F6F);
+          font-family: 'Pretendard-Regular';
         }
         .data{
           margin: .4vh 0;
           @include font(1.4vh, 600, #262626);
+          font-family: 'Pretendard-Regular';
         }
       }
       .button{

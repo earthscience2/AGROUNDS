@@ -18,12 +18,14 @@
       .fc{
         font-size: 2vh;
         font-weight: 600;
+        font-family: 'Pretendard-Regular';
         color: #333333;
         margin: 0;
       }
       .date{
         font-size: 1.5vh;
         font-weight: 600;
+        font-family: 'Pretendard-Regular';
         color: #AFAFAF;
         margin:1vh 0;
       }
@@ -58,6 +60,7 @@
         color: #C6C6C6;
         font-size: 2vh;
         font-weight: bold;
+        font-family: 'Pretendard-Regular';
         margin: 0;
         height: 5vh;
         border: none;
@@ -81,9 +84,7 @@
   }
   .video{
     width: 100%;
-    height: 25vh;
-    background-color: #AFAFAF;
-    margin-top: -2.3vh;
+    margin-top: -2.4vh;
   }
   .notice{
     width: 90%;
@@ -91,11 +92,13 @@
     background-color: #F2F4F8;
     border-radius: 1vh;
     font-size: 1.5vh;
+    font-family: 'Pretendard-Regular';
+    font-weight: 600;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #525252;
-    margin-top: 2vh;
+    margin-top: 4vh;
     & > img {
       height: 2vh;
       margin: 0 .5vh;
@@ -104,13 +107,14 @@
   .noticetitle{
     width: 90%;
     padding: 4vh 0;
+    font-family: 'Pretendard-Regular';
     .titleplace{
-      font-size: 3vh;
+      font-size: 2.5vh;
       font-weight: bold;
       margin: 0;
     }
     .titletime{
-      font-size: 1.8vh;
+      font-size: 1.7vh;
       color: #8D8D8D;
       margin: 1vh 0 0 0;
     }
@@ -125,6 +129,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-family: 'Pretendard-Regular';
     .title{
       font-size: 2.2vh;
       font-weight: bold;

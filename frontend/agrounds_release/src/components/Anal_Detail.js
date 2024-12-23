@@ -22,8 +22,8 @@ const AnalDetailStyle = styled.div`
   align-items: center;
   margin-top: 1.5vh;
   .title{
-    font-size: 1.7vh;
-    font-weight: 700;
+    font-size: 2vh;
+    font-weight: 500;
     width: 85%;
     margin: 3vh 0 1vh 0;
   }

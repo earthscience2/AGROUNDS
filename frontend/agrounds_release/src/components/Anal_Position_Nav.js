@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import right from '../assets/right.png';
 import './Anal_Position_Nav.scss';
 
-const Anal_Position_Nav = () => {
+const Anal_Position_Nav = ({currentIndex, setCurrentIndex}) => {
   const titles = ["전체", "공격", "수비"];
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const LeftSide = () => {
     setCurrentIndex((prevI) => (prevI - 1 + titles.length) % titles.length);

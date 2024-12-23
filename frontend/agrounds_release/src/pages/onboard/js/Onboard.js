@@ -19,6 +19,7 @@ const Onboard = () => {
   return (
     <div className='background'>
       <img src={img} className='img'/>
+      <div className='img-gradation'></div>
       <p className='logo'>AGROUNDS</p>
       <p className='ment'>나의 축구 실력을 <br/>기록하고 공유해보세요</p>
       <Circle_common_btn title="시작하기" onClick={handleModalOpen}/>

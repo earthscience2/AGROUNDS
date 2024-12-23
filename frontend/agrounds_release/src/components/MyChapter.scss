@@ -14,10 +14,11 @@
 .my-chapter{
   @include display(flex, column, start, center);
   width: 90%;
-  border-bottom: 1px solid #999999;
+  border-bottom: .5px solid #e6e6e6;
   .chapter-title{
     @include font(2.4vh, 700, #000000);
     margin: 5vh 0 2vh 0;
+    font-family: 'Pretendard-Regular';
   }
   .titlebox{
     @include display(flex, row, center, space-between);
@@ -26,14 +27,16 @@
       margin-bottom: 3vh;
     }
     .title{
-      @include font(2vh, 500, #333333);
+      @include font(2vh, 600, #333333);
       margin: 1.5vh 0;
+      font-family: 'Pretendard-Regular';
     }
     .email{
       position: relative;
       left: 4vh;
-      @include font(1.8vh, 500, #8A8A8A);
+      @include font(1.8vh, 600, #8A8A8A);
       margin: 1.5vh 0;
+      font-family: 'Pretendard-Regular';
     }
     .arrow{
       width: 2.8vh;

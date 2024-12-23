@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import './loading.scss'
 import client from '../../client';
+import { useNavigate } from 'react-router-dom';
 
 const LoadingPage = () => {
     const token = new URL(window.location.href).searchParams.get('code');
 
+    const navigate = useNavigate();
     // 카카오 로그인 시 token이 url parameter로 들어오는지 검사하고,
     // 들어오고 있으면 token을 api에 전송하여 유저 정보 불러옴
     useEffect(()=>{
@@ -41,10 +43,11 @@ const LoadingPage = () => {
                 sessionStorage.setItem('userPosition', response.data.user_position);
                 sessionStorage.setItem('teamCode', response.data.team_code);
 
-                if(response.data.user_type === '-1') // 가입 후 첫 로그인시 팀 가입 유도 페이지로 이동
+                if(response.data.user_type === '-1') { // 가입 후 첫 로그인시 팀 가입 유도 페이지로 이동
                     window.location.replace('/completesignup');
-                else
-                    window.location.replace('/main');
+                } else {
+                    navigate('/main');
+                }
             })
             .catch(function(error){
                 alert('로그인 실패');

@@ -5,18 +5,29 @@ import Login_title from '../../../../components/Login_title';
 import Circle_common_btn from '../../../../components/Circle_common_btn';
 import Modal from '../../../../components/Modal';
 import Small_Common_Btn from '../../../../components/Small_Common_Btn';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { reasonForWithdrawApi, withdrawApi } from '../../../../function/MyPageApi';
 
 const SecessionLast = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const location = useLocation();
+
+  const selectedReason = location.state?.reason || '선택된 이유가 없습니다.'
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const navigate = useNavigate();
 
   const secessionbtn = () => {
-    console.log('바이');
-    navigate('/secessioncomplete')  
+    reasonForWithdrawApi({"user_code" : sessionStorage.getItem("userCode"), "reason": selectedReason});
+    withdrawApi({"user_code": sessionStorage.getItem("userCode")})
+    .then(() => {
+      navigate('/secessioncomplete');
+    })
+    .catch((error) => {
+      alert('회원탈퇴에 실패했습니다.');
+    })
   }
 
   return (
@@ -46,8 +57,8 @@ const SecessionLast = () => {
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <p style={{margin:'2vh 0 1vh 0'}}>정말로 서비스 탈퇴하시겠습니까?</p>
-        <p style={{margin:'0 0 4vh 0'}}>탈퇴 시 되돌릴 수 없습니다</p>
+        <p style={{margin:'2vh 0 1vh 0', fontFamily: 'Pretendard-Regular',fontSize:'1.8vh', fontWeight:'600'}}>정말로 서비스 탈퇴하시겠습니까?</p>
+        <p style={{margin:'0 0 3vh 0', fontFamily: 'Pretendard-Regular', fontSize:'1.8vh', fontWeight:'600'}}>탈퇴 시 되돌릴 수 없습니다</p>
         <div className='buttonbox'>
           <Small_Common_Btn onClick={closeModal} title='취소' backgroundColor='#F2F4F8' color='black'></Small_Common_Btn>
           <Small_Common_Btn  onClick={secessionbtn} title='탈퇴하기' backgroundColor='#262626' color='white'></Small_Common_Btn>

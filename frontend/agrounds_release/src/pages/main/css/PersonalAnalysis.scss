@@ -12,4 +12,10 @@
   &:last-child{
     margin-bottom: 10vh;
   }
+  .greybackground{
+    @include display(flex, column,  center, start);
+    width: 100%;
+    background-color: #edf0f3bb;
+    height: max-content;
+  }
 }

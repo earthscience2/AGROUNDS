@@ -15,7 +15,7 @@
   @include display(flex, column, center, start);
   width: 100%;
   min-height: 100vh;
-  background-color: rgb(228,232,237);
+  background-color: rgb(242,244,246);
   .anal-box{
     display: flex;
     justify-content: space-between;
@@ -35,11 +35,55 @@
   .total-play{
     width: 90%;
     @include display(flex, row, start, start);
-    @include font(1.7vh, 400, #262626);
+    @include font(1.7vh, 600, #262626);
+    font-family: 'Pretendard-Regular';
     & > p {
       margin: 0;
       @include font(1.8vh, 700, #262626);
     }
+  }
+
+  .anal-nocontents{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 60vh;
+    img{
+      width: 15%;
+    }
+    .anal-contenttitle{
+      @include font(2.1vh, 600, black);
+      font-family: 'Pretendard-Regular';
+    }
+    .anal-content{
+      @include font(1.7vh, 600, #878D96);
+      font-family: 'Pretendard-Regular';
+    }
+    .anal-btn{
+      width: 50%;
+      height: 5vh;
+      background-color: #E5E9ED;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      font-size: 1.8vh;
+      border-radius: 3vh;
+      font-family: 'Pretendard-Regular';
+      margin-top: 3vh;
+    }
+  }
+
+  .list {
+    width: 100%;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20vh;
+    
   }
   .gap{
     height: 15vh;

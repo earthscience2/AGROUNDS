@@ -1,0 +1,54 @@
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color
+}
+
+@mixin display($dir, $jus, $align){
+  display: flex;
+  flex-direction: $dir;
+  justify-content: $jus;
+  align-items: $align;
+}
+
+.eventList{
+  @include display(column, start, center);
+  width: 100%;
+  .eventebox{
+    width: 90%;
+    height: 8vh;
+    @include display(column, center, start);
+    border-bottom: .5px solid #E5E9ED;
+    .eventtitle{
+      margin: 0;
+      width: 90%;
+      @include font(1.8vh, 500, #333333);
+      font-family: 'Pretendard-Regular';
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .eventdate{
+      margin: 1vh 0;
+      @include font(1.5vh, 500, #A8A8A8);
+      font-family: 'Pretendard-Regular';
+    }
+  }
+  .noevent{
+    width: 90%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    & > img {
+      width: 5vh;
+    }
+    & > div{
+      font-size: 1.6vh;
+      font-weight: 500;
+      font-family: 'Pretendard-Regular';
+      margin-top: 2vh;
+    }
+  }
+}

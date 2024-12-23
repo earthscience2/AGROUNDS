@@ -48,7 +48,7 @@ const RayderChart = ({ data, rate }) => {
   const chartRef = useRef();
 
   const chartData = {
-    labels: ['평점', '스프린트', '가속도', '스피드', '순발력', '체력'],
+    labels: ['평점', '스프린트', '가속도', '스피드', '적극성', '체력'],
     datasets: [
       {
         label: '',
@@ -67,7 +67,7 @@ const RayderChart = ({ data, rate }) => {
     scales: {
       r: {
         suggestedMin: 0,
-        suggestedMax: 100,
+        suggestedMax: 10,
         pointLabels: {
           font: {
             size: 14,
@@ -85,7 +85,7 @@ const RayderChart = ({ data, rate }) => {
         },
         ticks: {
           display: false,
-          stepSize: 25,
+          stepSize: 2.5,
         },
       },
     },
