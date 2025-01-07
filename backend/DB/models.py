@@ -36,7 +36,6 @@ class UserMatch(models.Model):
 # user_match_info 테이블
 class UserMatchInfo(models.Model):
     match_code = models.CharField(max_length=45)
-    user_code = models.CharField(max_length=45)
     ground_name = models.CharField(max_length=45)
     away_team = models.CharField(max_length=45, null=True, blank=True)
     away_team_name = models.CharField(max_length=45, null=True, blank=True)
@@ -106,7 +105,7 @@ class VideoInfo(models.Model):
     type = models.CharField(max_length=20, null=True, blank=True)
     title = models.CharField(max_length=45)
     date = models.DateField()
-    path = models.CharField(max_length=100)
+    path = models.CharField(max_length=100, null=True)
 
     class Meta:
         managed = False

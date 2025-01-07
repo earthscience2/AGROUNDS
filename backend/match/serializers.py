@@ -1,9 +1,6 @@
 from rest_framework import serializers
 from DB.models import *
-from backend.staticfiles import get_file_url
-from staticfiles.make_code import make_code
-from staticfiles.get_info import get_team_code_by_team_name
-from staticfiles.get_info import update_team_match_code
+from staticfiles.get_file_url import get_file_url
 
 class User_Match_Info_Serializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +8,19 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class User_Match_Serializer(serializers.ModelSerializer):
+    match_location = serializers.SerializerMethodField()
+    thumbnail = serializers.SerializerMethodField()
+    match_title = serializers.SerializerMethodField()
+    match_time = serializers.SerializerMethodField()
+    distance = serializers.SerializerMethodField()
+    top_speed = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
+    home_team = serializers.SerializerMethodField()
+    home_team_logo = serializers.SerializerMethodField()
+    away_team = serializers.SerializerMethodField()
+    away_team_logo = serializers.SerializerMethodField()
+
+
     class Meta:
         models = UserMatch
         fields = ['match_code', 'user_code', 'match_schedule', 'service_type',
@@ -76,6 +86,18 @@ class User_Match_Serializer(serializers.ModelSerializer):
             return self.default_team_logo
 
 class Team_Match_Serializer(serializers.ModelSerializer):
+    match_location = serializers.SerializerMethodField()
+    thumbnail = serializers.SerializerMethodField()
+    match_title = serializers.SerializerMethodField()
+    match_time = serializers.SerializerMethodField()
+    match_mom = serializers.SerializerMethodField()
+    match_result = serializers.SerializerMethodField()
+    participation = serializers.SerializerMethodField()
+    home_team = serializers.SerializerMethodField()
+    home_team_logo = serializers.SerializerMethodField()
+    away_team = serializers.SerializerMethodField()
+    away_team_logo = serializers.SerializerMethodField()
+
     class Meta:
         models = TeamMatch
         fields = ['match_code', 'match_schedule', 'match_location', 'thumbnail', 'match_title', 'match_time',
