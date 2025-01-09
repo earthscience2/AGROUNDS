@@ -101,7 +101,7 @@ class TeamMatchInfo(models.Model):
 class VideoInfo(models.Model):
     match_code = models.CharField(max_length=45, null=True, blank=True)
     user_code = models.CharField(max_length=45, null=True, blank=True)
-    quarter_name = models.CharField(max_length=45, null=True, blank=True)
+    quarter_name_list = models.JSONField(null=True, blank=True)
     type = models.CharField(max_length=20, null=True, blank=True)
     title = models.CharField(max_length=45)
     date = models.DateField()
