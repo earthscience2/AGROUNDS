@@ -1,6 +1,6 @@
 import React from 'react';
-import './Video_Thumnail.scss';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Video_Thumnail = ({list, type}) => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const Video_Thumnail = ({list, type}) => {
   const matchCode = list?.match_code || "";
 
   return (
-    <div className='video-thumnail' onClick={() => navigate('/videobyquarter', { state : { matchCode, type }})}>
+    <VideoThumnailStyle onClick={() => navigate('/videobyquarter', { state : { matchCode, type }})}>
       <div className='imgbox'>
         <img src={list?.thumbnail}/>
       </div>
@@ -16,8 +16,45 @@ const Video_Thumnail = ({list, type}) => {
         <p className='fc'>{list?.title}</p>
         <p className='date'>{list?.date}</p>
       </div>
-    </div>
+    </VideoThumnailStyle>
   );
 };
 
 export default Video_Thumnail;
+
+const VideoThumnailStyle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  gap: 2vh;
+  margin: 2vh 0;
+  .imgbox{
+    width: 45%;
+    height: 12vh;
+    border-radius: 1vh;
+    overflow: hidden;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .infobox{
+    display: flex;
+    width: 55%;
+    flex-direction: column;
+    .fc{
+      font-size: 1.8vh;
+      font-weight: 600;
+      font-family: 'Pretendard-Regular';
+      margin: 0;
+    }
+    .date{
+      font-size: 1.6vh;
+      font-weight: 600;
+      font-family: 'Pretendard-Regular';
+      color:#AFAFAF;
+      margin: 1vh 0 0 0;
+    }
+  }
+`

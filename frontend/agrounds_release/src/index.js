@@ -48,6 +48,31 @@ import TeamAnalysis from './pages/main/js/TeamAnalysis';
 import RecentMatch from './pages/team/js/RecentMatch';
 
 const router = createBrowserRouter([
+  // 자체 로그인 
+  // {
+  //   path: "/email",
+  //   element: <Email />,
+  // },
+  // {
+  //   path: "/password",
+  //   element: <Password />,
+  // },
+  // {
+  //   path: "/findpassword",
+  //   element: <FindPw />,
+  // },
+  // {
+  //   path: "/notuser",
+  //   element: <NotUserMessage />,
+  // },
+  // {
+  //   path: "/resetpassword",
+  //   element: <ResetPw />,
+  // },
+  // {
+  //   path: "/password-reset-complete",
+  //   element: <PwResetComplete />,
+  // },
   {
     path: "/",
     element: <Onboard />,
@@ -57,33 +82,10 @@ const router = createBrowserRouter([
     element: <LoadingPage />
   },
   {
-    path: "/email",
-    element: <Email />,
-  },
-  {
-    path: "/password",
-    element: <Password />,
-  },
-  {
-    path: "/findpassword",
-    element: <FindPw />,
-  },
-  {
-    path: "/notuser",
-    element: <NotUserMessage />,
-  },
-  {
     path: "/completesignup",
     element: <CompleteSignup />,
   },
-  {
-    path: "/resetpassword",
-    element: <ResetPw />,
-  },
-  {
-    path: "/password-reset-complete",
-    element: <PwResetComplete />,
-  },
+  
   {
     path: "/essencial-info",
     element: <EssencialInfo />,

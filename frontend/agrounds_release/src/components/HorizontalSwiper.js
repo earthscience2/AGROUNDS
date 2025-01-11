@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./HorizontalSwiper.scss";
 import rightBtn from '../assets/right.png';
 import { getMatchListApi } from "../function/MatchApi";
+import styled from "styled-components";
 
 const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
   const [isFullView, setIsFullView] = useState(false);
@@ -32,7 +32,7 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
   const visibleItems = isFullView ? items : items.slice(0, 5);
 
   return (
-    <div className="horizontal-swiper">
+    <HorizontalSwiperStyle>
       <div className="swiper-container">
         {visibleItems.map((item, index) => (
           <div
@@ -62,8 +62,137 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
           </button>
         )}
       </div>
-    </div>
+    </HorizontalSwiperStyle>
   );
 };
 
 export default HorizontalSwiper;
+
+
+const HorizontalSwiperStyle = styled.div`
+  overflow-x: auto; 
+  white-space: nowrap; 
+  height: 14vh;
+  width: 100%;
+
+  .swiper-container {
+    display: flex;
+
+    .swiper-item {
+      margin: 0 1vh;
+      flex: 0; 
+      height: 8vh;
+      width: 14vh;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      &:first-child{
+        margin-left: 2vh;
+      }
+      
+      .datebox{
+        background-color: rgb(229,233,237);
+        border-radius: 1vh 1vh 0 0;
+        width: 14vh;
+        height: 3vh;
+        display: flex;
+        align-items: center;
+        &.active {
+          background-color: rgb(24,172,110);
+          color: white;
+        }
+        .date {
+          font-size: 1.3vh;
+          color: #697077;
+          font-weight: 600;
+          font-family: 'Pretendard-Regular';
+          margin-left: 1vh;
+          &.active {
+            color: white;
+          }
+        }
+      }
+      
+      .locteambox {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+        background-color: rgb(242, 244, 248);
+        border-radius: 0 0 1vh 1vh;
+        margin-top: 0.2vh;
+        width: 14vh;
+        height: 7vh;
+      
+        &.active {
+          background-color: rgb(17, 152, 95); 
+          color: white; 
+        }
+        .team, .location {
+          overflow: hidden; 
+          text-overflow: ellipsis; 
+          white-space: nowrap;
+          width: 90%; 
+          
+        }
+        .team {
+          font-size: 1.5vh;
+          font-weight: 600;
+          font-family: 'Pretendard-Regular';
+          margin: 0.5vh 0 0 0;
+          margin-left: 1vh;
+      
+          &.active {
+            color: white; 
+          }
+        }
+  
+        .location {
+          font-size: 1.3vh;
+          // color: #6F6F6F;
+          margin: 0.5vh 0;
+          margin-left: 1vh;
+          font-family: 'Pretendard-Regular';
+      
+          &.active {
+            color: white; 
+          }
+        }
+      }
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    .view-more {
+      background-color: rgb(242,244,248);
+      border: none;
+      border-radius: 1vh;
+      font-size: 1.1vh;
+      cursor: pointer;
+      text-align: center;
+      width: 7vh;
+      height: 10vh;
+      font-family: 'Pretendard-Regular';
+      flex: 0 0 auto;
+      display: flex;
+      margin-left: 1vh;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .img{
+        height: 2vh;
+        padding: 1vh;
+      }
+
+      &:hover {
+        background-color: #f4f4f4;
+      }
+    }
+  }
+
+  &::-webkit-scrollbar {
+    height: 1px; 
+  }
+
+`
