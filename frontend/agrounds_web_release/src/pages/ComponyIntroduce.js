@@ -7,14 +7,14 @@ import CompanyIntroduction from '../components/CompanyIntroduction';
 
 
 const ComponyIntroduce = () => {
-  const [tab, setTab] = useState(null);
+  const [tab, setTab] = useState('home');
 
   const contents = () => {
     if (tab === 'companyI'){
       return <CompanyIntroduction />
     } else if(tab === 'service'){
       return <Service />
-    } else {
+    } else if(tab === 'home'){
       return <Main />
     }
   }

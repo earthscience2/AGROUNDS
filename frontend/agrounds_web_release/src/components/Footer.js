@@ -36,7 +36,6 @@ const FooterStyle = styled.div`
     justify-content: space-between;
     align-items: start;
     height: 15vh;
-
     .button-box {
       display: flex;
       flex-wrap: wrap; 
@@ -45,6 +44,30 @@ const FooterStyle = styled.div`
       font-size: 1.8vh;
       font-weight: 700;
       color: #525252;
+    }
+    @media (max-width: 480px) {
+      .button-box {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        font-size: 1.8vh;
+        font-weight: 700;
+        color: #525252;
+      }
+      .address {
+        margin-top: 2vh;
+        font-size: 1.6vh;
+        font-weight: 400;
+        color: #6F6F6F;
+      }
+
+      .copyright {
+        margin: 2vh 0 10vh 0;
+        font-size: 1.7vh;
+        font-weight: 500;
+        color: #6F6F6F;
+      }
     }
 
     .address {
@@ -75,4 +98,5 @@ const FooterStyle = styled.div`
       font-size: 1.5vh; 
     }
   }
+  
 `;
