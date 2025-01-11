@@ -1,6 +1,7 @@
 from django.forms import model_to_dict
 from django.shortcuts import redirect
 from django.http import JsonResponse
+from urllib.parse import quote, unquote
 
 import jwt
 import environ
@@ -90,8 +91,8 @@ class kakaoCallback(APIView):
         except UserInfo.DoesNotExist: # 가입되어있지 않은 유저의 경우 프런트 카카오 회원가입 페이지로 이동
             print("회원가입 진행")
             encrypted_email = cryptographysss.encrypt_aes(kakao_email)
-            print(cryptographysss.decrypt_aes(encrypted_email))
-            return redirect(CLIENT_URL+"/essencial-info/?type=kakao&id=" + encrypted_email)
+            encoded_string = quote(encrypted_email)
+            return redirect(CLIENT_URL+"/essencial-info/?type=kakao&id=" + encoded_string)
         
         # 가입되어있는 경우 토큰을 url파라메터로 전송해줌.
         return redirect(CLIENT_URL+"/loading-for-login/?code="+login.getTokensForUser(login, user)['access'])
@@ -116,7 +117,10 @@ class kakaoSignup(APIView):
         try:
             data = request.data
             print(data)
-            data["user_id"] = cryptographysss.decrypt_aes(data["user_id"])
+            decoded_string = unquote(data["user_id"])
+            user_id = cryptographysss.decrypt_aes(decoded_string)
+            print(user_id)
+            data["user_id"] = user_id
             data["password"] = "0"
             data["login_type"] = "kakao"
             serializer = User_Info_Serializer(data=data)

@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from staticfiles.get_file_url import get_file_url
+from django.db.models import Min
 
 from .serializers import *
 
@@ -32,18 +33,29 @@ class getVideoSummation(APIView):
         if not UserInfo.objects.filter(user_code=user_code).exists():
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
+        player_videos_number = VideoInfo.objects.filter(user_code = user_code, type = 'player').count()
+        team_videos_number = 0
+        full_videos_number = 0
+        
+        user_info = UserInfo.objects.get(user_code = user_code)
+        if user_info.user_type == 'coach' or user_info.user_type == 'player':
+            team_code = UserTeam.objects.filter(user_code = user_code).first().team_code
+            if team_code is not None :
+                team_videos_number = VideoInfo.objects.filter(team_code = team_code, type = 'team').count()
+                full_videos_number = VideoInfo.objects.filter(team_code = team_code, type = 'player').count()
+        
         result = {
             "player_cam" : {
                 "thumbnail" : thumnails,
-                "number_of_videos" : 8
+                "number_of_videos" : player_videos_number
             },
             "team_cam" : {
                 "thumbnail" : thumnails,
-                "number_of_videos" : 9
+                "number_of_videos" : team_videos_number
             },
             "full_cam" : {
                 "thumbnail" : thumnails,
-                "number_of_videos" : 10
+                "number_of_videos" : full_videos_number
             },
             "highlight_cam" : {
                 "thumbnail" : [],
@@ -62,6 +74,11 @@ class getPlayerVideoList(APIView):
         
         if not UserInfo.objects.filter(user_code=user_code).exists():
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
+        
+        video_infos = VideoInfo.objects.filter(user_code=user_code, type='player').values('match_code').annotate(min_id=Min('id')).values('min_id')
+        serializer = Video_List_Serializer(video_infos, many = True)
+
+        return Response({'result' : serializer.data})
                 
         result = [
             {
@@ -115,7 +132,7 @@ class getPlayerVideoList(APIView):
         ]
 
         return Response({'result':result})
-    
+
 class getTeamVideoList(APIView):
     def post(self, request):
         user_code = request.data.get('user_code')
@@ -123,8 +140,21 @@ class getTeamVideoList(APIView):
         if user_code is None:
             return Response({'error': 'Missing required field: user_code'}, status=400)
         
-        if not UserInfo.objects.filter(user_code=user_code).exists():
+        try:
+            user_info = UserInfo.objects.get(user_code=user_code)
+        except UserInfo.DoesNotExist:
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
+        
+        result = []
+        
+        if user_info.user_type == 'coach' or user_info.user_type == 'player':
+            team_code = UserTeam.objects.filter(user_code = user_code).first().team_code
+            if team_code is not None :
+                video_infos = VideoInfo.objects.filter(team_code=team_code, type='team').values('match_code').annotate(min_id=Min('id')).values('min_id')
+                serializer = Video_List_Serializer(video_infos, many=True)
+                result = serializer.data
+
+        return Response({"result" : result})
         
         result = [
             {
@@ -186,8 +216,21 @@ class getFullVideoList(APIView):
         if user_code is None:
             return Response({'error': 'Missing required field: user_code'}, status=400)
         
-        if not UserInfo.objects.filter(user_code=user_code).exists():
+        try:
+            user_info = UserInfo.objects.get(user_code=user_code)
+        except UserInfo.DoesNotExist:
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
+        
+        result = []
+        
+        if user_info.user_type == 'coach' or user_info.user_type == 'player':
+            team_code = UserTeam.objects.filter(user_code = user_code).first().team_code
+            if team_code is not None :
+                video_infos = VideoInfo.objects.filter(team_code=team_code, type='full').values('match_code').annotate(min_id=Min('id')).values('min_id')
+                serializer = Video_List_Serializer(video_infos, many=True)
+                result = serializer.data
+
+        return Response({"result" : result})
         
         result = [
             {
@@ -260,6 +303,15 @@ class getMatchVideoInfo(APIView):
         if type not in types :
             return Response({'error':'type이 올바르지 않습니다.'}, status=400)
         
+        video_info = VideoInfo.objects.filter(match_code=match_code, user_code=user_code, type=type)
+
+        if video_info is None:
+            return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
+        
+        serializer = Video_Info_Serializer(video_info, many=True)
+
+        return Response({'result':serializer.data})
+
         result = [
                 {
                     "quarter" : "1쿼터",
