@@ -15,11 +15,11 @@ class getUserMatchList(APIView):
         if not UserInfo.objects.filter(user_code=user_code).exists():
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
-        user_matchs = UserMatchInfo.objects.filter(user_code=user_code)
+        # user_matchs = UserMatchInfo.objects.filter(user_code=user_code)
 
-        serializer = User_Match_Info_Serializer(user_matchs, many=True)
+        # serializer = User_Match_Info_Serializer(user_matchs, many=True)
 
-        return Response({'result' : serializer.data})
+        # return Response({'result' : serializer.data})
         
         default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
         default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
@@ -129,10 +129,10 @@ class getTeamMatchList(APIView):
         if not TeamInfo.objects.filter(team_code=team_code).exists():
             return Response({'error': f'team_code({team_code})에 해당하는 팀이 존재하지 않습니다.'})
         
-        team_matchs = TeamMatch.objects.filter(team_code = team_code)
-        serializer = Team_Match_Serializer(team_matchs, many = True)
+        # team_matchs = TeamMatch.objects.filter(team_code = team_code)
+        # serializer = Team_Match_Serializer(team_matchs, many = True)
 
-        return Response({'result' : serializer.data})
+        # return Response({'result' : serializer.data})
         
         default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
         default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
