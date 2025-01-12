@@ -9,8 +9,8 @@ import graphGrey from '../assets/graph-grey.png';
 import videoGrey from '../assets/video-grey.png';
 import userGrey from '../assets/user-grey.png';
 import connectGrey from '../assets/connect-grey.png';
-import './Footer.scss';
 import { useNavigate, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Footer = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className='footer'>
+    <FooterStyle>
       <div className='box' onClick={() => navigate('/main')}>
         <img
           className='icon'
@@ -60,8 +60,46 @@ const Footer = () => {
         />
         <p className={`title ${isActive('/mypage') ? 'active' : ''}`}>마이</p>
       </div>
-    </div>
+    </FooterStyle>
   );
 };
 
 export default Footer;
+
+
+const FooterStyle = styled.div`
+  width: 100%;
+  max-width: 499px;
+  height: 10vh;
+  background-color: rgb(255,255,255);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  position: fixed;
+  bottom: 0;
+  margin: 0;
+  .box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img{
+      display: block;
+    }
+    .icon{
+      height: 2.2vh;
+      width: 2.2vh;
+    }
+    .title{
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Pretendard-Regular';
+      margin: 8px 0;
+      color: #A2A9B0;
+      &.active {
+        color: #000; 
+        font-weight: bold;
+      }
+    }
+    
+  }
+`

@@ -1,6 +1,6 @@
 import React from 'react';
-import './Login_input.scss';
 import eye from '../assets/eye-off.png';
+import styled from 'styled-components';
 
 const Login_input = ({ placeholder, type, borderRadius='15px', borderColor='#F2F4F8', value='', onChange}) => {
   
@@ -17,7 +17,7 @@ const Login_input = ({ placeholder, type, borderRadius='15px', borderColor='#F2F
   }
 
   return (
-    <div className='inputBG' style={{ borderRadius, border:'solid 1px', borderColor}}>
+    <LoginInputStyle style={{ borderRadius, border:'solid 1px', borderColor}}>
       <input 
         className='login_input'
         style={{ borderRadius }} 
@@ -26,8 +26,36 @@ const Login_input = ({ placeholder, type, borderRadius='15px', borderColor='#F2F
         value={value}
         onChange={onChange}/>
       {icon()}
-    </div>
+    </LoginInputStyle>
   );
 };
 
 export default Login_input;
+
+const LoginInputStyle = styled.div`
+
+  background-color: #F2F4F8;
+  width: 90%;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  .login_input{
+    background-color: #F2F4F8;
+    border: none;
+    width: 80%;
+    height: 55px;
+    font-size: 16px;
+    padding: 0 4vw 0 4vw;
+    outline: none;
+    
+    &::placeholder{
+      font-size: 17px;
+      font-weight: 600;
+      color: #C1C7CD;
+    }
+  }
+  .eyestyle{
+    height: 20px;
+  }
+
+`
