@@ -30,7 +30,7 @@ class getVideoSummation(APIView):
         if user_code is None:
             return Response({'error': 'Missing required field: user_code'}, status=400)
         
-        if not UserInfo.objects.filter(user_code=user_code).exists():
+        if not UserInfo.objects.filter(user_code = user_code).exists():
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
         player_videos_number = VideoInfo.objects.filter(user_code = user_code, type = 'player').count()
@@ -78,7 +78,7 @@ class getPlayerVideoList(APIView):
         video_infos = VideoInfo.objects.filter(user_code=user_code, type='player').values('match_code').annotate(min_id=Min('id')).values('min_id')
         serializer = Video_List_Serializer(video_infos, many = True)
 
-        return Response({'result' : serializer.data})
+        # return Response({'result' : serializer.data})
                 
         result = [
             {
@@ -154,7 +154,7 @@ class getTeamVideoList(APIView):
                 serializer = Video_List_Serializer(video_infos, many=True)
                 result = serializer.data
 
-        return Response({"result" : result})
+        # return Response({"result" : result})
         
         result = [
             {
@@ -230,7 +230,7 @@ class getFullVideoList(APIView):
                 serializer = Video_List_Serializer(video_infos, many=True)
                 result = serializer.data
 
-        return Response({"result" : result})
+        # return Response({"result" : result})
         
         result = [
             {
@@ -310,7 +310,7 @@ class getMatchVideoInfo(APIView):
         
         serializer = Video_Info_Serializer(video_info, many=True)
 
-        return Response({'result':serializer.data})
+        # return Response({'result':serializer.data})
 
         result = [
                 {

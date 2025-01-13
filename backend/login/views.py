@@ -116,10 +116,8 @@ class kakaoSignup(APIView):
     def post(self, request, *args, **kwargs):
         try:
             data = request.data
-            print(data)
             decoded_string = unquote(data["user_id"])
             user_id = cryptographysss.decrypt_aes(decoded_string)
-            print(user_id)
             data["user_id"] = user_id
             data["password"] = "0"
             data["login_type"] = "kakao"
