@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import introsec1 from '../assets/introsec1.png';
+import introsec1 from '../../assets/web/introsec1.png';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css'; 
 import 'swiper/css/navigation'; 
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import heegu from '../assets/heegu.png';
-import introsecm1 from '../assets/introsecm1.png';
-import introsecm2 from '../assets/introsecm2.png';
-import introsecm3 from '../assets/introsecm3.png';
-import introsecm4 from '../assets/introsecm4.png';
+import heegu from '../../assets/web/heegu.png';
+import introsecm1 from '../../assets/web/introsecm1.png';
+import introsecm2 from '../../assets/web/introsecm2.png';
+import introsecm3 from '../../assets/web/introsecm3.png';
+import introsecm4 from '../../assets/web/introsecm4.png';
 
 
 const CompanyIntroduction = () => {
@@ -116,6 +116,7 @@ const CompanyIntroductionStyle = styled.div`
   justify-content: center;
   margin-top: 25vh;
   width: 100vw;
+  font-family: 'Pretendard-Regular';
   .title {
     font-size: 4vh;
     font-weight: 700;

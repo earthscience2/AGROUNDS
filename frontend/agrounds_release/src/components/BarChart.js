@@ -13,28 +13,6 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const dataLabelPlugin = {
-  id: 'dataLabelPlugin',
-  afterDatasetsDraw: (chart) => {
-    const { ctx } = chart;
-    chart.data.datasets.forEach((dataset, datasetIndex) => {
-      const meta = chart.getDatasetMeta(datasetIndex);
-      meta.data.forEach((bar, index) => {
-        const value = dataset.data[index];
-        ctx.save();
-        ctx.font = 'bold 14px Arial'; 
-        ctx.fillStyle = '#000'; 
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.fillText(value, bar.x, bar.y + 30);
-        ctx.restore();
-      });
-    });
-  },
-};
-
-ChartJS.register(dataLabelPlugin);
-
 const OvrBarChart = () => {
   const chartRef = useRef(null);
 
@@ -44,7 +22,7 @@ const OvrBarChart = () => {
       {
         label: '',
         data: [52, 60, 77, 75, 61], // 추후 변경
-        backgroundColor: ['#5BECB0', '#29E2A0', '#1BD39E', '#14C19A', '#18BDA5'], 
+        backgroundColor: ['#5BECB0', '#29E2A0', '#1BD39E', '#14C19A', '#18BDA5'],
       },
     ],
   };
@@ -57,17 +35,35 @@ const OvrBarChart = () => {
         display: false,
       },
       title: {
-        display: false, 
+        display: false,
+      },
+      dataLabelPlugin: {
+        afterDatasetsDraw: (chart) => {
+          const { ctx } = chart;
+          chart.data.datasets.forEach((dataset, datasetIndex) => {
+            const meta = chart.getDatasetMeta(datasetIndex);
+            meta.data.forEach((bar, index) => {
+              const value = dataset.data[index];
+              ctx.save();
+              ctx.font = 'bold 14px Arial';
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillText(value, bar.x, bar.y + 30);
+              ctx.restore();
+            });
+          });
+        },
       },
     },
     scales: {
       x: {
-        barPercentage: 1.0, 
-        categoryPercentage: 1, 
+        barPercentage: 1.0,
+        categoryPercentage: 1,
         ticks: {
-          color: '#666', 
+          color: '#666',
           font: {
-            size: 14, 
+            size: 14,
             weight: 'bold',
           },
         },
@@ -76,13 +72,13 @@ const OvrBarChart = () => {
         },
       },
       y: {
-        beginAtZero: true, 
-        max: 100, 
+        beginAtZero: true,
+        max: 100,
         ticks: {
           display: false,
         },
         grid: {
-          display: false, 
+          display: false,
         },
       },
     },
@@ -109,5 +105,5 @@ const ChartContainer = styled.div`
   width: 90%;
   margin: 0;
   border: none;
-  height: 20vh; 
+  height: 20vh;
 `;
