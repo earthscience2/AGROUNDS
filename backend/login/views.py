@@ -95,7 +95,7 @@ class kakaoCallback(APIView):
             return redirect(CLIENT_URL+"/essencial-info/?type=kakao&id=" + encoded_string)
         
         # 가입되어있는 경우 토큰을 url파라메터로 전송해줌.
-        return redirect(CLIENT_URL+"/loading-for-login/?code="+login.getTokensForUser(login, user)['access'])
+        return redirect(CLIENT_URL+"/app/loading-for-login/?code="+login.getTokensForUser(login, user)['access'])
 
 # 카카오 로그인 - 회원가입
 class kakaoSignup(APIView):

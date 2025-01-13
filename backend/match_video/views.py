@@ -33,16 +33,18 @@ class getVideoSummation(APIView):
         if not UserInfo.objects.filter(user_code = user_code).exists():
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
-        player_videos_number = VideoInfo.objects.filter(user_code = user_code, type = 'player').count()
-        team_videos_number = 0
-        full_videos_number = 0
+        player_videos = VideoInfo.objects.filter(user_code = user_code, type = 'player')
+        player_videos_number = player_videos.count()
         
-        user_info = UserInfo.objects.get(user_code = user_code)
-        if user_info.user_type == 'coach' or user_info.user_type == 'player':
-            team_code = UserTeam.objects.filter(user_code = user_code).first().team_code
-            if team_code is not None :
-                team_videos_number = VideoInfo.objects.filter(team_code = team_code, type = 'team').count()
-                full_videos_number = VideoInfo.objects.filter(team_code = team_code, type = 'player').count()
+        user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+
+        team_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='team')
+
+        full_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='full')
+        
+        team_videos_number = len(team_videos)
+
+        full_videos_number = len(full_videos)
         
         result = {
             "player_cam" : {
@@ -75,10 +77,10 @@ class getPlayerVideoList(APIView):
         if not UserInfo.objects.filter(user_code=user_code).exists():
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
-        video_infos = VideoInfo.objects.filter(user_code=user_code, type='player').values('match_code').annotate(min_id=Min('id')).values('min_id')
+        video_infos = VideoInfo.objects.filter(user_code=user_code, type='player')
         serializer = Video_List_Serializer(video_infos, many = True)
 
-        # return Response({'result' : serializer.data})
+        return Response({'result' : serializer.data})
                 
         result = [
             {

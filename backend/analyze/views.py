@@ -97,6 +97,3 @@ class getOverall(APIView):
         }
 
         return Response(result)
-	
-        
-        
