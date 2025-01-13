@@ -70,14 +70,15 @@ class Essencial_User_Info(serializers.ModelSerializer):
 class Essencial_Player_Info(serializers.ModelSerializer):
     user_age = serializers.SerializerMethodField()  # 사용자 정의 필드 추가
     user_team = serializers.SerializerMethodField()
+    user_logo = serializers.SerializerMethodField()
     recent_match = serializers.SerializerMethodField()
     recent_match_date = serializers.SerializerMethodField()
 
     class Meta:
         model = UserInfo
-        fields = ['user_name', 'user_gender','user_nickname', 
+        fields = ['user_code', 'user_name', 'user_gender','user_nickname', 
                   'user_type', 'user_height', 'user_weight', 'user_position', 
-                  'user_age', 'user_team', 'recent_match', 'recent_match_date']
+                  'user_age', 'user_team', 'user_logo', 'recent_match', 'recent_match_date']
         
     def get_user_age(self, obj):
         if hasattr(obj, 'user_birth') and obj.user_birth:
@@ -97,6 +98,14 @@ class Essencial_Player_Info(serializers.ModelSerializer):
             if team.exists():
                 return team.first().team_code
         return ''
+    
+    def get_user_logo(self, obj):
+        user_team = UserTeam.objects.filter(user_code = obj.user_code)
+        if user_team.exists():
+            team = TeamInfo.objects.filter(team_code = user_team.first().team_code)
+            if team.exists():
+                return get_file_url(team.first().team_logo)
+        return get_file_url('img/teamlogo/default-team-logo.png')
     
     # 수정 필요
     def get_recent_match(self, obj):

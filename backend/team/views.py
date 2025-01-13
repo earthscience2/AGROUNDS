@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from PIL import Image
 from .serializers import *
-from player.serializers import Essencial_User_Info
+from player.serializers import Essencial_Player_Info, Essencial_User_Info
 from staticfiles.image_uploader import S3ImgUploader
 
 class makeTeam(APIView):
@@ -93,7 +93,7 @@ class getTeamPlayerList(APIView):
 
             players = UserInfo.objects.filter(user_code__in=user_codes)
             
-            serializer = Essencial_User_Info(players, many=True)
+            serializer = Essencial_Player_Info(players, many=True)
 
             return Response({'result' : serializer.data}, status=200)
         

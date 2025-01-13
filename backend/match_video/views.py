@@ -289,28 +289,36 @@ class getMatchVideoInfo(APIView):
     def post(self, request):
         data = request.data.copy()
 
-        required_fields = ['match_code', 'user_code', 'type']
+        required_fields = ['match_code', 'type']
         errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
         if errors:
             return Response(errors, status=400)
         
-        match_code = data['match_code']
-        user_code = data['user_code']
-
         type = data['type']
         types = ['player', 'team', 'full']
 
         if type not in types :
-            return Response({'error':'type이 올바르지 않습니다.'}, status=400)
+            return Response({'error':'type이 올바르지 않습니다.'}, status=400)        
         
-        video_info = VideoInfo.objects.filter(match_code=match_code, user_code=user_code, type=type)
+        match_code = data['match_code']
+        user_code = data.get('user_code')
+            
+        video_info = VideoInfo.objects.filter(match_code=match_code, type=type)
+
+        if type == 'player':
+            if user_code is None:
+                return Response({"error" : f"type이 {type}인 경우 user_code는 필수입니다."}, status=400)
+            video_info.filter(user_code=user_code)
 
         if video_info is None:
             return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
         
-        serializer = Video_Info_Serializer(video_info, many=True)
+        for quarter in video_info.first().quarter_name_list:
+            0
 
-        # return Response({'result':serializer.data})
+        serializer = Video_Info_Serializer(video_info)
+
+        return Response({'result':serializer.data})
 
         result = [
                 {
