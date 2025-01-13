@@ -13,11 +13,15 @@ const TeamAnalysis = () => {
 
   const location = useLocation();
   const initialMatchCode = location.state?.matchCode;
+  const [activeTab, setActiveTab] = useState("1쿼터");
+  const [currentIndex, setCurrentIndex] = useState(0);
   const teamCode = sessionStorage.getItem('teamCode');
   const userCode = sessionStorage.getItem('userCode');
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quarterData, setQuarterData]= useState([]);
+  
+  
 
 
   useEffect(() => {
@@ -52,6 +56,15 @@ const TeamAnalysis = () => {
       return <Loading />; 
     }
 
+    const quarterPositionData = () => {
+      for (let i = 0; i < quarterData?.length; i++) {
+        if (activeTab === `${i + 1}쿼터`) {
+          return quarterData[i];
+        }
+      }
+      return null; 
+    };
+    
   return (
     <div className='personalanal'>
       <div className='greybackground'>
@@ -60,9 +73,9 @@ const TeamAnalysis = () => {
         <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
       
-      <Quarter_Tab quarters={[1,2,3]}/>
-      <Summary />
-      <DynamicQuarter />
+      <Quarter_Tab quarters={quarterData?.length} activeTab={activeTab} setActiveTab={setActiveTab}/>
+      
+      <DynamicQuarter data={quarterPositionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type='team'/>
     </div>
   );
 };

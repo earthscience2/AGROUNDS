@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import right from '../assets/right.png';
 import styled from 'styled-components';
 
-const Anal_Position_Nav = ({currentIndex, setCurrentIndex}) => {
-  const titles = ["전체", "공격", "수비"];
+const Anal_Position_Nav = ({currentIndex, setCurrentIndex, type}) => {
+  const [title, setTitle] = useState([]);
+  useEffect(() => {
+    if(type === 'personal') {
+      setTitle(["전체", "공격", "수비"]);
+    } else if(type === 'team') {
+      setTitle(["종합", "평점"]);
+    }
+  })
+  
 
   const LeftSide = () => {
-    setCurrentIndex((prevI) => (prevI - 1 + titles.length) % titles.length);
+    setCurrentIndex((prevI) => (prevI - 1 + title.length) % title.length);
   }
 
   const RightSide = () => {
-    setCurrentIndex((prevI) => (prevI + 1 ) % titles.length);
+    setCurrentIndex((prevI) => (prevI + 1 ) % title.length);
   }
   return (
     <AnalPostionNavStyle>
       <img className='leftside' src={right} onClick={LeftSide}/>
-      <p className='analtitle'>{titles[currentIndex]}</p>
+      <p className='analtitle'>{title[currentIndex]}</p>
       <img className='rightside' src={right} onClick={RightSide}/>
     </AnalPostionNavStyle>
   );
