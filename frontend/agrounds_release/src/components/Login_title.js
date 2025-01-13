@@ -14,25 +14,25 @@ export default Login_title;
 
 
 const LoginTitleStyle = styled.div`
-
-.titlebox{
   width: 90%;
   display: flex;
   flex-direction: column;
   .login_title{
     margin: 0 0 1vh 0;
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 800;
     color: #262626;
+    font-family: 'Pretendard-Regular';
 
   }
   .login_explain{
     margin: 0 0 4vh 0;
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.5;
     font-weight: 500;
     color: #6F6F6F;
     font-family: 'Pretendard-Regular';
   }
-}
+
 
 `

@@ -22,7 +22,8 @@ export default Main_Subject;
 
 const MainSubjectStyle = styled.div`
   width: 85%;
-  height: 24vh;
+  height: 26vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;

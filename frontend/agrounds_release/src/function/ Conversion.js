@@ -8,4 +8,10 @@ const extractDateInfo = (dateString) => {
   return { year, month, day, dayOfWeek };
 };
 
-export {extractDateInfo};
+
+const formatDate = (dateString) => {
+  if (!dateString) return ''; 
+  const [year, month, day] = dateString.split('-'); 
+  return `${month}.${day}`; 
+};
+export {extractDateInfo, formatDate};

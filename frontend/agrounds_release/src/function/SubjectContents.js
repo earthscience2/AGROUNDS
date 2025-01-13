@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import playlist from '../assets/playlist.png';
 import polygon from '../assets/polygon.png';
 import { getTeamInfoApi, getTeamPlayerListApi } from './TeamApi';
+import LineChart from '../components/LineChart';
+import { formatDate } from './ Conversion';
 
 const MyTeam = () => {
   const [info, setInfo] = useState([]);
@@ -123,57 +125,67 @@ const RecentMatchS = ({logo1, logo2}) => {
 };
 
 
-const AverageScore = () => {
+const AverageScore = ({data}) => {
+  const [matchData, setMatchData] = useState([]);
+  const [recentData, setRecentData] = useState([]);
+  
+  useEffect(() => {
+    setMatchData(data || []);
+    setRecentData(data.recent_match || []);
+  }, [data])
+
   return(
     <AverageScoreStyle>
       <p className='title'>평점지수 추이</p>
       <div className='scorebox'>
-        <p className='score'>7.2</p>
+        <p className='score'>{matchData.average_point}</p>
         <p className='scoretitle'>평균 평점</p>
       </div>
-      <div className='allteambox'>
-        <div className='teambox'>
-          <div className='teambbox'>
-            <Image_Comp width="4vh" img={logo}/>
-            <p className='date'>09.22</p>
+
+      {recentData.map((data) => (
+        <div className='allteambox'>
+          <div className='teambox'>
+            <div className='teambbox'>
+              <Image_Comp width="3.5vh" img={data.team_logo}/>
+              <p className='date'>{formatDate(data.match_date)}</p>
+            </div>
+            <div className='colorbbox'>
+              <div className='colorbox'></div>
+              <p className='colorscore'>{data.point}</p>
+            </div>
           </div>
-          <div className='colorbbox'>
-            <div className='colorbox'></div>
-            <p className='colorscore'>6.8</p>
-          </div>
+          
         </div>
-        <div className='teambox'>
-          <div className='teambbox'>
-            <Image_Comp width="4vh" img={logo}/>
-            <p className='date'>09.22</p>
-          </div>
-          <div className='colorbbox'>
-            <div className='colorbox'></div>
-            <p className='colorscore'>6.8</p>
-          </div>
-        </div>
-        <div className='teambox'>
-          <div className='teambbox'>
-            <Image_Comp width="4vh" img={logo}/>
-            <p className='date'>09.22</p>
-          </div>
-          <div className='colorbbox'>
-            <div className='colorbox'></div>
-            <p className='colorscore'>6.8</p>
-          </div>
-        </div>
-      </div>
+      ))}
     </AverageScoreStyle>
   )
 }
 
-const AttackAve = () => {
+const AttackAve = ({data}) => {
+  const [attackData, setAttackData] = useState([]);
+  const [defenseData, setDefenseData] = useState([]);
+
+
+  useEffect(() => {
+    setAttackData(data.attack_trend);
+    setDefenseData(data.defense_trend);
+    
+  }, [data])
+
+  console.log('데이터를 봅시다: ', attackData);
+  console.log('데이터를 봅시다: ', defenseData);
+
+
   return(
     <AttackAveStyle>
       <p className='title'>공격지수 추이</p>
-      <div className='chart'></div>
+      <div className='chart'>
+        {attackData && <LineChart data={attackData}/>}
+      </div>
       <p className='title'>수비지수 추이</p>
-      <div className='chart'></div>
+      <div className='chart'>
+        {defenseData && <LineChart data={defenseData}/>}
+      </div>
     </AttackAveStyle>
   )
 }
@@ -470,7 +482,9 @@ const AverageScoreStyle = styled.div`
   .title {
     font-size: 1.8vh;
     font-weight: 700;
+    font-family: 'Pretendard-Regular';
     width: 80%;
+    margin: 2vh 0 1vh 0;
   }
   .scorebox{
     display: flex;
@@ -479,20 +493,22 @@ const AverageScoreStyle = styled.div`
     .score{
       font-size: 3.5vh;
       font-weight: 700;
+      font-family: 'Pretendard-Regular';
       margin: 0;
     }
     .scoretitle{
-      font-size: 1.5vh;
-      font-weight: 500;
+      font-size: 1.4vh;
+      font-weight: 700;
+      font-family: 'Pretendard-Regular';
       color: #A8A8A8;
-      margin: 0 1vh; 
+      margin: 0 1vh .3vh 1vh; 
     }
   }
   .allteambox{
     display: flex;
     flex-direction: column;
-    width: 80%;
-    margin-top: 2vh;
+    width: 84%;
+    margin-top: 1vh;
     .teambox{
       display: flex;
       justify-content: space-between;
@@ -502,7 +518,8 @@ const AverageScoreStyle = styled.div`
         align-items: center;
         .date{
           font-size: 1.5vh;
-          font-weight: 500;
+          font-weight: 700;
+          font-family: 'Pretendard-Regular';
           color: #8D8D8D;
           margin: 1.2vh 0 1vh 1vh;
         }
@@ -511,15 +528,16 @@ const AverageScoreStyle = styled.div`
         display: flex;
         align-items: center;
         .colorbox{
-          width: .7vh;
-          height: .7vh;
+          width: .8vh;
+          height: .8vh;
           background-color: #20CBAD;
           margin: auto;
         }
         .colorscore{
           margin: 1.2vh 0 1vh .7vh;
-          font-size: 1.7vh;
+          font-size: 1.6vh;
           font-weight: 500;
+          color: #525252;
         }
       }
     }
@@ -535,6 +553,7 @@ const AttackAveStyle = styled.div`
   .title{
     font-size: 1.8vh;
     font-weight: 700;
+    font-family: 'Pretendard-Regular';
     width: 80%;
   }
   .chart{
