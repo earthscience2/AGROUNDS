@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import AgroundsLogo from '../assets/AgroundsLogo.png';
-import menuIcon from '../assets/menu.png';
+import AgroundsLogo from '../../assets/web/AgroundsLogo.png';
+import menuIcon from '../../assets/web/menu.png';
 
 const Header = ({ tab, setTab }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,6 +65,7 @@ const HeaderStyle = styled.div`
   left: 0;
   background-color: white;
   z-index: 1999;
+  font-family: 'Pretendard-Regular';
 
   .header-width {
     width: 60%;

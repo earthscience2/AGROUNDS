@@ -1,28 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Back_btn from '../../../components/Back_btn';
 import Login_title from '../../../components/Login_title';
 import '../css/MyOvr.scss';
 import RayderChart from '../../../components/RayderChart';
 import Main_Subject from '../../../components/Main_Subject';
 import { AverageScore, AttackAve, OvrBarChart } from '../../../function/SubjectContents';
+import { getOverallApi } from '../../../function/MatchApi';
 const MyOvr = () => {
-  const data = {
-    stamina: 65,
-    sprint: 50,
-    acceleration: 78,
-    speed: 88,
-    agility: 12,
-    rating: 44,
-  };
+  const userCode = sessionStorage.getItem('userCode');
+  const [ovrData, setOvrData] = useState([]);
+  const [RaderData, setRaderData] = useState([]);
 
-  const chartData = [
-    data.stamina,
-    data.sprint,
-    data.acceleration,
-    data.speed,
-    data.agility,
-    data.rating,
-  ];
+  useEffect(() => {
+    getOverallApi({'user_code' : userCode})
+    .then((response) => {
+      if (response.data && response.data.point) {
+        setOvrData(response.data);
+        setRaderData(Object.values(response.data.point));
+        console.log(response.data);
+      } else {
+        console.log("response.data.point가 존재하지 않습니다.");
+        setRaderData([]);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }, [])
+
+
 
   return (
     <div className="myovr">
@@ -32,14 +38,14 @@ const MyOvr = () => {
         explain="경기 데이터를 기반으로 설정된 현재 나의 능력치를 확인하고 더 발전해보세요"
       />
       
-      <RayderChart data={chartData} rate="88" />
+      <RayderChart data={RaderData} rate="88" />
     
       <div className="avescorebox">
         <Main_Subject BG="white" color="black" arrow={false}>
-          <AverageScore />
+          {ovrData.point_trend && <AverageScore data={ovrData.point_trend}/>}
         </Main_Subject>
         <Main_Subject BG="white" color="black" arrow={false}>
-          <AttackAve />
+          {ovrData && <AttackAve data={ovrData}/>}
         </Main_Subject>
       </div>
    

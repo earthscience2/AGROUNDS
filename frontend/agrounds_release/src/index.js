@@ -1,7 +1,7 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import {createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {createBrowserRouter, RouterProvider,useLocation, Outlet } from 'react-router-dom';
 import Onboard from './pages/onboard/js/Onboard';
 import Email from './pages/onboard/js/Email';
 import Password from './pages/onboard/js/Password';
@@ -46,6 +46,25 @@ import EventList from './pages/mypage/js/announcement/EventList';
 import Event from './pages/mypage/js/announcement/Event';
 import TeamAnalysis from './pages/main/js/TeamAnalysis';
 import RecentMatch from './pages/team/js/RecentMatch';
+import ComponyIntroduce from './pages/web/ComponyIntroduce';
+
+
+const useBodyClass = (className) => {
+  React.useEffect(() => {
+    document.body.className = className;
+    return () => {
+      document.body.className = ""; 
+    };
+  }, [className]);
+};
+
+const AppWrapper = () => {
+  const location = useLocation();
+  const isRootApp = location.pathname === "/app" || location.pathname === "/app/";
+  useBodyClass(isRootApp ? "onboard-body" : "default-body");
+  return <Outlet />;
+};
+
 
 const router = createBrowserRouter([
   // 자체 로그인 
@@ -75,152 +94,52 @@ const router = createBrowserRouter([
   // },
   {
     path: "/",
-    element: <Onboard />,
+    element: <ComponyIntroduce />, // 홍보 페이지
   },
+
+  // 앱
   {
-    path: "/loading-for-login",
-    element: <LoadingPage />
-  },
-  {
-    path: "/completesignup",
-    element: <CompleteSignup />,
-  },
-  
-  {
-    path: "/essencial-info",
-    element: <EssencialInfo />,
-  },
-  {
-    path: "/extra-info",
-    element: <ExtraInfo />,
-  },
-  {
-    path: "/main",
-    element: <Main />,
-  },
-  {
-    path: "/userinfo",
-    element: <UserInfoCard />,
-  },
-  {
-    path: "/teamlist",
-    element: <TeamList />,
-  },
-  {
-    path: "/myteam",
-    element: <MyTeam />,
-  },
-  {
-    path: "/myovr",
-    element: <MyOvr />,
-  },
-  {
-    path: "/analysis",
-    element: <Anal />,
-  },
-  {
-    path: "/personalanalysis",
-    element: <PersonalAnalysis />,
-  },
-  {
-    path: "/video",
-    element: <Video />,
-  },
-  {
-    path: "/personalvideo",
-    element: <PersonalVideo />,
-  },
-  {
-    path: "/teamvideo",
-    element: <TeamVideo />,
-  },
-  {
-    path: "/fullvideo",
-    element: <FullVideo />,
-  },
-  {
-    path: "/videobyquarter",
-    element: <VideoByQuarter />,
-  },
-  {
-    path: "/mypage",
-    element: <My />,
-  },
-  {
-    path: "/reason",
-    element: <SelectReason />,
-  },
-  {
-    path: "/secessionlast",
-    element: <SecessionLast />,
-  },
-  {
-    path: "/secessioncomplete",
-    element: <Complete />,
-  },
-  {
-    path: "/maketeam",
-    element: <MakeTeam />,
-  },
-  {
-    path: "/completemaketeam",
-    element: <CompMakeTeam />,
-  },
-  {
-    path: "/teamsetting",
-    element: <TeamSetting />,
-  },
-  {
-    path: "/changeteamname",
-    element: <ChangeTeamName />,
-  },
-  {
-    path: "/completechangename",
-    element: <CompChangeName />,
-  },
-  {
-    path: "/completechangelogo",
-    element: <CompChangeLogo />,
-  },
-  {
-    path: "/changeteamlogo",
-    element: <ChangeTeamLogo />,
-  },
-  {
-    path: "/managemember",
-    element: <MemberManage />,
-  },
-  {
-    path: "/jointeam",
-    element: <JoinTeam />,
-  },
-  {
-    path: "/secession-other-reason",
-    element: <SecessionOtherReason />,
-  },
-  {
-    path: "/announcement-list",
-    element: <AnnouncementList />,
-  },
-  {
-    path: "/announcement",
-    element: <Announcement />,
-  },
-  {
-    path: "/eventlist",
-    element: <EventList />,
-  },
-  {
-    path: "/event",
-    element: <Event />,
-  },
-  {
-    path: "/teamanalysis",
-    element: <TeamAnalysis />,
-  },
-  {
-    path: "/recentmatch",
-    element: <RecentMatch />,
+    path: "/app/*",
+    element: <AppWrapper />,
+    children: [
+      { path: "", element: <Onboard /> },
+      { path: "loading-for-login", element: <LoadingPage /> },
+      { path: "completesignup", element: <CompleteSignup /> },
+      { path: "essencial-info", element: <EssencialInfo /> },
+      { path: "extra-info", element: <ExtraInfo /> },
+      { path: "main", element: <Main /> },
+      { path: "userinfo", element: <UserInfoCard /> },
+      { path: "teamlist", element: <TeamList /> },
+      { path: "myteam", element: <MyTeam /> },
+      { path: "myovr", element: <MyOvr /> },
+      { path: "analysis", element: <Anal /> },
+      { path: "personalanalysis", element: <PersonalAnalysis /> },
+      { path: "teamanalysis", element: <TeamAnalysis /> },
+      { path: "video", element: <Video /> },
+      { path: "personalvideo", element: <PersonalVideo /> },
+      { path: "teamvideo", element: <TeamVideo /> },
+      { path: "fullvideo", element: <FullVideo /> },
+      { path: "videobyquarter", element: <VideoByQuarter /> },
+      { path: "mypage", element: <My /> },
+      { path: "reason", element: <SelectReason /> },
+      { path: "secessionlast", element: <SecessionLast /> },
+      { path: "secessioncomplete", element: <Complete /> },
+      { path: "maketeam", element: <MakeTeam /> },
+      { path: "completemaketeam", element: <CompMakeTeam /> },
+      { path: "teamsetting", element: <TeamSetting /> },
+      { path: "changeteamname", element: <ChangeTeamName /> },
+      { path: "completechangename", element: <CompChangeName /> },
+      { path: "completechangelogo", element: <CompChangeLogo /> },
+      { path: "changeteamlogo", element: <ChangeTeamLogo /> },
+      { path: "managemember", element: <MemberManage /> },
+      { path: "jointeam", element: <JoinTeam /> },
+      { path: "secession-other-reason", element: <SecessionOtherReason /> },
+      { path: "announcement-list", element: <AnnouncementList /> },
+      { path: "announcement", element: <Announcement /> },
+      { path: "eventlist", element: <EventList /> },
+      { path: "event", element: <Event /> },
+      { path: "recentmatch", element: <RecentMatch /> },
+    ],
   },
 ]);
 

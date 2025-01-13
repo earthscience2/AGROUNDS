@@ -35,5 +35,8 @@ const getAnalyzeResultApi = (data) => {
   return client.post('api/analyze/get-analyze-result/', data);
 }
 
+const getOverallApi = (data) => {
+  return client.post('api/analyze/get-overall/', data);
+}
 
-export {getMatchListApi, getTeamMatchList, getVideoSummationApi, getPlayerVideoListApi,getTeamVideoListApi, getFullVideoListApi, getMatchVideoInfoApi, getAnalyzeResultApi};
+export {getMatchListApi, getTeamMatchList, getVideoSummationApi, getPlayerVideoListApi,getTeamVideoListApi, getFullVideoListApi, getMatchVideoInfoApi, getAnalyzeResultApi, getOverallApi};

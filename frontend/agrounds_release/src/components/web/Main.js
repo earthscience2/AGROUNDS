@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import section1 from '../assets/section1.png';
+import section1 from '../../assets/web/section1.png';
 import styled from 'styled-components';
-import section2 from '../assets/section2.png';
-import section7 from '../assets/section7.png';
+import section2 from '../../assets/web/section2.png';
+import section7 from '../../assets/web/section7.png';
 import dashjs from 'dashjs';
 
 const videoUrls = {
@@ -230,9 +230,12 @@ export default Main;
 
 const MainStyle = styled.div`
 width: 100vw;
+overflow: hidden;
+margin: 0;
 display: flex;
 flex-direction: column;
 align-items: center;
+font-family: 'Pretendard-Regular';
 
 `
 const Section1 = styled.div`

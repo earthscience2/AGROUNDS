@@ -21,8 +21,18 @@ font-family: 'Paperlogy-8ExtraBold', -apple-system, BlinkMacSystemFont, 'Segoe U
 -moz-osx-font-smoothing: grayscale;
 }
 
+/* Onboard 전용 스타일 */
+body.onboard-body {
+  max-width: 499px;
+  max-height: 950px;
+  margin: 0 auto;
+  overflow: scroll;
+  height: 100vh;
+}
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* 기본 스타일 (ComponyIntroduce 등 다른 페이지) */
+body.default-body {
+  margin: 0;
+  height: auto;
+  overflow: auto;
 }
