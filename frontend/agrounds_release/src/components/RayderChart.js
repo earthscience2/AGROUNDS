@@ -101,5 +101,4 @@ export default RayderChart;
 const RaderStyle = styled.div`
   width: 38vh;
   height: 38vh;
-  margin-top: -10vh;
 `;

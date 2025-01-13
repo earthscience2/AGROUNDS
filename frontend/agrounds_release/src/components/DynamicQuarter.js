@@ -31,6 +31,7 @@ const DynamicQuarter = ({data, currentIndex, setCurrentIndex}) => {
   return (
     <div style={{width: '100%', display:'flex',flexDirection: 'column',justifyContent:'center', alignItems:'center'}}>
       <Anal_Position_Nav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex}/>
+      <div style={{marginBottom: '5vh'}}/>
       <RayderChart data={chartPoints} rate={rate}/>
       <Anal_Detail title="히트맵 / 고속히트맵 / 방향전환" detail={<Map data={positionData()}/>}/>
       <Anal_Detail title="활동량" detail={<ActivityLevel attack={attack} defence={defence} data={positionData()}/>}/>

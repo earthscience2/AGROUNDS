@@ -7,43 +7,45 @@ import Summary from '../../../components/Summary';
 import DynamicQuarter from '../../../components/DynamicQuarter';
 import Loading from '../../../components/Loading';
 import { useLocation } from 'react-router-dom';
+import { getAnalyzeResultApi } from '../../../function/MatchApi';
 
 const TeamAnalysis = () => {
 
   const location = useLocation();
   const initialMatchCode = location.state?.matchCode;
   const teamCode = sessionStorage.getItem('teamCode');
-
+  const userCode = sessionStorage.getItem('userCode');
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [quarterData, setQuarterData]= useState([]);
 
 
   useEffect(() => {
-    // if (!selectedMatch && initialMatchCode) {
-    //   setLoading(true);
+    if (!selectedMatch && initialMatchCode) {
+      setLoading(true);
 
-    //   getAnalyzeResultApi({'match_code': initialMatchCode, 'user_code': userCode})
-    //   .then((response) => {
-    //     setSelectedMatch(initialMatchCode);
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     setLoading(false);
-    //   });
-    // } else if(selectedMatch) {
-    //   setLoading(true);
+      getAnalyzeResultApi({'match_code': initialMatchCode, 'user_code': userCode})
+      .then((response) => {
+        setSelectedMatch(initialMatchCode);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+    } else if(selectedMatch) {
+      setLoading(true);
 
-    //   getAnalyzeResultApi({'match_code': selectedMatch, 'user_code': userCode})
-    //   .then((response) => {
-    //     setQuarterData(response.data.analyze || [])
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     setLoading(false);
-    //   });
-    // }
+      getAnalyzeResultApi({'match_code': selectedMatch, 'user_code': userCode})
+      .then((response) => {
+        setQuarterData(response.data.analyze || [])
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+    }
     }, [selectedMatch]);
 
     if (loading) {

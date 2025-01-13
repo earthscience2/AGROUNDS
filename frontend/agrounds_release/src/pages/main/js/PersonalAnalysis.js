@@ -89,7 +89,7 @@ const PersonalAnalysis = () => {
         <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
 
-      <Quarter_Tab quarters={quarterData?.length} activeTab={activeTab} setActiveTab={setActiveTab}/>
+      <Quarter_Tab quarters={quarterData?.length} activeTab={activeTab} setActiveTab={setActiveTab} />
       {activeTab === "summary" ? (
         <Summary data={positionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex}/>
       ) : (
