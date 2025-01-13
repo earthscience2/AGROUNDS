@@ -146,17 +146,16 @@ class getTeamVideoList(APIView):
             user_info = UserInfo.objects.get(user_code=user_code)
         except UserInfo.DoesNotExist:
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
-        
-        result = []
-        
-        if user_info.user_type == 'coach' or user_info.user_type == 'player':
-            team_code = UserTeam.objects.filter(user_code = user_code).first().team_code
-            if team_code is not None :
-                video_infos = VideoInfo.objects.filter(team_code=team_code, type='team').values('match_code').annotate(min_id=Min('id')).values('min_id')
-                serializer = Video_List_Serializer(video_infos, many=True)
-                result = serializer.data
 
-        # return Response({"result" : result})
+        user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+
+        team_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='team')
+
+        serializer = Video_List_Serializer(team_videos, many=True)
+
+        result = serializer.data
+
+        return Response({"result" : result})
         
         result = [
             {
@@ -222,17 +221,16 @@ class getFullVideoList(APIView):
             user_info = UserInfo.objects.get(user_code=user_code)
         except UserInfo.DoesNotExist:
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
-        
-        result = []
-        
-        if user_info.user_type == 'coach' or user_info.user_type == 'player':
-            team_code = UserTeam.objects.filter(user_code = user_code).first().team_code
-            if team_code is not None :
-                video_infos = VideoInfo.objects.filter(team_code=team_code, type='full').values('match_code').annotate(min_id=Min('id')).values('min_id')
-                serializer = Video_List_Serializer(video_infos, many=True)
-                result = serializer.data
 
-        # return Response({"result" : result})
+        user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+
+        full_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='full')
+
+        serializer = Video_List_Serializer(full_videos, many=True)
+
+        result = serializer.data
+
+        return Response({"result" : result})
         
         result = [
             {
