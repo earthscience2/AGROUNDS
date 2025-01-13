@@ -19,7 +19,7 @@ const RecentMatch = () => {
     .catch((error) => console.log(error));
   }, [])
   return (
-    <div className='recentmatch' onClick={() => navigate('/recentmatch')}>
+    <div className='recentmatch' onClick={() => navigate('/app/recentmatch')}>
       <div className='recentmatch_arrowtitle'>
           <p className='title'>최근 경기</p>
           <img src={arrow} />

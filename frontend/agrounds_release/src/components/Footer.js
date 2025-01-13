@@ -20,45 +20,45 @@ const Footer = () => {
 
   return (
     <FooterStyle>
-      <div className='box' onClick={() => navigate('/main')}>
+      <div className='box' onClick={() => navigate('/app/main')}>
         <img
           className='icon'
-          src={isActive('/main') ? homeBlack : homeGrey}
+          src={isActive('/app/main') ? homeBlack : homeGrey}
           alt='홈'
         />
-        <p className={`title ${isActive('/main') ? 'active' : ''}`}>홈</p>
+        <p className={`title ${isActive('/app/main') ? 'active' : ''}`}>홈</p>
       </div>
-      <div className='box' onClick={() => navigate('/analysis')}>
+      <div className='box' onClick={() => navigate('/app/analysis')}>
         <img
           className='icon'
-          src={isActive('/analysis') ? graphBlack : graphGrey}
+          src={isActive('/app/analysis') ? graphBlack : graphGrey}
           alt='경기분석'
         />
-        <p className={`title ${isActive('/analysis') ? 'active' : ''}`}>경기분석</p>
+        <p className={`title ${isActive('/app/analysis') ? 'active' : ''}`}>경기분석</p>
       </div>
-      <div className='box' onClick={() => navigate('/connect')}>
+      <div className='box' onClick={() => navigate('/app/connect')}>
         <img
           className='icon'
-          src={isActive('/connect') ? connectBlack : connectGrey}
+          src={isActive('/app/connect') ? connectBlack : connectGrey}
           alt='기기연결'
         />
-        <p className={`title ${isActive('/connect') ? 'active' : ''}`}>업로드</p>
+        <p className={`title ${isActive('/app/connect') ? 'active' : ''}`}>업로드</p>
       </div>
-      <div className='box' onClick={() => navigate('/video')}>
+      <div className='box' onClick={() => navigate('/app/video')}>
         <img
           className='icon'
-          src={isActive('/video') ? videoBlack : videoGrey}
+          src={isActive('/app/video') ? videoBlack : videoGrey}
           alt='경기영상'
         />
-        <p className={`title ${isActive('/info') ? 'active' : ''}`}>경기영상</p>
+        <p className={`title ${isActive('/app/info') ? 'active' : ''}`}>경기영상</p>
       </div>
-      <div className='box' onClick={() => navigate('/mypage')}>
+      <div className='box' onClick={() => navigate('/app/mypage')}>
         <img
           className='icon'
-          src={isActive('/mypage') ? userBlack : userGrey}
+          src={isActive('/app/mypage') ? userBlack : userGrey}
           alt='마이'
         />
-        <p className={`title ${isActive('/mypage') ? 'active' : ''}`}>마이</p>
+        <p className={`title ${isActive('/app/mypage') ? 'active' : ''}`}>마이</p>
       </div>
     </FooterStyle>
   );

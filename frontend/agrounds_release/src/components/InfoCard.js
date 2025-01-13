@@ -39,21 +39,21 @@ const InfoCard = ({ userData }) => {
       <div className="row1">
         <div className="info-nick">
           <p className="usernickname">{userData.user_nickname}</p>
-          <p className="age">만 {userData.user_age}세, {genderConversion(userData.user_gender)}</p></div>
+          <p className="age">만 {userData.user_age}세, {genderConversion(userData.user_gender) }</p></div>
         <div className="nhwbox">
           <div className="info-name">
-            <p className="username">{userData.user_name || '김민재'}</p>
+            <p className="username">{userData.user_name || '-'}</p>
             </div>
           <div className="info-height">
-            <p className="userheight">{`${userData.user_height}cm` || '190cm'}</p>
+            <p className="userheight">{`${userData.user_height}cm` || '-'}</p>
           </div>
           <div className="info-weight">
-            <p className="userweight">{`${userData.user_weight}kg` || '81kg'} </p>
+            <p className="userweight">{`${userData.user_weight}kg` || '-'} </p>
             </div>
         </div>
       </div>
       <div className="row2">
-        <p className="info-position">{userData.user_position || 'CB'}</p>
+        <p className="info-position">{userData.user_position || '-'}</p>
         <div className="field">
           <Field selectedPosition={userData.user_position}/>
         </div>

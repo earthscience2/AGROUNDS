@@ -13,15 +13,16 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const OvrBarChart = () => {
-  const chartRef = useRef(null);
+const OvrBarChart = ({ data }) => {
+  const chartRef = useRef();
 
+  const convertedData = data.map(value => value * 10);
   const chartData = {
     labels: ['체력', '순발력', '스피드', '가속도', '스프린트'],
     datasets: [
       {
         label: '',
-        data: [52, 60, 77, 75, 61], // 추후 변경
+        data: convertedData,
         backgroundColor: ['#5BECB0', '#29E2A0', '#1BD39E', '#14C19A', '#18BDA5'],
       },
     ],
@@ -72,6 +73,7 @@ const OvrBarChart = () => {
         },
       },
       y: {
+        display: false,
         beginAtZero: true,
         max: 100,
         ticks: {
@@ -105,5 +107,5 @@ const ChartContainer = styled.div`
   width: 90%;
   margin: 0;
   border: none;
-  height: 20vh;
+  margin-top: 1.5vh;
 `;

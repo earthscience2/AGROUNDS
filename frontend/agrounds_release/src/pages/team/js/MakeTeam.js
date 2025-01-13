@@ -46,7 +46,7 @@ const MakeTeam = () => {
 
     MakeTeamApi(NewTeamData)
       .then(() => {
-        navigate('/completemaketeam');
+        navigate('/app/completemaketeam');
       })
       .catch((error) => {
         console.log(error)

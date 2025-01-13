@@ -3,9 +3,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  max-width: 499px;
   .prefpo{
     background-color: #F2F4F8;
-    width: 90vw;
+    width: 90%;
     height: 55px;
     display: flex;
     align-items: center;

@@ -14,6 +14,8 @@
 .mypage{
   @include display(flex, column, center, start);
   background-color: rgb(247,248,250);
+  width: 100%;
+  max-width: 499px;
   &:last-child{
     margin-bottom: 10vh;
   }

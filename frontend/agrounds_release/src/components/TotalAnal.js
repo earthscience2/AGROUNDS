@@ -44,7 +44,7 @@ const TotalAnal = ({ data, type }) => {
               </div>
               <button
                 className='button'
-                onClick={() => navigate('/personalanalysis', { state: { matchCode } })}
+                onClick={() => navigate('/app/personalanalysis', { state: { matchCode } })}
               >
                 경기 상세 분석
               </button>
@@ -69,7 +69,7 @@ const TotalAnal = ({ data, type }) => {
               </div>
               <button
                 className='button'
-                onClick={() => navigate('/teamanalysis', { state: { matchCode } })}
+                onClick={() => navigate('/app/teamanalysis', { state: { matchCode } })}
               >
                 경기 상세 분석
               </button>

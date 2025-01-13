@@ -14,6 +14,7 @@
 .maketeam{
   @include display(flex, column, center, center);
   width: 100%;
+  max-width: 499px;
   .error-message{
     @include font(1.5vh, 500, red);
     width: 90%;

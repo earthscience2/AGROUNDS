@@ -13,6 +13,7 @@
 
 .fullvideo{
   width: 100%;
+  max-width: 499px;
   @include display(flex, column, center, start);
   &:last-child {
     margin-bottom: 5vh;

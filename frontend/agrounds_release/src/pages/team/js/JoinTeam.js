@@ -89,7 +89,7 @@ const JoinTeam = () => {
           <p>새롭게 팀을 만들고 마음에 드는 선수들을 영입해보세요.</p>
           <button
             className="create-team-btn"
-            onClick={() => navigate("/maketeam")}
+            onClick={() => navigate("/app/maketeam")}
           >
             새로운 팀 만들기
           </button>

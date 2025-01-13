@@ -14,6 +14,7 @@
 .membermanage{
   @include display(flex, column, center, center);
   width: 100%;
+  max-width: 499px;
   .managecontents{
     width: 100%;
     @include display(flex, column, center, start);

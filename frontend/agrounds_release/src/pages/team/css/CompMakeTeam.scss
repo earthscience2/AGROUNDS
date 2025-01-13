@@ -14,6 +14,7 @@
 .compmaketeam{
   @include display(flex, column, center, center);
   width: 100%;
+  max-width: 499px;
 
   .tab1{
     margin-top: 10vh;

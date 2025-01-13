@@ -21,7 +21,7 @@ const LoadingPage = () => {
         if(token === null){
             console.log('token is not comming');
             alert('카카오 로그인 실퍠 : 토큰이 null 입니다.');
-            window.location.replace('/');
+            window.location.replace('/app');
         } else {
             console.log('token : ' + token);
             client.defaults.headers.common['Authorization'] = token;
@@ -44,21 +44,21 @@ const LoadingPage = () => {
                 sessionStorage.setItem('teamCode', response.data.team_code);
 
                 if(response.data.user_type === '-1') { // 가입 후 첫 로그인시 팀 가입 유도 페이지로 이동
-                    window.location.replace('/completesignup');
+                    window.location.replace('/app/completesignup');
                 } else {
-                    navigate('/main');
+                    navigate('/app/main');
                 }
             })
             .catch(function(error){
                 alert('로그인 실패');
-                window.location.replace('/');
+                window.location.replace('/app');
                 console.log(error);
             });
         }
     }
 
     return(
-        <div style={{width: '100vw', height:'100vh', display:'flex', flexDirection:'column', 
+        <div style={{width: '100%', height:'100vh', display:'flex', flexDirection:'column', 
         alignItems:'center', justifyContent:'center'}}>
             <div style={{fontWeight: '700', fontSize: '5vh', position:'absolute'}}>AGROUNDS</div>
             <span style={{position:'absolute', bottom:'20vh'}} className="loader"></span>

@@ -15,7 +15,7 @@ const SecessionOtherReason = () => {
 
   const handleSubmit = () => {
     if (inputValue.trim()) {
-      navigate('/secessionlast', {state: { reason: inputValue}})
+      navigate('/app/secessionlast', {state: { reason: inputValue}})
     }
   };
 
@@ -41,6 +41,7 @@ export default SecessionOtherReason;
 
 const SecessionOtherReasonStyle = styled.div`
   width: 100%;
+  max-width: 499px;
   display: flex;
   flex-direction: column;
   align-items: center;

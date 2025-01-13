@@ -9,19 +9,19 @@ const TeamSetting = () => {
   return (
     <div className='teamsetting'>
       <BackTitle_Btn navTitle='팀 설정' />
-      <div className='setbox' onClick={() => navigate('/changeteamname')}>
+      <div className='setbox' onClick={() => navigate('/app/changeteamname')}>
         <p className='settitle'>팀명 변경하기</p>
         <img src={left} className='arrow'/>
       </div>
-      <div className='setbox' onClick={() => navigate('/changeteamlogo')}>
+      <div className='setbox' onClick={() => navigate('/app/changeteamlogo')}>
         <p className='settitle' >팀 로고 변경하기</p>
         <img src={left} className='arrow'/>
       </div>
-      <div className='setbox' onClick={() => navigate('/managemember')}>
+      <div className='setbox' onClick={() => navigate('/app/managemember')}>
         <p className='settitle' >팀원 관리하기</p>
         <img src={left} className='arrow'/>
       </div>
-      <div className='setbox' onClick={() => navigate('/teamvideo')}>
+      <div className='setbox' onClick={() => navigate('/app/teamvideo')}>
         <p className='settitle' >팀 경기 영상</p>
         <img src={left} className='arrow'/>
       </div>

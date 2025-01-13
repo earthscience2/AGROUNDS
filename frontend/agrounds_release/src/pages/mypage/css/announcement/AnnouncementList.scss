@@ -14,6 +14,7 @@
 .announcementList{
   @include display(column, start, center);
   width: 100%;
+  max-width: 499px;
   .announcebox{
     width: 90%;
     height: 8vh;

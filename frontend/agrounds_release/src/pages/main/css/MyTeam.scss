@@ -9,6 +9,7 @@
   @include display(flex, column, center, start);
   background-color: #eeeff3;
   width: 100%;
+  max-width: 499px;
   .teamnav{
     @include display(flex, row, center, space-between);
     height: 10vh;
@@ -33,14 +34,14 @@
     font-family: 'Pretendard-Regular';
   }
   .subjectbox{
-    width: 85%;
+    width: 90%;
     @include display(flex, row, center, center);
     gap: 1.5vh;
     margin: 2vh 0;
   }
   .teambox{
     background-color: white;
-    width: 85%;
+    width: 90%;
     min-height: 50vh;
     border-radius: 2vh;
     @include display(flex, column, center, start);
@@ -71,7 +72,7 @@
 
       width: 85%;
       .t1{
-        font-size: 1.5vh;
+        font-size: 1.7vh;
         font-weight: 500;
         margin: 1vh 0;
         font-family: 'Pretendard-Regular';

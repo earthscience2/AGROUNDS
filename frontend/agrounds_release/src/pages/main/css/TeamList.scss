@@ -8,6 +8,8 @@
 .userinfo {
   @include display(flex, column, center, center);
   min-height: 100vh;
+  width: 100%;
+  max-width: 499px;
 
   .backdiv {
     position: fixed;
@@ -29,19 +31,17 @@
   }
   .cards-container {
     @include display(flex, column, center, flex-start);
-    overflow-y: auto; 
-    height: 100vh; 
+    overflow-y: scroll;
+    height: 100vh; // 부모 높이를 설정하여 스크롤 영역 명확화
     width: 100%;
+    scroll-snap-type: y mandatory; // 카드 스크롤 단위 설정
     scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
-    & > * {
-      scroll-snap-align: center; 
-    }
-    & > :first-child {
-      margin-top: 25vh;
-    }
-    & > :last-child {
-      margin-bottom: 20vh;
+  
+    .infoBack {
+      @include display(flex, column, center, center);
+      height: 100vh; // 각 카드가 뷰포트 높이를 차지
+      width: 100%;
+      scroll-snap-align: center;
     }
   }
 }

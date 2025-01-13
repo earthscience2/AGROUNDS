@@ -67,7 +67,7 @@ const MyTeam = () => {
     withdrawTeamApi()
     .then((response) => {
       alert('팀 탈퇴에 성공했습니다.');
-      navigate('/main');
+      navigate('/app/main');
     })
     .catch((error) => {
       console.log(error)
@@ -89,7 +89,7 @@ const MyTeam = () => {
       {isManager ? (
         <div className='teamnav'>
         <img src={left} className='leftbtn' onClick={() => navigate(-1)}/>
-        <img src={cog} className='cogbtn' onClick={() => navigate('/teamsetting')}/>
+        <img src={cog} className='cogbtn' onClick={() => navigate('/app/teamsetting')}/>
       </div>
         ): (
         <div className='teamnav'>
@@ -111,12 +111,12 @@ const MyTeam = () => {
       <div className='fc'>{team.team_name}</div>
       <div className='subjectbox'>
         <Main_Subject title='최근 경기' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={<RecentMatchS logo1={logo} logo2={logo} />}/>
-        <Main_Subject title='경기 영상' BG='#DADFE5' color='#000000' arrowC='black' arrow={true}children={MatchVideo()} onClick={() => navigate('/video')}/>
+        <Main_Subject title='경기 영상' BG='#DADFE5' color='#000000' arrowC='black' arrow={true}children={MatchVideo()} onClick={() => navigate('/app/video')}/>
       </div>
       <div className='teambox'>
         <div className='teamtitle' >
           <p>팀원</p>
-          {isManager ? <div className='managerbtn' onClick={() => navigate('/managemember')}>관리하기</div> : <img src={righbtn} onClick={() => navigate('/teamlist')}/>}
+          {isManager ? <div className='managerbtn' onClick={() => navigate('/app/managemember')}>관리하기</div> : <img src={righbtn} onClick={() => navigate('/app/teamlist')}/>}
         </div>
         <div className='detail'>
           <p className='t1'>총</p>
@@ -126,7 +126,7 @@ const MyTeam = () => {
         {member.length > 0 ? (
           <div className='list'>
             {member.map((player) => (
-              <MemberPrev userCode={player.user_code} img={team.team_logo} isManager={isManager} player={player.user_nickname} age={player.user_age} color={PositionDotColor(player.user_position)} position={player.user_position} onClick={() => navigate('/userinfo', {state: { userCode: player.user_code}})}/>
+              <MemberPrev userCode={player.user_code} img={team.team_logo} isManager={isManager} player={player.user_nickname} age={player.user_age} color={PositionDotColor(player.user_position)} position={player.user_position} onClick={() => navigate('/app/userinfo', {state: { userCode: player.user_code}})}/>
             ))}
           </div>
         ) : (

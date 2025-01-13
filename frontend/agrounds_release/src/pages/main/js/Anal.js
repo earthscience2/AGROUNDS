@@ -58,7 +58,7 @@ const Anal = () => {
                 <img src={paper} />
                 <p className='anal-contenttitle'>경기 내역이 없습니다</p>
                 <div className='anal-content'>새로운 팀을 찾아서 팀원들과 경기를 하고<br/> 에이그라운즈에서 제공하는 분석 데이터를 받아보세요!</div>
-                <div className='anal-btn' onClick={() => navigate('/jointeam')}>새로운 팀 찾아보기</div>
+                <div className='anal-btn' onClick={() => navigate('/app/jointeam')}>새로운 팀 찾아보기</div>
               </div>
             </>
 

@@ -90,7 +90,7 @@ const MemberManage = () => {
                 position={player.user_position}
                 activeTab={activeTab}
                 onClick={() =>
-                  navigate("/userinfo", { state: { userCode: player.user_code } })
+                  navigate("/app/userinfo", { state: { userCode: player.user_code } })
                 }
               />
             ))
@@ -131,7 +131,7 @@ const MemberManage = () => {
                     activeTab={activeTab}
                     searchTerm={searchTerm}
                     onClick={() =>
-                      navigate("/userinfo", {
+                      navigate("/app/userinfo", {
                         state: { userCode: player.user_code },
                       })
                     }
@@ -163,7 +163,7 @@ const MemberManage = () => {
                     activeTab={activeTab}
                     searchTerm={searchTerm}
                     onClick={() =>
-                      navigate("/userinfo", {
+                      navigate("/app/userinfo", {
                         state: { userCode: player.user_code },
                       })
                     }
