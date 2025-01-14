@@ -4,13 +4,14 @@ import styled from 'styled-components';
 
 const Anal_Position_Nav = ({currentIndex, setCurrentIndex, type}) => {
   const [title, setTitle] = useState([]);
+
   useEffect(() => {
     if(type === 'personal') {
       setTitle(["전체", "공격", "수비"]);
     } else if(type === 'team') {
       setTitle(["종합", "평점"]);
     }
-  })
+  }, [type])
   
 
   const LeftSide = () => {
