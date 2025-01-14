@@ -1,7 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from staticfiles.get_file_url import get_file_url
+from rest_framework.generics import get_object_or_404
 from django.db.models import Min
+from staticfiles.make_file_key import get_link, get_download_link
 
 from .serializers import *
 
@@ -313,12 +315,31 @@ class getMatchVideoInfo(APIView):
         if video_info is None:
             return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
         
-        for quarter in video_info.first().quarter_name_list:
-            0
+        
 
-        serializer = Video_Info_Serializer(video_info)
+        video_info = video_info.first()
+        match_info = get_object_or_404(UserMatchInfo, match_code=match_code)
+        video_title = video_info.title
+        match_location = match_info.ground_name
+        match_date = video_info.date
 
-        return Response({'result':serializer.data})
+        result = []
+
+        for quarter in video_info.quarter_name_list:
+            video_json = {
+                "quarter" : quarter,
+                "title" : video_title,
+                "match_location" : match_location,
+                "date" : match_date,
+                "thumbnail" : thumnails[0],
+                "link" : get_link(video_info, quarter),
+                "download_link" : get_download_link(video_info, quarter)
+            }
+            result.append(video_json)
+            
+        # serializer = Video_Info_Serializer(video_info)
+
+        return Response({'result':result})
 
         result = [
                 {
