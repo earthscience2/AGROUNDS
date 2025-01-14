@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../css/MyTeam.scss';
-import logo from '../../../assets/logo_sample.png';
+import logo from '../../../assets/default-team-logo.png';
 import Main_Subject from '../../../components/Main_Subject';
 import righbtn from '../../../assets/right.png';
 import Image_Comp from '../../../components/Image_Comp';

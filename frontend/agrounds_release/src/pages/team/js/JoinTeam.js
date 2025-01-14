@@ -4,7 +4,7 @@ import Back_btn from "../../../components/Back_btn";
 import Login_title from "../../../components/Login_title";
 import Search from "../../../components/Search";
 import reload from "../../../assets/reload.png";
-import logo from "../../../assets/logo_sample.png";
+import logo from "../../../assets/default-team-logo.png";
 import Image_Comp from "../../../components/Image_Comp";
 import Modal from "../../../components/Modal";
 import Small_Common_Btn from "../../../components/Small_Common_Btn";

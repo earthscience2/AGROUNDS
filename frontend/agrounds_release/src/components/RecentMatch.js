@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './RecentMatch.scss';
 import location from '../assets/location.png';
-import logo from '../assets/logo_sample.png';
+import logo from '../assets/default-team-logo.png';
 import { getMatchListApi } from '../function/MatchApi';
 import arrow from '../assets/left.png';
 import { useNavigate } from 'react-router-dom';

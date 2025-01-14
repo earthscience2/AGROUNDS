@@ -4,7 +4,7 @@ import Login_title from '../../../components/Login_title';
 import '../css/MemberManage.scss';
 import Member_Tab from '../../../components/Member_Tab';
 import Member from '../../../components/Member';
-import logo from '../../../assets/logo_sample.png';
+import logo from '../../../assets/user-grey.png';
 import { useNavigate } from 'react-router-dom';
 import Search from '../../../components/Search';
 import { getJoinRequestListApi, SearchPlayerByNicknameAPI, getTeamPlayerListApi } from '../../../function/TeamApi';

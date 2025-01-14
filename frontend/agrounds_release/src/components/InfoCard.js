@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import sample from '../assets/logo_sample.png';
+import sample from '../assets/user-grey.png';
 import {PositionColor} from "../function/PositionColor";
 import { getTeamInfoApi } from "../function/TeamApi";
 import Field from "./Field";

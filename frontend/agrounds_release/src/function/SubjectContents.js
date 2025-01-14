@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import device from '../assets/device.png';
 import styled from 'styled-components';
 import ovr from '../assets/ovr.png';
-import logo from '../assets/logo_sample.png';
 import location from '../assets/location.png';
 import Image_Comp from '../components/Image_Comp';
 import BarChart from '../components/BarChart';

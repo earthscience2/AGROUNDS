@@ -1,7 +1,7 @@
 import React from 'react';
 import './TotalAnal.scss';
 import Image_Comp from './Image_Comp';
-import logo1 from '../assets/logo_sample.png';
+import logo1 from '../assets/default-team-logo.png';
 import { useNavigate } from 'react-router-dom';
 
 const TotalAnal = ({ data, type }) => {
