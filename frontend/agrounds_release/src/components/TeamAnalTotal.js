@@ -4,29 +4,32 @@ import HighBox from './HighBox';
 
 
 const TeamAnalTotal = ({data}) => {
+  const topData = data.top_players;
+  const myData = data.my_rankings;
+
   return(
     <TeamAnalTotalStyle>
       <div className="title">팀내 항목별 최고 순위</div>
       <div className="high-box">
         <div className="high-column">
-          <HighBox img='' name='최현우' title='평점' titleData='9.3' km=''/>
-          <HighBox img='' name='최현우' title='활동량' titleData='7.75' km='km'/>
+          <HighBox img={topData.top_point.profile} name={topData.top_point.nickname} title='평점' titleData={topData.top_point.value} km=''/>
+          <HighBox img={topData.top_activity.profile} name={topData.top_activity.nickname} title='활동량' titleData={topData.top_activity.value} km='km'/>
           
         </div>
         <div className="high-column">
-          <HighBox img='' name='최현우' title='스프린트' titleData='36.79' km='m'/>
-          <HighBox img='' name='최현우' title='속력' titleData='26.17' km='km/h'/>
+          <HighBox img={topData.top_sprint.profile} name={topData.top_sprint.nickname} title='스프린트' titleData={topData.top_sprint.value} km='m'/>
+          <HighBox img={topData.top_speed.profile} name={topData.top_speed.nickname} title='속력' titleData={topData.top_speed.value} km='km/h'/>
         </div>
       </div>
       <div className="title2">나의 순위</div>
       <div className='rank-box'>
         <div className="rank-column">
-          <RankBox title='평점' titleData='4.5' rank='5' />
-          <RankBox title='활동량' titleData='3.5' rank='10' km={true}/>
+          <RankBox title='평점' titleData={myData.point.value} rank={myData.point.rank} />
+          <RankBox title='활동량' titleData={myData.activity.value} rank={myData.activity.rank} km={true}/>
         </div>
         <div className="rank-column">
-          <RankBox title='스프린트' titleData='33.21' rank='2' km={true}/>
-          <RankBox title='속력' titleData='20.33' rank='9' km={true}/>
+          <RankBox title='스프린트' titleData={myData.sprint.value} rank={myData.sprint.rank} km={true}/>
+          <RankBox title='속력' titleData={myData.speed.value} rank={myData.speed.rank} km={true}/>
         </div>
       </div>
     </TeamAnalTotalStyle>
