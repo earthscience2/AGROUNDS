@@ -34,6 +34,7 @@ const MyOvr = () => {
         title="나의 OVR"
         explain="경기 데이터를 기반으로 설정된 현재 나의 능력치를 확인하고 더 발전해보세요"
       />
+      <div style={{marginTop: '-10vh'}}></div>
       <p className='rader-rate'>{RaderData[0]}</p>
       {RaderData && <RayderChart data={RaderData} /> }
     

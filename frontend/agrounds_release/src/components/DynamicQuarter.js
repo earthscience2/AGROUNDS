@@ -5,6 +5,7 @@ import RayderChart from './RayderChart';
 import { Sprint, ActivityLevel, Speed, Map } from '../function/AnalysisData';
 import TeamAnalTotal from './TeamAnalTotal';
 import TeamAnalScore from './TeamAnalScore';
+import styled from 'styled-components';
 
 const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
   if (!data) return null; 
@@ -38,6 +39,7 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
     return (
       <>
         <div style={{ marginBottom: '5vh' }} />
+        <RaderDate>{chartPoints[0]}</RaderDate>
         <RayderChart data={chartPoints} rate={rate} />
         <Anal_Detail title="히트맵 / 고속히트맵 / 방향전환" detail={<Map data={positionData()} />} />
         <Anal_Detail title="활동량" detail={<ActivityLevel attack={attack} defence={defence} data={positionData()} />} />
@@ -73,3 +75,12 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
 };
 
 export default DynamicQuarter;
+
+
+const RaderDate = styled.div`
+  font-size: 3vh;
+  font-weight: 700;
+  position: relative;
+  top: 20.5vh;
+  right: 1vh;
+`

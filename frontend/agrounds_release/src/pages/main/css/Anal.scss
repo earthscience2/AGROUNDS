@@ -33,6 +33,13 @@
     background-color: #DADFE5;
     margin-bottom: 2vh;
   }
+  .sort-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+
+  }
   .total-play{
     width: 90%;
     @include display(flex, row, start, start);
