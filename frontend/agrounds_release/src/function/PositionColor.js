@@ -94,7 +94,41 @@ const PositionCoordinates = {
   GK: { top: "110%", left: "50%" },
 };
 
+const AnalPositionColor = (position) => {
+  let color;
+
+  switch (position) {
+    case 'LWF':
+    case 'ST':
+    case 'RWF':
+      color = 'linear-gradient(180deg, #EC5C3A 0%, #FF8147 100%)';
+      break;
+    case 'LWM':
+    case 'CAM':
+    case 'RWM':
+    case 'LM':
+    case 'CM':
+    case 'RM':
+    case 'CDM':
+      color = 'linear-gradient(180deg, #1DB48B 0%, #1EDAB7 100%)';
+      break;
+    case 'LWB':
+    case 'RWB':
+    case 'LB':
+    case 'CB':
+    case 'RB':
+      color = 'linear-gradient(180deg, #5872FD 0%, #55AFFE 100%)';
+      break;
+    case 'GK':
+      color = 'linear-gradient(180deg, #C5A922 0%, #DEC42F 100%)';
+      break;
+    default:
+      color = '#000000'; 
+  }
+
+  return color;
+}
+
+export {PositionColor, PositionBackColor, PositionDotColor, PositionCoordinates, AnalPositionColor};
 
 
-
-export {PositionColor, PositionBackColor, PositionDotColor, PositionCoordinates};
