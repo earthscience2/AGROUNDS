@@ -65,7 +65,7 @@ const TeamAnalysis = () => {
       }
       return null; 
     };
-  
+  console.log(quarterPositionData)
   return (
     <div className='personalanal'>
       <div className='greybackground'>

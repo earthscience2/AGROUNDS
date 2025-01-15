@@ -1,7 +1,7 @@
 
 import styled from 'styled-components';
 import user from '../assets/user-grey.png'
-import PositionDotColor from '../function/PositionColor';
+import PositionDotColor, { AnalPositionColor } from '../function/PositionColor';
 
 
 const TeamAnalScore = ({data}) => {
@@ -13,7 +13,7 @@ const TeamAnalScore = ({data}) => {
       <div className='teamlist'>
         {rankingData.map((rank, index) => (
           index === 0 ? (
-            <div key={index} className="first-player" style={{backgroundColor: PositionDotColor(rank.position)}}>
+            <div key={index} className="first-player" style={{background: AnalPositionColor(rank.position)}}>
               <div className='first-player-box'>
                 <p className='rank'>1</p>
                 <div className='nickpo-box'>
