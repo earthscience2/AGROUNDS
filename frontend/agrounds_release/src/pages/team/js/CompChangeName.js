@@ -17,7 +17,7 @@ const CompChangeName = () => {
       <div className='tab1'/>
       <Image_Comp img={check} width= '22vh'/>
       <div className='tab2'/>
-      <Circle_common_btn title='완료' onClick={() => navigate('/teamsetting')}/>
+      <Circle_common_btn title='완료' onClick={() => navigate('/app/teamsetting')}/>
     </div>
   );
 };

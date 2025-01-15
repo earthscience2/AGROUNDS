@@ -18,11 +18,11 @@ const Main = () => {
       <MainSummary/>
       <div className='subjectbox'>
         {userType === 'individual' ?
-          (<Main_Subject title='나의 팀' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={NoTeam()} onClick={() => navigate('/jointeam')}/>):
-          (<Main_Subject title='나의 팀' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={MyTeam()} onClick={() => navigate('/myteam')}/>)
+          (<Main_Subject title='나의 팀' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={NoTeam()} onClick={() => navigate('/app/jointeam')}/>):
+          (<Main_Subject title='나의 팀' BG='#FFFFFF' color='#262626' arrowC='black' arrow={true} children={MyTeam()} onClick={() => navigate('/app/myteam')}/>)
         }
-        <Main_Subject title='나의 OVR' BG='#343A3F' color='#FFFFFF' arrowC='white' arrow={true}children={MyOvr()} onClick={() => navigate('/myovr')}/>
-        <Main_Subject title='경기 영상' BG='#DADFE5' color='#000000' arrowC='black' arrow={true}children={MatchVideo()} onClick={() => navigate('/video')}/>
+        <Main_Subject title='나의 OVR' BG='#343A3F' color='#FFFFFF' arrowC='white' arrow={true}children={MyOvr()} onClick={() => navigate('/app/myovr')}/>
+        <Main_Subject title='경기 영상' BG='#DADFE5' color='#000000' arrowC='black' arrow={true}children={MatchVideo()} onClick={() => navigate('/app/video')}/>
         <Main_Subject title='GPS 기기' BG='#10CC7E' color='#FFFFFF'arrow={true} arrowC='white'children={Device()}/>
       </div>
       <div className='recentmatchbox'>

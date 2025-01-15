@@ -4,7 +4,7 @@ import Login_title from '../../../components/Login_title';
 import '../css/MemberManage.scss';
 import Member_Tab from '../../../components/Member_Tab';
 import Member from '../../../components/Member';
-import logo from '../../../assets/logo_sample.png';
+import logo from '../../../assets/user-grey.png';
 import { useNavigate } from 'react-router-dom';
 import Search from '../../../components/Search';
 import { getJoinRequestListApi, SearchPlayerByNicknameAPI, getTeamPlayerListApi } from '../../../function/TeamApi';
@@ -90,7 +90,7 @@ const MemberManage = () => {
                 position={player.user_position}
                 activeTab={activeTab}
                 onClick={() =>
-                  navigate("/userinfo", { state: { userCode: player.user_code } })
+                  navigate("/app/userinfo", { state: { userCode: player.user_code } })
                 }
               />
             ))
@@ -131,7 +131,7 @@ const MemberManage = () => {
                     activeTab={activeTab}
                     searchTerm={searchTerm}
                     onClick={() =>
-                      navigate("/userinfo", {
+                      navigate("/app/userinfo", {
                         state: { userCode: player.user_code },
                       })
                     }
@@ -163,7 +163,7 @@ const MemberManage = () => {
                     activeTab={activeTab}
                     searchTerm={searchTerm}
                     onClick={() =>
-                      navigate("/userinfo", {
+                      navigate("/app/userinfo", {
                         state: { userCode: player.user_code },
                       })
                     }

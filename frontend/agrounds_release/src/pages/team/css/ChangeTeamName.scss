@@ -13,6 +13,7 @@
 .changeteamname{
   @include display(flex, column, center, center);
   width: 100%;
+  max-width: 499px;
   .gap{
     height: 55vh;
   }

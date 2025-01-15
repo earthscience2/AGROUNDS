@@ -15,7 +15,7 @@ const MakeTeam = () => {
       <Login_title title='팀 로고 변경하기' explain='팀 로고를 자유롭게 변경해보세요'/>
       <UserProfile />
       <div className='tab'/>
-      <Circle_common_btn title='변경하기' onClick={() => navigate('/completechangelogo')}/>
+      <Circle_common_btn title='변경하기' onClick={() => navigate('/app/completechangelogo')}/>
     </div>
   );
 };

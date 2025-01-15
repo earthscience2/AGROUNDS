@@ -7,49 +7,65 @@ import Summary from '../../../components/Summary';
 import DynamicQuarter from '../../../components/DynamicQuarter';
 import Loading from '../../../components/Loading';
 import { useLocation } from 'react-router-dom';
+import { getAnalyzeResultApi, getTeamAnalResultApi } from '../../../function/MatchApi';
+import TeamAnalTotal from '../../../components/TeamAnalTotal';
+import TeamAnalScore from '../../../components/TeamAnalScore';
 
 const TeamAnalysis = () => {
 
   const location = useLocation();
   const initialMatchCode = location.state?.matchCode;
+  const [activeTab, setActiveTab] = useState("1쿼터");
+  const [currentIndex, setCurrentIndex] = useState(0);
   const teamCode = sessionStorage.getItem('teamCode');
-
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [loading, setLoading] = useState(true);
-
-
+  const [quarterData, setQuarterData]= useState([]);
+  const [quarter, setQuarter] = useState();  
+  
   useEffect(() => {
-    // if (!selectedMatch && initialMatchCode) {
-    //   setLoading(true);
+    if (!selectedMatch && initialMatchCode) {
+      setLoading(true);
 
-    //   getAnalyzeResultApi({'match_code': initialMatchCode, 'user_code': userCode})
-    //   .then((response) => {
-    //     setSelectedMatch(initialMatchCode);
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     setLoading(false);
-    //   });
-    // } else if(selectedMatch) {
-    //   setLoading(true);
+      getTeamAnalResultApi({'match_code': initialMatchCode, 'team_code': teamCode})
+      .then((response) => {
+        setQuarterData(response.data.result || [])
+        setSelectedMatch(initialMatchCode);
+        setQuarter(response.data.result.length)
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
 
-    //   getAnalyzeResultApi({'match_code': selectedMatch, 'user_code': userCode})
-    //   .then((response) => {
-    //     setQuarterData(response.data.analyze || [])
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     setLoading(false);
-    //   });
-    // }
+    } else if(selectedMatch) {
+      setLoading(true);
+
+      getTeamAnalResultApi({'match_code': selectedMatch, 'team_code': teamCode})
+      .then((response) => {
+        setQuarterData(response.data.result || [])
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+    }
     }, [selectedMatch]);
 
     if (loading) {
       return <Loading />; 
     }
-
+    const quarterPositionData = () => {
+      for (let i = 0; i < quarterData?.length; i++) {
+        if (activeTab === `${i + 1}쿼터`) {
+          return quarterData[i];
+        }
+      }
+      return null; 
+    };
+  
   return (
     <div className='personalanal'>
       <div className='greybackground'>
@@ -58,9 +74,10 @@ const TeamAnalysis = () => {
         <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
       
-      <Quarter_Tab quarters={[1,2,3]}/>
-      <Summary />
-      <DynamicQuarter />
+      <Quarter_Tab quarters={quarter} activeTab={activeTab} setActiveTab={setActiveTab}/>
+      
+      <DynamicQuarter data={quarterPositionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type='team'/>
+      
     </div>
   );
 };

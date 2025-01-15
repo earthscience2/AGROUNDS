@@ -2,7 +2,7 @@ import React from 'react';
 import '../css/My.scss';
 import LogoBellNav from '../../../components/Logo_bell_Nav';
 import Image_Comp from '../../../components/Image_Comp';
-import logo from '../../../assets/logo_sample.png';
+import logo from '../../../assets/user-grey.png';
 import BasicInfo from '../../../components/BasicInfo';
 import MyChapter from '../../../components/MyChapter';
 import Footer from '../../../components/Footer';

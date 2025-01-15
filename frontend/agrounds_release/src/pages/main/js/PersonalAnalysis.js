@@ -34,6 +34,7 @@ const PersonalAnalysis = () => {
         setSummary(response.data.ai_summation || [])
         setSelectedMatch(initialMatchCode);
         setLoading(false);
+        console.log(response.data.analyze )
       })
       .catch((error) => {
         console.error(error);
@@ -89,11 +90,11 @@ const PersonalAnalysis = () => {
         <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
 
-      <Quarter_Tab quarters={quarterData?.length} activeTab={activeTab} setActiveTab={setActiveTab}/>
+      <Quarter_Tab quarters={quarterData?.length} activeTab={activeTab} setActiveTab={setActiveTab} type={'personal'}/>
       {activeTab === "summary" ? (
-        <Summary data={positionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex}/>
+        <Summary data={positionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type={'personal'}/>
       ) : (
-        <DynamicQuarter data={quarterPositionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex}/>
+        <DynamicQuarter data={quarterPositionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type={'personal'}/>
       )}
     </div>
   );

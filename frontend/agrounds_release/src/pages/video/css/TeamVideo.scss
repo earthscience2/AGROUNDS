@@ -13,6 +13,7 @@
 
 .teamvideo{
   width: 100%;
+  max-width: 499px;
   @include display(flex, column, center, start);
   &:last-child {
     margin-bottom: 5vh;
@@ -23,18 +24,27 @@
     height: 1px;
     background-color: #DADFE5;
   }
-  .totalnum{
-    @include display(flex, row, start, start);
-    width: 90%;
-    margin: 2vh;
-    font-family: 'Pretendard-Regular';
-    & > p{
-      margin: 0;
-      @include font(1.8vh, 700, #262626);
+  .sortvideo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    .totalnum{
+      @include display(flex, row, start, start);
+      width: 90%;
+      margin: 2vh;
       font-family: 'Pretendard-Regular';
+      & > p{
+        margin: 0;
+        @include font(1.8vh, 700, #262626);
+        font-family: 'Pretendard-Regular';
+      }
     }
   }
   .nomatchvideo{
     margin-top: 15vh;
+    font-family: 'Pretendard-Regular';
+    font-size: 2vh;
+    font-weight: 500;
   }
 }

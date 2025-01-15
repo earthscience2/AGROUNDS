@@ -13,6 +13,7 @@
 
 .secessionlast{
   width: 100%;
+  max-width: 499px;
   @include display(flex, column, center, start);
   .quidebox{
     @include display(flex, column, start, center);

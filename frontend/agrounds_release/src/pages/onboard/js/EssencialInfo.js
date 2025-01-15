@@ -114,7 +114,7 @@ const EssencialInfo = () => {
     }
     console.log(formData)
 
-    navigate('/extra-info', { state: formData});
+    navigate('/app/extra-info', { state: formData});
   }
 
   return (

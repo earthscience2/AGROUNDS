@@ -17,7 +17,7 @@ const CompMakeTeam = () => {
       <div className='tab1'/>
       <Image_Comp img={check} width= '22vh'/>
       <div className='circletab'>
-        <Circle_common_btn title='팀 보러가기' onClick={() => navigate('/myteam')}/>
+        <Circle_common_btn title='팀 보러가기' onClick={() => navigate('/app/myteam')}/>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import Back_btn from "../../../components/Back_btn";
 import Login_title from "../../../components/Login_title";
 import Search from "../../../components/Search";
 import reload from "../../../assets/reload.png";
-import logo from "../../../assets/logo_sample.png";
+import logo from "../../../assets/default-team-logo.png";
 import Image_Comp from "../../../components/Image_Comp";
 import Modal from "../../../components/Modal";
 import Small_Common_Btn from "../../../components/Small_Common_Btn";
@@ -89,7 +89,7 @@ const JoinTeam = () => {
           <p>새롭게 팀을 만들고 마음에 드는 선수들을 영입해보세요.</p>
           <button
             className="create-team-btn"
-            onClick={() => navigate("/maketeam")}
+            onClick={() => navigate("/app/maketeam")}
           >
             새로운 팀 만들기
           </button>

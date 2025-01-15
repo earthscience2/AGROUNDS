@@ -14,6 +14,7 @@
 .jointeam{
   @include display(flex, column, center, center);
   width: 100%;
+  max-width: 499px;
   .recommend{
     @include display(flex, row, center, space-between);
     width: 90%;

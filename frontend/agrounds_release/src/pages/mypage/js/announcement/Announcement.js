@@ -22,6 +22,7 @@ export default Announcement;
 
 const AnnouncementStyle = styled.div`
   width: 100%;
+  max-width: 499px;
   display: flex;
   flex-direction: column;
   justify-content: start;
