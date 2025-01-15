@@ -24,13 +24,20 @@ ChartJS.register(
 );
 
 const CustomLineChart = ({ data }) => {
+  const LineColor = () => {
+    if(data[4] > data[3]){
+      return '#10CC7E';
+    }else {
+      return '#EC5858';
+    }
+  }
   const lineChartData = {
     labels: ['_','_','_','_','_'] ,
     datasets: [
       {
         label: '_',
         data: data, 
-        borderColor: '#111111',
+        borderColor: LineColor,
         borderWidth: 2,
         backgroundColor: 'rgba(206, 212, 218, 0.2)', 
         tension: .3, 
@@ -62,7 +69,15 @@ const CustomLineChart = ({ data }) => {
         display: false,
       },
       y: {
-        display: false, 
+        display: true, 
+        ticks: {
+          display: false, 
+        },
+        grid: {
+          drawBorder: false, 
+          drawOnChartArea: true, 
+          drawTicks: false, 
+        },
       },
     },
   };

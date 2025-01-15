@@ -23,7 +23,7 @@ const SecessionLast = () => {
     reasonForWithdrawApi({"user_code" : sessionStorage.getItem("userCode"), "reason": selectedReason});
     withdrawApi({"user_code": sessionStorage.getItem("userCode")})
     .then(() => {
-      navigate('/secessioncomplete');
+      navigate('/app/secessioncomplete');
     })
     .catch((error) => {
       alert('회원탈퇴에 실패했습니다.');

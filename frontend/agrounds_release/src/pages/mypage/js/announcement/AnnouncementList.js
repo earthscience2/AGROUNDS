@@ -22,7 +22,7 @@ const AnnouncementList = () => {
       <BackTitle_Btn navTitle='공지사항' />
       {list.length ? (
         list.map((announce, index) => (
-          <div className='announcebox' key={index} onClick={() => navigate('/announce',{state: {contents: announce}})}>
+          <div className='announcebox' key={index} onClick={() => navigate('/app/announce',{state: {contents: announce}})}>
             <p className='anntitle'>{announce.title}</p>
             <p className='anndate'>{announce.date}</p>
           </div>

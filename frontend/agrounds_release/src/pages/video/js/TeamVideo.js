@@ -4,10 +4,12 @@ import Back_btn from '../../../components/Back_btn';
 import Login_title from '../../../components/Login_title';
 import Video_Thumnail from '../../../components/Video_Thumnail';
 import { getTeamVideoListApi } from '../../../function/MatchApi';
+import Sort from '../../../components/Sort';
 
 const TeamVideo = () => {
 
   const [videoList, setVideoList] = useState([]);
+  const [sortOrder, setSortOrder] = useState('newest'); 
 
   useEffect(() => {
 
@@ -19,17 +21,30 @@ const TeamVideo = () => {
 
   }, [])
 
+  const getSortedVideos = () => {
+    return [...videoList].sort((a, b) => {
+      if (sortOrder === 'newest') {
+        return new Date(b.date) - new Date(a.date); // 최신순
+      } else {
+        return new Date(a.date) - new Date(b.date); // 오래된 순
+      }
+    });
+  };
+
+  const sortedVideos = getSortedVideos();
   return (
     <div className='teamvideo'>
       <Back_btn />
       <Login_title title="팀 경기영상" explain="팀의 움직임을 중심으로 경기 흐름을 파악해보세요"/>
       <div className='line'/>
-      <div className='totalnum'>총 <p>{videoList.length}개</p>의 동영상</div>
-
-      {videoList.length === 0 ? (
+      <div className='sortvideo'>
+        <div className='totalnum'>총 <p>{sortedVideos.length}개</p>의 동영상</div>
+        <Sort sortOrder={sortOrder} setSortOrder={setSortOrder} back='white'/>
+      </div>
+      {sortedVideos.length === 0 ? (
         <p className='nomatchvideo'>경기영상이 없습니다.</p>
       ) : (
-        videoList.map((list) => (
+        sortedVideos.map((list) => (
           <Video_Thumnail list={list} type="team"/>
         ))
       )}

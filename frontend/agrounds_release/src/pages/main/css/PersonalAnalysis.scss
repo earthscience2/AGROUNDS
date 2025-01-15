@@ -8,6 +8,7 @@
 .personalanal{
   @include display(flex, column,  center, start);
   width: 100%;
+  max-width: 499px;
   min-height: 100vh; 
   &:last-child{
     margin-bottom: 10vh;

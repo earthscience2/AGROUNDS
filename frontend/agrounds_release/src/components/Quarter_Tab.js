@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const Quarter_Tab = ({quarters, activeTab, setActiveTab}) => {
+const Quarter_Tab = ({quarters, activeTab, setActiveTab, type}) => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
+  const typeReturn = () => {
+    if(type === 'personal'){
+      return <button
+        className={`tab ${activeTab === "summary" ? "active" : ""}`}
+        onClick={() => handleTabClick("summary")}
+      >
+        요약
+      </button>
+    } else {
+      return ''
+    }
+  }
+
   return (
     <QuarterTabStyle>
       <div className="tabs">
-        <button
-          className={`tab ${activeTab === "summary" ? "active" : ""}`}
-          onClick={() => handleTabClick("summary")}
-        >
-          요약
-        </button>
+        {typeReturn()}
         {Array.from({ length: quarters }, (_, index) => (
           <button
             key={index}

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import device from '../assets/device.png';
 import styled from 'styled-components';
 import ovr from '../assets/ovr.png';
-import logo from '../assets/logo_sample.png';
 import location from '../assets/location.png';
 import Image_Comp from '../components/Image_Comp';
 import BarChart from '../components/BarChart';
@@ -11,7 +10,8 @@ import playlist from '../assets/playlist.png';
 import polygon from '../assets/polygon.png';
 import { getTeamInfoApi, getTeamPlayerListApi } from './TeamApi';
 import LineChart from '../components/LineChart';
-import { formatDate } from './ Conversion';
+import { extractDateInfo, formatDate } from './ Conversion';
+import { getTeamMatchList, getVideoSummationApi } from './MatchApi';
 
 const MyTeam = () => {
   const [info, setInfo] = useState([]);
@@ -59,7 +59,7 @@ const NoTeam = () => {
   return (
     <NoTeamStyle>
       <div className='noteamment'>함께할 팀을 찾고<br/>합류해보세요</div>
-      <div className='noteambtn' onClick={() => navigate('/jointeam')}>팀 찾기</div>
+      <div className='noteambtn' onClick={() => navigate('/app/jointeam')}>팀 찾기</div>
     </NoTeamStyle>
   )
 }
@@ -90,13 +90,27 @@ const MatchPlan = () => {
 };
 
 const MatchVideo = () => {
+  const [videonum, setVideoNum] = useState(0);
+  useEffect(() => {
+    getVideoSummationApi({'user_code': sessionStorage.getItem('userCode')})
+    .then((response) => {
+      const num = response.data.player_cam.number_of_videos + response.data.team_cam.number_of_videos + response.data.full_cam.number_of_videos + response.data.highlight_cam.number_of_videos
+      setVideoNum(num)
+    })
+    .catch((error) => {
+      console.log(error)
+      setVideoNum(0)
+    })
+
+  }, [sessionStorage.getItem('userCode')])
+  
   return (
     <MatchVideoStyle>
       <div className='videobox'>
         <div className='smallvideobox'/>
         <div className='bigvideobox'><img src={polygon} /></div>
       </div>
-      <div className='videocount'><img src={playlist} />3</div>
+      <div className='videocount'><img src={playlist} />{videonum}</div>
     </MatchVideoStyle>
   )
 }
@@ -110,14 +124,42 @@ const Device = () => {
 };
 
 const RecentMatchS = ({logo1, logo2}) => {
+  const navigate = useNavigate();
+
+  const [match, setMatch] = useState([]);
+  useEffect(() => {
+    getTeamMatchList({'team_code': sessionStorage.getItem('teamCode')})
+    .then((response) => {
+      setMatch(response.data.result[0])
+    })
+  }, [sessionStorage.getItem('teamCode')])
+
+  const formattedDate = match.match_schedule ? formatDate(match.match_schedule) : '';
+  const dayOfWeek = match.match_schedule
+    ? extractDateInfo(match.match_schedule).dayOfWeek.slice(0, 1)
+    : '';
+
   return (
-    <RecentMatchStyle>
-      <p className='date'>09.10(토)</p>
-      <div className='place'><img src={location} />인하대학교 운동장</div>
+    <RecentMatchStyle onClick={() => navigate('/app/recentmatch')}>
+      <p className='date'>
+      {match.match_schedule ? `${formattedDate} (${dayOfWeek})` : '최근 경기가 없습니다.'}
+      </p>
+      <div className='place'>
+        {match ? 
+        <>
+          <img src={location} />{match.match_location}
+        </>
+        : 
+        <>
+          -
+        </>
+        }
+      </div>
+        
       <div className='imgbox'>
-        <Image_Comp width='5vh' img={logo1}/>
+        <Image_Comp width='6vh' img={match.home_team_logo}/>
         <div className='secimg'>
-          <Image_Comp  width='5vh' img={logo2}/>
+          <Image_Comp  width='6vh' img={match.away_team_logo}/>
         </div>
       </div>
     </RecentMatchStyle>
@@ -172,9 +214,6 @@ const AttackAve = ({data}) => {
     
   }, [data])
 
-  console.log('데이터를 봅시다: ', attackData);
-  console.log('데이터를 봅시다: ', defenseData);
-
 
   return(
     <AttackAveStyle>
@@ -190,10 +229,10 @@ const AttackAve = ({data}) => {
   )
 }
 
-const OvrBarChart = () => {
+const OvrBarChart = ({data}) => {
   return(
     <OvrBarChartStyle>
-      <BarChart />
+      <BarChart data={data}/>
     </OvrBarChartStyle> 
   )
 }
@@ -206,6 +245,7 @@ const MatchVideoStyle = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-top: 1vh;
     .videobox{
       width: 100%;
       height: 90%;
@@ -215,7 +255,7 @@ const MatchVideoStyle = styled.div`
       align-items: center;
       margin-top: 2vh;
       .bigvideobox{
-        width: 90%;
+        width: 80%;
         height: 10vh;
         background-color: #697077;
         border-radius: 1vh;
@@ -227,7 +267,7 @@ const MatchVideoStyle = styled.div`
         }
       }
       .smallvideobox{
-        width: 80%;
+        width: 75%;
         height: 1vh;
         background-color: #697077;
         margin-bottom: 3px;
@@ -249,7 +289,7 @@ const MatchVideoStyle = styled.div`
       position: relative;
       font-family: 'Pretendard-Regular';
       margin-top: 1vh;
-      left: 30%;
+      left: 25%;
       img{
         width: 1.8vh;
         margin-right: .3vh;
@@ -269,7 +309,7 @@ const MyTeamStyle = styled.div`
     align-items: center;
     border-radius: 50%;
     overflow: hidden;
-    margin-top: 1vh;
+    margin-top: 3vh;
     .img{
       object-fit: contain;
       width: 10vh;
@@ -449,7 +489,7 @@ const RecentMatchStyle = styled.div`
     font-weight: 400;
     font-family: 'Pretendard-Regular';
     color: #6F6F6F;
-    margin: .5vh 0;
+    margin: 1vh 0;
   }
   .place{
     font-size: 1.5vh;
@@ -460,12 +500,13 @@ const RecentMatchStyle = styled.div`
     display: flex;
     align-items: center;
     & > img{
-      height: 1.5vh;
+      height: 1.7vh;
+      margin-right: .5vh;
     }
   }
   .imgbox{
     display: flex;
-    margin-top: 8vh;
+    margin-top: 7vh;
     .secimg{
       position: relative;
       right: 1.5vh;

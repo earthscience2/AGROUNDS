@@ -1,7 +1,7 @@
 import React from 'react';
 import './TotalAnal.scss';
 import Image_Comp from './Image_Comp';
-import logo1 from '../assets/logo_sample.png';
+import logo1 from '../assets/default-team-logo.png';
 import { useNavigate } from 'react-router-dom';
 
 const TotalAnal = ({ data, type }) => {
@@ -44,7 +44,7 @@ const TotalAnal = ({ data, type }) => {
               </div>
               <button
                 className='button'
-                onClick={() => navigate('/personalanalysis', { state: { matchCode } })}
+                onClick={() => navigate('/app/personalanalysis', { state: { matchCode } })}
               >
                 경기 상세 분석
               </button>
@@ -69,7 +69,7 @@ const TotalAnal = ({ data, type }) => {
               </div>
               <button
                 className='button'
-                onClick={() => navigate('/teamanalysis', { state: { matchCode } })}
+                onClick={() => navigate('/app/teamanalysis', { state: { matchCode } })}
               >
                 경기 상세 분석
               </button>

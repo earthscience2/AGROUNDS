@@ -2,11 +2,11 @@ import React from 'react';
 import Anal_Position_Nav from './Anal_Position_Nav';
 import star from '../assets/Star.png';
 import styled from 'styled-components';
-const Summary = ({data, currentIndex, setCurrentIndex}) => {
+const Summary = ({data, currentIndex, setCurrentIndex, type}) => {
   
   return (
     <SummaryStyle>
-      <Anal_Position_Nav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex}/>
+      <Anal_Position_Nav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type={type}/>
       <div className='contents'>
         <div className='startitle'>
         <img src={star} /><p>AI 요약</p>

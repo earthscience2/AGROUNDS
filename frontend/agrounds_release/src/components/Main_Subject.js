@@ -21,7 +21,7 @@ const Main_Subject = ({title, BG, color, children, arrow, arrowC, onClick}) => {
 export default Main_Subject;
 
 const MainSubjectStyle = styled.div`
-  width: 85%;
+  width: 90%;
   height: 26vh;
   overflow: hidden;
   display: flex;

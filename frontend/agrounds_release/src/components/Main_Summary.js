@@ -21,7 +21,7 @@ const MainSummary = () => {
 
   return (
     <div className='mainsummary'>
-      <div className='infobox' onClick={() => navigate('/userinfo', {state: {userCode: userCode}})}>
+      <div className='infobox' onClick={() => navigate('/app/userinfo', {state: {userCode: userCode}})}>
         <div className='info'>
           <p className='age'>만 {AgeConversion(sessionStorage.getItem('userBirth'))}세</p>
           <p className='name'>{sessionStorage.getItem('userName')}</p>

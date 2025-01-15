@@ -21,7 +21,7 @@ const EventList = () => {
       <BackTitle_Btn navTitle='이벤트' />
       {list.length ? (
         list.map((announce, index) => (
-          <div className='eventebox' key={index} onClick={() => navigate('/announce',{state: {contents: announce}})}>
+          <div className='eventebox' key={index} onClick={() => navigate('/app/announce',{state: {contents: announce}})}>
             <p className='eventtitle'>{announce.title}</p>
             <p className='eventdate'>{announce.date}</p>
           </div>

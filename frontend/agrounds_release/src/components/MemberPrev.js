@@ -65,15 +65,15 @@ const MemberPrevStyle = styled.div`
     justify-content: center;
     align-items: center;
     .dot{
-      width: .6vh;
-      height: .6vh;
+      width: .8vh;
+      height: .8vh;
       border-radius: 50%;
     }
     .position{
       font-size: 1.6vh;
       font-weight: 600;
       font-family: 'Pretendard-Regular';
-      margin: 0 .5vh 0 .5vh;
+      margin: 0 .5vh 0 1vh;
     }
   }
   .getoutBtn{

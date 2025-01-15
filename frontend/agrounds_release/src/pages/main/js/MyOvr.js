@@ -17,7 +17,6 @@ const MyOvr = () => {
       if (response.data && response.data.point) {
         setOvrData(response.data);
         setRaderData(Object.values(response.data.point));
-        console.log(response.data);
       } else {
         console.log("response.data.point가 존재하지 않습니다.");
         setRaderData([]);
@@ -28,8 +27,6 @@ const MyOvr = () => {
     })
   }, [])
 
-
-
   return (
     <div className="myovr">
       <Back_btn />
@@ -37,8 +34,9 @@ const MyOvr = () => {
         title="나의 OVR"
         explain="경기 데이터를 기반으로 설정된 현재 나의 능력치를 확인하고 더 발전해보세요"
       />
-      
-      <RayderChart data={RaderData} rate="88" />
+      <div style={{marginTop: '-10vh'}}></div>
+      <p className='rader-rate'>{RaderData[0]}</p>
+      {RaderData && <RayderChart data={RaderData} /> }
     
       <div className="avescorebox">
         <Main_Subject BG="white" color="black" arrow={false}>
@@ -51,7 +49,7 @@ const MyOvr = () => {
    
       <div className="myovrchartbox">
         <Main_Subject title="OVR지수 추세" BG="white" color="black" arrow={true}>
-          <OvrBarChart />
+          {RaderData && <OvrBarChart data={RaderData}/>}
         </Main_Subject>
       </div>
     </div>

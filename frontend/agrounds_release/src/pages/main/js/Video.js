@@ -43,19 +43,19 @@ const Video = () => {
       <LogoBellNav />
       <p className='videotitle'>경기 영상</p>
       <div className='contents'>
-        <div className='contentbox' onClick={() => navigate('/personalvideo')}>
+        <div className='contentbox' onClick={() => navigate('/app/personalvideo')}>
           <ThumbnailStack thumbnails={videoData.player_cam?.thumbnail || []} />
           <p className='contenttitle'>Player Cam</p>
           <p className='contentnumber'>{videoData.player_cam?.number_of_videos || 0}개의 영상</p>
         </div>
 
-        <div className='contentbox' onClick={() => navigate('/teamvideo')}>
+        <div className='contentbox' onClick={() => navigate('/app/teamvideo')}>
           <ThumbnailStack thumbnails={videoData.team_cam?.thumbnail || []} />
           <p className='contenttitle'>Team Cam</p>
           <p className='contentnumber'>{videoData.team_cam?.number_of_videos || 0}개의 영상</p>
         </div>
 
-        <div className='contentbox' onClick={() => navigate('/fullvideo')}>
+        <div className='contentbox' onClick={() => navigate('/app/fullvideo')}>
           <ThumbnailStack thumbnails={videoData.full_cam?.thumbnail || []} />
           <p className='contenttitle'>Full Cam</p>
           <p className='contentnumber'>{videoData.full_cam?.number_of_videos || 0}개의 영상</p>

@@ -47,6 +47,7 @@ import Event from './pages/mypage/js/announcement/Event';
 import TeamAnalysis from './pages/main/js/TeamAnalysis';
 import RecentMatch from './pages/team/js/RecentMatch';
 import ComponyIntroduce from './pages/web/ComponyIntroduce';
+import ErrorPage from './pages/ErrorPage';
 
 
 const useBodyClass = (className) => {
@@ -60,8 +61,38 @@ const useBodyClass = (className) => {
 
 const AppWrapper = () => {
   const location = useLocation();
-  const isRootApp = location.pathname === "/app" || location.pathname === "/app/";
+  const isRootApp = location.pathname.startsWith("/app");
+
   useBodyClass(isRootApp ? "onboard-body" : "default-body");
+
+  useEffect(() => {
+    const SESSION_TIMEOUT = 20 * 60 * 1000; // 20분
+    let inactivityTimeout;
+
+    const resetInactivityTimer = () => {
+      clearTimeout(inactivityTimeout);
+      inactivityTimeout = setTimeout(() => {
+        sessionStorage.clear();
+        alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+        window.location.href = '/app'; 
+      }, SESSION_TIMEOUT);
+    };
+
+    ['mousemove', 'keydown', 'click', 'scroll'].forEach((event) => {
+      window.addEventListener(event, resetInactivityTimer);
+    });
+
+    resetInactivityTimer(); 
+
+    return () => {
+      ['mousemove', 'keydown', 'click', 'scroll'].forEach((event) => {
+        window.removeEventListener(event, resetInactivityTimer);
+      });
+      clearTimeout(inactivityTimeout);
+    };
+  }, []);
+
+
   return <Outlet />;
 };
 
@@ -101,6 +132,7 @@ const router = createBrowserRouter([
   {
     path: "/app/*",
     element: <AppWrapper />,
+    errorElement: <ErrorPage />,
     children: [
       { path: "", element: <Onboard /> },
       { path: "loading-for-login", element: <LoadingPage /> },

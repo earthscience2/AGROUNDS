@@ -11,7 +11,7 @@ const Complete = () => {
 
   const compSecession = () => {
     sessionStorage.clear();
-    navigate('/');
+    navigate('/app');
   }
 
   return (
@@ -29,6 +29,7 @@ export default Complete;
 
 const CompleteStyle = styled.div`
   width: 100%;
+  max-width: 499px;
   display: flex;
   flex-direction: column;
   align-items: center;

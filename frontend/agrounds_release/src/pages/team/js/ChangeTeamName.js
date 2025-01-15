@@ -14,7 +14,7 @@ const ChangeTeamName = () => {
       <Login_title title='팀명 변경하기' explain='팀명을 원하는 이름으로 변경해보세요.'/>
       <Login_input placeholder='팀 이름 입력' type='text'/>
       <div className='gap'></div>
-      <Circle_common_btn title='변경하기' onClick={() => navigate('/completechangename')}/> 
+      <Circle_common_btn title='변경하기' onClick={() => navigate('/app/completechangename')}/> 
     </div>
   );
 };
