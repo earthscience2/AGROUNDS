@@ -38,11 +38,11 @@ class getVideoSummation(APIView):
         player_videos = VideoInfo.objects.filter(user_code = user_code, type = 'player')
         player_videos_number = player_videos.count()
         
-        user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+        user_matchs = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
 
-        team_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='team')
+        team_videos = VideoInfo.objects.filter(match_code__in=user_matchs, type='team')
 
-        full_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='full')
+        full_videos = VideoInfo.objects.filter(match_code__in=user_matchs, type='full')
         
         team_videos_number = len(team_videos)
 
@@ -312,7 +312,7 @@ class getMatchVideoInfo(APIView):
                 return Response({"error" : f"type이 {type}인 경우 user_code는 필수입니다."}, status=400)
             video_info.filter(user_code=user_code)
 
-        if video_info is None:
+        if not video_info.exists():
             return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
         
         

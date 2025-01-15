@@ -2,16 +2,15 @@ from rest_framework import serializers
 from DB.models import *
 from staticfiles.get_file_url import get_file_url
 
-class User_Match_Info_Serializer(serializers.ModelSerializer):
+class Default_User_Match_Info_Serializer(serializers.ModelSerializer):
     class Meta:
         model = UserMatchInfo
         fields = '__all__'
 
-class User_Match_Serializer(serializers.ModelSerializer):
+class User_Match_Info_Serializer(serializers.ModelSerializer):
     match_location = serializers.SerializerMethodField()
     thumbnail = serializers.SerializerMethodField()
     match_title = serializers.SerializerMethodField()
-    match_time = serializers.SerializerMethodField()
     distance = serializers.SerializerMethodField()
     top_speed = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
@@ -22,29 +21,23 @@ class User_Match_Serializer(serializers.ModelSerializer):
 
 
     class Meta:
-        models = UserMatch
-        fields = ['match_code', 'user_code', 'match_schedule', 'service_type',
-                  'match_type', 'match_location', 'thumbnail', 'match_title', 'match_time',
-                  'distance', 'top_speed', 'rating', 'home_team', 'home_team_logo', 'away_team',
+        model = UserMatchInfo
+        fields = ['match_code', 'match_schedule', 'match_location',
+                    'thumbnail', 'match_title', 'match_time', 'distance', 
+                    'top_speed', 'rating', 'home_team', 'home_team_logo', 'away_team',
                   'away_team_logo']
         
     default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
     default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
         
     def get_match_location(self, obj):
-        match_info = UserMatchInfo.objects.filter(match_code = obj.match_code, user_code = obj.user_code).first()
-        return match_info.ground_name
+        return obj.ground_name
     
     def get_thumbnail(self, obj):
         return self.default_thumbnail
 
     def get_match_title(self, obj):
-        match_info = UserMatchInfo.objects.filter(match_code = obj.match_code, user_code = obj.user_code).first()
-        return match_info.match_name
-    
-    def get_match_time(self, obj):
-        match_info = UserMatchInfo.objects.filter(match_code = obj.match_code, user_code = obj.user_code).first()
-        return match_info.match_time
+        return obj.match_name
     
     def get_distance(self, obj):
         return '-'
@@ -56,40 +49,40 @@ class User_Match_Serializer(serializers.ModelSerializer):
         return '-'
     
     def get_home_team(self, obj):
-        if obj.match_type == 'player':
-            return '-'
-        try:
-            return TeamMatch.objects.filter(match_code = obj.match_code).first().team_code
-        except TeamMatch.DoesNotExist:
+        team_match = TeamMatch.objects.filter(match_code = obj.match_code)
+        if team_match.exists():
+            return team_match.first().team_code
+        else:
             return '-'
     
     def get_home_team_logo(self, obj):
-        if obj.match_type == 'player':
-            return self.default_team_logo
-        try:
-            team_code = TeamMatch.objects.filter(match_code = obj.match_code).first().team_code
-            return TeamInfo.objects.get(team_code = team_code).team_logo
-        except TeamMatch.DoesNotExist:
-            return '-'
-        except TeamInfo.DoesNotExist:
+        team_match = TeamMatch.objects.filter(match_code = obj.match_code)
+        if team_match.exists():
+            team_code = team_match.first().team_code
+            try:
+                team_info = TeamInfo.objects.get(team_code = team_code)
+                return team_info.team_logo
+            except TeamInfo.DoesNotExist:
+                return '-'
+        else:
             return '-'
     
     def get_away_team(self, obj):
-        match_info = UserMatchInfo.objects.filter(match_code = obj.match_code, user_code = obj.user_code).first()
-        return match_info.away_team
+        if obj.away_team is None:
+            return '-'
+        else:
+            return obj.away_team
     
     def get_away_team_logo(self, obj):
-        match_info = UserMatchInfo.objects.filter(match_code = obj.match_code, user_code = obj.user_code).first()
         try:
-            return TeamInfo.objects.get(team_code = match_info.away_team).team_logo
+            return TeamInfo.objects.get(team_code = obj.away_team).team_logo
         except TeamInfo.DoesNotExist:
             return self.default_team_logo
 
-class Team_Match_Serializer(serializers.ModelSerializer):
+class Team_Match_Info_Serializer(serializers.ModelSerializer):
     match_location = serializers.SerializerMethodField()
     thumbnail = serializers.SerializerMethodField()
     match_title = serializers.SerializerMethodField()
-    match_time = serializers.SerializerMethodField()
     match_mom = serializers.SerializerMethodField()
     match_result = serializers.SerializerMethodField()
     participation = serializers.SerializerMethodField()
@@ -99,7 +92,7 @@ class Team_Match_Serializer(serializers.ModelSerializer):
     away_team_logo = serializers.SerializerMethodField()
 
     class Meta:
-        models = TeamMatch
+        models = TeamMatchInfo
         fields = ['match_code', 'match_schedule', 'match_location', 'thumbnail', 'match_title', 'match_time',
                   'match_mom', 'match_result', 'participation', 'home_team', 'home_team_logo', 'away_team',
                   'away_team_logo']
@@ -108,21 +101,13 @@ class Team_Match_Serializer(serializers.ModelSerializer):
     default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
         
     def get_match_location(self, obj):
-        try:
-            match_info = TeamMatchInfo.objects.get(match_code = obj.match_code)
-            return match_info.ground_name
-        except TeamMatchInfo.DoesNotExist:
-            return '-'
-        
+        return obj.ground_name
+    
     def get_thumbnail(self, obj):
         return self.default_thumbnail
 
     def get_match_title(self, obj):
-        try:
-            match_info = TeamMatchInfo.objects.get(match_code = obj.match_code)
-            return match_info.match_name
-        except TeamMatchInfo.DoesNotExist:
-            return '-'
+        return obj.match_name
     
     def get_match_time(self, obj):
         try:
@@ -141,27 +126,32 @@ class Team_Match_Serializer(serializers.ModelSerializer):
         return '-'
     
     def get_home_team(self, obj):
-        return obj.team_code
+        team_match = TeamMatch.objects.filter(match_code = obj.match_code)
+        if team_match.exists():
+            return team_match.first().team_code
+        else:
+            return '-'
     
     def get_home_team_logo(self, obj):
-        try:
-            return TeamInfo.objects.get(team_code = obj.team_code).team_logo
-        except TeamInfo.DoesNotExist:
-            return self.default_team_logo
+        team_match = TeamMatch.objects.filter(match_code = obj.match_code)
+        if team_match.exists():
+            team_code = team_match.first().team_code
+            try:
+                team_info = TeamInfo.objects.get(team_code = team_code)
+                return team_info.team_logo
+            except TeamInfo.DoesNotExist:
+                return '-'
+        else:
+            return '-'
     
     def get_away_team(self, obj):
-        try:
-            match_info = TeamMatchInfo.objects.get(match_code = obj.match_code)
-            return match_info.away_team
-        except TeamMatchInfo.DoesNotExist:
+        if obj.away_team is None:
             return '-'
+        else:
+            return obj.away_team
     
     def get_away_team_logo(self, obj):
         try:
-            match_info = TeamMatchInfo.objects.get(match_code = obj.match_code)
-            away_team_info = TeamInfo.objects.get(team_code = match_info.away_team)
-            return away_team_info.team_logo
-        except TeamMatchInfo.DoesNotExist:
-            return '-'
+            return TeamInfo.objects.get(team_code = obj.away_team).team_logo
         except TeamInfo.DoesNotExist:
-            return '-'
+            return self.default_team_logo
