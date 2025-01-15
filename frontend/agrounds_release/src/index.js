@@ -64,6 +64,35 @@ const AppWrapper = () => {
   const isRootApp = location.pathname.startsWith("/app");
 
   useBodyClass(isRootApp ? "onboard-body" : "default-body");
+
+  useEffect(() => {
+    const SESSION_TIMEOUT = 20 * 60 * 1000; // 20분
+    let inactivityTimeout;
+
+    const resetInactivityTimer = () => {
+      clearTimeout(inactivityTimeout);
+      inactivityTimeout = setTimeout(() => {
+        sessionStorage.clear();
+        alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+        window.location.href = '/app'; 
+      }, SESSION_TIMEOUT);
+    };
+
+    ['mousemove', 'keydown', 'click', 'scroll'].forEach((event) => {
+      window.addEventListener(event, resetInactivityTimer);
+    });
+
+    resetInactivityTimer(); 
+
+    return () => {
+      ['mousemove', 'keydown', 'click', 'scroll'].forEach((event) => {
+        window.removeEventListener(event, resetInactivityTimer);
+      });
+      clearTimeout(inactivityTimeout);
+    };
+  }, []);
+
+
   return <Outlet />;
 };
 
