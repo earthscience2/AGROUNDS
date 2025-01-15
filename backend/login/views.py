@@ -60,9 +60,9 @@ class nickname(APIView):
 
 # 카카오 로그인
 class kakao(APIView):
-    def get(self, requset):
+    def get(self, request):
         return redirect(
-            f"https://kauth.kakao.com/oauth/authorize?client_id={KAKAO_CLIENT_ID}&redirect_uri={KAKAO_CALLBACK_URI}&response_type=code"
+            f"https://kauth.kakao.com/oauth/authorize?client_id={KAKAO_CLIENT_ID}&redirect_uri={KAKAO_CALLBACK_URI}?hostname={request.query_params.get('hostname')}&response_type=code"
         )
 
 # 카카오 로그인 - callback view
@@ -75,7 +75,7 @@ class kakaoCallback(APIView):
             data = {
                 "grant_type"    :"authorization_code",
                 "client_id"     :KAKAO_CLIENT_ID,
-                "redirect_uri"  :KAKAO_CALLBACK_URI,
+                "redirect_uri"  :f"{KAKAO_CALLBACK_URI}?hostname={request.query_params.get('hostname')}",
                 "code"          :request.query_params.get("code")
             }
             kakao_token_api = "https://kauth.kakao.com/oauth/token"
