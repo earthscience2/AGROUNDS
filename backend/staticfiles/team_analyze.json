@@ -8,22 +8,26 @@
 					"top_point" : {
 						"profile" : "",
 						"nickname" : "조규성",
-						"value" : 9.3
+						"value" : 9.3,
+						"position" : "ST"
 					},
 					"top_activity" : {
 						"profile" : "",
 						"nickname" : "KIM",
-						"value" : 7.75
+						"value" : 7.75,
+						"position" : "CB"
 					},
 					"top_sprint" : {
 						"profile" : "",
 						"nickname" : "Sonny",
-						"value" : 36.79
+						"value" : 36.79,
+						"position" : "RWF"
 					},
 					"top_speed" : {
 						"profile" : "",
 						"nickname" : "강인리",
-						"value" : 26.17
+						"value" : 26.17,
+						"position" : "CAM"
 					}
 				},
 				"my_rankings" : {
@@ -105,22 +109,26 @@
 					"top_point" : {
 						"profile" : "",
 						"nickname" : "Sonny",
-						"value" : 8.3
+						"value" : 8.3,
+						"position" : "RWF"
 					},
 					"top_activity" : {
 						"profile" : "",
 						"nickname" : "KIM",
-						"value" : 7.75
+						"value" : 7.75,
+						"position" : "CB"
 					},
 					"top_sprint" : {
 						"profile" : "",
 						"nickname" : "조규성",
-						"value" : 36.79
+						"value" : 36.79,
+						"position" : "ST"
 					},
 					"top_speed" : {
 						"profile" : "",
 						"nickname" : "강인리",
-						"value" : 26.17
+						"value" : 26.17,
+						"position" : "CAM"
 					}
 				},
 				"my_rankings" : {
@@ -202,22 +210,26 @@
 					"top_point" : {
 						"profile" : "",
 						"nickname" : "강인리",
-						"value" : 9.3
+						"value" : 9.3,
+						"position" : "CAM"
 					},
 					"top_activity" : {
 						"profile" : "",
 						"nickname" : "KIM",
-						"value" : 7.75
+						"value" : 7.75,
+						"position" : "CB"
 					},
 					"top_sprint" : {
 						"profile" : "",
 						"nickname" : "Sonny",
-						"value" : 36.79
+						"value" : 36.79,
+						"position" : "RWF"
 					},
 					"top_speed" : {
 						"profile" : "",
 						"nickname" : "조규성",
-						"value" : 26.17
+						"value" : 26.17,
+						"position" : "ST"
 					}
 				},
 				"my_rankings" : {

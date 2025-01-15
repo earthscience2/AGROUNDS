@@ -20,7 +20,7 @@ class getUserMatchList(APIView):
 
         serializer = User_Match_Info_Serializer(user_matchs, many=True)
 
-        return Response({'result' : serializer.data})
+        # return Response({'result' : serializer.data})
         
         default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
         default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')

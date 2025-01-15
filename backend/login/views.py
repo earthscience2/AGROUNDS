@@ -68,6 +68,7 @@ class kakao(APIView):
 # 카카오 로그인 - callback view
 class kakaoCallback(APIView):
     def get(self, request, format=None):
+        client_url = request.META.get('CLIENT_URL')
         try:
             data = {
                 "grant_type"    :"authorization_code",
@@ -92,10 +93,10 @@ class kakaoCallback(APIView):
             print("회원가입 진행")
             encrypted_email = cryptographysss.encrypt_aes(kakao_email)
             encoded_string = quote(encrypted_email)
-            return redirect(CLIENT_URL+"/essencial-info/?type=kakao&id=" + encoded_string)
+            return redirect(client_url+"/app/essencial-info/?type=kakao&id=" + encoded_string)
         
         # 가입되어있는 경우 토큰을 url파라메터로 전송해줌.
-        return redirect(CLIENT_URL+"/app/loading-for-login/?code="+login.getTokensForUser(login, user)['access'])
+        return redirect(client_url+"/app/loading-for-login/?code="+login.getTokensForUser(login, user)['access'])
 
 # 카카오 로그인 - 회원가입
 class kakaoSignup(APIView):
