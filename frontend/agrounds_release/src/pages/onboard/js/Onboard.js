@@ -13,7 +13,7 @@ const Onboard = () => {
   const handleModalClose = () => setModalOpen(false);
 
   const kakaoLogin = () => { // 카카오 로그인 처리를 위해 서버 측 url로 redirect
-    window.location.replace(process.env.REACT_APP_BASE_URL + "/api/login/kakao/");
+    window.location.replace(process.env.REACT_APP_BASE_URL + "/api/login/kakao/?hostname=" + window.location.hostname);
   };
 
   return (

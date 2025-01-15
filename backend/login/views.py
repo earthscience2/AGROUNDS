@@ -68,7 +68,9 @@ class kakao(APIView):
 # 카카오 로그인 - callback view
 class kakaoCallback(APIView):
     def get(self, request, format=None):
-        client_url = request.META.get('CLIENT_URL')
+        client_url = CLIENT_URL
+        if request.query_params.get('hostname') == 'localhost' :
+            client_url = "http://localhost:3000"
         try:
             data = {
                 "grant_type"    :"authorization_code",
@@ -287,4 +289,3 @@ class login(APIView):
 #         user_info_serializer.is_valid(raise_exception=True)
 #         user_info_serializer.save()
 #         return Response(user_info_serializer.data, status=status.HTTP_200_OK)
-        
