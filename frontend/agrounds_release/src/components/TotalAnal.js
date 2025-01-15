@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 const TotalAnal = ({ data, type }) => {
   const navigate = useNavigate();
   const matchCode = data.match_code;
-  console.log(data)
 
   return (
     <div className='totalanal'>

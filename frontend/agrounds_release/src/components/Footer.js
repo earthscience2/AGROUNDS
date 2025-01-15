@@ -42,7 +42,7 @@ const Footer = () => {
           src={isActive('/app/connect') ? connectBlack : connectGrey}
           alt='기기연결'
         />
-        <p className={`title ${isActive('/app/connect') ? 'active' : ''}`}>업로드</p>
+        <p className={`title ${isActive('/app/connection') ? 'active' : ''}`}>업로드</p>
       </div>
       <div className='box' onClick={() => navigate('/app/video')}>
         <img

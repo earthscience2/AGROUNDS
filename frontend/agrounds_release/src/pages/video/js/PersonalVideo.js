@@ -21,9 +21,9 @@ const PersonalVideo = () => {
   const getSortedVideos = () => {
     return [...videoList].sort((a, b) => {
       if (sortOrder === 'newest') {
-        return new Date(b.match_schedule) - new Date(a.match_schedule); // 최신순
+        return new Date(b.date) - new Date(a.date); // 최신순
       } else {
-        return new Date(a.match_schedule) - new Date(b.match_schedule); // 오래된 순
+        return new Date(a.date) - new Date(b.date); // 오래된 순
       }
     });
   };

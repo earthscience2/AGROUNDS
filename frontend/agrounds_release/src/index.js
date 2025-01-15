@@ -61,7 +61,8 @@ const useBodyClass = (className) => {
 
 const AppWrapper = () => {
   const location = useLocation();
-  const isRootApp = location.pathname.startsWith("/app");
+  const isRootApp = location.pathname.replace(/\/+$/, "").startsWith("/app");
+
 
   useBodyClass(isRootApp ? "onboard-body" : "default-body");
 
