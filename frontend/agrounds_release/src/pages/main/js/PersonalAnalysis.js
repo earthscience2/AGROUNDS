@@ -34,7 +34,6 @@ const PersonalAnalysis = () => {
         setSummary(response.data.ai_summation || [])
         setSelectedMatch(initialMatchCode);
         setLoading(false);
-        console.log(response.data.analyze )
       })
       .catch((error) => {
         console.error(error);

@@ -2,6 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import section1 from '../../assets/web/section1.png';
 import styled from 'styled-components';
 import section2 from '../../assets/web/section2.png';
+import section3 from '../../assets/web/section3.png';
+import section4 from '../../assets/web/section4.png';
+import section5 from '../../assets/web/section5.png';
 import section7 from '../../assets/web/section7.png';
 import dashjs from 'dashjs';
 
@@ -64,7 +67,7 @@ const Main = () => {
     return (
       <MainStyle>
       <Section1>
-        <div>누구나 이용할 수 있는 제품 <br/>아마추어를 위한 쉽고 합리적인 <br/>제품을 통해 모든 아마추어 선수들의 <br/>성장을 응원하고 돕습니다.</div>
+        <div style={{lineHeight:'2'}}>누구나 이용할 수 있는 제품 <br/>아마추어를 위한 쉽고 합리적인 <br/>제품을 통해 모든 아마추어 선수들의 <br/>성장을 응원하고 돕습니다.</div>
         <img src={section1} />
       </Section1>
       <Section2>
@@ -82,7 +85,7 @@ const Main = () => {
           <p className='contents2'>이후, AI 기술을 활용하여 이 정보를 한층 더 정교하게 요약하고 시각화하여,<br/> 누구나 쉽게 이해하고 활용할 수 있도록 제공합니다. <br/>데이터의 전문성과 소비자의 접근성을 동시에 만족시키는 <br/>혁신적인 분석 솔루션입니다.
           </p>
         </div>
-        <img src={section2} />
+        <img src={section3} />
       </Section3>
       <Section4>
         <div className='info-box'>
@@ -90,7 +93,7 @@ const Main = () => {
           <div className='contents'>무선 충전 기술을 적용해 비와 땀으로부터 안전한 설계를 구현했습니다. <br/>또한 블루투스 연결을 통해 경기 종료 후 데이터를 손쉽게 <br/>전송할 수 있도록 하여 편리함과 실용성을 동시에 제공하고 있습니다.
           </div>
         </div>
-        <img src={section2} />
+        <img src={section4} />
       </Section4>
       <Section5>
         <div className='info-box'>
@@ -99,7 +102,7 @@ const Main = () => {
           <p className='contents2'>이후, AI 기술을 활용하여 이 정보를 한층 더 정교하게 요약하고 시각화하여,<br/> 누구나 쉽게 이해하고 활용할 수 있도록 제공합니다. <br/>데이터의 전문성과 소비자의 접근성을 동시에 만족시키는 <br/>혁신적인 분석 솔루션입니다.
           </p>
         </div>
-        <img src={section2} />
+        <img src={section5} />
       </Section5>
       <Section6M>
         <div className='contents-box'>
@@ -164,10 +167,10 @@ const Main = () => {
           <p className='contents2'>이후, AI 기술을 활용하여 이 정보를 한층 더 정교하게 요약하고 시각화하여,<br/> 누구나 쉽게 이해하고 활용할 수 있도록 제공합니다. <br/>데이터의 전문성과 소비자의 접근성을 동시에 만족시키는 <br/>혁신적인 분석 솔루션입니다.
           </p>
         </div>
-        <img src={section2} />
+        <img src={section3} />
       </Section3>
       <Section4>
-        <img src={section2} />
+        <img src={section4} />
         <div className='info-box'>
           <div className='title'>GPS 기기</div>
           <div className='contents'>무선 충전 기술을 적용해 비와 땀으로부터 안전한 설계를 구현했습니다. <br/>또한 블루투스 연결을 통해 경기 종료 후 데이터를 손쉽게 <br/>전송할 수 있도록 하여 편리함과 실용성을 동시에 제공하고 있습니다.
@@ -181,7 +184,7 @@ const Main = () => {
           <p className='contents2'>이후, AI 기술을 활용하여 이 정보를 한층 더 정교하게 요약하고 시각화하여,<br/> 누구나 쉽게 이해하고 활용할 수 있도록 제공합니다. <br/>데이터의 전문성과 소비자의 접근성을 동시에 만족시키는 <br/>혁신적인 분석 솔루션입니다.
           </p>
         </div>
-        <img src={section2} />
+        <img src={section5} />
       </Section5>
       <Section6>
         <div className='video-type'>
