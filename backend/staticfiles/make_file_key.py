@@ -1,3 +1,33 @@
+from staticfiles.get_file_url import get_file_url
+
+def get_link(video_info, quarter_name):
+        path = video_info.path
+
+        if path is not None:
+            if path.startswith("http"):
+                return path
+            elif path != '':
+                return get_file_url(path)
+        
+        if video_info.type == 'player':
+            return get_file_url(f'video/{video_info.match_code}/{quarter_name}/player_pc/{video_info.user_code}/{video_info.user_code}.mpd')
+        else :
+            return get_file_url(f'video/{video_info.match_code}/{quarter_name}/{video_info.type}/{video_info.type}.mpd')
+
+def get_download_link(video_info, quarter_name): 
+    if video_info.type == 'player':
+        return get_file_url(f'video/{video_info.match_code}/{quarter_name}/player_pc/{video_info.user_code}.mp4/')
+    else :
+        return get_file_url(f'video/{video_info.match_code}/{quarter_name}/{video_info.type}.mp4')
+
+
+# ================================================
+
+# ================= teat_page ====================
+
+# ================================================
+
+
 base = "https://aground-aisdfis.s3.ap-northeast-2.amazonaws.com"
 
 def getQurterName(num_of_quarter, quarter):

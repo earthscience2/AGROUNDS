@@ -35,7 +35,7 @@ class UserMatch(models.Model):
 
 # user_match_info 테이블
 class UserMatchInfo(models.Model):
-    match_code = models.CharField(max_length=45)
+    match_code = models.CharField(primary_key=True, max_length=45)
     ground_name = models.CharField(max_length=45)
     away_team = models.CharField(max_length=45, null=True, blank=True)
     away_team_name = models.CharField(max_length=45, null=True, blank=True)

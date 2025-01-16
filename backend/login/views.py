@@ -60,19 +60,22 @@ class nickname(APIView):
 
 # 카카오 로그인
 class kakao(APIView):
-    def get(self, requset):
+    def get(self, request):
         return redirect(
-            f"https://kauth.kakao.com/oauth/authorize?client_id={KAKAO_CLIENT_ID}&redirect_uri={KAKAO_CALLBACK_URI}&response_type=code"
+            f"https://kauth.kakao.com/oauth/authorize?client_id={KAKAO_CLIENT_ID}&redirect_uri={KAKAO_CALLBACK_URI}?hostname={request.query_params.get('hostname')}&response_type=code"
         )
 
 # 카카오 로그인 - callback view
 class kakaoCallback(APIView):
     def get(self, request, format=None):
+        client_url = CLIENT_URL
+        if request.query_params.get('hostname') == 'localhost' :
+            client_url = "http://localhost:3000"
         try:
             data = {
                 "grant_type"    :"authorization_code",
                 "client_id"     :KAKAO_CLIENT_ID,
-                "redirect_uri"  :KAKAO_CALLBACK_URI,
+                "redirect_uri"  :f"{KAKAO_CALLBACK_URI}?hostname={request.query_params.get('hostname')}",
                 "code"          :request.query_params.get("code")
             }
             kakao_token_api = "https://kauth.kakao.com/oauth/token"
@@ -92,10 +95,10 @@ class kakaoCallback(APIView):
             print("회원가입 진행")
             encrypted_email = cryptographysss.encrypt_aes(kakao_email)
             encoded_string = quote(encrypted_email)
-            return redirect(CLIENT_URL+"/essencial-info/?type=kakao&id=" + encoded_string)
+            return redirect(client_url+"/app/essencial-info/?type=kakao&id=" + encoded_string)
         
         # 가입되어있는 경우 토큰을 url파라메터로 전송해줌.
-        return redirect(CLIENT_URL+"/app/loading-for-login/?code="+login.getTokensForUser(login, user)['access'])
+        return redirect(client_url+"/app/loading-for-login/?code="+login.getTokensForUser(login, user)['access'])
 
 # 카카오 로그인 - 회원가입
 class kakaoSignup(APIView):
@@ -286,4 +289,3 @@ class login(APIView):
 #         user_info_serializer.is_valid(raise_exception=True)
 #         user_info_serializer.save()
 #         return Response(user_info_serializer.data, status=status.HTTP_200_OK)
-        
