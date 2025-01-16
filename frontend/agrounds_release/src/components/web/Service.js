@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import service from '../../assets/web/service.png';
+import service from '../../assets/web/service-wide.png';
 import servicem1 from '../../assets/web/servicem1.png';
 import servicem2 from '../../assets/web/servicem2.png';
 import servicem3 from '../../assets/web/servicem3.png';
