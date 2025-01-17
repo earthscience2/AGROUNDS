@@ -26,7 +26,7 @@ class Team_Info_Serializer(serializers.ModelSerializer):
     def validate_team_name(self, value):
         if not (2 <= len(value) <= 15):
             raise serializers.ValidationError("team_name은 2글자 이상 15글자 이하로 설정해야 합니다.")
-        if not all(char.isalnum() or char in "!@#$%^&*()_+-=<>?/.,;:[]{}" for char in value):
+        if not all(char.isalnum() or char in " !@#$%^&*()_+-=<>?/.,;:[]{}" for char in value):
             raise serializers.ValidationError("team_name은 영문, 한글, 숫자, 특수문자로만 구성되어야 합니다.")
         return value
 

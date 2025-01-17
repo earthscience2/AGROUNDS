@@ -53,7 +53,7 @@ const Member = ({ userCode, img, player, age, position, color, onClick, activeTa
         break;
     }
     closeModal();
-    navigate('/teamsetting');
+    navigate('/app/teamsetting');
   };
 
   return (

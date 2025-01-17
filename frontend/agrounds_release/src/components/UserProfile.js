@@ -4,11 +4,13 @@ import agroundslogo from '../assets/agrounds_circle_logo.png';
 import pencil from '../assets/pencil.png';
 
 const UserProfile = ({selectedImage, setSelectedImage}) => {
+  const [imgObjUrl, setImgObjUrl] = useState(null)
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const fileURL = URL.createObjectURL(file);
-      setSelectedImage(fileURL);
+      setImgObjUrl(fileURL);
+      setSelectedImage(file)
     }
   };
 
@@ -22,10 +24,10 @@ const UserProfile = ({selectedImage, setSelectedImage}) => {
         <EditBox>
           <Pencil src={pencil} />
         </EditBox>
-        {selectedImage ? (
-          <ProfileImage src={selectedImage} alt="프로필 미리보기" />
+        {imgObjUrl ? (
+          <ProfileImage src={imgObjUrl} alt="프로필 미리보기" />
         ) : (
-          <DefaultImage src={agroundslogo} />
+          <DefaultImage src={imgObjUrl} />
         )}
       </Preview>
       <FileInput

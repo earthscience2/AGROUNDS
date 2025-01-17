@@ -40,15 +40,16 @@ class makeTeam(APIView):
                 
             try:
                 # 팀을 생성한 유저 타입을 coach로 변경
+                serializer.save()
                 team_host = request_data['team_host']
                 user = UserInfo.objects.get(user_code=team_host)
                 user.user_type = 'coach'
                 user.save()  # 변경 사항 저장
             except UserInfo.DoesNotExist:
                 return Response({"error": f"user with user_code {team_host} does not exist"}, status=status.HTTP_404_NOT_FOUND)
-            
-            serializer.save()
-            return Response({"result" : "success", "team_code" : serializer.data['team_code']})
+    
+            # return Response({"result" : "success", "team_code" : serializer.data['team_code']})
+            return Response(serializer.data)
         else:
             # 유효성 검사 오류 메시지
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

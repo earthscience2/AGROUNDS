@@ -38,20 +38,27 @@ const MakeTeam = () => {
   };
 
   const handleSubmit = () => {
-    const NewTeamData = {
-      team_host: sessionStorage.getItem('userCode'),
-      team_name: teamName,
-      team_logo: selectedImage,
-    };
+    setIsValid(false);
+    const formData = new FormData();
+    formData.append('team_host', sessionStorage.getItem('userCode'));
+    formData.append('team_name', teamName);
+    formData.append('team_logo', selectedImage); // 파일 객체 추가
 
-    MakeTeamApi(NewTeamData)
-      .then(() => {
+    console.log(formData);
+
+    MakeTeamApi(formData)
+      .then((res) => {
+        console.log(res.data.team_code)
+        sessionStorage.setItem('teamCode', res.data.team_code)
         navigate('/app/completemaketeam');
       })
       .catch((error) => {
         console.log(error)
-        // alert('팀 생성에 실패했습니다.');
-      });
+        alert('팀 생성에 실패했습니다. 다시 시도해주세요.');
+      })
+      .finally(()=>{
+        setIsValid(true);
+      })
   };
 
   return (
