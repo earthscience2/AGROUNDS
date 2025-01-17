@@ -74,7 +74,10 @@ const PersonalAnalysis = () => {
 
   const quarterPositionData = () => {
     for (let i = 0; i < quarterData?.length; i++) {
-      if (activeTab === `${i + 1}쿼터`) {
+      // if (activeTab === `${i + 1}쿼터`) {
+      //   return quarterData[i];
+      // }
+      if (activeTab === quarterData[i].quarter) {
         return quarterData[i];
       }
     }
@@ -90,7 +93,7 @@ const PersonalAnalysis = () => {
         <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
 
-      <Quarter_Tab quarters={quarterData?.length} activeTab={activeTab} setActiveTab={setActiveTab} type={'personal'}/>
+      <Quarter_Tab quarterData={quarterData} activeTab={activeTab} setActiveTab={setActiveTab} type={'personal'}/>
       {activeTab === "summary" ? (
         <Summary data={positionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type={'personal'}/>
       ) : (

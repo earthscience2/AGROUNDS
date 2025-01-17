@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const Quarter_Tab = ({quarters, activeTab, setActiveTab, type}) => {
+const Quarter_Tab = ({quarterData, activeTab, setActiveTab, type}) => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -24,15 +24,24 @@ const Quarter_Tab = ({quarters, activeTab, setActiveTab, type}) => {
     <QuarterTabStyle>
       <div className="tabs">
         {typeReturn()}
-        {Array.from({ length: quarters }, (_, index) => (
+        {quarterData.map((value, index)=>(
+           <button
+           key={index}
+           className={`tab ${activeTab === value.quarter ? "active" : ""}`}
+           onClick={() => handleTabClick(value.quarter)}
+         >
+           {value.quarter}
+         </button>
+        ))}
+        {/* {Array.from({ length: quarterData?.length }, (_, index) => (
           <button
             key={index}
             className={`tab ${activeTab === `${index + 1}쿼터` ? "active" : ""}`}
             onClick={() => handleTabClick(`${index + 1}쿼터`)}
           >
-            {index+1}쿼터
+            {quarterData[index].quarter}
           </button>
-        ))}
+        ))} */}
       </div>
     </QuarterTabStyle>
   )

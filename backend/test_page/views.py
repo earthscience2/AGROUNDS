@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import TestAnalyzeData
 from .serializers import *
-from staticfiles.make_file_key import *
+from staticfiles.test_page_make_file_key import *
 
 class getQuarterNumber(APIView):
     def post(self, request):

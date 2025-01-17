@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from staticfiles.get_file_url import get_file_url
 from .models import TestAnalyzeData
-from staticfiles.make_file_key import *
+from staticfiles.test_page_make_file_key import *
 from staticfiles.s3 import S3TxtFileReader
 import json
 

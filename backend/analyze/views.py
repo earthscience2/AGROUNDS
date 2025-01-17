@@ -4,6 +4,8 @@ from rest_framework.response import Response
 import json
 import os
 from django.conf import settings
+from .serializers import *
+from django.db.models import Case, When, Value, IntegerField
 
 from staticfiles.get_file_url import get_file_url
 # Create your views here.
@@ -22,11 +24,32 @@ class getAnalyzeResult(APIView):
         match_code = data['match_code']
         user_code = data['user_code']
 
-        filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
+        user_anal_match = UserAnalMatch.objects.filter(match_code=match_code, user_code=user_code)
 
-        with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
-            data = json.load(file)
-            return Response(data)
+        user_anal_match = sorted(
+            user_anal_match,
+            key=lambda x: (0 if x.quarter_name == "전반전" else 1, x.quarter_name),
+        )
+        
+        result = {}
+
+        serializer = Match_Analyze_Result_Serializer(user_anal_match, many=True)
+
+        result['ai_summation'] = {
+            "total" : "",
+            "attack" : "",
+            "defense" : ""
+        }
+
+        result['analyze'] = serializer.data
+
+        return Response(result)
+
+        # filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
+
+        # with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
+        #     data = json.load(file)
+        #     return Response(data)
         
     def map_string_to_number(self, input_string):
         if len(input_string) > 45:
