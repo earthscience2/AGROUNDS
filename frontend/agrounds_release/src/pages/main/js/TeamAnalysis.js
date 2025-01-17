@@ -74,7 +74,7 @@ const TeamAnalysis = () => {
         <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
       
-      <Quarter_Tab quarters={quarter} activeTab={activeTab} setActiveTab={setActiveTab}/>
+      <Quarter_Tab quarterData={quarterData} activeTab={activeTab} setActiveTab={setActiveTab}/>
       
       <DynamicQuarter data={quarterPositionData()} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type='team'/>
       
