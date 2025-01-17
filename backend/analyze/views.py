@@ -4,10 +4,12 @@ from rest_framework.response import Response
 import json
 import os
 from django.conf import settings
+
+from staticfiles.s3 import CloudFrontTxtFileReader
 from .serializers import *
 from django.db.models import Case, When, Value, IntegerField
 
-from staticfiles.get_file_url import get_file_url
+from staticfiles.get_file_url import get_base_url
 # Create your views here.
 
 default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
@@ -33,13 +35,21 @@ class getAnalyzeResult(APIView):
         
         result = {}
 
-        serializer = Match_Analyze_Result_Serializer(user_anal_match, many=True)
+        file_key = makeGptJosnKey(match_code, user_code)
 
-        result['ai_summation'] = {
+        reader = CloudFrontTxtFileReader(get_base_url())
+        file_content = reader.read(file_key)
+        json_data = {
             "total" : "",
             "attack" : "",
             "defense" : ""
         }
+        if file_content:
+            json_data = json.loads(file_content)
+
+        result['ai_summation'] = json_data
+
+        serializer = Match_Analyze_Result_Serializer(user_anal_match, many=True)
 
         result['analyze'] = serializer.data
 

@@ -4,6 +4,36 @@ from django.conf import settings
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, BotoCoreError
 import json
 
+import requests
+
+class CloudFrontTxtFileReader:
+    '''
+        Read txt files as strings from a CloudFront URL.
+        Usage:
+        1. Create an object: reader = CloudFrontTxtFileReader([base_url])
+        2. Read a file as a string: content = reader.read([file_path])
+    '''
+    def __init__(self, base_url):
+        self.base_url = base_url.rstrip('/')  # Ensure no trailing slash
+
+    def read(self, file_path):
+        '''
+            Read the file from CloudFront as a string
+        '''
+        file_url = f"{self.base_url}/{file_path.lstrip('/')}"  # Construct full URL
+        try:
+            response = requests.get(file_url)
+            response.raise_for_status()  # Raise an error for non-2xx responses
+            return response.text  # Return file content as string
+        except requests.exceptions.HTTPError as http_err:
+            if response.status_code == 404:
+                raise ValueError(f"The file '{file_path}' does not exist at {file_url}.")
+            else:
+                raise ValueError(f"HTTP error occurred: {http_err}")
+        except requests.exceptions.RequestException as req_err:
+            raise ValueError(f"Error fetching file from CloudFront: {req_err}")
+
+
 class S3TxtFileReader:
     '''
         s3버킷에서 txt파일을 string으로 읽어옴
