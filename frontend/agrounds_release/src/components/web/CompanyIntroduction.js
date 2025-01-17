@@ -6,6 +6,10 @@ import 'swiper/css';
 import 'swiper/css/navigation'; 
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import heegu from '../../assets/web/heegu.png';
+import sowon from '../../assets/web/sowon.png';
+import jayou from '../../assets/web/jayou.png';
+import uichan from '../../assets/web/uichan.png';
+import soyeong from '../../assets/web/soyeong.png';
 import introsecm1 from '../../assets/web/introsecm1.png';
 import introsecm2 from '../../assets/web/introsecm2.png';
 import introsecm3 from '../../assets/web/introsecm3.png';
@@ -15,11 +19,11 @@ import introsecm4 from '../../assets/web/introsecm4.png';
 const CompanyIntroduction = () => {
 
   const teamMembers = [
-    { name: "김소원", position: "Designer", image: heegu },
+    { name: "김소원", position: "Designer", image: sowon },
     { name: "이희구", position: "CEO", image: heegu },
-    { name: "구자유", position: "BE Developer", image: heegu },
-    { name: "안의찬", position: "BE Developer", image: heegu },
-    { name: "문소영", position: "FE Developer", image: heegu },
+    { name: "구자유", position: "BE Developer", image: jayou },
+    { name: "안의찬", position: "BE Developer", image: uichan },
+    { name: "문소영", position: "FE Developer", image: soyeong },
   ];
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
@@ -50,6 +54,7 @@ const CompanyIntroduction = () => {
               그리고 그 시작은 아마추어 축구에서부터 시작된다고 믿고 있기 때문에 
               우리는 30만 아마추어 축구인을 위한 전술 분석 플랫폼 AGROUNDS를 서비스하고 있습니다.</div>
         </div>
+        <div style={{marginTop: '5vh'}} />
         <TeamSwiper
         modules={[Autoplay]}
         autoplay={{
