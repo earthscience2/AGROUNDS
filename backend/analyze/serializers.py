@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from DB.models import *
 from staticfiles.get_file_url import get_file_url
@@ -13,7 +14,7 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserAnalMatch
-        fields = ['quarter', 'point', 'active_ratio', 'total', 'attack', 'defense']
+        fields = ['quarter', 'point', 'active_ratio', 'total', 'attack', 'defense', 'position']
 
     def get_quarter(self, obj):
         return obj.quarter_name
@@ -111,7 +112,3 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
             "SDPD": obj.D_SDPD
         }
         return defense
-
-    
-
-    

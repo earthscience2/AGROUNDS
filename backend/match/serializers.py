@@ -92,7 +92,7 @@ class Team_Match_Info_Serializer(serializers.ModelSerializer):
     away_team_logo = serializers.SerializerMethodField()
 
     class Meta:
-        models = TeamMatchInfo
+        model = TeamMatchInfo
         fields = ['match_code', 'match_schedule', 'match_location', 'thumbnail', 'match_title', 'match_time',
                   'match_mom', 'match_result', 'participation', 'home_team', 'home_team_logo', 'away_team',
                   'away_team_logo']
@@ -138,11 +138,11 @@ class Team_Match_Info_Serializer(serializers.ModelSerializer):
             team_code = team_match.first().team_code
             try:
                 team_info = TeamInfo.objects.get(team_code = team_code)
-                return team_info.team_logo
+                return get_file_url(team_info.team_logo)
             except TeamInfo.DoesNotExist:
-                return '-'
+                return self.default_team_logo
         else:
-            return '-'
+            return self.default_team_logo
     
     def get_away_team(self, obj):
         if obj.away_team is None:

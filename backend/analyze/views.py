@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from decimal import Decimal
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import json
@@ -7,7 +8,6 @@ from django.conf import settings
 
 from staticfiles.s3 import CloudFrontTxtFileReader
 from .serializers import *
-from django.db.models import Case, When, Value, IntegerField
 
 from staticfiles.get_file_url import get_base_url
 # Create your views here.
@@ -80,12 +80,145 @@ class getTeamAnalyzeResult(APIView):
         
         match_code = data['match_code']
         team_code = data['team_code']
+        user_code = request.data.get('user_code')
+
+        result = []
+
+        team_match_info = get_object_or_404(TeamMatchInfo, match_code=match_code)
+
+        user_anal_matchs = UserAnalMatch.objects.filter(match_code=match_code)
+
+        if user_code is not None:
+            if not user_anal_matchs.filter(user_code=user_code).exists():
+                return Response({"error" : "해당 경기에 참여하지 않았습니다."})
+
+        for quarter in team_match_info.quarter_name_list :
+            user_anal_matchs_in_quarter = user_anal_matchs.filter(quarter_name=quarter)
+
+            quarter_data = {}
+            quarter_data['quarter'] = quarter
+
+            total = {}
+            total['top_players'] = self.get_top_players(user_anal_matchs_in_quarter)
+            
+            user_anal_match = (
+                user_anal_matchs_in_quarter.filter(user_code=user_code).first()
+                if user_code is not None
+                else None
+            )
+
+            total['my_rankings'] = self.get_my_rankings(user_anal_matchs_in_quarter, user_anal_match)
+
+            quarter_data['total'] = total
+
+            point = {}
+            point_ranking = []
+
+            anal_match_sorted_by_point = self.sort_by_target(user_anal_matchs_in_quarter, 'point_total')
+            for anal_match in anal_match_sorted_by_point:
+                point_ranking.append(self.get_player_info(anal_match, 'point_total'))
+
+            point['point_ranking'] = point_ranking
+
+            quarter_data['point'] = point
+
+            result.append(quarter_data)
+
+        
+
+        serializer = Match_Analyze_Result_Serializer(user_anal_matchs, many=True)
+
+        return Response({"result" : result})
         
         filename = 'team_analyze.json'
 
         with open(os.path.join(settings.STATIC_ROOT, filename), encoding='utf-8') as file:
             data = json.load(file)
             return Response(data)
+        
+    def get_value_by_target(self, user_match_result, target):
+        return ( user_match_result.point[target.split('_')[1]] if target.startswith('point_')
+                else getattr(user_match_result, target, 0) )
+
+    def sort_by_target(self, analyze_result, target):
+        analyze_result_sorted_by_target = sorted(
+            analyze_result,
+            key=lambda x: self.get_value_by_target(x, target),
+            reverse=True
+        )
+        return analyze_result_sorted_by_target
+
+    def get_player_info(self, user_anal_match, target):
+        profile = default_team_logo
+        user_code = nickname = value = position = '-'
+
+        if user_anal_match is not None:
+            user_code = user_anal_match.user_code
+            value = self.get_value_by_target(user_anal_match, target)
+            position = user_anal_match.position
+
+        result = {
+            "profile" : profile,
+            "nickname" : nickname,
+            "value" : value,
+            "position" : position
+        }
+        if user_code == '-':
+            return result
+        try:
+            user_info = UserInfo.objects.get(user_code=user_code)
+            # result['profile'] = '-'
+            result['nickname'] = user_info.user_nickname
+            return result
+        except UserInfo.DoesNotExist:
+            return result
+        
+    def get_top_player_info(self, user_anal_matchs_in_quarter, target):
+        analyze_result_sorted_by_target = self.sort_by_target(user_anal_matchs_in_quarter, target)
+        top_player = analyze_result_sorted_by_target[0] if analyze_result_sorted_by_target else None
+        return self.get_player_info(top_player, target)
+
+    def get_top_players(self, user_anal_matchs_in_quarter):
+        top_players = {}
+
+        top_players['top_point'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'point_total')
+        top_players['top_activity'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_D')
+        top_players['top_sprint'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_S')
+        top_players['top_sprint'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_S')
+        top_players['top_speed'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_HS')
+
+        return top_players
+    
+    def get_my_rankings(self, user_anal_matchs_in_quarter, user_anal_match):
+        my_rankings = {}
+        attributes = ['point', 'activity', 'sprint', 'speed']
+        targets = ['point_total', 'T_D', 'T_S', 'T_HS']
+
+        for attribute in attributes:
+            my_rankings[attribute] = {
+                "value" : "-",
+                "rank" : "-"
+            }
+
+        if user_anal_match is None:
+           return my_rankings
+        
+        for attribute, target in zip(attributes, targets):
+            value = self.get_value_by_target(user_anal_match, target)
+            sorted_data = self.sort_by_target(user_anal_matchs_in_quarter, target)
+            rank = next(
+                (index + 1 for index, match in enumerate(sorted_data) if match == user_anal_match),
+                "-"
+            )
+            # 결과 저장
+            my_rankings[attribute] = {
+                "value": value,
+                "rank": rank
+            }
+
+        return my_rankings
+        
+
 
 class getOverall(APIView):
     def post(self, request):

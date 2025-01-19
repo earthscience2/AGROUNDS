@@ -93,6 +93,7 @@ class TeamMatchInfo(models.Model):
     match_time = models.IntegerField()
     match_name = models.CharField(max_length=45)
     match_schedule = models.CharField(max_length=45)
+    quarter_name_list = models.JSONField()
 
     class Meta:
         managed = False
