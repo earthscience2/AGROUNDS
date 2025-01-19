@@ -283,23 +283,6 @@ class MatchInfo(models.Model):
         managed = False
         db_table = 'match_info'
 
-# 팀 정보 
-class TeamInfo_old(models.Model):
-    team_code = models.CharField(primary_key=True, max_length=45)
-    team_host = models.CharField(max_length=45, blank=True, null=True)
-    team_name = models.CharField(max_length=45, blank=True, null=True)
-    team_player = models.JSONField(blank=True)
-    team_logo = models.CharField(max_length=45, blank=True, null=True)
-    team_point = models.IntegerField(blank=True, null=True)
-    team_area = models.CharField(max_length=45, blank=True, null=True)
-    team_description = models.CharField(max_length=45, blank=True, null=True)
-    team_games = models.JSONField(blank=True)
-    
-
-    class Meta:
-        managed = False
-        db_table = 'team_info'
-
 # V2 팀 생성
 class V2_TeamInfo(models.Model):
     v2_team_code = models.CharField(primary_key=True, max_length=45)

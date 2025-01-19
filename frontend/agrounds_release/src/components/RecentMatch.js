@@ -14,7 +14,8 @@ const RecentMatch = () => {
   useEffect(() => {
     getMatchListApi({'user_code' : sessionStorage.getItem('userCode')})
     .then((response) => {
-      setData(response.data.result[0]);
+      if(response.data.result.lenght > 0)
+        setData(response.data.result[0]);
     })
     .catch((error) => console.log(error));
   }, [])

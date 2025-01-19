@@ -61,11 +61,11 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
             team_code = team_match.first().team_code
             try:
                 team_info = TeamInfo.objects.get(team_code = team_code)
-                return team_info.team_logo
+                return get_file_url(team_info.team_logo)
             except TeamInfo.DoesNotExist:
-                return '-'
+                return self.default_team_logo
         else:
-            return '-'
+            return self.default_team_logo
     
     def get_away_team(self, obj):
         if obj.away_team is None:
@@ -75,7 +75,7 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
     
     def get_away_team_logo(self, obj):
         try:
-            return TeamInfo.objects.get(team_code = obj.away_team).team_logo
+            return get_file_url(TeamInfo.objects.get(team_code = obj.away_team).team_logo)
         except TeamInfo.DoesNotExist:
             return self.default_team_logo
 

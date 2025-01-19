@@ -1,17 +1,6 @@
-from DB.models import TeamInfo_old
 from DB.models import *
 from rest_framework import serializers
 from datetime import datetime
-
-def get_team_name_by_team_code(team_code):
-    """
-    team_code를 받아 team_name을 리턴해주는 함수
-    """
-    try:
-        team_name = getattr(TeamInfo_old.objects.get(team_code = team_code), 'team_name')
-    except TeamInfo_old.DoesNotExist:
-        raise ValueError(f"팀 코드 {team_code}에 해당하는 선수 정보가 존재하지 않습니다.")
-    return team_name
 
 def get_team_code_by_team_name(team_name):
     """

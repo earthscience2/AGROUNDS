@@ -8,7 +8,7 @@ const Video_Thumnail = ({list, type}) => {
   const matchCode = list?.match_code || "";
 
   return (
-    <VideoThumnailStyle onClick={() => navigate('/videobyquarter', { state : { matchCode, type }})}>
+    <VideoThumnailStyle onClick={() => navigate('/app/videobyquarter', { state : { matchCode, type }})}>
       <div className='imgbox'>
         <img src={list?.thumbnail}/>
       </div>
