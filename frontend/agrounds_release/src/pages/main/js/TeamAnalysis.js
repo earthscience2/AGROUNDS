@@ -18,7 +18,8 @@ const TeamAnalysis = () => {
   const [activeTab, setActiveTab] = useState("1쿼터");
   const [currentIndex, setCurrentIndex] = useState(0);
   const teamCode = sessionStorage.getItem('teamCode');
-  const [selectedMatch, setSelectedMatch] = useState(null);
+  const user_code = sessionStorage.getItem('userCode');
+  const [selectedMatch, setSelectedMatch] = useState(initialMatchCode);
   const [loading, setLoading] = useState(true);
   const [quarterData, setQuarterData]= useState([]);
   const [quarter, setQuarter] = useState();  
@@ -27,10 +28,10 @@ const TeamAnalysis = () => {
     if (!selectedMatch && initialMatchCode) {
       setLoading(true);
 
-      getTeamAnalResultApi({'match_code': initialMatchCode, 'team_code': teamCode})
+      getTeamAnalResultApi({'match_code': initialMatchCode, 'team_code': teamCode, 'user_code' : user_code})
       .then((response) => {
         setQuarterData(response.data.result || [])
-        setSelectedMatch(initialMatchCode);
+        // setSelectedMatch(initialMatchCode);
         setQuarter(response.data.result.length)
         setLoading(false);
       })
@@ -42,7 +43,7 @@ const TeamAnalysis = () => {
     } else if(selectedMatch) {
       setLoading(true);
 
-      getTeamAnalResultApi({'match_code': selectedMatch, 'team_code': teamCode})
+      getTeamAnalResultApi({'match_code': selectedMatch, 'team_code': teamCode, 'user_code' : user_code})
       .then((response) => {
         setQuarterData(response.data.result || [])
         setLoading(false);
