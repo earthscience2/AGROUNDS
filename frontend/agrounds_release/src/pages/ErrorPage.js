@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import Back_btn from '../components/Back_btn';
-import BackTitle_Btn from '../components/BackTitle_Btn';
+
 const ErrorPage = () => {
   return (
       <ErrorPageStyle>
