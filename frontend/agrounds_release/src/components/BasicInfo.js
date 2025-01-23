@@ -1,17 +1,19 @@
 import React from 'react';
 import './BasicInfo.scss';
 import AgeConversion from '../function/AgeConversion';
+import { useNavigate } from 'react-router-dom';
 
 const BasicInfo = () => {
   const gender = () => {
     return sessionStorage.getItem('userGender') === 'male' ? '남자' : '여자';
   }
+  const navigate = useNavigate();
 
   return (
     <div className='basicinfo'>
       <div className='titlebox'>
         <p className='basicinfotitle'>기본정보</p>
-        <p className='basicfix'>수정하기</p>
+        <p className='basicfix' onClick={() => navigate('/app/infofix')}>수정하기</p>
       </div>
       <div className='basiccontentsbox'>
         <p className='contenttitle'>성별</p>
