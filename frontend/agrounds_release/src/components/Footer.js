@@ -36,13 +36,13 @@ const Footer = () => {
         />
         <p className={`title ${isActive('/app/analysis') ? 'active' : ''}`}>경기분석</p>
       </div>
-      <div className='box' onClick={() => navigate('/app/connect')}>
+      <div className='box' onClick={() => navigate('/app/errorpage')}>
         <img
           className='icon'
-          src={isActive('/app/connect') ? connectBlack : connectGrey}
-          alt='기기연결'
+          src={isActive('/app/errorpage') ? connectBlack : connectGrey}
+          alt='업로드'
         />
-        <p className={`title ${isActive('/app/connection') ? 'active' : ''}`}>업로드</p>
+        <p className={`title ${isActive('/app/errorpage') ? 'active' : ''}`}>업로드</p>
       </div>
       <div className='box' onClick={() => navigate('/app/video')}>
         <img

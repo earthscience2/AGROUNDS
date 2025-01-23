@@ -172,6 +172,7 @@ const router = createBrowserRouter([
       { path: "eventlist", element: <EventList /> },
       { path: "event", element: <Event /> },
       { path: "recentmatch", element: <RecentMatch /> },
+      { path: "errorpage", element: <ErrorPage /> },
     ],
   },
 ]);
