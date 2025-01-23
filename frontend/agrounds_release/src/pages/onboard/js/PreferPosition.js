@@ -49,8 +49,8 @@ const PreferPosition = ({selectedPosition, setSelectedPosition, exit}) => {
         ))}
       </div>
       {selectedPosition ? 
-      <Circle_common_btn title='완료' onClick={exit} color='#000000' backgroundColor='#FFFFFF' style={{position:'fixed', bottom:'5vh'}}/> :
-      <Circle_common_btn title='포지션 선택을 완료하세요' style={{position:'fixed', bottom:'5vh'}} />}
+      <Circle_common_btn title='완료' onClick={exit} color='#000000' backgroundColor='#FFFFFF' style={{position:'fixed', bottom:'5vh',zIndex: '1999'}}/> :
+      <Circle_common_btn title='포지션 선택을 완료하세요' style={{position:'fixed', bottom:'5vh', zIndex: '1999'}} />}
     </div>
   );
 };

@@ -1,0 +1,50 @@
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.info-fix{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Pretendard-Regular';
+  width: 100%;
+  .info-fix-title{
+    @include font(2vh, 700,#262626);
+    width: 90%;
+  }
+  .prefpo{
+    background-color: #F2F4F8;
+    width: 90%;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    border-radius: 0 0 15px 15px;
+    margin: 0 0 40vh 0;
+
+    & > div{
+      font-size: 17px;
+      font-weight: 600;
+      font-family: 'Pretendard-Regular';
+      color: #000000;
+      width: 80%;
+      height: 55px;
+      font-size: 16px;
+      padding: 0 4vw 0 4vw;
+      display: flex;
+      align-items: center;
+    }
+    & > img{
+      height: 20px;
+      transform: rotate(180);
+    }
+  }
+  .genderBox{
+    display: flex;
+    width: 85%;
+    justify-content: space-between;
+    align-items: center;
+    margin: -38vh 0 20vh 0;
+  }
+}

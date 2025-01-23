@@ -120,8 +120,8 @@ const EssencialInfo = () => {
   return (
     <div className='eiBG'>
       <BackBtn />
+      <Input_error_tooltip text={errorText} style={{position:'absolute' ,marginTop:'-22vh'}}/>
       <LoginTitle title='필수정보 입력' explain='다양한 정보 분석을 제공해드려요.' />
-      <Input_error_tooltip text={errorText}/>
       <LoginInput 
         borderRadius='15px 15px 0 0'
         placeholder='이름 입력'
@@ -155,7 +155,6 @@ const EssencialInfo = () => {
       </div>
       {errorNum===0 && nicknameCheck==='success'? <CircleBtn title='다음' style={{position:'fixed', bottom:'5vh'}} onClick={onNext}/> : 
       <CircleBtn title='다음' backgroundColor='#F4F4F4' color='C6C6C6' style={{position:'fixed', bottom:'5vh'}}/>}
-      
     </div>
   );
 };

@@ -45,19 +45,19 @@ const Video = () => {
       <div className='contents'>
         <div className='contentbox' onClick={() => navigate('/app/personalvideo')}>
           <ThumbnailStack thumbnails={videoData.player_cam?.thumbnail || []} />
-          <p className='contenttitle'>Player Cam</p>
+          <p className='contenttitle'>개인 영상</p>
           <p className='contentnumber'>{videoData.player_cam?.number_of_videos || 0}개의 영상</p>
         </div>
 
         <div className='contentbox' onClick={() => navigate('/app/teamvideo')}>
           <ThumbnailStack thumbnails={videoData.team_cam?.thumbnail || []} />
-          <p className='contenttitle'>Team Cam</p>
+          <p className='contenttitle'>팀 영상</p>
           <p className='contentnumber'>{videoData.team_cam?.number_of_videos || 0}개의 영상</p>
         </div>
 
         <div className='contentbox' onClick={() => navigate('/app/fullvideo')}>
           <ThumbnailStack thumbnails={videoData.full_cam?.thumbnail || []} />
-          <p className='contenttitle'>Full Cam</p>
+          <p className='contenttitle'>원본 영상</p>
           <p className='contentnumber'>{videoData.full_cam?.number_of_videos || 0}개의 영상</p>
         </div>
 
@@ -65,7 +65,7 @@ const Video = () => {
           <div className='content4'>
             <img src={list} alt="Highlight" />
           </div>
-          <p className='contenttitle'>Highlight</p>
+          <p className='contenttitle'>하이라이트</p>
           <p className='contentnumber'>{videoData.highlight_cam?.number_of_videos || 0}개의 영상</p>
         </div>
       </div>

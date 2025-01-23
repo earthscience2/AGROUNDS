@@ -1,18 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SpecificGravity from '../components/SpecificGravity';
 
 const Map = ({ data }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const swiperRef = useRef(null);
 
   const slides = [data.hitmap, data.high_speed_hitmap, data.change_direction];
 
+  const handleScroll = () => {
+    const swiper = swiperRef.current;
+    if (swiper) {
+      const scrollLeft = swiper.scrollLeft;
+      const slideWidth = swiper.offsetWidth;
+      const newSlide = Math.round(scrollLeft / slideWidth);
+      setCurrentSlide(newSlide);
+    }
+  };
+
   const handleDotClick = (index) => {
     setCurrentSlide(index);
+    const swiper = swiperRef.current;
+    if (swiper) {
+      const slideWidth = swiper.offsetWidth;
+      swiper.scrollTo({
+        left: index * slideWidth,
+        behavior: 'smooth',
+      });
+    }
   };
+
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    if (swiper) {
+      swiper.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (swiper) {
+        swiper.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
   return (
     <SwiperContainer>
-      <SwiperWrapper currentSlide={currentSlide}>
+      <SwiperWrapper ref={swiperRef}>
         <SwiperItem>
           <img src={slides[0]} alt="Heatmap" />
         </SwiperItem>
@@ -35,6 +67,7 @@ const Map = ({ data }) => {
     </SwiperContainer>
   );
 };
+
   
 
 const ActivityLevel = ({ data, attack,defence }) => {
@@ -155,16 +188,25 @@ const SwiperWrapper = styled.div`
   display: flex;
   transform: translateX(${({ currentSlide }) => -100 * currentSlide}%);
   transition: transform 0.3s ease-in-out;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const SwiperItem = styled.div`
   flex: 0 0 100%;
-  height: 22vh;
+  height: 23vh;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius:1vh;
   overflow: hidden;
+  scroll-snap-align: start;
 
   img {
     width: 100%;

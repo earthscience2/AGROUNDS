@@ -48,6 +48,7 @@ import TeamAnalysis from './pages/main/js/TeamAnalysis';
 import RecentMatch from './pages/team/js/RecentMatch';
 import ComponyIntroduce from './pages/web/ComponyIntroduce';
 import ErrorPage from './pages/ErrorPage';
+import InfoFix from './pages/mypage/js/InfoFix';
 
 
 const useBodyClass = (className) => {
@@ -173,6 +174,7 @@ const router = createBrowserRouter([
       { path: "event", element: <Event /> },
       { path: "recentmatch", element: <RecentMatch /> },
       { path: "errorpage", element: <ErrorPage /> },
+      { path: "infofix", element: <InfoFix /> },
     ],
   },
 ]);
