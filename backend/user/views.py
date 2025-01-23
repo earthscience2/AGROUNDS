@@ -13,10 +13,19 @@ from drf_yasg.utils import swagger_auto_schema
 class SetUserChange(APIView):
     def patch(self, request):
         user_code = request.data.get('user_code')
+        copied_date = request.data.copy()
         
         if not user_code:
             return Response({"error": "user_code parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
         
+        for data in request.data:
+            value = request.data.get(data)
+            if not value:
+                copied_date.pop(data)
+
+        for data in copied_date:
+            print(data)
+
         user_info = get_object_or_404(UserInfo, user_code=user_code)
         
         serializer = UserChangeSerializer(user_info, data=request.data, partial=True, user_code=user_code)
