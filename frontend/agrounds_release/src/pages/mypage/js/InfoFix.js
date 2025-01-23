@@ -26,10 +26,22 @@ const InfoFix = () => {
   const [userHeight, setUserHeight] = useState("");
   const [selectedPosition, setSelectedPosition] = useState("");
 
+  const [errorNum, setErrorNum] = useState(1); //0: 정상, 1: 몸무게 에러, 2: 신장 에러, 3: 포지션 에러
+
   const [errorText, setErrorText] = useState("");
   const [nicknameCheck, setNicknameCheck] = useState('null');
   const [typingTimeout, setTypingTimeout] = useState(null);
   const [isModified, setIsModified] = useState(false);
+
+  const originalData = {
+    userName: sessionStorage.getItem("userName"), 
+    userNickname: sessionStorage.getItem("userNickname"),
+    userBirth: sessionStorage.getItem("userBirth"),
+    selectedGender: sessionStorage.getItem("userGender"),
+    userWeight: sessionStorage.getItem("userWeight"),
+    userHeight: sessionStorage.getItem("userHeight"),
+    selectedPosition: sessionStorage.getItem("userPosition")
+  };
 
   function validateUserName(name) {
     return /^[a-zA-Z가-힣]{2,15}$/.test(name);
@@ -54,6 +66,7 @@ const InfoFix = () => {
   }
 
   const checkNickname = () => {
+    if(originalData.userNickname === userNickname) return;
     client.get(`/api/login/nickname/?user_nickname=${userNickname}`)
       .then((res) => {
         if (res.data.isAvailable) setNicknameCheck('success');
@@ -65,6 +78,16 @@ const InfoFix = () => {
         alert('서버 에러');
       });
   };
+
+  useEffect(() => {
+    setUserName(originalData.userName);
+    setUserNickname(originalData.userNickname);
+    setUserBirth(originalData.userBirth);
+    setSelectedPosition(originalData.selectedPosition);
+    setUserWeight(originalData.userWeight);
+    setUserHeight(originalData.userHeight);
+    setSelectedGender(originalData.selectedGender);
+  }, [])
 
   useEffect(() => {
     if (typingTimeout) {
@@ -81,16 +104,6 @@ const InfoFix = () => {
   }, [userNickname]);
 
   useEffect(() => {
-    const originalData = {
-      userName: sessionStorage.getItem("userName"), 
-      userNickname: sessionStorage.getItem("userNickname"),
-      userBirth: sessionStorage.getItem("userBirth"),
-      selectedGender: sessionStorage.getItem("userGender"),
-      userWeight: sessionStorage.getItem("userWeight"),
-      userHeight: sessionStorage.getItem("userHeight"),
-      selectedPosition: sessionStorage.getItem("userPosition")
-    };
-
     setIsModified(
       userName !== originalData.userName ||
       userNickname !== originalData.userNickname ||
@@ -100,33 +113,43 @@ const InfoFix = () => {
       userHeight !== originalData.userHeight ||
       selectedPosition !== originalData.selectedPosition
     );
+    handleValidation();
   }, [userName, userNickname, userBirth, selectedGender, userWeight, userHeight, selectedPosition]);
 
   const handleValidation = () => {
     if (userName && !validateUserName(userName)) {
       setErrorText("이름은 영문 또는 한글 2 ~ 15글자 이내로 설정해주세요.");
+      setErrorNum(1);
       return false;
     }
     if (userNickname && !validateUserNickname(userNickname)) {
-      setErrorText("닉네임은 영문, 한글, 숫자, 특수문자 2 ~ 15글자 이내로 설정해주세요.");
-      return false;
+      if(originalData.userNickname !== userNickname) {
+        setErrorText("닉네임은 영문, 한글, 숫자, 특수문자 2 ~ 15글자 이내로 설정해주세요.");
+        setErrorNum(2);
+        return false;
+      }
     }
     if (userBirth && !isDateValid(userBirth)) {
       setErrorText("생년월일을 확인해주세요.");
+      setErrorNum(3);
       return false;
     }
     if (userWeight && !validateUserWeight(userWeight)) {
       setErrorText("몸무게는 10 ~ 220kg 사이로 설정해주세요.");
+      setErrorNum(4);
       return false;
     }
     if (userHeight && !validateUserHeight(userHeight)) {
       setErrorText("키는 10 ~ 220cm 사이로 설정해주세요.");
+      setErrorNum(5);
       return false;
     }
     if (selectedGender === "") {
       setErrorText("성별을 선택해주세요.");
+      setErrorNum(6);
       return false;
     }
+    setErrorNum(0);
     setErrorText("");
     return true;
   };
@@ -164,13 +187,13 @@ const InfoFix = () => {
     <div className='info-fix'>
       <BackTitle_Btn navTitle='내 정보 수정' />
       <p className='info-fix-title'>필수 정보</p>
-      <Input_error_tooltip text={errorText} />
       <LoginInput
         borderRadius='15px 15px 0 0'
         placeholder='이름 입력'
         type='text'
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
+        borderColor={errorNum === 1 ? 'red' : '#F2F4F8'}
       />
       <div style={{ height: '0.5vh' }} />
       {nicknameCheck === 'fail' && <Nickname_check_tooltip />}
@@ -180,6 +203,7 @@ const InfoFix = () => {
         type='text'
         value={userNickname}
         onChange={(e) => setUserNickname(e.target.value)}
+        borderColor={errorNum === 2 || nicknameCheck==='fail' ? 'red' : '#F2F4F8'}
       />
       <div style={{ height: '0.5vh' }} />
       <LoginInput
@@ -188,6 +212,7 @@ const InfoFix = () => {
         type='date'
         value={userBirth}
         onChange={(e) => setUserBirth(e.target.value)}
+        
       />
       <div style={{ height: '3vh' }} />
       <p className='info-fix-title'>선택 정보</p>
@@ -236,6 +261,7 @@ const InfoFix = () => {
       ) : (
         <CircleBtn title='수정하기' backgroundColor='#F4F4F4' color='#C6C6C6' style={{ position: 'fixed', bottom: '5vh' }} />
       )}
+      <Input_error_tooltip text={errorText} style={{position: 'fixed', bottom: '14vh'}}/>
     </div>
   );
 };

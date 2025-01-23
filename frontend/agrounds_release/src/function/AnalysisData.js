@@ -191,7 +191,7 @@ const SwiperWrapper = styled.div`
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox용 스크롤바 숨김 */
+  scrollbar-width: none; 
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;
