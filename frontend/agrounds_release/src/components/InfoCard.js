@@ -4,11 +4,14 @@ import {PositionColor} from "../function/PositionColor";
 import { getTeamInfoApi } from "../function/TeamApi";
 import Field from "./Field";
 import styled from "styled-components";
+import red from '../assets/card-red.png';
+import blue from '../assets/card-blue.png';
+import green from '../assets/card-green.png';
+import yellow from '../assets/card-yellow.png';
 
 const InfoCard = ({ userData }) => {
-  const backgroundColor = PositionColor[userData.user_position] || "linear-gradient(117.23deg, rgba(92, 139, 245, 0.8), rgba(76, 103, 244) , rgba(114, 192, 250) 80%)";
-
   const [teamData, setTeamData] = useState([]);
+  const position = userData.user_position;
 
   useEffect(() => {
     getTeamInfoApi({"team_code" : userData.user_team})
@@ -25,6 +28,7 @@ const InfoCard = ({ userData }) => {
     } return '여성'
   }
 
+
   const dateConversion = (date) => {
     if (date === undefined) return '-';
     const [year, month, day] = date.split('-');
@@ -34,11 +38,31 @@ const InfoCard = ({ userData }) => {
       </>
     );
   }
+
+  const ellipse = () => {
+    if (position === 'LWF' || position === 'ST' || position === 'RWF') {
+      return red;
+    } else if (position === 'LWM' || position === 'CAM' || position === 'RWM' || position === 'LM' || position === 'CM' || position === 'RM'|| position === 'CDM') {
+      return green;
+    } else if (position === 'LWB' || position === 'RWB' || position === 'LB' || position === 'CB' || position === 'RB' ){
+      return blue;
+    } else {
+      return yellow;
+    }
+  }
+
+  const dynamicFontSize = (nickname) => {
+    if (nickname.length <= 6) return "4vh";
+    if (nickname.length <= 10) return "2.8vh";
+    return "2.5vh";
+  };
+
   return (
-    <InfoCardStyle style={{ background: backgroundColor }}>
+    <InfoCardStyle>
+      <img className='card-back' src={ellipse()} />
       <div className="row1">
         <div className="info-nick">
-          <p className="usernickname">{userData.user_nickname}</p>
+          <p className="usernickname" style={{ fontSize: dynamicFontSize(userData.user_nickname || '') }}>{userData.user_nickname}</p>
           <p className="age">만 {userData.user_age}세, {genderConversion(userData.user_gender) }</p></div>
         <div className="nhwbox">
           <div className="info-name">
@@ -76,24 +100,34 @@ export default InfoCard;
 
 
 const InfoCardStyle = styled.div`
+  position: relative; 
   width: 80%;
-  height: 50vh;
-  margin: 2vh 0;
-  border-radius: 2.5vh;
+  height: 53vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 11px 16px 24px #00000014;
   color: white;
+  overflow: hidden;
+  .card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    z-index: 0;
+  }
+  .row1, .row2, .row3 {
+    z-index: 1;
+    position: relative;
+  }
   .row1{
     display: flex;
     flex-direction: row;
     align-items: center;
     .info-nick{
       width: 65%;
-      height: 15vh;
+      height: 17vh;
       font-size: 4vh;
       font-weight: 600;
-      border-bottom: .5px solid white;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -102,9 +136,6 @@ const InfoCardStyle = styled.div`
       .usernickname{
         margin: 0;
         width: 70%;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         margin-left: 2vh;
         font-family: 'Pretendard-Regular';
       }
@@ -117,19 +148,16 @@ const InfoCardStyle = styled.div`
     }
     .nhwbox{
       width: 35%;
-      height: 15vh;
+      height: 17vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      border-bottom: .5px solid white;
-      border-left: .5px solid white;
       font-size: 1.8vh;
       font-weight: 700;
       font-family: 'Pretendard-Regular';
       .info-name{
         width: 100%;
-        height: 5vh;
-        border-bottom: .5px solid white;
+        height: 5.5vh;
         display: flex;
         align-items: center;
         .username{
@@ -143,8 +171,7 @@ const InfoCardStyle = styled.div`
       }
       .info-height{
         width: 100%;
-        height: 5vh;
-        border-bottom: .5px solid white;
+        height: 5.5vh;
         display: flex;
         align-items: center;
         .userheight{
@@ -158,7 +185,7 @@ const InfoCardStyle = styled.div`
       }
       .info-weight{
         width: 100%;
-        height: 5vh;
+        height: 5.5vh;
         display: flex;
         align-items: center;
         .userweight{
@@ -174,20 +201,23 @@ const InfoCardStyle = styled.div`
   }
   .row2{
     width: 100%;
-    height: 20vh;
-    border-bottom: .5px solid white;
+    height: 21vh;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     .info-position{
       font-size: 9vh;
       font-weight: 700;
-      width: 60%;
+      width: 50%;
+      font-family: "Anton", serif;
+      font-weight: 400;
+      font-style: normal;
+      margin-left: 10%;
     }
     .field{
-      width: 20%;
-      height: 16vh;
+      width: 30%;
+      height: 17vh;
       display: flex;
       justify-content: center;
     }
@@ -200,22 +230,22 @@ const InfoCardStyle = styled.div`
     .info-recent{
       height: 15vh;
       width: 40%;
-      border-right: .5px solid white;
       display: flex;
       flex-direction: column;
       justify-content: center;
       .recenttitle{
-        font-size: 1.8vh;
+        font-size: 1.6vh;
         font-weight: 600;
         color: rgba(255, 255, 255, 0.743);
         margin-left: 2vh;
+        margin-top: 1vh;
         font-family: 'Pretendard-Regular';
       }
       .date{
         font-size: 1.8vh;
         font-weight: 700;
         color: white;
-        margin: 3vh 0 2vh 2vh;
+        margin: 4vh 0 2vh 2vh;
         width: 70%;
         overflow: hidden;
         white-space: nowrap;
@@ -232,7 +262,7 @@ const InfoCardStyle = styled.div`
         font-size: 1.8vh;
         font-weight: 700;
         font-family: 'Pretendard-Regular';
-        margin: 2vh 0 0 2vh;
+        margin: 1.8vh 0 0 2vh;
         display: -webkit-box;
         -webkit-line-clamp: 2; 
         -webkit-box-orient: vertical;
