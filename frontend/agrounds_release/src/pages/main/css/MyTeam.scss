@@ -67,28 +67,34 @@
         height: 2vh;
       }
     }
-    .detail{
-      @include display(flex, row, center, start);
-
+    .detailbox{
+      @include display(flex, row, center, space-between);
       width: 85%;
-      .t1{
-        font-size: 1.7vh;
-        font-weight: 500;
-        margin: 1vh 0;
-        font-family: 'Pretendard-Regular';
-      }
-      .t2 {
-        font-size: 1.7vh;
-        font-weight: 700;
-        margin: 1vh 0;
-        margin-left: .5vh;
-        font-family: 'Pretendard-Regular';
+      .detail{
+        @include display(flex, row, center, start);
+        width: 50%;
+        .t1{
+          font-size: 1.7vh;
+          font-weight: 500;
+          margin: 1vh 0;
+          color: #6F6F6F;
+          font-family: 'Pretendard-Regular';
+        }
+        .t2 {
+          font-size: 1.7vh;
+          font-weight: 700;
+          margin: 1vh 0;
+          margin-left: .5vh;
+          font-family: 'Pretendard-Regular';
+        }
       }
     }
+    
     .list{
       overflow-y: auto;
       @include display(flex, column, center, start);
       width: 100%;
+      margin-top: 1vh;
     }
     .empty-message{
       font-size: 1.5vh;

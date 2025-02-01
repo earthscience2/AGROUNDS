@@ -14,11 +14,13 @@ import { getTeamInfoApi, getTeamPlayerListApi, TeamMemberApi, withdrawTeamApi } 
 import { PositionDotColor } from '../../../function/PositionColor';
 import Modal from '../../../components/Modal';
 import Small_Common_Btn from '../../../components/Small_Common_Btn';
+import PositionDropbox from '../../../components/PositionDropbox';
 
 const MyTeam = () => {
   const navigate = useNavigate();
   const [isManager, setIsManager] = useState(true);
   const [member, setMember] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [team, setTeam] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBoxOpen, setIsBoxOpen] = useState(false);
@@ -38,7 +40,7 @@ const MyTeam = () => {
     getTeamPlayerListApi({'team_code': sessionStorage.getItem('teamCode')})
     .then((response) => {
       setMember(response.data.result);
-      console.log(response.data.result);
+      setFilteredData(response.data.result);
     })
     .catch(error => console.log(error));
     
@@ -118,15 +120,29 @@ const MyTeam = () => {
           <p>팀원</p>
           {isManager ? <div className='managerbtn' onClick={() => navigate('/app/managemember')}>관리하기</div> : <img src={righbtn} onClick={() => navigate('/app/teamlist')}/>}
         </div>
-        <div className='detail'>
-          <p className='t1'>총</p>
-          <p className='t2'>{member.length}명</p>
+        <div className='detailbox'>
+          <div className='detail'>
+            <p className='t1'>총</p>
+            <p className='t2'>{member.length}명</p>
+          </div>
+          <PositionDropbox teamData={member} setFilteredData={setFilteredData}/>
         </div>
+        
 
         {member.length > 0 ? (
           <div className='list'>
-            {member.map((player) => (
-              <MemberPrev userCode={player.user_code} img={team.team_logo} isManager={isManager} player={player.user_nickname} age={player.user_age} color={PositionDotColor(player.user_position)} position={player.user_position} onClick={() => navigate('/app/userinfo', {state: { userCode: player.user_code}})}/>
+            {filteredData.map((player) => (
+              <MemberPrev
+                key={player.user_code}
+                userCode={player.user_code}
+                img={team.team_logo}
+                isManager={isManager}
+                player={player.user_nickname}
+                age={player.user_age}
+                color={PositionDotColor(player.user_position)}
+                position={player.user_position}
+                onClick={() => navigate('/app/userinfo', {state: { userCode: player.user_code}})}
+              />
             ))}
           </div>
         ) : (
