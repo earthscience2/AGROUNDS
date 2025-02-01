@@ -100,7 +100,6 @@ class Team_Match_Info_Serializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField()
     match_title = serializers.SerializerMethodField()
     match_mom = serializers.SerializerMethodField()
-    match_result = serializers.SerializerMethodField()
     participation = serializers.SerializerMethodField()
     home_team = serializers.SerializerMethodField()
     home_team_logo = serializers.SerializerMethodField()
@@ -131,15 +130,15 @@ class Team_Match_Info_Serializer(serializers.ModelSerializer):
             return match_info.match_time
         except TeamMatchInfo.DoesNotExist:
             return '-'
-        
-    def get_match_mom(self, obj):
-        return '-'
     
-    def get_match_result(self, obj):
+    def get_match_mom(self, obj):
+        user_info = UserInfo.objects.filter(user_code = obj.match_mom)
+        if user_info.exists():
+            return user_info.first().user_nickname
         return '-'
     
     def get_participation(self, obj):
-        return '-'
+        return UserMatch.objects.filter(match_code=obj.match_code).count()
     
     def get_home_team(self, obj):
         team_match = TeamMatch.objects.filter(match_code = obj.match_code)

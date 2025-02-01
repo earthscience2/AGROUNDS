@@ -135,10 +135,10 @@ class getTeamAnalyzeResult(APIView):
         with open(os.path.join(settings.STATIC_ROOT, filename), encoding='utf-8') as file:
             data = json.load(file)
             return Response(data)
-        
+
     def get_value_by_target(self, user_match_result, target):
         return ( user_match_result.point[target.split('_')[1]] if target.startswith('point_')
-                else getattr(user_match_result, target, 0) )
+                else getattr(user_match_result, target, 0))
 
     def sort_by_target(self, analyze_result, target):
         analyze_result_sorted_by_target = sorted(
@@ -217,8 +217,6 @@ class getTeamAnalyzeResult(APIView):
             }
 
         return my_rankings
-        
-
 
 class getOverall(APIView):
     def post(self, request):
