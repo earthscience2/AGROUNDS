@@ -91,7 +91,7 @@ const MyTeam = () => {
       {isManager ? (
         <div className='teamnav'>
         <img src={left} className='leftbtn' onClick={() => navigate(-1)}/>
-        <img src={cog} className='cogbtn' onClick={() => navigate('/app/teamsetting')}/>
+        <img src={dots} className='cogbtn' onClick={() => navigate('/app/teamsetting')}/>
       </div>
         ): (
         <div className='teamnav'>
