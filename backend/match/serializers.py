@@ -29,6 +29,10 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
         
     default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
     default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
+
+    def __init__(self, instance=None, data=..., **kwargs):
+        self.user_code = kwargs.pop('user_code', None)
+        super().__init__(instance, data, **kwargs)
         
     def get_match_location(self, obj):
         return obj.ground_name
@@ -40,12 +44,24 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
         return obj.match_name
     
     def get_distance(self, obj):
+        self.match_info = UserAnalMatch.objects.filter(match_code=obj.match_code, user_code=self.user_code)
+        if self.match_info.exists():
+            self.match_info = self.match_info.first()
+        else:
+            self.match_info = None
+
+        if self.match_info is not None:
+            return self.match_info.T_D
         return '-'
     
     def get_top_speed(self, obj):
+        if self.match_info is not None:
+            return self.match_info.T_HS
         return '-'
     
     def get_rating(self, obj):
+        if self.match_info is not None:
+            return self.match_info.point['total']
         return '-'
     
     def get_home_team(self, obj):

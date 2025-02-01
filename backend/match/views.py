@@ -18,7 +18,7 @@ class getUserMatchList(APIView):
         match_codes = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
         user_matchs = UserMatchInfo.objects.filter(match_code__in=match_codes)
 
-        serializer = User_Match_Info_Serializer(user_matchs, many=True)
+        serializer = User_Match_Info_Serializer(instance=user_matchs, user_code=user_code, many=True)
 
         return Response({'result' : serializer.data})
         
