@@ -1,24 +1,28 @@
 import styled from 'styled-components';
 import RankBox from './RankBox';
 import HighBox from './HighBox';
+import { useNavigate } from "react-router-dom"
 
 
 const TeamAnalTotal = ({data}) => {
-  const topData = data.top_players;
-  const myData = data.my_rankings;
+  const topData = data.total.top_players;
+  const myData = data.total.my_rankings;
+  console.log('룰룰룰룰',data);
+
+  const navigate = useNavigate
 
   return(
     <TeamAnalTotalStyle>
       <div className="title">팀내 항목별 최고 순위</div>
       <div className="high-box">
         <div className="high-column">
-          <HighBox img={topData.top_point.profile} name={topData.top_point.nickname} title='평점' titleData={topData.top_point.value} km=''/>
-          <HighBox img={topData.top_activity.profile} name={topData.top_activity.nickname} title='활동량' titleData={topData.top_activity.value} km='km'/>
+          <HighBox img={topData.top_point.profile} position={topData.top_point.position} name={topData.top_point.nickname} title='평점' titleData={topData.top_point.value} km='' onClick={() => navigate('/app/teamrank')}/>
+          <HighBox img={topData.top_activity.profile} position={topData.top_activity.position} name={topData.top_activity.nickname} title='활동량' titleData={topData.top_activity.value} km='km'/>
           
         </div>
         <div className="high-column">
-          <HighBox img={topData.top_sprint.profile} name={topData.top_sprint.nickname} title='스프린트' titleData={topData.top_sprint.value} km='m'/>
-          <HighBox img={topData.top_speed.profile} name={topData.top_speed.nickname} title='속력' titleData={topData.top_speed.value} km='km/h'/>
+          <HighBox img={topData.top_sprint.profile} position={topData.top_sprint.position} name={topData.top_sprint.nickname} title='스프린트' titleData={topData.top_sprint.value} km='m'/>
+          <HighBox img={topData.top_speed.profile} position={topData.top_speed.position} name={topData.top_speed.nickname} title='속력' titleData={topData.top_speed.value} km='km/h'/>
         </div>
       </div>
       <div className="title2">나의 순위</div>

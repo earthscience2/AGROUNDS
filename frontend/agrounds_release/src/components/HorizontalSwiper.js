@@ -74,6 +74,7 @@ const HorizontalSwiperStyle = styled.div`
   white-space: nowrap; 
   height: 14vh;
   width: 100%;
+  background-color: white;
 
   .swiper-container {
     display: flex;

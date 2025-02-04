@@ -3,13 +3,10 @@ import Back_btn from '../../../components/Back_btn';
 import Login_title from '../../../components/Login_title';
 import HorizontalSwiper from '../../../components/HorizontalSwiper';
 import Quarter_Tab from '../../../components/Quarter_Tab';
-import Summary from '../../../components/Summary';
 import DynamicQuarter from '../../../components/DynamicQuarter';
 import Loading from '../../../components/Loading';
 import { useLocation } from 'react-router-dom';
-import { getAnalyzeResultApi, getTeamAnalResultApi } from '../../../function/MatchApi';
-import TeamAnalTotal from '../../../components/TeamAnalTotal';
-import TeamAnalScore from '../../../components/TeamAnalScore';
+import { getTeamAnalResultApi } from '../../../function/MatchApi';
 
 const TeamAnalysis = () => {
 

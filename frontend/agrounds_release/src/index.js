@@ -50,6 +50,7 @@ import ComponyIntroduce from './pages/web/ComponyIntroduce';
 import ErrorPage from './pages/ErrorPage';
 import InfoFix from './pages/mypage/js/InfoFix';
 import HighlightVideo from './pages/video/js/HighlightVideo';
+import TeamRank from './pages/main/js/TeamRank';
 
 
 const useBodyClass = (className) => {
@@ -177,6 +178,7 @@ const router = createBrowserRouter([
       { path: "recentmatch", element: <RecentMatch /> },
       { path: "errorpage", element: <ErrorPage /> },
       { path: "infofix", element: <InfoFix /> },
+      { path: "teamrank", element: <TeamRank /> },
     ],
   },
 ]);

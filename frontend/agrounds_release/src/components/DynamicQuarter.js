@@ -50,11 +50,7 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
   };
 
   const renderTeamContent = () => {
-    return currentIndex === 0 ? (
-      <TeamAnalTotal data={data.total} />
-    ) : (
-      <TeamAnalScore data={data.point} />
-    );
+    return <TeamAnalTotal data={data} />
   };
   console.log(data)
   return (
@@ -67,7 +63,8 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
         alignItems: 'center',
       }}
     >
-      <Anal_Position_Nav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type={type} />
+      {type === 'personal' ?  <Anal_Position_Nav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type={type} /> :  ''}
+      
       {type === 'personal' ? renderPersonalContent() : renderTeamContent()}
       
     </div>

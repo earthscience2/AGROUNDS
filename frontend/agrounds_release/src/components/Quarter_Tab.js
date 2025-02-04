@@ -51,7 +51,7 @@ export default Quarter_Tab;
 
 const QuarterTabStyle = styled.div`
   width: 100%;
-  margin: 4vh auto 0 auto;
+  /* margin: 4vh auto 0 auto; */
 
   .tabs {
     display: flex;

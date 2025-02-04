@@ -6,7 +6,7 @@ import PositionDotColor, { AnalPositionColor } from '../function/PositionColor';
 
 const TeamAnalScore = ({data}) => {
   const rankingData = data.point_ranking;
-
+  console.log('scoreDATa',data)
   return(
     <TeamAnalScoreStyle>
       <div className='title'>평점 순위</div>
