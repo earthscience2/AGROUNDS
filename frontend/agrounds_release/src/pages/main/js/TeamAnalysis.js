@@ -71,7 +71,7 @@ const TeamAnalysis = () => {
     <div className='personalanal'>
       <div className='greybackground'>
         <Back_btn />
-        <Login_title title="팀 상세 분석" explain="경기 데이터를 기반으로 설정된 현재 팀의 수준을 파악하고 더 발전해보세요" />
+        <Login_title title="팀 상세 분석" explain={"경기 데이터를 기반으로 설정된 \n현재 팀의 수준을 파악하고 더 발전해보세요"} />
         <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
       

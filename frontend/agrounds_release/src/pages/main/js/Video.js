@@ -14,6 +14,7 @@ const Video = () => {
     getVideoSummationApi({ "user_code": sessionStorage.getItem('userCode') })
       .then((response) => {
         setVideoData(response.data);
+        console.log(response.data)
       })
       .catch((error) => console.log(error));
   }, []);
@@ -61,7 +62,7 @@ const Video = () => {
           <p className='contentnumber'>{videoData.full_cam?.number_of_videos || 0}개의 영상</p>
         </div>
 
-        <div className='contentbox' onClick={() => alert('동영상 준비중입니다.')}>
+        <div className='contentbox' onClick={() => navigate('/app/hightlightvideo')}>
           <div className='content4'>
             <img src={list} alt="Highlight" />
           </div>
