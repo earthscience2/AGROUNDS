@@ -99,6 +99,6 @@ const RayderChart = ({ data, rate }) => {
 export default RayderChart;
 
 const RaderStyle = styled.div`
-  width: 38vh;
-  height: 38vh;
+  width: 42vh;
+  height: 42vh;
 `;
