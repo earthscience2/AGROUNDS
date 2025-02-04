@@ -7,5 +7,6 @@ urlpatterns = [
     path('get-player-video-list/', views.getPlayerVideoList.as_view()),
     path('get-team-video-list/', views.getTeamVideoList.as_view()),
     path('get-full-video-list/', views.getFullVideoList.as_view()),
+    path('get-highlight-video-list/', views.getHighlightVideoList.as_view()),
     path('get-match-video-info/', views.getMatchVideoInfo.as_view()),
 ]
