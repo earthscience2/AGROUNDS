@@ -58,7 +58,7 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
         {!isFullView && (
           <button className="view-more" onClick={handleFullView}>
             <img className="img" src={rightBtn} alt="view more" />
-            전체보기
+            날짜 선택
           </button>
         )}
       </div>

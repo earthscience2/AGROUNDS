@@ -6,7 +6,7 @@ import yellow from '../assets/team-yellow-bg.png';
 import green from '../assets/team-green-bg.png';
 import blue from '../assets/team-blue-bg.png';
 
-const HighBox = ({img, name, title, titleData, km, position, onClick}) => {
+const HighBox = ({ img, name, title, titleData, km, position, onClick }) => {
   
   const backgroundImg = () => {
     if (position === "LWF" || position === "ST" || position === "RWF") {
@@ -20,8 +20,8 @@ const HighBox = ({img, name, title, titleData, km, position, onClick}) => {
     }
   }
   return (
-    <HighBoxStyle >
-      <div className='first-box' onClick={onClick}>
+    <HighBoxStyle onClick={onClick}>
+      <div className='first-box'>
         <img className='background' src={backgroundImg()}/>
         {img ? <div className='img-box'><img src={img}/></div> : <div className='img-box' style={{backgroundColor: 'white'}}><img src={user} style={{width:' 50%'}}/></div>}
         <div className='name'>{name}</div>
@@ -68,6 +68,7 @@ const HighBoxStyle = styled.div`
       background-color: white;
       z-index: 1999;
       margin-top: -3vh;
+      pointer-events: none;
       img{
         width: 100%;
         object-fit: cover;
