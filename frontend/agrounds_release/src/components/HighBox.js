@@ -66,7 +66,7 @@ const HighBoxStyle = styled.div`
       border-radius: 50%;
       position: absolute;
       background-color: white;
-      z-index: 1999;
+      z-index: 100;
       margin-top: -3vh;
       pointer-events: none;
       img{
@@ -80,7 +80,7 @@ const HighBoxStyle = styled.div`
       font-weight: 600;
       margin-top: 8vh;
       position: absolute;
-      z-index: 1999;
+      z-index: 100;
     }
   }
   .second-box{

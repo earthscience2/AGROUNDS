@@ -11,6 +11,7 @@
     "dashjs": "^4.7.4",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
+    "react-datepicker": "^8.0.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
