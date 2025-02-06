@@ -77,7 +77,7 @@ class getUserMatchList(APIView):
                     },
                     {
                         "match_code" : "m_0001",
-                        "match_schedule" : "2024-10-10",
+                        "match_schedule" : "2024-10-13",
                         "match_location" : "인하대운동장",
                         "thumbnail" : default_thumbnail,
                         "match_title" : "인하대학교 FC",
@@ -92,7 +92,7 @@ class getUserMatchList(APIView):
                     },
                     {
                         "match_code" : "m_0002",
-                        "match_schedule" : "2024-10-11",
+                        "match_schedule" : "2024-10-14",
                         "match_location" : "부천축구경기장",
                         "thumbnail" : default_thumbnail,
                         "match_title" : "동백 FC",
@@ -107,7 +107,7 @@ class getUserMatchList(APIView):
                     },
                     {
                         "match_code" : "m_0003",
-                        "match_schedule" : "2024-10-12",
+                        "match_schedule" : "2024-10-15",
                         "match_location" : "대야미월드컵경기장",
                         "thumbnail" : default_thumbnail,
                         "match_title" : "FC 제주",
@@ -196,7 +196,7 @@ class getTeamMatchList(APIView):
             },
             {
                 "match_code" : "m_0001",
-                "match_schedule" : "2024-10-10",
+                "match_schedule" : "2024-11-10",
                 "match_location" : "인하대운동장",
                 "thumbnail" : default_thumbnail,
                 "match_title" : "인하대학교 FC",
@@ -211,7 +211,7 @@ class getTeamMatchList(APIView):
             },
             {
                 "match_code" : "m_0002",
-                "match_schedule" : "2024-10-12",
+                "match_schedule" : "2024-12-12",
                 "match_location" : "부천축구경기장",
                 "thumbnail" : default_thumbnail,
                 "match_title" : "동백 FC",
@@ -226,7 +226,7 @@ class getTeamMatchList(APIView):
             },
             {
                 "match_code" : "m_0003",
-                "match_schedule" : "2024-10-13",
+                "match_schedule" : "2025-01-01",
                 "match_location" : "대야미월드컵경기장",
                 "thumbnail" : default_thumbnail,
                 "match_title" : "FC 제주",
