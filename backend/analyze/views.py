@@ -87,11 +87,8 @@ class getTeamAnalyzeResult(APIView):
         try:
             team_match_info = TeamMatchInfo.objects.get(match_code=match_code)
         except TeamMatchInfo.DoesNotExist:
-            filename = 'team_analyze.json'
-            with open(os.path.join(settings.STATIC_ROOT, filename), encoding='utf-8') as file:
-                data = json.load(file)
-                return Response(data)
-
+            return self.returnExampleData()
+        
         user_anal_matchs = UserAnalMatch.objects.filter(match_code=match_code)
 
         if user_code is not None:
@@ -131,6 +128,13 @@ class getTeamAnalyzeResult(APIView):
             result.append(quarter_data)
 
         return Response({"result" : result})
+    
+    def returnExampleData(self):
+        filename = 'team_analyze.json'
+        with open(os.path.join(settings.STATIC_ROOT, filename), encoding='utf-8') as file:
+            data = json.load(file)
+            return Response(data)
+
 
     def get_value_by_target(self, user_match_result, target):
         return ( user_match_result.point[target.split('_')[1]] if target.startswith('point_')
