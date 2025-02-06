@@ -28,6 +28,12 @@ class getAnalyzeResult(APIView):
 
         user_anal_match = UserAnalMatch.objects.filter(match_code=match_code, user_code=user_code)
 
+        if not user_anal_match.exists():
+            filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
+            with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
+                data = json.load(file)
+                return Response(data)
+
         user_anal_match = sorted(
             user_anal_match,
             key=lambda x: (0 if x.quarter_name == "전반전" else 1, x.quarter_name),
@@ -54,12 +60,6 @@ class getAnalyzeResult(APIView):
         result['analyze'] = serializer.data
 
         return Response(result)
-
-        # filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
-
-        # with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
-        #     data = json.load(file)
-        #     return Response(data)
         
     def map_string_to_number(self, input_string):
         if len(input_string) > 45:
@@ -73,18 +73,24 @@ class getTeamAnalyzeResult(APIView):
     def post(self, request):
         data = request.data.copy()
 
-        required_fields = ['match_code', 'team_code']
+        required_fields = ['match_code', 'user_code']
         errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
         if errors:
             return Response(errors, status=400)
         
         match_code = data['match_code']
-        team_code = data['team_code']
+        # team_code = data['team_code']
         user_code = request.data.get('user_code')
 
         result = []
 
-        team_match_info = get_object_or_404(TeamMatchInfo, match_code=match_code)
+        try:
+            team_match_info = TeamMatchInfo.objects.get(match_code=match_code)
+        except TeamMatchInfo.DoesNotExist:
+            filename = 'team_analyze.json'
+            with open(os.path.join(settings.STATIC_ROOT, filename), encoding='utf-8') as file:
+                data = json.load(file)
+                return Response(data)
 
         user_anal_matchs = UserAnalMatch.objects.filter(match_code=match_code)
 
@@ -124,17 +130,7 @@ class getTeamAnalyzeResult(APIView):
 
             result.append(quarter_data)
 
-        
-
-        serializer = Match_Analyze_Result_Serializer(user_anal_matchs, many=True)
-
         return Response({"result" : result})
-        
-        filename = 'team_analyze.json'
-
-        with open(os.path.join(settings.STATIC_ROOT, filename), encoding='utf-8') as file:
-            data = json.load(file)
-            return Response(data)
 
     def get_value_by_target(self, user_match_result, target):
         return ( user_match_result.point[target.split('_')[1]] if target.startswith('point_')

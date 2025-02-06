@@ -64,7 +64,7 @@ class getVideoSummation(APIView):
                 "number_of_videos" : full_videos_number
             },
             "highlight_cam" : {
-                "thumbnail" : [],
+                "thumbnail" : thumnails,
                 "number_of_videos" : 0
             }
         }
@@ -82,10 +82,15 @@ class getPlayerVideoList(APIView):
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
         video_infos = VideoInfo.objects.filter(user_code=user_code, type='player')
+
+        if not video_infos.exists():
+            return self.returnExampleData()
+        
         serializer = Video_List_Serializer(video_infos, many = True)
 
         return Response({'result' : serializer.data})
-                
+
+    def returnExampleData(self):
         result = [
             {
                 "match_code" : "m_0001",
@@ -155,12 +160,16 @@ class getTeamVideoList(APIView):
 
         team_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='team')
 
+        if not team_videos.exists():
+            return self.returnExampleData()
+
         serializer = Video_List_Serializer(team_videos, many=True)
 
         result = serializer.data
 
         return Response({"result" : result})
         
+    def returnExampleData(self):
         result = [
             {
                 "match_code" : "m_0001",
@@ -230,12 +239,17 @@ class getFullVideoList(APIView):
 
         full_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='full')
 
+        if not full_videos.exists():
+            return self.returnExampleData()
+        
         serializer = Video_List_Serializer(full_videos, many=True)
 
         result = serializer.data
 
         return Response({"result" : result})
         
+    
+    def returnExampleData(self):
         result = [
             {
                 "match_code" : "m_0001",
@@ -370,9 +384,8 @@ class getMatchVideoInfo(APIView):
             video_info.filter(user_code=user_code)
 
         if not video_info.exists():
-            return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
-        
-        
+            # return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
+            return self.returnExampleData(type=type)
 
         video_info = video_info.first()
         match_info = get_object_or_404(UserMatchInfo, match_code=match_code)
@@ -397,7 +410,8 @@ class getMatchVideoInfo(APIView):
         # serializer = Video_Info_Serializer(video_info)
 
         return Response({'result':result})
-
+    
+    def returnExampleData(self, type):
         result = [
                 {
                     "quarter" : "1쿼터",
