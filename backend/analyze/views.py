@@ -114,16 +114,36 @@ class getTeamAnalyzeResult(APIView):
 
             quarter_data['total'] = total
 
-            point = {}
+            ranking = {}
             point_ranking = []
 
             anal_match_sorted_by_point = self.sort_by_target(user_anal_matchs_in_quarter, 'point_total')
             for anal_match in anal_match_sorted_by_point:
                 point_ranking.append(self.get_player_info(anal_match, 'point_total'))
 
-            point['point_ranking'] = point_ranking
+            activity_ranking = []
 
-            quarter_data['point'] = point
+            anal_match_sorted_by_activity = self.sort_by_target(user_anal_matchs_in_quarter, 'point_positiveness')
+            for anal_match in anal_match_sorted_by_activity:
+                activity_ranking.append(self.get_player_info(anal_match, 'point_positiveness'))
+
+            sprint_ranking = []
+            anal_match_sorted_by_sprint = self.sort_by_target(user_anal_matchs_in_quarter, 'T_S')
+            for anal_match in anal_match_sorted_by_sprint:
+                sprint_ranking.append(self.get_player_info(anal_match, 'T_S'))
+
+
+            speed_ranking = []
+            anal_match_sorted_by_speed = self.sort_by_target(user_anal_matchs_in_quarter, 'T_AS')
+            for anal_match in anal_match_sorted_by_speed:
+                speed_ranking.append(self.get_player_info(anal_match, 'T_AS'))
+
+            ranking['point_ranking'] = point_ranking
+            ranking['activity_ranking'] = activity_ranking
+            ranking['sprint_ranking'] = sprint_ranking
+            ranking['speed_ranking'] = speed_ranking
+
+            quarter_data['ranking'] = ranking
 
             result.append(quarter_data)
 
