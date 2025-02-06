@@ -29,6 +29,10 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
         
     default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
     default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
+
+    def __init__(self, instance=None, data=..., **kwargs):
+        self.user_code = kwargs.pop('user_code', None)
+        super().__init__(instance, data, **kwargs)
         
     def get_match_location(self, obj):
         return obj.ground_name
@@ -40,12 +44,24 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
         return obj.match_name
     
     def get_distance(self, obj):
+        self.match_info = UserAnalMatch.objects.filter(match_code=obj.match_code, user_code=self.user_code)
+        if self.match_info.exists():
+            self.match_info = self.match_info.first()
+        else:
+            self.match_info = None
+
+        if self.match_info is not None:
+            return self.match_info.T_D
         return '-'
     
     def get_top_speed(self, obj):
+        if self.match_info is not None:
+            return self.match_info.T_HS
         return '-'
     
     def get_rating(self, obj):
+        if self.match_info is not None:
+            return self.match_info.point['total']
         return '-'
     
     def get_home_team(self, obj):
@@ -84,7 +100,6 @@ class Team_Match_Info_Serializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField()
     match_title = serializers.SerializerMethodField()
     match_mom = serializers.SerializerMethodField()
-    match_result = serializers.SerializerMethodField()
     participation = serializers.SerializerMethodField()
     home_team = serializers.SerializerMethodField()
     home_team_logo = serializers.SerializerMethodField()
@@ -115,15 +130,15 @@ class Team_Match_Info_Serializer(serializers.ModelSerializer):
             return match_info.match_time
         except TeamMatchInfo.DoesNotExist:
             return '-'
-        
-    def get_match_mom(self, obj):
-        return '-'
     
-    def get_match_result(self, obj):
+    def get_match_mom(self, obj):
+        user_info = UserInfo.objects.filter(user_code = obj.match_mom)
+        if user_info.exists():
+            return user_info.first().user_nickname
         return '-'
     
     def get_participation(self, obj):
-        return '-'
+        return UserMatch.objects.filter(match_code=obj.match_code).count()
     
     def get_home_team(self, obj):
         team_match = TeamMatch.objects.filter(match_code = obj.match_code)

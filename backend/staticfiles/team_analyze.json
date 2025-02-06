@@ -1,305 +1,1005 @@
 {
-	"result" : 
-	[
+	"result": [
 		{
-			"quarter" : "1쿼터",
-			"total" : {
-				"top_players" : {
-					"top_point" : {
-						"profile" : "",
-						"nickname" : "조규성",
-						"value" : 9.3,
-						"position" : "ST"
+			"quarter": "1쿼터",
+			"total": {
+				"top_players": {
+					"top_point": {
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 9.9
 					},
-					"top_activity" : {
-						"profile" : "",
-						"nickname" : "KIM",
-						"value" : 7.75,
-						"position" : "CB"
+					"top_activity": {
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 8.7
 					},
-					"top_sprint" : {
-						"profile" : "",
-						"nickname" : "Sonny",
-						"value" : 36.79,
-						"position" : "RWF"
+					"top_sprint": {
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 40.00
 					},
-					"top_speed" : {
-						"profile" : "",
-						"nickname" : "강인리",
-						"value" : 26.17,
-						"position" : "CAM"
+					"top_speed": {
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 30.00
 					}
 				},
-				"my_rankings" : {
-					"point" : {
-						"value" : 7.8,
-						"rank" : 5
+				"my_rankings": {
+					"point": {
+						"value": 7.8,
+						"rank": 5
 					},
-					"activity" : {
-						"value" : 3.5,
-						"rank" : 10
+					"activity": {
+						"value": 3.5,
+						"rank": 10
 					},
-					"sprint" : {
-						"value" : 33.21,
-						"rank" : 2
+					"sprint": {
+						"value": 33.21,
+						"rank": 2
 					},
-					"speed" : {
-						"value" : 20.33,
-						"rank" : 9
+					"speed": {
+						"value": 20.33,
+						"rank": 9
 					}
 				}
 			},
-			"point" : {
-				"point_ranking" : [
+			"ranking": {
+				"point_ranking": [
 					{
-						"profile" : "",
-						"nickname" : "조규성",
-						"position" : "ST",
-						"value" : 9.3
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 9.9
 					},
 					{
-						"profile" : "",
-						"nickname" : "Sonny",
-						"position" : "RWF",
-						"value" : 8.9
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 9.2
 					},
 					{
-						"profile" : "",
-						"nickname" : "희찬",
-						"position" : "LWM",
-						"value" : 7.8
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 8.6
 					},
 					{
-						"profile" : "",
-						"nickname" : "강인리",
-						"position" : "CAM",
-						"value" : 7.4
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 7.7
 					},
 					{
-						"profile" : "",
-						"nickname" : "KIM",
-						"position" : "CB",
-						"value" : 6.5
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 6.5
 					},
 					{
-						"profile" : "",
-						"nickname" : "JAYOU",
-						"position" : "GK",
-						"value" : 6.4
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 5.4
 					},
 					{
-						"profile" : "",
-						"nickname" : "의찬",
-						"position" : "ST",
-						"value" : 6.1
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 3.2
 					},
 					{
-						"profile" : "",
-						"nickname" : "소영",
-						"position" : "RWF",
-						"value" : 5.8
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 2.0
+					}
+				],
+				"activity_ranking": [
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 8.7
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 8.1
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 7.5
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 6.9
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 6.3
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 5.2
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 4.8
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 3.9
+					}
+				],
+				"sprint_ranking": [
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 40.00
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 36.25
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 32.50
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 28.75
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 24.50
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 20.00
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 15.75
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 10.00
+					}
+				],
+				"speed_ranking": [
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 30.00
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 29.50
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 28.20
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 26.80
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 25.30
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 24.10
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 22.70
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 20.50
 					}
 				]
 			}
 		},
 		{
-			"quarter" : "2쿼터",
-			"total" : {
-				"top_players" : {
-					"top_point" : {
-						"profile" : "",
-						"nickname" : "Sonny",
-						"value" : 8.3,
-						"position" : "RWF"
+			"quarter": "2쿼터",
+			"total": {
+				"top_players": {
+					"top_point": {
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 9.7
 					},
-					"top_activity" : {
-						"profile" : "",
-						"nickname" : "KIM",
-						"value" : 7.75,
-						"position" : "CB"
+					"top_activity": {
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 9.0
 					},
-					"top_sprint" : {
-						"profile" : "",
-						"nickname" : "조규성",
-						"value" : 36.79,
-						"position" : "ST"
+					"top_sprint": {
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 39.5
 					},
-					"top_speed" : {
-						"profile" : "",
-						"nickname" : "강인리",
-						"value" : 26.17,
-						"position" : "CAM"
+					"top_speed": {
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 29.9
 					}
 				},
-				"my_rankings" : {
-					"point" : {
-						"value" : 7.8,
-						"rank" : 5
+				"my_rankings": {
+					"point": {
+						"value": 8.2,
+						"rank": 4
 					},
-					"activity" : {
-						"value" : 3.5,
-						"rank" : 10
+					"activity": {
+						"value": 3.8,
+						"rank": 7
 					},
-					"sprint" : {
-						"value" : 33.21,
-						"rank" : 2
+					"sprint": {
+						"value": 35.7,
+						"rank": 3
 					},
-					"speed" : {
-						"value" : 20.33,
-						"rank" : 9
+					"speed": {
+						"value": 22.5,
+						"rank": 6
 					}
 				}
 			},
-			"point" : {
-				"point_ranking" : [
+			"ranking": {
+				"point_ranking": [
 					{
-						"profile" : "",
-						"nickname" : "조규성",
-						"position" : "ST",
-						"value" : 9.3
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 9.7
 					},
 					{
-						"profile" : "",
-						"nickname" : "Sonny",
-						"position" : "RWF",
-						"value" : 8.9
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 9.3
 					},
 					{
-						"profile" : "",
-						"nickname" : "희찬",
-						"position" : "LWM",
-						"value" : 7.8
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 8.9
 					},
 					{
-						"profile" : "",
-						"nickname" : "강인리",
-						"position" : "CAM",
-						"value" : 7.4
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 8.2
 					},
 					{
-						"profile" : "",
-						"nickname" : "KIM",
-						"position" : "CB",
-						"value" : 6.5
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 7.5
 					},
 					{
-						"profile" : "",
-						"nickname" : "JAYOU",
-						"position" : "GK",
-						"value" : 6.4
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 6.8
 					},
 					{
-						"profile" : "",
-						"nickname" : "의찬",
-						"position" : "ST",
-						"value" : 6.1
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 5.4
 					},
 					{
-						"profile" : "",
-						"nickname" : "소영",
-						"position" : "RWF",
-						"value" : 5.8
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 2.0
+					}
+				],
+				"activity_ranking": [
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 9.0
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 8.3
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 7.8
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 7.1
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 6.5
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 5.2
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 4.9
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 3.0
+					}
+				],
+				"sprint_ranking": [
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 39.5
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 35.3
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 31.4
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 27.8
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 25.1
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 21.0
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 16.5
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 11.0
+					}
+				],
+				"speed_ranking": [
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 30.0
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 29.8
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 28.5
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 27.2
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 26.1
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 25.0
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 23.7
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 20.8
 					}
 				]
 			}
 		},
 		{
-			"quarter" : "3쿼터",
-			"total" : {
-				"top_players" : {
-					"top_point" : {
-						"profile" : "",
-						"nickname" : "강인리",
-						"value" : 9.3,
-						"position" : "CAM"
+			"quarter": "3쿼터",
+			"total": {
+				"top_players": {
+					"top_point": {
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 9.8
 					},
-					"top_activity" : {
-						"profile" : "",
-						"nickname" : "KIM",
-						"value" : 7.75,
-						"position" : "CB"
+					"top_activity": {
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 9.1
 					},
-					"top_sprint" : {
-						"profile" : "",
-						"nickname" : "Sonny",
-						"value" : 36.79,
-						"position" : "RWF"
+					"top_sprint": {
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 40.0
 					},
-					"top_speed" : {
-						"profile" : "",
-						"nickname" : "조규성",
-						"value" : 26.17,
-						"position" : "ST"
+					"top_speed": {
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 30.5
 					}
 				},
-				"my_rankings" : {
-					"point" : {
-						"value" : 7.8,
-						"rank" : 5
+				"my_rankings": {
+					"point": {
+						"value": 7.9,
+						"rank": 6
 					},
-					"activity" : {
-						"value" : 3.5,
-						"rank" : 10
+					"activity": {
+						"value": 4.1,
+						"rank": 8
 					},
-					"sprint" : {
-						"value" : 33.21,
-						"rank" : 2
+					"sprint": {
+						"value": 36.5,
+						"rank": 4
 					},
-					"speed" : {
-						"value" : 20.33,
-						"rank" : 9
+					"speed": {
+						"value": 21.3,
+						"rank": 7
 					}
 				}
 			},
-			"point" : {
-				"point_ranking" : [
+			"ranking": {
+				"point_ranking": [
 					{
-						"profile" : "",
-						"nickname" : "조규성",
-						"position" : "ST",
-						"value" : 9.3
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 9.8
 					},
 					{
-						"profile" : "",
-						"nickname" : "Sonny",
-						"position" : "RWF",
-						"value" : 8.9
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 9.2
 					},
 					{
-						"profile" : "",
-						"nickname" : "희찬",
-						"position" : "LWM",
-						"value" : 7.8
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 8.9
 					},
 					{
-						"profile" : "",
-						"nickname" : "강인리",
-						"position" : "CAM",
-						"value" : 7.4
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 8.0
 					},
 					{
-						"profile" : "",
-						"nickname" : "KIM",
-						"position" : "CB",
-						"value" : 6.5
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 7.5
 					},
 					{
-						"profile" : "",
-						"nickname" : "JAYOU",
-						"position" : "GK",
-						"value" : 6.4
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 7.0
 					},
 					{
-						"profile" : "",
-						"nickname" : "의찬",
-						"position" : "ST",
-						"value" : 6.1
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 5.8
 					},
 					{
-						"profile" : "",
-						"nickname" : "소영",
-						"position" : "RWF",
-						"value" : 5.8
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 2.0
+					}
+				],
+				"activity_ranking": [
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 9.1
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 8.5
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 8.0
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 7.3
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 6.7
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 5.5
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 4.4
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 3.2
+					}
+				],
+				"sprint_ranking": [
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 40.0
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 37.3
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 35.5
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 33.2
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 29.1
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 25.0
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 20.5
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 15.0
+					}
+				],
+				"speed_ranking": [
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 30.5
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 29.9
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 28.3
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 27.7
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 26.4
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 25.1
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 23.6
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 21.8
+					}
+				]
+			}
+		},
+		{
+			"quarter": "4쿼터",
+			"total": {
+				"top_players": {
+					"top_point": {
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 9.9
+					},
+					"top_activity": {
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 9.3
+					},
+					"top_sprint": {
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 38.8
+					},
+					"top_speed": {
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 30.0
+					}
+				},
+				"my_rankings": {
+					"point": {
+						"value": 8.4,
+						"rank": 3
+					},
+					"activity": {
+						"value": 4.6,
+						"rank": 5
+					},
+					"sprint": {
+						"value": 34.6,
+						"rank": 4
+					},
+					"speed": {
+						"value": 22.1,
+						"rank": 7
+					}
+				}
+			},
+			"ranking": {
+				"point_ranking": [
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 9.9
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 9.4
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 9.3
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 8.8
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 8.1
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 7.5
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 4.2
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 2.0
+					}
+				],
+				"activity_ranking": [
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 9.3
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 8.6
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 8.1
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 7.8
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 7.2
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 6.5
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 4.9
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 3.5
+					}
+				],
+				"sprint_ranking": [
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 38.8
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 36.0
+					},
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 33.5
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 31.3
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 28.4
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 25.6
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 22.2
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 10.0
+					}
+				],
+				"speed_ranking": [
+					{
+						"profile": "",
+						"nickname": "소영",
+						"position": "RWF",
+						"value": 30.0
+					},
+					{
+						"profile": "",
+						"nickname": "KIM",
+						"position": "CB",
+						"value": 29.3
+					},
+					{
+						"profile": "",
+						"nickname": "강인리",
+						"position": "CAM",
+						"value": 28.5
+					},
+					{
+						"profile": "",
+						"nickname": "희찬",
+						"position": "LWM",
+						"value": 27.8
+					},
+					{
+						"profile": "",
+						"nickname": "조규성",
+						"position": "ST",
+						"value": 26.4
+					},
+					{
+						"profile": "",
+						"nickname": "Sonny",
+						"position": "RWF",
+						"value": 25.7
+					},
+					{
+						"profile": "",
+						"nickname": "의찬",
+						"position": "ST",
+						"value": 24.2
+					},
+					{
+						"profile": "",
+						"nickname": "JAYOU",
+						"position": "GK",
+						"value": 20.9
 					}
 				]
 			}

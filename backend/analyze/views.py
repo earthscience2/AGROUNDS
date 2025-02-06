@@ -28,6 +28,12 @@ class getAnalyzeResult(APIView):
 
         user_anal_match = UserAnalMatch.objects.filter(match_code=match_code, user_code=user_code)
 
+        if not user_anal_match.exists():
+            filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
+            with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
+                data = json.load(file)
+                return Response(data)
+
         user_anal_match = sorted(
             user_anal_match,
             key=lambda x: (0 if x.quarter_name == "전반전" else 1, x.quarter_name),
@@ -54,12 +60,6 @@ class getAnalyzeResult(APIView):
         result['analyze'] = serializer.data
 
         return Response(result)
-
-        # filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
-
-        # with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
-        #     data = json.load(file)
-        #     return Response(data)
         
     def map_string_to_number(self, input_string):
         if len(input_string) > 45:
@@ -73,19 +73,22 @@ class getTeamAnalyzeResult(APIView):
     def post(self, request):
         data = request.data.copy()
 
-        required_fields = ['match_code', 'team_code']
+        required_fields = ['match_code', 'user_code']
         errors = {field: f"{field}는 필수 항목입니다." for field in required_fields if field not in data}
         if errors:
             return Response(errors, status=400)
         
         match_code = data['match_code']
-        team_code = data['team_code']
+        # team_code = data['team_code']
         user_code = request.data.get('user_code')
 
         result = []
 
-        team_match_info = get_object_or_404(TeamMatchInfo, match_code=match_code)
-
+        try:
+            team_match_info = TeamMatchInfo.objects.get(match_code=match_code)
+        except TeamMatchInfo.DoesNotExist:
+            return self.returnExampleData()
+        
         user_anal_matchs = UserAnalMatch.objects.filter(match_code=match_code)
 
         if user_code is not None:
@@ -111,34 +114,51 @@ class getTeamAnalyzeResult(APIView):
 
             quarter_data['total'] = total
 
-            point = {}
+            ranking = {}
             point_ranking = []
 
             anal_match_sorted_by_point = self.sort_by_target(user_anal_matchs_in_quarter, 'point_total')
             for anal_match in anal_match_sorted_by_point:
                 point_ranking.append(self.get_player_info(anal_match, 'point_total'))
 
-            point['point_ranking'] = point_ranking
+            activity_ranking = []
 
-            quarter_data['point'] = point
+            anal_match_sorted_by_activity = self.sort_by_target(user_anal_matchs_in_quarter, 'point_positiveness')
+            for anal_match in anal_match_sorted_by_activity:
+                activity_ranking.append(self.get_player_info(anal_match, 'point_positiveness'))
+
+            sprint_ranking = []
+            anal_match_sorted_by_sprint = self.sort_by_target(user_anal_matchs_in_quarter, 'T_S')
+            for anal_match in anal_match_sorted_by_sprint:
+                sprint_ranking.append(self.get_player_info(anal_match, 'T_S'))
+
+
+            speed_ranking = []
+            anal_match_sorted_by_speed = self.sort_by_target(user_anal_matchs_in_quarter, 'T_AS')
+            for anal_match in anal_match_sorted_by_speed:
+                speed_ranking.append(self.get_player_info(anal_match, 'T_AS'))
+
+            ranking['point_ranking'] = point_ranking
+            ranking['activity_ranking'] = activity_ranking
+            ranking['sprint_ranking'] = sprint_ranking
+            ranking['speed_ranking'] = speed_ranking
+
+            quarter_data['ranking'] = ranking
 
             result.append(quarter_data)
 
-        
-
-        serializer = Match_Analyze_Result_Serializer(user_anal_matchs, many=True)
-
         return Response({"result" : result})
-        
+    
+    def returnExampleData(self):
         filename = 'team_analyze.json'
-
         with open(os.path.join(settings.STATIC_ROOT, filename), encoding='utf-8') as file:
             data = json.load(file)
             return Response(data)
-        
+
+
     def get_value_by_target(self, user_match_result, target):
         return ( user_match_result.point[target.split('_')[1]] if target.startswith('point_')
-                else getattr(user_match_result, target, 0) )
+                else getattr(user_match_result, target, 0))
 
     def sort_by_target(self, analyze_result, target):
         analyze_result_sorted_by_target = sorted(
@@ -217,8 +237,6 @@ class getTeamAnalyzeResult(APIView):
             }
 
         return my_rankings
-        
-
 
 class getOverall(APIView):
     def post(self, request):
