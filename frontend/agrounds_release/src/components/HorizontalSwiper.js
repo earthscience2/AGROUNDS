@@ -20,6 +20,7 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
   const [modalOpen, setModalOpen ] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
+  const [visibleItems, setVisibleItems] = useState([]);
 
   useEffect(() => {
     getMatchListApi({'user_code' : sessionStorage.getItem('userCode')})
@@ -27,6 +28,7 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
       const matches = response.data.result || [];
       console.log(response.data.result)
       setItems(matches);
+      setVisibleItems(matches.slice(0, 5));
     })
   
     .catch((error) => console.error(error));
@@ -37,7 +39,6 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
     onSelectMatch(item);
   };
 
-  const visibleItems = items.slice(0, 5);
 
   const isOpen = () => {
     setModalOpen(true)
@@ -50,26 +51,26 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
   const isSameOrBefore = (date1, date2) => {
     const d1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
     const d2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
-    console.log('날짜비교',d1,d2)
     return d1 <= d2;
   };
 
   const availableDates = items.map((item) => new Date(item.match_schedule).toDateString());
-  console.log('실제 가능날짜',availableDates)
-  const handleDateChange = (date) => {
-    const today = new Date();
 
-    if (isSameOrBefore(today, date)) return; 
+  const handleDateChange = (date) => {
     setSelectedDate(date);
+  
     const pastData = items
       .filter((item) => isSameOrBefore(new Date(item.match_schedule), date))
-      .slice(-5)
-      .reverse();
-    setFilteredData(pastData);
+      .slice(0, 5); 
+
+      if (pastData.length > 0) {
+        setVisibleItems([...pastData]);
+        setActiveItem(0);
+      }
   };
 
+
   const isDateAvailable = (date) => {
-    console.log(date.toDateString())
     return availableDates.includes(date.toDateString());
   };
 
@@ -144,7 +145,7 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
               />
             </CustomDatePicker>
             <Circlebox>
-              <Circle_common_btn title="확인"/>
+              <Circle_common_btn title="확인" onClick={() => onClose()}/>
             </Circlebox>
             
           </FullModal>
