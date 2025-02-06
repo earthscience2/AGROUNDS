@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SpecificGravity from '../components/SpecificGravity';
+import LineChart from '../components/LineChart';
 
 const Map = ({ data }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -102,39 +103,51 @@ const ActivityLevel = ({ data, attack,defence }) => {
   );
 };
 
-const Speed = ({ data }) => {
+const Speed = ({ data, positionData }) => {
+  const [speedData, setSpeedData] = useState([]);
+  const [accData, setAccData] = useState([]);
+  
+  useEffect(() => {
+    setSpeedData(data.speed_change);
+    setAccData(data.acceleration_change);
+  }, [data])
+
   return (
     <SpeedStyle >
       <div className='movingbox'>
         <div className='eachmovingbox'>
           <p>속력 변화</p>
-          <img src={data.speed_change} />
+          <div className='chart'>
+            {speedData && <LineChart data={speedData} speed={true}/>}
+          </div>
         </div>
         <div className='eachmovingbox'>
           <p>가속도 변화</p>
-          <img src={data.acceleration_change} />
+          <div className='chart'>
+            {accData && <LineChart data={accData} speed={true}/>}
+          </div>
         </div>
       </div>
       <div className='datarow'>
         <p className='datatitle'>평균 속력</p>
-        <p className='datadetail'>{data.AS}km/h</p>
+        <p className='datadetail'>{positionData.AS}km/h</p>
       </div>
       <div className='datarow'>
         <p className='datatitle'>최고 속력</p>
-        <p className='datadetail'>{data.HS}km/h</p>
+        <p className='datadetail'>{positionData.HS}km/h</p>
       </div>
       <div className='datarow'>
         <p className='datatitle'>평균 가속도</p>
-        <p className='datadetail'>{data.AA}m/s²</p>
+        <p className='datadetail'>{positionData.AA}m/s²</p>
       </div>
       <div className='datarow'>
         <p className='datatitle'>최고 가속도</p>
-        <p className='datadetail'>{data.HA}m/s²</p>
+        <p className='datadetail'>{positionData.HA}m/s²</p>
       </div>
     </SpeedStyle>
   );
 };
-console.log()
+
 const Sprint = ({data}) => {
   return (
     <SprintStyle >
@@ -277,7 +290,7 @@ const SpeedStyle = styled.div`
     align-items: center;
     .eachmovingbox{
       width: 50%;
-      height: 15vh;
+      height: 13vh;
       margin-left: 2vh;
       & > p {
         font-size: 1.6vh;
@@ -291,7 +304,12 @@ const SpeedStyle = styled.div`
         object-fit: cover;
         margin-left: -1vh;
       }
+      .chart{
+        width: 80%;
+        height: 20%;
+      }
     }
+
   }
   .datarow{
     display: flex;

@@ -21,7 +21,7 @@ export default Field;
 
 const FieldContainer = styled.div`
   position: relative;
-  width: 80%;
+  width: 60%;
   height: 50%;
  
 `;

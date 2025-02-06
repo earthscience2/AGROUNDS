@@ -130,7 +130,7 @@ const RecentMatchS = ({logo1, logo2}) => {
   useEffect(() => {
     getTeamMatchList({'team_code': sessionStorage.getItem('teamCode')})
     .then((response) => {
-      setMatch(response.data.result[0])
+      setMatch(response.data.result[0] || [])
     })
   }, [sessionStorage.getItem('teamCode')])
 

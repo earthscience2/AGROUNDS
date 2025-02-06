@@ -32,6 +32,9 @@ const LoginTitleStyle = styled.div`
     font-weight: 500;
     color: #6F6F6F;
     font-family: 'Pretendard-Regular';
+    word-wrap: break-word;  
+    white-space: pre-wrap;
+    
   }
 
 

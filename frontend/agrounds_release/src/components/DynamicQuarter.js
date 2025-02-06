@@ -37,24 +37,20 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
     };
 
     return (
-      <>
-        <div style={{ marginBottom: '5vh' }} />
+      <PersonalAnalStyle>
+        <div />
         <RaderDate>{chartPoints[0]}</RaderDate>
         <RayderChart data={chartPoints} rate={rate} />
         <Anal_Detail title="히트맵 / 고속히트맵 / 방향전환" detail={<Map data={positionData()} />} />
         <Anal_Detail title="활동량" detail={<ActivityLevel attack={attack} defence={defence} data={positionData()} />} />
-        <Anal_Detail title="속도 및 가속도" detail={<Speed data={positionData()} />} />
+        <Anal_Detail title="속도 및 가속도" detail={<Speed data={data} positionData={positionData()}/>} />
         <Anal_Detail title="스프린트" detail={<Sprint data={positionData()} />} />
-      </>
+      </PersonalAnalStyle>
     );
   };
 
   const renderTeamContent = () => {
-    return currentIndex === 0 ? (
-      <TeamAnalTotal data={data.total} />
-    ) : (
-      <TeamAnalScore data={data.point} />
-    );
+    return <TeamAnalTotal data={data} />
   };
   console.log(data)
   return (
@@ -67,7 +63,8 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
         alignItems: 'center',
       }}
     >
-      <Anal_Position_Nav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type={type} />
+      {type === 'personal' ?  <Anal_Position_Nav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} type={type} /> :  ''}
+      
       {type === 'personal' ? renderPersonalContent() : renderTeamContent()}
       
     </div>
@@ -83,4 +80,14 @@ const RaderDate = styled.div`
   position: relative;
   top: 20.5vh;
   right: 1vh;
+`
+
+const PersonalAnalStyle = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &:last-child{
+    margin-bottom: 5vh;
+  }
 `

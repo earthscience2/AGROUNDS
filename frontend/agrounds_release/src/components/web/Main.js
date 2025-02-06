@@ -149,13 +149,13 @@ const Main = () => {
   return (
     <MainStyle>
       <Section1>
-        <div>누구나 이용할 수 있는 제품 <br />아마추어를 위한 쉽고 합리적인 제품을 통해 <br/>모든 아마추어 선수들의 성장을 응원하고 돕습니다.</div>
+        <div style={{lineHeight:'1.7'}}>누구나 이용할 수 있는 제품 <br />아마추어를 위한 쉽고 합리적인 제품을 통해 <br/>모든 아마추어 선수들의 성장을 응원하고 돕습니다.</div>
         <img src={section1} />
       </Section1>
       <Section2>
         <img src={section2} />
         <div className='info-box'>
-          <div className='title'>아마추어 축구 전술 <br/>분석 플랫폼</div>
+          <div className='title' style={{lineHeight:'1.5'}}>아마추어 축구 전술 <br/>분석 플랫폼</div>
           <div className='contents'>히트맵과 리플레이 등 총 123가지의 다양한 분석 결과를 제공하고,<br/> 분석 결과를 바탕으로 도출한 6가지의 주요 지표를 제공합니다.</div>
           <p className='contents2'>또한 개인 뿐 아니라 팀 단위로도 더 자세한 정보를 제공하고자 합니다.</p>
         </div>
@@ -163,8 +163,8 @@ const Main = () => {
       <Section3>
         <div className='info-box'>
           <div className='title'>GPS 분석</div>
-          <div className='contents'>GPS 기기를 통해 수집된 데이터는 저희만의 독자적인 알고리즘을<br/> 통해 선수들의 경기력을 체계적으로 분석합니다.</div>
-          <p className='contents2'>이후, AI 기술을 활용하여 이 정보를 한층 더 정교하게 요약하고 시각화하여,<br/> 누구나 쉽게 이해하고 활용할 수 있도록 제공합니다. <br/>데이터의 전문성과 소비자의 접근성을 동시에 만족시키는 <br/>혁신적인 분석 솔루션입니다.
+          <div className='contents' style={{lineHeight:'1.8'}}>GPS 기기를 통해 수집된 데이터는 저희만의 독자적인 알고리즘을<br/> 통해 선수들의 경기력을 체계적으로 분석합니다.</div>
+          <p className='contents2'style={{lineHeight:'1.8'}}>이후, AI 기술을 활용하여 이 정보를 한층 더 정교하게 요약하고 시각화하여,<br/> 누구나 쉽게 이해하고 활용할 수 있도록 제공합니다. <br/>데이터의 전문성과 소비자의 접근성을 동시에 만족시키는 <br/>혁신적인 분석 솔루션입니다.
           </p>
         </div>
         <img src={section3} />
@@ -173,15 +173,15 @@ const Main = () => {
         <img src={section4} />
         <div className='info-box'>
           <div className='title'>GPS 기기</div>
-          <div className='contents'>무선 충전 기술을 적용해 비와 땀으로부터 안전한 설계를 구현했습니다. <br/>또한 블루투스 연결을 통해 경기 종료 후 데이터를 손쉽게 <br/>전송할 수 있도록 하여 편리함과 실용성을 동시에 제공하고 있습니다.
+          <div className='contents' style={{lineHeight:'1.8'}}>무선 충전 기술을 적용해 비와 땀으로부터 안전한 설계를 구현했습니다. <br/>또한 블루투스 연결을 통해 경기 종료 후 데이터를 손쉽게 <br/>전송할 수 있도록 하여 편리함과 실용성을 동시에 제공하고 있습니다.
           </div>
         </div>
       </Section4>
       <Section5>
         <div className='info-box'>
           <div className='title'>GPS 조끼</div>
-          <div className='contents'>GPS 기기를 통해 수집된 데이터는 저희만의 독자적인 알고리즘을<br/> 통해 선수들의 경기력을 체계적으로 분석합니다.</div>
-          <p className='contents2'>이후, AI 기술을 활용하여 이 정보를 한층 더 정교하게 요약하고 시각화하여,<br/> 누구나 쉽게 이해하고 활용할 수 있도록 제공합니다. <br/>데이터의 전문성과 소비자의 접근성을 동시에 만족시키는 <br/>혁신적인 분석 솔루션입니다.
+          <div className='contents' style={{lineHeight:'1.8'}}>GPS 기기를 통해 수집된 데이터는 저희만의 독자적인 알고리즘을<br/> 통해 선수들의 경기력을 체계적으로 분석합니다.</div>
+          <p className='contents2' style={{lineHeight:'1.8'}}>이후, AI 기술을 활용하여 이 정보를 한층 더 정교하게 요약하고 시각화하여,<br/> 누구나 쉽게 이해하고 활용할 수 있도록 제공합니다. <br/>데이터의 전문성과 소비자의 접근성을 동시에 만족시키는 <br/>혁신적인 분석 솔루션입니다.
           </p>
         </div>
         <img src={section5} />
@@ -219,9 +219,9 @@ const Main = () => {
       </Section6>
       <Section7>
         <div className='title'>축구를 위한 영상</div>
-        <div className='contents'>3대의 4K 카메라를 활용하여 약 4m 높이의 최적의 촬영 각도로 <br/>촬영합니다. 촬영된 데이터를 합성 알고리즘을 통해 자연스럽게 합성하여<br/> 경기장 전체를 한 눈에 볼 수 있게 제공합니다.</div>
+        <div className='contents' style={{lineHeight:'1.8'}}>3대의 4K 카메라를 활용하여 약 4m 높이의 최적의 촬영 각도로 <br/>촬영합니다. 촬영된 데이터를 합성 알고리즘을 통해 자연스럽게 합성하여<br/> 경기장 전체를 한 눈에 볼 수 있게 제공합니다.</div>
         <img src={section7} />
-        <div className='explain'>영상 합성 알고리즘(Stitching) 기술을 통해 <br/>전 경기장을 한 눈에 볼 수 있도록</div>
+        <div className='explain'style={{lineHeight:'2'}}>영상 합성 알고리즘(Stitching) 기술을 통해 <br/>전 경기장을 한 눈에 볼 수 있도록</div>
       </Section7>
       <div style={{marginBottom: '25vh'}}></div>
     </MainStyle>

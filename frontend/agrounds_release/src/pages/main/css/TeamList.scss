@@ -10,11 +10,13 @@
   min-height: 100vh;
   width: 100%;
   max-width: 499px;
+  position: relative;
 
   .backdiv {
     position: fixed;
     width: 90%;
     top: 5vh;
+    z-index: 1999;
 
     .backBtn {
       background-color: #262626;
@@ -31,17 +33,21 @@
   }
   .cards-container {
     @include display(flex, column, center, flex-start);
-    overflow-y: scroll;
-    height: 100vh; // 부모 높이를 설정하여 스크롤 영역 명확화
+    overflow-y: auto;
+    height: 100vh;
     width: 100%;
-    scroll-snap-type: y mandatory; // 카드 스크롤 단위 설정
+    scroll-snap-type: y mandatory; 
     scroll-behavior: smooth;
+    z-index: 2;
   
     .infoBack {
       @include display(flex, column, center, center);
-      height: 100vh; // 각 카드가 뷰포트 높이를 차지
+      position: relative;
+      height: 100vh; 
       width: 100%;
       scroll-snap-align: center;
+      padding: 20px; 
+      
     }
   }
 }

@@ -38,7 +38,7 @@ const FullVideo = () => {
       <Login_title title="풀 경기영상" explain="경기장 전체를 한 눈에 확인해보세요"/>
       <div className='line'/>
       <div className='sortvideo'>
-        <div className='totalnum'>총 <p>{sortedVideos.length}개</p>의 동영상</div>
+        <div className='totalnum'>총 <p className='totalnumber'>{sortedVideos.length}개</p>의 동영상</div>
         <Sort sortOrder={sortOrder} setSortOrder={setSortOrder} back='white'/>
       </div>
       {sortedVideos.length === 0 ? (

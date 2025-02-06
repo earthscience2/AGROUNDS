@@ -36,7 +36,7 @@ const PersonalVideo = () => {
       <Login_title title="개인 경기영상" explain="나의 움직임을 파악해 정확한 분석을 해보세요" />
       <div className='line' />
       <div className='sortvideo'>
-        <div className='totalnum'>총 <p>{sortedVideos.length}개</p>의 동영상</div>
+        <div className='totalnum'>총 <p className='totalnumber'>{sortedVideos.length}개</p>의 동영상</div>
         <Sort sortOrder={sortOrder} setSortOrder={setSortOrder} back='white'/>
       </div>
 

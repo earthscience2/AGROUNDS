@@ -42,7 +42,7 @@ const ModalStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: last baseline;
-  z-index: 1000;
+  z-index: 1990;
 
 
   .modal-content {

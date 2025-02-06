@@ -32,7 +32,7 @@ const RankBoxStyle = styled.div`
     height: 40%;
     & :first-child{
       font-size: 2vh;
-      font-weight: 700;
+      font-weight: 800;
       color: #4D5358;
     }
     & :nth-child(2) {

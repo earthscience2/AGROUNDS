@@ -21,6 +21,7 @@ const AnalDetailStyle = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 1.5vh;
+
   .title{
     font-size: 2vh;
     font-weight: 500;

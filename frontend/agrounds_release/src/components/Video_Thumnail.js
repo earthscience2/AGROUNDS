@@ -1,12 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { extractDateInfo } from '../function/ Conversion';
 
 const Video_Thumnail = ({list, type}) => {
   const navigate = useNavigate();
 
   const matchCode = list?.match_code || "";
 
+  const dayOfWeek = list?.date
+  ? extractDateInfo(list?.date).dayOfWeek.slice(0, 1)
+  : '';
   return (
     <VideoThumnailStyle onClick={() => navigate('/app/videobyquarter', { state : { matchCode, type }})}>
       <div className='imgbox'>
@@ -14,7 +18,7 @@ const Video_Thumnail = ({list, type}) => {
       </div>
       <div className='infobox'>
         <p className='fc'>{list?.title}</p>
-        <p className='date'>{list?.date}</p>
+        <p className='date'>{`${list?.date} (${dayOfWeek})` }</p>
       </div>
     </VideoThumnailStyle>
   );

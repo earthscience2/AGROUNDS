@@ -49,6 +49,8 @@ import RecentMatch from './pages/team/js/RecentMatch';
 import ComponyIntroduce from './pages/web/ComponyIntroduce';
 import ErrorPage from './pages/ErrorPage';
 import InfoFix from './pages/mypage/js/InfoFix';
+import HighlightVideo from './pages/video/js/HighlightVideo';
+import TeamRank from './pages/main/js/TeamRank';
 
 
 const useBodyClass = (className) => {
@@ -153,6 +155,7 @@ const router = createBrowserRouter([
       { path: "personalvideo", element: <PersonalVideo /> },
       { path: "teamvideo", element: <TeamVideo /> },
       { path: "fullvideo", element: <FullVideo /> },
+      { path: "hightlightvideo", element: <HighlightVideo /> },
       { path: "videobyquarter", element: <VideoByQuarter /> },
       { path: "mypage", element: <My /> },
       { path: "reason", element: <SelectReason /> },
@@ -175,6 +178,7 @@ const router = createBrowserRouter([
       { path: "recentmatch", element: <RecentMatch /> },
       { path: "errorpage", element: <ErrorPage /> },
       { path: "infofix", element: <InfoFix /> },
+      { path: "teamrank", element: <TeamRank /> },
     ],
   },
 ]);

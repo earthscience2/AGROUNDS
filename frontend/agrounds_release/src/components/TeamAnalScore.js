@@ -2,18 +2,33 @@
 import styled from 'styled-components';
 import user from '../assets/user-grey.png'
 import PositionDotColor, { AnalPositionColor } from '../function/PositionColor';
-
+import red from '../assets/rank-red.png';
+import blue from '../assets/rank-blue.png';
+import green from '../assets/rank-green.png';
+import yellow from '../assets/rank-yellow.png';
 
 const TeamAnalScore = ({data}) => {
-  const rankingData = data.point_ranking;
+  const rankingData = data || [];
 
+  const fPosition = data?.[0]?.position || ""
+
+  const backgroundImg = () => {
+    if (fPosition === "LWF" || fPosition === "ST" || fPosition === "RWF") {
+      return red;
+    } else if (fPosition === "LWM" || fPosition === "CAM" || fPosition === "RWM" || fPosition === "LM" || fPosition === "CM" || fPosition === "RM" || fPosition === "CDM") {
+      return green;
+    } else if (fPosition === "LWB" || fPosition === "RWB" || fPosition === "LB" || fPosition === "CB" || fPosition === "RB" ) {
+      return blue;
+    } else {
+      return yellow;
+    }
+  }
   return(
     <TeamAnalScoreStyle>
-      <div className='title'>평점 순위</div>
       <div className='teamlist'>
         {rankingData.map((rank, index) => (
           index === 0 ? (
-            <div key={index} className="first-player" style={{background: AnalPositionColor(rank.position)}}>
+            <div className="first-player" key={rank.nickname} style={{ backgroundImage: `url(${backgroundImg()})` }}>
               <div className='first-player-box'>
                 <p className='rank'>1</p>
                 <div className='nickpo-box'>
@@ -64,7 +79,7 @@ const TeamAnalScoreStyle = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 5vh;
+  margin-top: 1vh;
   .title{
     width: 90%;
     font-size: 2vh;
@@ -86,8 +101,11 @@ const TeamAnalScoreStyle = styled.div`
         border-bottom: 1px solid #F2F4F8;
         height: 12vh;
         width: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         .first-player-box{
-          width: 90%;
+          width: 85%;
           display: flex;
           flex-direction: row;
           justify-content: space-between;
@@ -156,7 +174,7 @@ const TeamAnalScoreStyle = styled.div`
       margin: auto;
       border-bottom: 1px solid #F2F4F8;
       height: 8vh;
-      width: 90%;
+      width: 85%;
       .rank{
         font-size: 2vh;
         font-weight: 700;
@@ -164,9 +182,8 @@ const TeamAnalScoreStyle = styled.div`
       .profile-box{
         display: flex;
         flex-direction: row;
-        justify-content: start;
         align-items: center;
-        width: 70%;
+        width: 65%;
         .img-box{
           height: 4vh;
           width: 4vh;
@@ -200,7 +217,7 @@ const TeamAnalScoreStyle = styled.div`
               height: .8vh;
             }
             .po{
-              font-size: 1.5vh;
+              font-size: 1.4vh;
               font-weight: 700;
               color: #393939;
               margin-left: .5vh;
@@ -213,6 +230,8 @@ const TeamAnalScoreStyle = styled.div`
           font-size: 2.3vh;
           font-weight: 700;
           color: #697077;
+          text-align: center;
+          min-width: 5vh;
         }
     }
   }

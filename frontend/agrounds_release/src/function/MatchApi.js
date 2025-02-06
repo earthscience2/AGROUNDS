@@ -27,6 +27,10 @@ const getFullVideoListApi = (data) => {
   return client.post('/api/video/get-full-video-list/', data)
 }
 
+const getHighlightVideoListApi = (data) => {
+  return client.post('/api/video/get-highlight-video-list/', data)
+}
+
 const getMatchVideoInfoApi = (data) => {
   return client.post('/api/video/get-match-video-info/', data)
 }
@@ -43,4 +47,4 @@ const getTeamAnalResultApi = (data) => {
   return client.post('api/analyze/get-team-analyze-result/', data);
 }
 
-export {getMatchListApi, getTeamMatchList, getVideoSummationApi, getPlayerVideoListApi,getTeamVideoListApi, getFullVideoListApi, getMatchVideoInfoApi, getAnalyzeResultApi, getOverallApi,getTeamAnalResultApi};
+export {getMatchListApi, getTeamMatchList, getVideoSummationApi, getPlayerVideoListApi,getTeamVideoListApi, getHighlightVideoListApi,getFullVideoListApi, getMatchVideoInfoApi, getAnalyzeResultApi, getOverallApi,getTeamAnalResultApi};

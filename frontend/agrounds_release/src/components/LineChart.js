@@ -23,7 +23,7 @@ ChartJS.register(
   Legend
 );
 
-const CustomLineChart = ({ data }) => {
+const CustomLineChart = ({ data, speed }) => {
   const LineColor = () => {
     if(data[4] > data[3]){
       return '#10CC7E';
@@ -96,7 +96,7 @@ const CustomLineChart = ({ data }) => {
           fontWeight: 'bold',
         }}
       >
-          {data[4] * 10 || "N/A"}
+          {speed ? data[4] : data[4] * 10 || "N/A" }
       </div>
     </div>
   );

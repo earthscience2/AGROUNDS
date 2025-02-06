@@ -88,7 +88,7 @@ const PersonalAnalysis = () => {
     <div className='personalanal'>
       <div className='greybackground'>
         <Back_btn />
-        <Login_title title="개인 상세 분석" explain="경기 데이터를 기반으로 설정된 현재 나의 능력치를 확인하고 더 발전해보세요" />
+        <Login_title title="개인 상세 분석" explain={"경기 데이터를 기반으로 설정된 \n현재 나의 능력치를 확인하고 더 발전해보세요"} />
         <HorizontalSwiper matchCode={initialMatchCode} onSelectMatch={setSelectedMatch}/>
       </div>
 

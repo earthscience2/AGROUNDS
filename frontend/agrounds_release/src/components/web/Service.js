@@ -54,6 +54,7 @@ const ServiceStyle = styled.div`
   justify-content: center;
   align-items: center;
   font-family: 'Pretendard-Regular';
+
   img{
     width: 50%;
     margin-top: 20vh;
@@ -74,6 +75,7 @@ const ServiceStyle = styled.div`
       margin-top: 20vh;
       margin-bottom: 5vh;
       text-align: center;
+      font-family: 'Pretendard-Regular';
     }
     .img-box{
       display: flex;

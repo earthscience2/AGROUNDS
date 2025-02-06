@@ -28,7 +28,7 @@ export default MemberPrev;
 
 const MemberPrevStyle = styled.div`
   display: flex;
-  width: 90%;
+  width: 85%;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #E5E9ED;
@@ -71,7 +71,7 @@ const MemberPrevStyle = styled.div`
     }
     .position{
       font-size: 1.6vh;
-      font-weight: 600;
+      font-weight: 800;
       font-family: 'Pretendard-Regular';
       margin: 0 .5vh 0 1vh;
     }
