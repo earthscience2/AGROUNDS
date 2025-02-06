@@ -103,10 +103,10 @@ const ActivityLevel = ({ data, attack,defence }) => {
   );
 };
 
-const Speed = ({ data }) => {
+const Speed = ({ data, positionData }) => {
   const [speedData, setSpeedData] = useState([]);
   const [accData, setAccData] = useState([]);
-  console.log('speed', data)
+  
   useEffect(() => {
     setSpeedData(data.speed_change);
     setAccData(data.acceleration_change);
@@ -118,36 +118,36 @@ const Speed = ({ data }) => {
         <div className='eachmovingbox'>
           <p>속력 변화</p>
           <div className='chart'>
-            {speedData && <LineChart data={speedData}/>}
+            {speedData && <LineChart data={speedData} speed={true}/>}
           </div>
         </div>
         <div className='eachmovingbox'>
           <p>가속도 변화</p>
           <div className='chart'>
-            {accData && <LineChart data={accData}/>}
+            {accData && <LineChart data={accData} speed={true}/>}
           </div>
         </div>
       </div>
       <div className='datarow'>
         <p className='datatitle'>평균 속력</p>
-        <p className='datadetail'>{data.AS}km/h</p>
+        <p className='datadetail'>{positionData.AS}km/h</p>
       </div>
       <div className='datarow'>
         <p className='datatitle'>최고 속력</p>
-        <p className='datadetail'>{data.HS}km/h</p>
+        <p className='datadetail'>{positionData.HS}km/h</p>
       </div>
       <div className='datarow'>
         <p className='datatitle'>평균 가속도</p>
-        <p className='datadetail'>{data.AA}m/s²</p>
+        <p className='datadetail'>{positionData.AA}m/s²</p>
       </div>
       <div className='datarow'>
         <p className='datatitle'>최고 가속도</p>
-        <p className='datadetail'>{data.HA}m/s²</p>
+        <p className='datadetail'>{positionData.HA}m/s²</p>
       </div>
     </SpeedStyle>
   );
 };
-console.log()
+
 const Sprint = ({data}) => {
   return (
     <SprintStyle >
