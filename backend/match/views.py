@@ -46,7 +46,7 @@ class getUserMatchList(APIView):
                         "away_team_logo" : default_team_logo
                     },
                     {
-                        "match_code" : "m_0002",
+                        "match_code" : "m_0005",
                         "match_schedule" : "2024-10-14",
                         "match_location" : "부천축구경기장",
                         "thumbnail" : default_thumbnail,
@@ -76,7 +76,7 @@ class getUserMatchList(APIView):
                         "away_team_logo" : default_team_logo
                     },
                     {
-                        "match_code" : "m_0004",
+                        "match_code" : "m_4213",
                         "match_schedule" : "2024-10-10",
                         "match_location" : "인하대운동장",
                         "thumbnail" : default_thumbnail,
@@ -91,7 +91,7 @@ class getUserMatchList(APIView):
                         "away_team_logo" : default_team_logo
                     },
                     {
-                        "match_code" : "m_0005",
+                        "match_code" : "m_5434",
                         "match_schedule" : "2024-09-14",
                         "match_location" : "부천축구경기장",
                         "thumbnail" : default_thumbnail,
@@ -106,7 +106,7 @@ class getUserMatchList(APIView):
                         "away_team_logo" : default_team_logo
                     },
                     {
-                        "match_code" : "m_0006",
+                        "match_code" : "m_5432",
                         "match_schedule" : "2024-08-15",
                         "match_location" : "대야미월드컵경기장",
                         "thumbnail" : default_thumbnail,
@@ -165,7 +165,7 @@ class getTeamMatchList(APIView):
                 "away_team_logo" : default_team_logo
             },
             {
-                "match_code" : "m_0002",
+                "match_code" : "m_0005",
                 "match_schedule" : "2024-12-12",
                 "match_location" : "부천축구경기장",
                 "thumbnail" : default_thumbnail,
@@ -180,7 +180,7 @@ class getTeamMatchList(APIView):
                 "away_team_logo" : default_team_logo
             },
             {
-                "match_code" : "m_0003",
+                "match_code" : "m_4213",
                 "match_schedule" : "2024-12-01",
                 "match_location" : "대야미월드컵경기장",
                 "thumbnail" : default_thumbnail,
@@ -195,7 +195,7 @@ class getTeamMatchList(APIView):
                 "away_team_logo" : default_team_logo
             },
             {
-                "match_code" : "m_0004",
+                "match_code" : "m_6414",
                 "match_schedule" : "2024-11-10",
                 "match_location" : "인하대운동장",
                 "thumbnail" : default_thumbnail,
@@ -210,7 +210,7 @@ class getTeamMatchList(APIView):
                 "away_team_logo" : default_team_logo
             },
             {
-                "match_code" : "m_0005",
+                "match_code" : "m_3214",
                 "match_schedule" : "2024-10-01",
                 "match_location" : "부천축구경기장",
                 "thumbnail" : default_thumbnail,
@@ -225,7 +225,7 @@ class getTeamMatchList(APIView):
                 "away_team_logo" : default_team_logo
             },
             {
-                "match_code" : "m_0006",
+                "match_code" : "m_6943",
                 "match_schedule" : "2024-09-01",
                 "match_location" : "대야미월드컵경기장",
                 "thumbnail" : default_thumbnail,
