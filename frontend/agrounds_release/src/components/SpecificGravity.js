@@ -35,6 +35,7 @@ const Bar = styled.div`
   border-radius: 1vh;
   overflow: hidden;
   background-color: #e6e6e6;
+  z-index: 200;
 `;
 
 const Separator = styled.div`
@@ -48,6 +49,7 @@ const Attack = styled.div`
   color: white;
   text-align: start;
   display: flex;
+  z-index: 1999;
   & > p {
     font-size: 12px;
     font-weight: 600;
@@ -60,6 +62,7 @@ const Defense = styled.div`
   color: white;
   display: flex;
   justify-content: end;
+  z-index: 1999;
   & > p {
     font-size: 12px;
     font-weight: 600;

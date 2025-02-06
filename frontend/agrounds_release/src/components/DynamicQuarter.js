@@ -43,7 +43,7 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
         <RayderChart data={chartPoints} rate={rate} />
         <Anal_Detail title="히트맵 / 고속히트맵 / 방향전환" detail={<Map data={positionData()} />} />
         <Anal_Detail title="활동량" detail={<ActivityLevel attack={attack} defence={defence} data={positionData()} />} />
-        <Anal_Detail title="속도 및 가속도" detail={<Speed data={positionData()} />} />
+        <Anal_Detail title="속도 및 가속도" detail={<Speed data={data} />} />
         <Anal_Detail title="스프린트" detail={<Sprint data={positionData()} />} />
       </PersonalAnalStyle>
     );

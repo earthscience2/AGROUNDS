@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SpecificGravity from '../components/SpecificGravity';
+import LineChart from '../components/LineChart';
 
 const Map = ({ data }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -103,16 +104,28 @@ const ActivityLevel = ({ data, attack,defence }) => {
 };
 
 const Speed = ({ data }) => {
+  const [speedData, setSpeedData] = useState([]);
+  const [accData, setAccData] = useState([]);
+  console.log('speed', data)
+  useEffect(() => {
+    setSpeedData(data.speed_change);
+    setAccData(data.acceleration_change);
+  }, [data])
+
   return (
     <SpeedStyle >
       <div className='movingbox'>
         <div className='eachmovingbox'>
           <p>속력 변화</p>
-          <img src={data.speed_change} />
+          <div className='chart'>
+            {speedData && <LineChart data={speedData}/>}
+          </div>
         </div>
         <div className='eachmovingbox'>
           <p>가속도 변화</p>
-          <img src={data.acceleration_change} />
+          <div className='chart'>
+            {accData && <LineChart data={accData}/>}
+          </div>
         </div>
       </div>
       <div className='datarow'>
@@ -277,7 +290,7 @@ const SpeedStyle = styled.div`
     align-items: center;
     .eachmovingbox{
       width: 50%;
-      height: 15vh;
+      height: 13vh;
       margin-left: 2vh;
       & > p {
         font-size: 1.6vh;
@@ -291,7 +304,12 @@ const SpeedStyle = styled.div`
         object-fit: cover;
         margin-left: -1vh;
       }
+      .chart{
+        width: 80%;
+        height: 20%;
+      }
     }
+
   }
   .datarow{
     display: flex;
