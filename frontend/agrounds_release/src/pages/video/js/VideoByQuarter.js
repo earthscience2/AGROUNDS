@@ -88,7 +88,6 @@ const VideoByQuarter = () => {
     } else {
       alert("선택한 쿼터의 영상 다운로드 링크가 없습니다.");
     }
-    console.log('다운로드 영상',selectedVideo.download_link)
   };
 
   return (
