@@ -50,14 +50,14 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
   const isSameOrBefore = (date1, date2) => {
     const d1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
     const d2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
+    console.log('날짜비교',d1,d2)
     return d1 <= d2;
   };
 
-  const availableDates = items.map((item) => new Date(item.date).toDateString());
+  const availableDates = items.map((item) => new Date(item.match_schedule).toDateString());
+  console.log('실제 가능날짜',availableDates)
   const handleDateChange = (date) => {
     const today = new Date();
-    console.log('dnfdnfndf',new Date(items[1].match_schedule))
-
 
     if (isSameOrBefore(today, date)) return; 
     setSelectedDate(date);
@@ -69,6 +69,7 @@ const HorizontalSwiper = ({ matchCode, onSelectMatch }) => {
   };
 
   const isDateAvailable = (date) => {
+    console.log(date.toDateString())
     return availableDates.includes(date.toDateString());
   };
 
@@ -237,7 +238,6 @@ const HorizontalSwiperStyle = styled.div`
   
         .location {
           font-size: 1.3vh;
-          // color: #6F6F6F;
           margin: 0.5vh 0;
           margin-left: 1vh;
           font-family: 'Pretendard-Regular';
@@ -306,7 +306,7 @@ const CustomDatePicker = styled.div`
   }
   .react-datepicker__day-names{
     font-weight: 700;
-    font-size: 1.5vh;
+    font-size: 1.6vh;
     margin: auto;
     width: 92%;
     display: flex;
@@ -320,17 +320,22 @@ const CustomDatePicker = styled.div`
     }
   }
   .react-datepicker__day {
-    padding: 1vh;
+    padding: 0.5vh;
     border-radius: 50%;
     position: relative;
+    margin: 1.5vh 1vh;
+    color: #697077;
+    font-weight: 600;
+    font-size: 2vh;
   }
-
   .available-date::after {
     content: "•";
     color: #0EAC6A;
     position: absolute;
-    bottom: 4px;
-    font-size: 2vh;
+    font-size: 3vh;
+    border-radius: 50%;
+    top: 3.5vh;
+    right: 40%;
   }
 
   .disabled-date {
@@ -343,6 +348,7 @@ const CustomDatePicker = styled.div`
   .react-datepicker__day--selected {
     background-color: #0EAC6A !important;
     color: white !important;
+    border-radius: 50% !important;
   }
 `;
 
