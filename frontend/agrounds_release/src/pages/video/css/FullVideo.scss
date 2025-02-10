@@ -33,12 +33,12 @@
       @include display(flex, row, center, start);
       width: 90%;
       margin: 2vh;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       @include font(1.8vh, 500, #262626);
       & > p{
         margin: 0;
         @include font(1.8vh, 700, #262626);
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
         margin-left: 1%;
       }
       
@@ -46,7 +46,7 @@
   }
   .nomatchvideo{
     margin-top: 15vh;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     font-size: 2vh;
     font-weight: 500;
   }

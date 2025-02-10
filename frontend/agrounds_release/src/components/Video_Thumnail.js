@@ -50,13 +50,13 @@ const VideoThumnailStyle = styled.div`
     .fc{
       font-size: 1.8vh;
       font-weight: 600;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       margin: 0;
     }
     .date{
       font-size: 1.6vh;
       font-weight: 600;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       color:#AFAFAF;
       margin: 1vh 0 0 0;
     }

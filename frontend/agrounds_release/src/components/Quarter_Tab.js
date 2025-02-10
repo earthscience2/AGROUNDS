@@ -62,7 +62,7 @@ const QuarterTabStyle = styled.div`
       color: #C6C6C6;
       font-size: 1.8vh;
       font-weight: bold;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       padding: .7vh 0;
       margin: 0 2% 0 6%;
       border: none;

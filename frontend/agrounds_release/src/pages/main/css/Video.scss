@@ -82,12 +82,12 @@
       .contenttitle{
         @include font(2vh, 600, #262626);
         margin: 1.5vh 0 1vh 0;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
       .contentnumber{
         @include font(1.5vh, 600, #8D8D8D);
         margin: 0 0 1vh 0;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
     }
   }}

@@ -73,7 +73,7 @@ const ModalStyle = styled.div`
   background: white;
   height: 100vh;
   width: 100%;
-  font-family: 'Pretendard-Regular';
+  font-family: 'Pretendard';
   position: relative;
   display: flex;
   flex-direction: column;

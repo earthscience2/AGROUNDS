@@ -183,7 +183,7 @@ const ModalStyle = styled.div`
   align-items: center;
   width: 100%;
   margin: 10vh 0 3vh 0 ;
-  font-family: 'Pretendard-Regular';
+  font-family: 'Pretendard';
   .title{
     font-size: 2.3vh;
     font-weight: 700;

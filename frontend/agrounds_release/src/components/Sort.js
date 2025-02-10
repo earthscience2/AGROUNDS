@@ -77,7 +77,7 @@ const DropdownItem = styled.div`
   color: #525252;
   cursor: pointer;
   transition: background-color 0.2s;
-  font-family: 'Pretendard-Regular';
+  font-family: 'Pretendard';
   font-weight: 500;
   border-bottom: 1px solid #F2F4F8;
   border-width: 80%;

@@ -29,7 +29,7 @@
       border-radius: 1vh;
       background-color: #F2F4F8;
       @include font(1.7vh, 500, #333333);
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       padding: 0 1vh;
       & > img {
         height: 2vh;
@@ -41,7 +41,7 @@
     height: 50vh;
     & > p{
       @include font(1.4vh, 500, #333333);
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       margin: 0 0;
     }
     .create-team-btn{
@@ -62,7 +62,7 @@
     width: 90%;
     & > p {
       @include font(2vh, 600, #333333);
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
     }
   }
   .contentsbox{
@@ -75,14 +75,14 @@
       width: 50%;
       .fcname{
         @include font(2vh, 600, #333333);
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
         margin: 0 0 .5vh 0;
       }
       .minitext{
         @include display(flex, row, center, center);
         .greytext{
           @include font(1.5vh, 500, #B0B0B0);
-          font-family: 'Pretendard-Regular';
+          font-family: 'Pretendard';
         }
         .greybar{
           width: 1px;
@@ -99,7 +99,7 @@
       @include display(flex, row, center, center);
       background-color: #343A3F;
       @include font(1.5vh, 600, white);
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
     }
   }
   .errorment{
@@ -110,7 +110,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     margin-bottom: -3vh;
   }
   .buttonbox{

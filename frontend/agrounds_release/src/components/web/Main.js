@@ -238,7 +238,7 @@ margin: 0;
 display: flex;
 flex-direction: column;
 align-items: center;
-font-family: 'Pretendard-Regular';
+font-family: 'Pretendard';
 
 `
 const Section1 = styled.div`

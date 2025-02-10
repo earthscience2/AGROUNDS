@@ -121,7 +121,7 @@ const CompanyIntroductionStyle = styled.div`
   justify-content: center;
   margin-top: 25vh;
   width: 100vw;
-  font-family: 'Pretendard-Regular';
+  font-family: 'Pretendard';
   .title {
     font-size: 4vh;
     font-weight: 700;
