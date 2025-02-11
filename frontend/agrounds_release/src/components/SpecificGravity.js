@@ -1,7 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const SpecificGravity = ({ attack, defence }) => {
+const SpecificGravity = ({attack, defence}) => {
+  
+  const attackWidth = () => {
+    if(attack <= '20'){
+      return '20'
+    }else{
+      return attack
+    }
+  }
+
+  const defenceWidth = () => {
+    if(defence <= '20'){
+      return '20'
+    }else{
+      return defence
+    }
+  }
   return (
     <BarContainer>
       <Labels>
@@ -9,11 +25,11 @@ const SpecificGravity = ({ attack, defence }) => {
         <span className="defense-label">수비</span>
       </Labels>
       <Bar>
-        <Attack style={{ width: `${attack}%` }}>
+        <Attack style={{ width: `${attackWidth()}%` }}>
           <p>{attack}%</p>
         </Attack>
         <Separator />
-        <Defense style={{ width: `${defence}%` }}>
+        <Defense style={{ width: `${defenceWidth()}%` }}>
           <p>{defence}%</p>
         </Defense>
       </Bar>
