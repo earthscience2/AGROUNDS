@@ -39,7 +39,7 @@ const SummaryStyle = styled.div`
         font-size: 2.5vh;
         font-weight: 700;
         margin-left: 1vh;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
     }
     width: 88%;
@@ -47,7 +47,7 @@ const SummaryStyle = styled.div`
     & > span{
       font-size: 2vh;
       font-weight: 400;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       color: #393939;
       line-height: 1.5;
     }

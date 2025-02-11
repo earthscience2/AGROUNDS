@@ -84,13 +84,13 @@ const TeamAnalScoreStyle = styled.div`
     width: 90%;
     font-size: 2vh;
     font-weight: 700;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
   }
   .teamlist {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     margin: 2vh 0 5vh 0;
     width: 100%;
     .first-player{

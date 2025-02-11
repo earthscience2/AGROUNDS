@@ -44,7 +44,7 @@
     width: 90%;
     @include display(flex, row, start, start);
     @include font(1.7vh, 600, #262626);
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     & > p {
       margin: 0;
       @include font(1.8vh, 700, #262626);
@@ -63,11 +63,11 @@
     }
     .anal-contenttitle{
       @include font(2.1vh, 600, black);
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
     }
     .anal-content{
       @include font(1.7vh, 600, #878D96);
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
     }
     .anal-btn{
       width: 50%;
@@ -79,7 +79,7 @@
       font-weight: 600;
       font-size: 1.8vh;
       border-radius: 3vh;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       margin-top: 3vh;
     }
   }

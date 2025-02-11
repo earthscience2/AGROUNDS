@@ -28,17 +28,17 @@
       .ename{
         @include font(3vh, 700, #333333);
         margin: 0;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
       .kname{
         @include font(1.5vh, 600, #AFAFAF);
         margin: 1vh 0 0 0;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
       .fc{
         @include font(1.8vh, 600, #333333);
         margin: 1vh 0 0 0;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
     }
   }

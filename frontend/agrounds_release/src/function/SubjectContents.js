@@ -287,7 +287,7 @@ const MatchVideoStyle = styled.div`
       font-weight: 700;
       font-size: 2vh;
       position: relative;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       margin-top: 1vh;
       left: 25%;
       img{
@@ -320,7 +320,7 @@ const MyTeamStyle = styled.div`
     font-size: 1.8vh;
     font-weight: 600;
     margin: 1vh;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
   }
   .detailbox{
     display: flex;
@@ -332,7 +332,7 @@ const MyTeamStyle = styled.div`
       margin: 0;
       color: #6F6F6F;
       font-weight: 500;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
     }
     .detailline{
       width: .1vh;
@@ -355,7 +355,7 @@ const NoTeamStyle = styled.div`
     font-weight: 500;
     color: #333333;
     text-align: center;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
   }
   .noteambtn{
     background-color: #0EAC6A;
@@ -365,7 +365,7 @@ const NoTeamStyle = styled.div`
     margin-top: 3vh;
     margin-bottom: -3vh;
     border-radius: 3vh;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     height: 4vh;
     width: 80%;
     font-size: 1.3vh;
@@ -390,7 +390,7 @@ const MyOvrStyle = styled.div`
     font-weight: 500;
     color:#E5E9ED;
     margin: -1vh 0 2vh 0;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
   }
   .ovr{
     height: 14vh;
@@ -487,14 +487,14 @@ const RecentMatchStyle = styled.div`
   .date{
     font-size: 1.3vh;
     font-weight: 400;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     color: #6F6F6F;
     margin: 1vh 0;
   }
   .place{
     font-size: 1.5vh;
     font-weight: 500;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     color: #6F6F6F;
     margin: 1vh 0;
     display: flex;
@@ -523,7 +523,7 @@ const AverageScoreStyle = styled.div`
   .title {
     font-size: 1.8vh;
     font-weight: 700;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     width: 80%;
     margin: 2vh 0 1vh 0;
   }
@@ -534,13 +534,13 @@ const AverageScoreStyle = styled.div`
     .score{
       font-size: 3.5vh;
       font-weight: 700;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       margin: 0;
     }
     .scoretitle{
       font-size: 1.4vh;
       font-weight: 700;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       color: #A8A8A8;
       margin: 0 1vh .3vh 1vh; 
     }
@@ -560,7 +560,7 @@ const AverageScoreStyle = styled.div`
         .date{
           font-size: 1.5vh;
           font-weight: 700;
-          font-family: 'Pretendard-Regular';
+          font-family: 'Pretendard';
           color: #8D8D8D;
           margin: 1.2vh 0 1vh 1vh;
         }
@@ -594,7 +594,7 @@ const AttackAveStyle = styled.div`
   .title{
     font-size: 1.8vh;
     font-weight: 700;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     width: 80%;
   }
   .chart{

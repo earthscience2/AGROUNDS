@@ -92,7 +92,7 @@ const FooterStyle = styled.div`
     .title{
       font-size: 13px;
       font-weight: 500;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       margin: 8px 0;
       color: #A2A9B0;
       &.active {

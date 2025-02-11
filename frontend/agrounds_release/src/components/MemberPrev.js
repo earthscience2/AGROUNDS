@@ -42,20 +42,20 @@ const MemberPrevStyle = styled.div`
     .t3{
       font-size: 1.9vh;
       font-weight: 600;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       margin: 0;
     }
     .t4{
       font-size: 1.4vh;
       font-weight: 600;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       color: #6F6F6F;
       margin: .5vh 0;
     }
     .t5{
       font-size: 1.5vh;
       font-weight: 600;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       color: #6F6F6F;
       margin: 0;
     }
@@ -72,7 +72,7 @@ const MemberPrevStyle = styled.div`
     .position{
       font-size: 1.6vh;
       font-weight: 800;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       margin: 0 .5vh 0 1vh;
     }
   }
@@ -82,7 +82,7 @@ const MemberPrevStyle = styled.div`
     width: 8vh;
     border-radius: 3vh;
     font-size: 1.5vh;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     font-weight: 600;
     margin-left: 13%;
   }
@@ -92,7 +92,7 @@ const MemberPrevStyle = styled.div`
     width: 8vh;
     border-radius: 3vh;
     font-size: 1.5vh;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     font-weight: 600;
     margin-left: 13%;
     background-color: #343A3F;
@@ -119,7 +119,7 @@ const MemberPrevStyle = styled.div`
       border-radius: 1vh;
       font-size: 1.6vh;
       font-weight: 700;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       color: #343A3F;
       background-color: #F2F4F8;
       margin: 0 .3vh;
@@ -131,7 +131,7 @@ const MemberPrevStyle = styled.div`
       border-radius: 1vh;
       font-size: 1.6vh;
       font-weight: 700;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       color: white;
       background-color: #343A3F;
       margin: 0 .3vh;
@@ -142,7 +142,7 @@ const MemberPrevStyle = styled.div`
   .errorment{
     font-size: 2vh;
     font-weight: 700;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     color: black;
     height: 15vh;
     display: flex;

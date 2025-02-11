@@ -131,19 +131,19 @@ const InfoCardStyle = styled.div`
       display: flex;
       flex-direction: column;
       justify-content: center;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
 
       .usernickname{
         margin: 0;
         width: 70%;
         margin-left: 2vh;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
       .age{
         font-size: 1.7vh;
         font-weight: 500;
         margin: 1vh 0 0 2vh;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
     }
     .nhwbox{
@@ -154,7 +154,7 @@ const InfoCardStyle = styled.div`
       justify-content: center;
       font-size: 1.8vh;
       font-weight: 700;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       .info-name{
         width: 100%;
         height: 5.5vh;
@@ -239,7 +239,7 @@ const InfoCardStyle = styled.div`
         color: rgba(255, 255, 255, 0.743);
         margin-left: 2vh;
         margin-top: 1vh;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
       }
       .date{
         font-size: 1.8vh;
@@ -250,7 +250,7 @@ const InfoCardStyle = styled.div`
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
         
       }
     }
@@ -261,7 +261,7 @@ const InfoCardStyle = styled.div`
       .teamname{
         font-size: 1.8vh;
         font-weight: 700;
-        font-family: 'Pretendard-Regular';
+        font-family: 'Pretendard';
         margin: 1.8vh 0 0 2vh;
         display: -webkit-box;
         -webkit-line-clamp: 2; 

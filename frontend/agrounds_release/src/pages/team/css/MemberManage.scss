@@ -15,7 +15,7 @@
   @include display(flex, column, center, center);
   width: 100%;
   max-width: 499px;
-  font-family: 'Pretendard-Regular';
+  font-family: 'Pretendard';
   .managecontents{
     width: 100%;
     @include display(flex, column, center, start);

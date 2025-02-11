@@ -195,7 +195,7 @@ const HorizontalSwiperStyle = styled.div`
           font-size: 1.3vh;
           color: #697077;
           font-weight: 600;
-          font-family: 'Pretendard-Regular';
+          font-family: 'Pretendard';
           margin-left: 1vh;
           &.active {
             color: white;
@@ -228,7 +228,7 @@ const HorizontalSwiperStyle = styled.div`
         .team {
           font-size: 1.5vh;
           font-weight: 600;
-          font-family: 'Pretendard-Regular';
+          font-family: 'Pretendard';
           margin: 0.5vh 0 0 0;
           margin-left: 1vh;
       
@@ -241,7 +241,7 @@ const HorizontalSwiperStyle = styled.div`
           font-size: 1.3vh;
           margin: 0.5vh 0;
           margin-left: 1vh;
-          font-family: 'Pretendard-Regular';
+          font-family: 'Pretendard';
       
           &.active {
             color: white; 
@@ -263,7 +263,7 @@ const HorizontalSwiperStyle = styled.div`
       text-align: center;
       width: 7vh;
       height: 10vh;
-      font-family: 'Pretendard-Regular';
+      font-family: 'Pretendard';
       flex: 0 0 auto;
       display: flex;
       margin-left: 1vh;

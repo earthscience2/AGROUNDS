@@ -29,7 +29,7 @@ const TeamRankStyle = styled.div`
 
   .title{
     width: 90%;
-    font-family: 'Pretendard-Regular';
+    font-family: 'Pretendard';
     font-weight: 700;
     font-size: 2.5vh;
   }
