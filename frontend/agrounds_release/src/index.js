@@ -51,6 +51,7 @@ import ErrorPage from './pages/ErrorPage';
 import InfoFix from './pages/mypage/js/InfoFix';
 import HighlightVideo from './pages/video/js/HighlightVideo';
 import TeamRank from './pages/main/js/TeamRank';
+import CampSide from './pages/gps/CampSide';
 
 
 const useBodyClass = (className) => {
@@ -179,6 +180,7 @@ const router = createBrowserRouter([
       { path: "errorpage", element: <ErrorPage /> },
       { path: "infofix", element: <InfoFix /> },
       { path: "teamrank", element: <TeamRank /> },
+      { path: "campside", element: <CampSide /> },
     ],
   },
 ]);
