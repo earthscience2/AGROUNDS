@@ -11,6 +11,7 @@ import userGrey from '../assets/user-grey.png';
 import connectGrey from '../assets/connect-grey.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { triggerUpload } from '../function/TriggerUpload';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const Footer = () => {
         />
         <p className={`title ${isActive('/app/analysis') ? 'active' : ''}`}>경기분석</p>
       </div>
-      <div className='box' onClick={() => navigate('/app/errorpage')}>
+      <div className='box' onClick={triggerUpload}>
         <img
           className='icon'
           src={isActive('/app/errorpage') ? connectBlack : connectGrey}
