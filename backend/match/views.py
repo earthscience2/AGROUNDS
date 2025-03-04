@@ -1,5 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from staticfiles.make_code import make_code
+from staticfiles.get_file_url import get_upload_url
 
 from staticfiles.get_file_url import get_file_url
 
@@ -242,3 +244,15 @@ class getTeamMatchList(APIView):
 	    ]
 
         return Response({'result' : result})
+
+class getUploadUrl(APIView):
+    def post(self, request):
+        user_code = request.data.get('user_code')
+        
+        if user_code is None:
+            return Response({'error': 'Missing required field: user_code'}, status=400)
+        
+        match_code = make_code('m')
+        url = get_upload_url(f'gps/{match_code}/{user_code}/')
+
+        return Response({'match_code' : match_code, 'url' : url})
