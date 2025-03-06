@@ -52,6 +52,8 @@ import InfoFix from './pages/mypage/js/InfoFix';
 import HighlightVideo from './pages/video/js/HighlightVideo';
 import TeamRank from './pages/main/js/TeamRank';
 import CampSide from './pages/gps/CampSide';
+import SelectRest from './pages/gps/SelectRest';
+import FindStadium from './pages/gps/FindStadium';
 
 
 const useBodyClass = (className) => {
@@ -181,6 +183,8 @@ const router = createBrowserRouter([
       { path: "infofix", element: <InfoFix /> },
       { path: "teamrank", element: <TeamRank /> },
       { path: "campside", element: <CampSide /> },
+      { path: "selectrest", element: <SelectRest /> },
+      { path: "findstadium", element: <FindStadium /> },
     ],
   },
 ]);
