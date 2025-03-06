@@ -54,6 +54,7 @@ import TeamRank from './pages/main/js/TeamRank';
 import CampSide from './pages/gps/CampSide';
 import SelectRest from './pages/gps/SelectRest';
 import FindStadium from './pages/gps/FindStadium';
+import SetQuarterInfo from './pages/gps/SetQuarterInfo';
 
 
 const useBodyClass = (className) => {
@@ -185,6 +186,7 @@ const router = createBrowserRouter([
       { path: "campside", element: <CampSide /> },
       { path: "selectrest", element: <SelectRest /> },
       { path: "findstadium", element: <FindStadium /> },
+      { path: "set-quarter-info", element: <SetQuarterInfo /> },
     ],
   },
 ]);

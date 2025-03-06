@@ -28,15 +28,23 @@ const FindStadium = () => {
       <Back_btn />
       <Login_title title={'경기장 선택'}/>
       <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} onSearchSubmit={onSearchSubmit}/>
-      {stadiumResult.map((stadium) => (
-        <div className='resultbox'>
-          <img src={location} />
-          <div className='contentbox'>
-            <p className='ground_name'>{stadium.ground_name}</p>
-            <p className='ground_location'>{stadium.ground_location}</p>
-          </div>
-        </div>
-      ))}
+      {stadiumResult.length === 0 ?
+        (
+          <div className='noresult'>검색결과가 없습니다.</div>
+        )
+        :
+        (
+          stadiumResult.map((stadium) => (
+            <div className='resultbox'>
+              <img src={location} />
+              <div className='contentbox'>
+                <p className='ground_name'>{stadium.ground_name}</p>
+                <p className='ground_location'>{stadium.ground_location}</p>
+              </div>
+            </div>
+          ))
+        )
+      }
       
     </FindStadiumStyle>
   );
@@ -75,5 +83,11 @@ const FindStadiumStyle = styled.div`
         margin: 1vh 0;
       }
     }
+  }
+  .noresult{
+    margin-top: 10vh;
+    font-size: 2vh;
+    font-family: 'regular';
+    font-weight: 700;
   }
 `
