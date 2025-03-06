@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import edit from '../assets/ico_edit.png';
 import trash from '../assets/ico_trash.png';
 
-const SetQuarter = ({quarter, data, first=false}) => {
+const SetQuarter = ({quarter, data, first=false, onDelete}) => {
   return (
     <SetQuarterStyle>
       <div className='infobox'>
@@ -17,7 +17,7 @@ const SetQuarter = ({quarter, data, first=false}) => {
       ): 
       <div className='button'>
         <img src={edit} className='edit'/>
-        <img src={trash} className='trash'/>
+        <img src={trash} className='trash' onClick={onDelete}/>
       </div>
       }
     </SetQuarterStyle>
