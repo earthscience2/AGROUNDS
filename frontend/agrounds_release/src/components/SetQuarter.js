@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import edit from '../assets/ico_edit.png';
+import editicon from '../assets/ico_edit.png';
 import trash from '../assets/ico_trash.png';
+import { useNavigate } from 'react-router-dom';
 
-const SetQuarter = ({quarter, data, first=false, onDelete}) => {
+const SetQuarter = ({quarter, data, first=false, onDelete, edit}) => {
+
+  const navigate = useNavigate();
+
   return (
     <SetQuarterStyle>
       <div className='infobox'>
@@ -12,11 +16,11 @@ const SetQuarter = ({quarter, data, first=false, onDelete}) => {
       </div>
       {first ? (
         <div className='button'>
-          <img src={edit} className='edit'/>
+          <img src={editicon} className='edit' onClick={() => navigate('/app/set-quarter-detail', {state: {quarter, data}})}/>
         </div>
       ): 
       <div className='button'>
-        <img src={edit} className='edit'/>
+        <img src={editicon} className='edit' onClick={edit}/>
         <img src={trash} className='trash' onClick={onDelete}/>
       </div>
       }

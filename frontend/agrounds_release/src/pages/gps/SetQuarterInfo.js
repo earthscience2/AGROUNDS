@@ -29,7 +29,7 @@ const SetQuarterInfo = () => {
       <Login_title title='쿼터정보 입력' explain={'쿼터별 데이터를 입력해 \n더 자세한 분석을 받아보세요.'} />
       <div className='quarterbox'>
         {quarters.map((quarter, index) => (
-          <SetQuarter key={quarter.id} quarter={quarter.id} data={quarter.data} first={index === 0} onDelete={() => handleDeleteQuarter(quarter.id)}/>
+          <SetQuarter key={quarter.id} quarter={quarter.id} data={quarter.data} first={index === 0} onDelete={() => handleDeleteQuarter(quarter.id)} />
         ))}
         <img src={plus} className='plus' onClick={handleAddQuarter}/>
       </div>
