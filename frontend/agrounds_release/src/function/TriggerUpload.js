@@ -2,7 +2,6 @@
 // match_code, user_code, 생성한 gps파일 업로드 url을 flutter로 넘겨줌
 
 import client from "../client";
-import makeCode from "./MakeCode"
 
 export function triggerUpload() {
     let match_code = ""
