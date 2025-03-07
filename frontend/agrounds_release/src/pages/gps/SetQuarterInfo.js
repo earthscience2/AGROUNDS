@@ -7,7 +7,7 @@ import SetQuarter from '../../components/SetQuarter';
 import Circle_common_btn from '../../components/Circle_common_btn';
 
 const SetQuarterInfo = () => {
-  const [quarters, setQuarters] = useState([{ id: 1, data: '11:30 - 11:30 / 출전' }]);
+  const [quarters, setQuarters] = useState([{ id: 1, data: '데이터 없음' }]);
 
   const handleAddQuarter = () => {
     const maxId = quarters.length > 0 ? Math.max(...quarters.map((q) => q.id)) : 0;
@@ -31,10 +31,9 @@ const SetQuarterInfo = () => {
         {quarters.map((quarter, index) => (
           <SetQuarter key={quarter.id} quarter={quarter.id} data={quarter.data} first={index === 0} onDelete={() => handleDeleteQuarter(quarter.id)}/>
         ))}
+        <img src={plus} className='plus' onClick={handleAddQuarter}/>
       </div>
 
-      
-      <img src={plus} className='plus' onClick={handleAddQuarter}/>
       <div className='btn'>
         {quarters ? 
           <Circle_common_btn title='다음' onClick={() => console.log(quarters)}/>
@@ -64,6 +63,7 @@ const SetQuarterInfoStyle = styled.div`
     align-items: center;
     width: 100%;
     gap: 1vh 0;
+    padding-bottom: 20vh;
   }
   .btn{
     width: 100%;
