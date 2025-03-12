@@ -56,6 +56,7 @@ import SelectRest from './pages/gps/SelectRest';
 import FindStadium from './pages/gps/FindStadium';
 import SetQuarterInfo from './pages/gps/SetQuarterInfo';
 import SetQuarterDetail from './pages/gps/SetQuarterDetail';
+import SearchStadiumByMap from './pages/gps/SearchStadiumByMap';
 
 
 const useBodyClass = (className) => {
@@ -189,6 +190,7 @@ const router = createBrowserRouter([
       { path: "findstadium", element: <FindStadium /> },
       { path: "set-quarter-info", element: <SetQuarterInfo /> },
       { path: "set-quarter-detail", element: <SetQuarterDetail /> },
+      { path: "search-stadium-by-map", element: <SearchStadiumByMap /> },
     ],
   },
 ]);

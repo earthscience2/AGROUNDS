@@ -1,37 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import down from '../assets/down.png';
+import Modal from './Modal';
+import WheelDateTimePicker from './WheelDateTimePicker';
 
 const TimePicker = ({title, startT, endT}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const ModalOpen = () => {
+    setIsOpen(!isOpen);
+  }
+
+  const closeModal = () => {
+    setIsOpen(false);
+  }
   return (
     <TimePickerStyle>
       <p className='title'>{title}</p>
       <div className='timerbox'>
         {startT ? 
-          <div className='timer'>
+          <div className='timer' onClick={ModalOpen}>
             <p className='time'>{startT}</p>
             <img src={down} className='downicon'/>
           </div> 
           : 
-          <div className='timer'>
+          <div className='timer' onClick={ModalOpen}>
             <p className='time'>시작시간</p>
             <img src={down} className='downicon'/>
           </div> 
 
           }
         {endT ? 
-          <div className='timer'>
+          <div className='timer' onClick={ModalOpen}>
             <p className='time'>{endT}</p>
             <img src={down} className='downicon'/>
           </div> 
           : 
-          <div className='timer'>
+          <div className='timer' onClick={ModalOpen}>
             <p className='time'>종료시간</p>
             <img src={down} className='downicon'/>
           </div> 
 
           }
       </div>
+      {
+        isOpen && 
+        <Modal isOpen={isOpen} onClose={closeModal}>
+          <WheelDateTimePicker />
+        </Modal>
+      }
     </TimePickerStyle>
   );
 };
