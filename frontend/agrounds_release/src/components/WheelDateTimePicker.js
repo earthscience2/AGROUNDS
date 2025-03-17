@@ -1,151 +1,128 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import Circle_common_btn from "./Circle_common_btn";
 
-const WheelDateTimePicker = () => {
-  const [ampm, setAmPm] = useState("AM");
-  const [hour, setHour] = useState(12);
-  const [minute, setMinute] = useState(0);
-
-  const ampmList = ["AM", "PM"];
-  const hourList = Array.from({ length: 12 }, (_, i) => i + 1);
-  const minuteList = Array.from({ length: 60 }, (_, i) => i).filter((m) => m % 5 === 0); // 5분 단위
-
-  const scrollToCenter = (ref, value, list) => {
-    if (ref.current) {
-      const index = list.indexOf(value);
-      ref.current.scrollTo({
-        top: index * 40, // 아이템 하나의 높이 (40px)
-        behavior: "smooth",
-      });
-    }
-  };
-
+const WheelDateTimePicker = ({setStartTime, setEndTime, onClose}) => {
   const ampmRef = useRef(null);
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
+  
+  const [ampm, setAmpm] = useState('오전');
+  const [hour, setHour] = useState('1');
+  const [minute, setMinute] = useState('30');
+
+  const ampmOptions = ["", "", "오전", "오후", "", ""];
+  const hourOptions = ["", "", ...Array.from({ length: 12 }, (_, i) => i + 1), "", ""];
+  const minuteOptions = [null, null, ...Array.from({ length: 60 }, (_, i) => i), null, null];
+
+  const handleScroll = (ref, setter, options) => {
+    if (ref.current) {
+      const index = Math.round(ref.current.scrollTop / (ref.current.clientHeight / 5));
+      setter(options[index ]); 
+    }
+  };
 
   useEffect(() => {
-    scrollToCenter(ampmRef, ampm, ampmList);
-    scrollToCenter(hourRef, hour, hourList);
-    scrollToCenter(minuteRef, minute, minuteList);
-  }, [ampm, hour, minute]);
+    const itemHeight = '5vh'; 
+    setTimeout(() => {
+      ampmRef.current.scrollTop = (ampm === "오전" ? 2 : 3) * itemHeight;
+      hourRef.current.scrollTop = (hour + 1) * itemHeight;
+      minuteRef.current.scrollTop = (minute + 2) * itemHeight;
+    }, 0);
+  }, []);
 
+  const handleConfirm = () => {
+    const hour24 = ampm === "오전" ? (hour === 12 ? 0 : hour) : (hour === 12 ? 12 : hour + 12);
+    const formattedTime = `${hour24.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+    if (setStartTime) setStartTime(formattedTime);
+    if (setEndTime) setEndTime(formattedTime);
+    
+    onClose();
+  };
+
+  
   return (
-    <Container>
-      <PickerContainer>
-        {/* AM/PM Picker */}
-        <Picker>
-          <Wheel ref={ampmRef}>
-            {ampmList.map((item) => (
-              <WheelItem key={item} selected={item === ampm} onClick={() => setAmPm(item)}>
-                {item}
-              </WheelItem>
-            ))}
-          </Wheel>
-        </Picker>
-
-        {/* Hour Picker */}
-        <Picker>
-          <Wheel ref={hourRef}>
-            {hourList.map((item) => (
-              <WheelItem key={item} selected={item === hour} onClick={() => setHour(item)}>
-                {item}
-              </WheelItem>
-            ))}
-          </Wheel>
-        </Picker>
-
-        {/* Minute Picker */}
-        <Picker>
-          <Wheel ref={minuteRef}>
-            {minuteList.map((item) => (
-              <WheelItem key={item} selected={item === minute} onClick={() => setMinute(item)}>
-                {item.toString().padStart(2, "0")}
-              </WheelItem>
-            ))}
-          </Wheel>
-        </Picker>
-      </PickerContainer>
-
-      <SelectedTime>
-        선택한 시간: <strong>{ampm} {hour}:{minute.toString().padStart(2, "0")}</strong>
-      </SelectedTime>
-    </Container>
+    <WheelDateTimePickerS>
+      <TimePickerContainer>
+        <Divider />
+        <PickerColumn ref={ampmRef} onScroll={() => handleScroll(ampmRef, setAmpm, ["오전", "오후"])}>
+          {ampmOptions.map((val, index) => (
+            <PickerItem key={index} selected={val === ampm}>{val}</PickerItem>
+          ))}
+        </PickerColumn>
+        <PickerColumn ref={hourRef} onScroll={() => handleScroll(hourRef, setHour, Array.from({ length: 12 }, (_, i) => i + 1))}>
+          {hourOptions.map((val, index) => (
+            <PickerItem key={index} selected={val === hour}>{val}</PickerItem>
+          ))}
+        </PickerColumn>
+        <PickerColumn ref={minuteRef} onScroll={() => handleScroll(minuteRef, setMinute, Array.from({ length: 60 }, (_, i) => i))}>
+          {minuteOptions.map((val, index) => (
+            <PickerItem key={index} selected={val === minute}>{val !== null ? val : ''}</PickerItem>
+          ))}
+        </PickerColumn>
+      </TimePickerContainer>
+      <ModalBox >
+        <Circle_common_btn title={'확인'} onClick={() => handleConfirm()}/>
+      </ModalBox>
+    </WheelDateTimePickerS>
+    
   );
 };
 
-// Styled Components
-const Container = styled.div`
-  text-align: center;
-  font-size: 18px;
-  padding: 20px;
-`;
-
-const Title = styled.h2`
-  margin-bottom: 20px;
-`;
-
-const PickerContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  align-items: center;
-  padding: 20px;
-  position: relative;
-`;
-
-const Picker = styled.div`
+const WheelDateTimePickerS = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+`
+const TimePickerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vh 0 5vh 0;
+  width: 80%;
+  position: relative;
+  overflow: hidden;
 `;
 
-
-const Wheel = styled.div`
-  width: 80px;
-  height: 160px;
+const PickerColumn = styled.div`
+  width: 30%;
+  height: 25vh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
-  border-radius: 10px;
   text-align: center;
-  position: relative;
-  
-  /* 아이폰 스타일 오버레이 효과 */
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 40px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
-    pointer-events: none;
-  }
-  
-  &::before {
-    top: 0;
-  }
-  
-  &::after {
-    bottom: 0;
-    background: linear-gradient(to top, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
 
-const WheelItem = styled.div`
-  padding: 10px;
-  font-size: 18px;
-  cursor: pointer;
+const PickerItem = styled.div`
+  height: 5vh;
+  line-height: 4vh;
+  font-size: 2.5vh;
+  font-weight: 600;
+  color: ${(props) => (props.selected ? "black" : "rgba(51, 51, 51, 0.5)")};
   scroll-snap-align: center;
-  color: ${(props) => (props.selected ? "#007bff" : "#888")};
-  font-weight: ${(props) => (props.selected ? "bold" : "normal")};
-  height: 40px;
-  line-height: 40px;
+  transition: color 0.3s ease;
 `;
 
-const SelectedTime = styled.p`
-  margin-top: 20px;
-  font-size: 18px;
+const Divider = styled.div`
+  position: absolute;
+  top: 54%;
+  left: 0;
+  right: 0;
+  height: 5vh;
+  background: rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+  transform: translateY(-50%);
+  border-radius:1vh;
 `;
 
+const ModalBox = styled.div`
+  width: 100%;
+  padding: 0 0 5vh   0;
+`
 export default WheelDateTimePicker;

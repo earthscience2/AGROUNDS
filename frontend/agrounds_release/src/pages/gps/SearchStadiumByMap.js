@@ -19,8 +19,6 @@ const SearchStadiumByMap = () => {
 
   const { updateFieldData } = useFieldContext();
 
-
-
   const handleNext = () => {
     if (!state?.groundCode) {
       console.error("groundCode가 없습니다.");

@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import down from '../assets/down.png';
 import Modal from './Modal';
 import WheelDateTimePicker from './WheelDateTimePicker';
+import Circle_common_btn from './Circle_common_btn';
 
 const TimePicker = ({title, startT, endT}) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
   const ModalOpen = () => {
     setIsOpen(!isOpen);
@@ -14,13 +17,14 @@ const TimePicker = ({title, startT, endT}) => {
   const closeModal = () => {
     setIsOpen(false);
   }
+  console.log(startTime, endTime);
   return (
     <TimePickerStyle>
       <p className='title'>{title}</p>
       <div className='timerbox'>
-        {startT ? 
+        {startTime ? 
           <div className='timer' onClick={ModalOpen}>
-            <p className='time'>{startT}</p>
+            <p className='times'>{startTime}</p>
             <img src={down} className='downicon'/>
           </div> 
           : 
@@ -30,9 +34,9 @@ const TimePicker = ({title, startT, endT}) => {
           </div> 
 
           }
-        {endT ? 
+        {endTime ? 
           <div className='timer' onClick={ModalOpen}>
-            <p className='time'>{endT}</p>
+            <p className='times'>{endTime}</p>
             <img src={down} className='downicon'/>
           </div> 
           : 
@@ -45,8 +49,8 @@ const TimePicker = ({title, startT, endT}) => {
       </div>
       {
         isOpen && 
-        <Modal isOpen={isOpen} onClose={closeModal}>
-          <WheelDateTimePicker />
+        <Modal isOpen={isOpen} onClose={closeModal} setStartTime={setStartTime} setEndTime={setEndTime}>
+          <WheelDateTimePicker setStartTime={setStartTime} setEndTime={setEndTime} onClose={closeModal} />
         </Modal>
       }
     </TimePickerStyle>
@@ -85,6 +89,11 @@ const TimePickerStyle = styled.div`
       .time{
         font-size: 1.8vh;
         color: #A2A9B0;
+        font-weight: 500;
+      }
+      .times{
+        font-size: 1.8vh;
+        color: black;
         font-weight: 500;
       }
       .downicon{
