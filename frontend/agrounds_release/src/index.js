@@ -57,6 +57,7 @@ import FindStadium from './pages/gps/FindStadium';
 import SetQuarterInfo from './pages/gps/SetQuarterInfo';
 import SetQuarterDetail from './pages/gps/SetQuarterDetail';
 import SearchStadiumByMap from './pages/gps/SearchStadiumByMap';
+import { FieldProvider } from './function/Context';
 
 
 const useBodyClass = (className) => {
@@ -198,6 +199,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <FieldProvider>
+      <RouterProvider router={router} />
+    </FieldProvider>
   </React.StrictMode>
 );

@@ -4,15 +4,28 @@ import Back_btn from '../../components/Back_btn';
 import Login_title from '../../components/Login_title';
 import ground from '../../assets/illust_ground.png';
 import Circle_common_btn from '../../components/Circle_common_btn';
+import { useFieldContext } from '../../function/Context';
+import { useNavigate } from 'react-router-dom';
 
 const SelectRest = () => {
   const [checkSide, setCheckSide] = useState('');
 
+  const { updateFieldData } = useFieldContext();
+  const navigate = useNavigate();
+
+  const handleNext = () => {
+    if (!checkSide){
+      return;
+    }
+    updateFieldData({ standard: checkSide});
+    navigate('/app/set-quarter-info'); 
+  }
+
   const checkA = () => {
-    setCheckSide('A');
+    setCheckSide('south');
   }
   const checkB = () => {
-    setCheckSide('B');
+    setCheckSide('north');
   }
 
   return (
@@ -22,7 +35,7 @@ const SelectRest = () => {
       </div>
       <Login_title title='휴식공간 선택' explain={'경기장 기준점 설정을 위해 \n 휴식공간 지점을 선택하세요.'}/>
       {
-        checkSide === 'A' 
+        checkSide === 'south' 
         ? 
         <div className='rest' onClick={checkA} style={{backgroundColor: '#3DA5FF', color: 'white'}}>A</div> 
         : 
@@ -31,7 +44,7 @@ const SelectRest = () => {
       
       <img src={ground} /> 
       {
-        checkSide === 'B'
+        checkSide === 'north'
         ?
         <div className='rest' onClick={checkB} style={{backgroundColor: '#3DA5FF', color: 'white'}}>B</div>
         :
@@ -40,7 +53,7 @@ const SelectRest = () => {
     
       <div className='btn'>
         {checkSide ? 
-          <Circle_common_btn title='다음' onClick={() => console.log(checkSide)}/>
+          <Circle_common_btn title='다음' onClick={handleNext}/>
           :
           <Circle_common_btn title='다음' backgroundColor='#F4F4F4' color='#A8A8A8'/>
         }

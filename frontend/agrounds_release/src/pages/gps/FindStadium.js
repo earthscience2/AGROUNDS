@@ -5,6 +5,7 @@ import Login_title from '../../components/Login_title';
 import Search from '../../components/Search';
 import { findStadium } from '../../function/GpsApi';
 import location from '../../assets/location_noback.png';
+import { useNavigate } from 'react-router-dom';
 
 const FindStadium = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,6 +24,8 @@ const FindStadium = () => {
       console.log(error)
     })
   }
+  const navigate = useNavigate();
+
   return (
     <FindStadiumStyle>
       <Back_btn />
@@ -35,7 +38,7 @@ const FindStadium = () => {
         :
         (
           stadiumResult.map((stadium) => (
-            <div className='resultbox'>
+            <div key={stadium.ground_code} className='resultbox' onClick={() => navigate('/app/search-stadium-by-map', {state: {groundCode: stadium.ground_code}})}>
               <img src={location} />
               <div className='contentbox'>
                 <p className='ground_name'>{stadium.ground_name}</p>
