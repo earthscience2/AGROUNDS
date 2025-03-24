@@ -73,4 +73,4 @@ class addMatchInfo(APIView):
                         )
 
         # 모든 유효성 검사를 통과한 경우
-        return Response({"message": "데이터가 유효합니다."}, status=status.HTTP_200_OK)
+        return Response({"result" : "success"})

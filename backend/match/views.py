@@ -22,7 +22,7 @@ class getUserMatchList(APIView):
 
         if not user_matchs.exists():
             return self.returnExampleData()
-
+        
         serializer = User_Match_Info_Serializer(instance=user_matchs, user_code=user_code, many=True)
 
         return Response({'result' : serializer.data})
