@@ -6,6 +6,7 @@ import Search from '../../components/Search';
 import { findStadium } from '../../function/GpsApi';
 import location from '../../assets/location_noback.png';
 import { useNavigate } from 'react-router-dom';
+import plus from '../../assets/white-plus.png';
 
 const FindStadium = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,6 +27,9 @@ const FindStadium = () => {
   }
   const navigate = useNavigate();
 
+  const DirectInputStadium = () => {
+    navigate('/app/direct-input-stadium')
+  }
   return (
     <FindStadiumStyle>
       <Back_btn />
@@ -45,10 +49,14 @@ const FindStadium = () => {
                 <p className='ground_location'>{stadium.ground_location}</p>
               </div>
             </div>
+            
           ))
         )
       }
-      
+        {/* <Direct onClick={DirectInputStadium}>
+          <img src={plus} />
+          <p>직접입력</p>
+        </Direct> */}
     </FindStadiumStyle>
   );
 };
@@ -94,3 +102,26 @@ const FindStadiumStyle = styled.div`
     font-weight: 700;
   }
 `
+const Direct = styled.div`
+  width: 15vh;
+  border-radius: 5vh;
+  height: 6vh;
+  background-color: #21272A;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 10vh;
+  img{
+    height: 2.5vh;
+    margin: 0 0 0 2vh;
+  }
+  p{
+    font-family: 'regular';
+    font-size: 2vh;
+    font-weight: 600;
+    color: white;
+    margin: 0 3vh 0 0;
+  }
+
+  `

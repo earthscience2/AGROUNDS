@@ -13,6 +13,8 @@ export const FieldProvider = ({ children }) => {
     quarter_info : [
       {
         quarter_name : "",
+        match_start_time: "",
+        match_end_time: "",
         start_time : "",
         end_time: "",
         status: "",

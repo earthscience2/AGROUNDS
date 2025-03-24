@@ -58,6 +58,8 @@ import SetQuarterInfo from './pages/gps/SetQuarterInfo';
 import SetQuarterDetail from './pages/gps/SetQuarterDetail';
 import SearchStadiumByMap from './pages/gps/SearchStadiumByMap';
 import { FieldProvider } from './function/Context';
+import DirectInputStadium from './pages/gps/DirectInputStadium';
+import SetQuarterSide from './pages/gps/SetQuarterSide';
 
 
 const useBodyClass = (className) => {
@@ -192,6 +194,8 @@ const router = createBrowserRouter([
       { path: "set-quarter-info", element: <SetQuarterInfo /> },
       { path: "set-quarter-detail", element: <SetQuarterDetail /> },
       { path: "search-stadium-by-map", element: <SearchStadiumByMap /> },
+      { path: "direct-input-stadium", element: <DirectInputStadium /> },
+      { path: "set-quarter-side", element: <SetQuarterSide /> },
     ],
   },
 ]);

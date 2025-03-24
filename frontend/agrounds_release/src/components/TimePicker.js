@@ -3,56 +3,56 @@ import styled from 'styled-components';
 import down from '../assets/down.png';
 import Modal from './Modal';
 import WheelDateTimePicker from './WheelDateTimePicker';
-import Circle_common_btn from './Circle_common_btn';
 
-const TimePicker = ({title, startT, endT}) => {
+const TimePicker = ({ title, startT, endT, setStartT, setEndT }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [activeField, setActiveField] = useState(null); // 'start' or 'end'
 
-  const ModalOpen = () => {
-    setIsOpen(!isOpen);
-  }
+  const openPicker = (field) => {
+    setActiveField(field);
+    setIsOpen(true);
+  };
 
   const closeModal = () => {
     setIsOpen(false);
-  }
-  console.log(startTime, endTime);
+    setActiveField(null);
+  };
+
+  const handleTimeSelect = (time) => {
+    if (activeField === 'start') {
+      setStartT(time);
+    } else if (activeField === 'end') {
+      setEndT(time);
+    }
+    closeModal();
+  };
+
   return (
     <TimePickerStyle>
       <p className='title'>{title}</p>
       <div className='timerbox'>
-        {startTime ? 
-          <div className='timer' onClick={ModalOpen}>
-            <p className='times'>{startTime}</p>
-            <img src={down} className='downicon'/>
-          </div> 
-          : 
-          <div className='timer' onClick={ModalOpen}>
-            <p className='time'>시작시간</p>
-            <img src={down} className='downicon'/>
-          </div> 
-
-          }
-        {endTime ? 
-          <div className='timer' onClick={ModalOpen}>
-            <p className='times'>{endTime}</p>
-            <img src={down} className='downicon'/>
-          </div> 
-          : 
-          <div className='timer' onClick={ModalOpen}>
-            <p className='time'>종료시간</p>
-            <img src={down} className='downicon'/>
-          </div> 
-
-          }
+        <div className='timer' onClick={() => openPicker('start')}>
+          <p className={startT ? 'times' : 'time'}>
+            {startT || '시작시간'}
+          </p>
+          <img src={down} className='downicon' />
+        </div>
+        <div className='timer' onClick={() => openPicker('end')}>
+          <p className={endT ? 'times' : 'time'}>
+            {endT || '종료시간'}
+          </p>
+          <img src={down} className='downicon' />
+        </div>
       </div>
-      {
-        isOpen && 
-        <Modal isOpen={isOpen} onClose={closeModal} setStartTime={setStartTime} setEndTime={setEndTime}>
-          <WheelDateTimePicker setStartTime={setStartTime} setEndTime={setEndTime} onClose={closeModal} />
+
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={closeModal}>
+          <WheelDateTimePicker
+            onClose={closeModal}
+            onTimeSelect={handleTimeSelect}
+          />
         </Modal>
-      }
+      )}
     </TimePickerStyle>
   );
 };
@@ -63,42 +63,44 @@ const TimePickerStyle = styled.div`
   width: 90%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: start;
   font-family: 'regular';
-  .title{
+
+  .title {
     font-size: 2vh;
     font-weight: 700;
   }
-  .timerbox{
+
+  .timerbox {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
     width: 100%;
     gap: 1.5vh;
-    .timer{
+
+    .timer {
       display: flex;
       justify-content: space-around;
       align-items: center;
       width: 50%;
       height: 6vh;
-      background-color: #F2F4F8;
+      background-color: #f2f4f8;
       border-radius: 1.5vh;
       cursor: pointer;
-      .time{
+
+      .time {
         font-size: 1.8vh;
-        color: #A2A9B0;
+        color: #a2a9b0;
         font-weight: 500;
       }
-      .times{
+
+      .times {
         font-size: 1.8vh;
         color: black;
         font-weight: 500;
       }
-      .downicon{
-          height: 2vh
+
+      .downicon {
+        height: 2vh;
       }
     }
   }
-`
+`;

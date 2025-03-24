@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import BackTitle_Btn from '../../components/BackTitle_Btn';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import TimePicker from '../../components/TimePicker';
 import check from '../../assets/check.png';
 import Circle_common_btn from '../../components/Circle_common_btn';
+import { useFieldContext } from '../../function/Context';
 
 const SetQuarterDetail = () => {
   const location = useLocation();
   const state = location.state;
+  const navigate = useNavigate();
 
   const [playingSTime, setPlayingSTime] = useState('');
   const [playingETime, setPlayingETime] = useState('');
@@ -16,18 +18,57 @@ const SetQuarterDetail = () => {
   const [attendanceETime, setAttendanceETime] = useState('');
   const [attendanceStatus, setAttendanceStatus] = useState(null);
 
-
   const handleAttendanceToggle = (status) => {
-    setAttendanceStatus(status)
-  }
+    setAttendanceStatus(status);
+  };
+  
+  const {fieldData, updateFieldData} = useFieldContext();
 
+  const handleNextBtn = () => {
+    const quarterIndex = state.quarter - 1;
+    const updatedQuarterInfo = [...fieldData.quarter_info];
+  
+    updatedQuarterInfo[quarterIndex] = {
+      ...updatedQuarterInfo[quarterIndex],
+      quarter_name: `${state?.quarter}쿼터`,
+      match_start_time: playingSTime,
+      match_end_time: playingETime,
+      start_time: attendanceSTime,
+      end_time: attendanceETime,
+      status: attendanceStatus,
+    };
+  
+    updateFieldData({
+      quarter_info: updatedQuarterInfo,
+    });
+  
+    navigate('/app/set-quarter-info');
+  };
+  
   return (
     <SetQuarterDetailStyle>
       <BackTitle_Btn navTitle={`${state?.quarter}쿼터`} />
-      <TimePicker title='경기시간' startT={playingSTime} endT={playingETime}/>
-      <div style={{marginTop: '4vh'}}/>
-      <TimePicker title='참여시간' startT={attendanceSTime} endT={attendanceETime}/>
-      <div style={{marginTop: '4vh'}}/>
+
+      <TimePicker
+        title='경기시간'
+        startT={playingSTime}
+        endT={playingETime}
+        setStartT={setPlayingSTime}
+        setEndT={setPlayingETime}
+      />
+
+      <div style={{ marginTop: '4vh' }} />
+
+      <TimePicker
+        title='참여시간'
+        startT={attendanceSTime}
+        endT={attendanceETime}
+        setStartT={setAttendanceSTime}
+        setEndT={setAttendanceETime}
+      />
+
+      <div style={{ marginTop: '4vh' }} />
+
       <Attend>
         <p className='title'>출전여부</p>
         <div className='timerbox'>
@@ -36,24 +77,23 @@ const SetQuarterDetail = () => {
             <div className={`checkbtn ${attendanceStatus === '출전' ? 'selected' : ''}`}>
               <img src={check} className='check' />
             </div>
-          </div> 
+          </div>
           <div className='timer' onClick={() => handleAttendanceToggle('미출전')}>
             <p className='time'>미출전</p>
             <div className={`checkbtn ${attendanceStatus === '미출전' ? 'selected' : ''}`}>
               <img src={check} className='check' />
             </div>
-          </div> 
+          </div>
         </div>
       </Attend>
 
       <div className='btn'>
-        {playingSTime ? 
-          <Circle_common_btn title='다음' onClick={() => console.log(playingSTime)}/>
-          :
-          <Circle_common_btn title='다음' backgroundColor='#F4F4F4' color='#A8A8A8'/>
-        }
+        {playingSTime && playingETime && attendanceSTime && attendanceETime && attendanceStatus? (
+          <Circle_common_btn title='다음' onClick={handleNextBtn} />
+        ) : (
+          <Circle_common_btn title='다음' backgroundColor='#F4F4F4' color='#A8A8A8' />
+        )}
       </div>
-
     </SetQuarterDetailStyle>
   );
 };
@@ -65,61 +105,64 @@ const SetQuarterDetailStyle = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  .btn{
+  .btn {
     width: 100%;
     position: fixed;
     bottom: 5vh;
   }
-`
+`;
 
 const Attend = styled.div`
   width: 90%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: start;
   font-family: 'regular';
-  .title{
+
+  .title {
     font-size: 2vh;
     font-weight: 700;
   }
-  .timerbox{
+
+  .timerbox {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
     width: 100%;
     gap: 1.5vh;
-    .timer{
+
+    .timer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 50%;
       height: 7.5vh;
-      background-color: #F2F4F8;
+      background-color: #f2f4f8;
       border-radius: 1.5vh;
       cursor: pointer;
-      .time{
+
+      .time {
         font-size: 1.9vh;
         font-weight: 600;
         padding: 0 3vh;
       }
-      .checkbtn{
+
+      .checkbtn {
         height: 3vh;
         width: 3vh;
         border-radius: 50%;
-        background-color: #E5E9ED;
+        background-color: #e5e9ed;
         display: flex;
         justify-content: center;
         align-items: center;
         margin: 0 3vh;
+
         &.selected {
-          background-color: #0EAC6A; 
+          background-color: #0eac6a;
         }
-        .check{
+
+        .check {
           height: 1.5vh;
         }
       }
     }
   }
-`
+`;

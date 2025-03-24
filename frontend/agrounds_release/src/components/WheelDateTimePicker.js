@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Circle_common_btn from "./Circle_common_btn";
 
-const WheelDateTimePicker = ({setStartTime, setEndTime, onClose}) => {
+const WheelDateTimePicker = ({setStartTime, setEndTime, onClose, onTimeSelect}) => {
   const ampmRef = useRef(null);
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
@@ -18,7 +18,7 @@ const WheelDateTimePicker = ({setStartTime, setEndTime, onClose}) => {
   const handleScroll = (ref, setter, options) => {
     if (ref.current) {
       const index = Math.round(ref.current.scrollTop / (ref.current.clientHeight / 5));
-      setter(options[index ]); 
+      setter(options[index]); 
     }
   };
 
@@ -36,7 +36,7 @@ const WheelDateTimePicker = ({setStartTime, setEndTime, onClose}) => {
     const formattedTime = `${hour24.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
     if (setStartTime) setStartTime(formattedTime);
     if (setEndTime) setEndTime(formattedTime);
-    
+    onTimeSelect(formattedTime);
     onClose();
   };
 
