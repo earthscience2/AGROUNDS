@@ -42,7 +42,7 @@ class addMatchInfo(APIView):
                 )
 
         # quarter_info 내부 각 객체의 필수 필드 검사
-        quarter_required_fields = ["quarter_name", "start_time", "end_time", "status", "home"]
+        quarter_required_fields = ["quarter_name", "match_start_time", "match_end_time", "start_time", "end_time", "status", "home"]
         for idx, quarter in enumerate(data["quarter_info"]):
             if not isinstance(quarter, dict):
                 return Response(
