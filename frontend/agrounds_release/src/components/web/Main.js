@@ -7,6 +7,7 @@ import section4 from '../../assets/web/section4.png';
 import section5 from '../../assets/web/section5.png';
 import section7 from '../../assets/web/section7.png';
 import YouTube from 'react-youtube';
+import useIsMobile from '../../hooks/useIsMobile';
 
 const videoUrls = {
   '풀 영상': 'https://youtu.be/8D0wuGqy5RQ?si=CI1GNXC3PXEnyC5G',
@@ -19,7 +20,7 @@ const Main = () => {
 
   const [activeVideoType, setActiveVideoType] = useState('풀 영상'); 
   const [activeQuarter, setActiveQuarter] = useState('1쿼터'); 
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
+  const isMobile = useIsMobile(); // isMobile을 custom hook으로 분리
 
   const handleVideoTypeClick = (type) => {
     setActiveVideoType(type);
@@ -40,23 +41,25 @@ const Main = () => {
 
   const videoId = getVideoId(currentVideoUrl);
 
-  const opts = {
-    height: '390',
-    width: '640',
-    playerVars: {
-      autoplay: 0,
-    },
-  };
+  const [opts, setOpts] = useState(getPlayerOpts());
+
+  function getPlayerOpts() {
+    let factor = 0.6
+    if(isMobile){
+      factor = 0.9
+    }
+    const width = window.innerWidth * factor;
+    const height = width * 9 / 16;
+    return {
+      height: height.toString(),
+      width: width.toString(),
+      playerVars: {
+        autoplay: 0,
+      },
+    };
+  }
 
   const videoRef = useRef(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 480);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   if (isMobile) {
     return (
@@ -114,11 +117,11 @@ const Main = () => {
               </VideoTypeButton>
             ))}
             </div>
+            <div className='spacer'></div>
           {videoId ? (
             <YouTube
               videoId={videoId}
               opts={opts}
-              style={{width: '100%'}}
             />
           ) : (
             <p>유효하지 않은 YouTube URL입니다.</p>
@@ -197,7 +200,6 @@ const Main = () => {
             <YouTube
               videoId={videoId}
               opts={opts}
-              style={{width: '100%'}}
             />
           ) : (
             <p>유효하지 않은 YouTube URL입니다.</p>
@@ -593,11 +595,8 @@ const Section6M = styled.div`
       font-weight: 400;
       margin-top: 2vh;
     }
-    video{
-      width: 100%;
-      margin-top: 3vh;
-      border-radius: 1vh;
-      z-index: 1;
+   .spacer{
+      height: 25px;
     }
     .quarter-box{
       width: 100%;
