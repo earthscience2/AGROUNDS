@@ -1,25 +1,35 @@
-import React, { useEffect, useRef } from 'react';
-import dashjs from 'dashjs';
+import React from 'react';
+import YouTube from 'react-youtube';
 
 const VideoPlayer = ({ url }) => {
-  const videoRef = useRef(null);
+  // YouTube URL에서 비디오 ID 추출
+  const getVideoId = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
 
-  useEffect(() => {
-    const player = dashjs.MediaPlayer().create();
-    player.initialize(videoRef.current, url, false);
+  const videoId = getVideoId(url);
 
-    return () => {
-      player.destroy();
-    };
-  }, [url]);
+  const opts = {
+    height: '390',
+    width: '640',
+    playerVars: {
+      autoplay: 0,
+    },
+  };
 
   return (
     <div style={{maxWidth: '500px', height: 'maxContent', width: '100%', display: 'flex', justifyContent:'center', alignItems: 'center'}}>
-      <video
-        ref={videoRef}
-        controls
-        style={{margin: 'auto', width: '100%', maxWidth: '500px'}}>
-      </video>
+      {videoId ? (
+        <YouTube
+          videoId={videoId}
+          opts={opts}
+          style={{margin: 'auto', width: '100%', maxWidth: '500px'}}
+        />
+      ) : (
+        <p>유효하지 않은 YouTube URL입니다.</p>
+      )}
     </div>
   );
 };

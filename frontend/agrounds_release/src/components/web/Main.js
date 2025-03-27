@@ -6,24 +6,12 @@ import section3 from '../../assets/web/section3.png';
 import section4 from '../../assets/web/section4.png';
 import section5 from '../../assets/web/section5.png';
 import section7 from '../../assets/web/section7.png';
-import dashjs from 'dashjs';
+import YouTube from 'react-youtube';
 
 const videoUrls = {
-  '풀 영상': {
-    '1쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/1쿼터/full/full.mpd',
-    '2쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/2쿼터/full/full.mpd',
-    '3쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/3쿼터/full/full.mpd',
-  },
-  '팀 영상': {
-    '1쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/1쿼터/team/team.mpd',
-    '2쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/2쿼터/team/team.mpd',
-    '3쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/3쿼터/team/team.mpd',
-  },
-  '개인 영상': {
-    '1쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/1쿼터/player_pc/u_50/u_50.mpd',
-    '2쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/2쿼터/player_pc/u_50/u_50.mpd',
-    '3쿼터': 'https://d3lgojruk6udwb.cloudfront.net/video/m_015/3쿼터/player_pc/u_50/u_50.mpd',
-  },
+  '풀 영상': 'https://youtu.be/8D0wuGqy5RQ?si=CI1GNXC3PXEnyC5G',
+  '팀 영상': 'https://youtu.be/IuSH08ydjEc?si=2RMlcyEtOFxj8yFo',
+  '개인 영상': 'https://www.youtube.com/watch?v=zWdfiX9qMI4'
 };
 
 
@@ -41,19 +29,26 @@ const Main = () => {
     setActiveQuarter(quarter);
   };
 
-  const currentVideoUrl = videoUrls[activeVideoType][activeQuarter];
+  const currentVideoUrl = videoUrls[activeVideoType];
+
+  // YouTube URL에서 비디오 ID 추출
+  const getVideoId = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  const videoId = getVideoId(currentVideoUrl);
+
+  const opts = {
+    height: '390',
+    width: '640',
+    playerVars: {
+      autoplay: 0,
+    },
+  };
 
   const videoRef = useRef(null);
-
-  useEffect(() => {
-    const player = dashjs.MediaPlayer().create();
-    player.initialize(videoRef.current, currentVideoUrl, false);
-
-    return () => {
-      player.destroy();
-    };
-  }, [currentVideoUrl]);
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -119,19 +114,15 @@ const Main = () => {
               </VideoTypeButton>
             ))}
             </div>
-          <video ref={videoRef} controls style={{width: '100%'}}/>
-          
-          <div className='quarter-box'>
-          {['1쿼터', '2쿼터', '3쿼터'].map((quarter) => (
-            <QuarterButton
-              key={quarter}
-              isActive={activeQuarter === quarter}
-              onClick={() => handleQuarterClick(quarter)}
-            >
-              {quarter}
-            </QuarterButton>
-          ))}
-          </div>
+          {videoId ? (
+            <YouTube
+              videoId={videoId}
+              opts={opts}
+              style={{width: '100%'}}
+            />
+          ) : (
+            <p>유효하지 않은 YouTube URL입니다.</p>
+          )}
         </div>
 
       </Section6M>
@@ -201,20 +192,16 @@ const Main = () => {
         <div className='contents-box'>
           <div className='title'>세 개의 영상을 하나의 영상처럼</div>
           <div className='title2'>경기장 전체를 한 눈에 확인할 수 있게 영상 합성 기술(Stitching)을 통해 영상을 제공합니다.</div>
-          
-          <video ref={videoRef} controls style={{width: '100%'}}/>
-          
-          <div className='quarter-box'>
-          {['1쿼터', '2쿼터', '3쿼터'].map((quarter) => (
-            <QuarterButton
-              key={quarter}
-              isActive={activeQuarter === quarter}
-              onClick={() => handleQuarterClick(quarter)}
-            >
-              {quarter}
-            </QuarterButton>
-          ))}
-          </div>
+          <div className='spacer'></div>
+          {videoId ? (
+            <YouTube
+              videoId={videoId}
+              opts={opts}
+              style={{width: '100%'}}
+            />
+          ) : (
+            <p>유효하지 않은 YouTube URL입니다.</p>
+          )}
         </div>
       </Section6>
       <Section7>
@@ -551,6 +538,9 @@ const Section6 = styled.div`
       font-size: 1.5vh;
       font-weight: 400;
       margin-top: 1vh;
+    }
+    .spacer{
+      height: 25px;
     }
     video{
       width: 100%;
