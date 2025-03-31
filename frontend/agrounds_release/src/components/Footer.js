@@ -37,13 +37,13 @@ const Footer = () => {
         />
         <p className={`title ${isActive('/app/analysis') ? 'active' : ''}`}>경기분석</p>
       </div>
-      <div className='box' onClick={triggerUpload}>
+      <div className='box' onClick={() => navigate('/app/findstadium')}>
         <img
           className='icon'
-          src={isActive('/app/errorpage') ? connectBlack : connectGrey}
+          src={isActive('/app/findstadium') ? connectBlack : connectGrey}
           alt='업로드'
         />
-        <p className={`title ${isActive('/app/errorpage') ? 'active' : ''}`}>업로드</p>
+        <p className={`title ${isActive('/app/findstadium') ? 'active' : ''}`}>업로드</p>
       </div>
       <div className='box' onClick={() => navigate('/app/video')}>
         <img
