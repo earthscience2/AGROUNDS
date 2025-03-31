@@ -37,6 +37,7 @@ class UserMatch(models.Model):
 class UserMatchInfo(models.Model):
     match_code = models.CharField(primary_key=True, max_length=45)
     ground_name = models.CharField(max_length=45)
+    ground_code = models.CharField(max_length=45)
     away_team = models.CharField(max_length=45, null=True, blank=True)
     away_team_name = models.CharField(max_length=45, null=True, blank=True)
     match_time = models.IntegerField(null=True, blank=True)

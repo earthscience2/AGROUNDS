@@ -3,8 +3,11 @@ import img from '../../../assets/onboard_bg.png';
 import '../css/Onboard.scss';
 import Circle_common_btn from '../../../components/Circle_common_btn';
 import Rec_Common_btn from '../../../components/Rec_common_btn';
+import Rec_half_btn from '../../../components/Rec_half_btn'
 import Symbol from '../../../assets/symbol.png';
 import LoginModal from './LoginModal';
+import kakao from '../../../assets/kakao.png'
+import apple from '../../../assets/apple-logo.png'
 
 const Onboard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -31,7 +34,7 @@ const Onboard = () => {
           <p className="modal-description">
             GPS와 AI CAM을 통해 나의 경기 데이터를 <br/>분석하고 더 높이 성장해보세요.
           </p>
-          <Rec_Common_btn onClick={kakaoLogin} backgroundColor='#F7DE0C' title='카카오로 시작하기' color='black'></Rec_Common_btn>
+          <Rec_half_btn onClick={kakaoLogin} backgroundColor='#F7DE0C' title='카카오 로그인' color='black' src={kakao}></Rec_half_btn>
         </div>
       </LoginModal>
     </div>
