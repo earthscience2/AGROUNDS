@@ -39,6 +39,7 @@ urlpatterns = [
     path("api/video/", include("match_video.urls")),
     path("api/analyze/", include("analyze.urls")),
     path("api/ground/", include("ground.urls")),
+    path("api/upload/", include("upload.urls")),
 ]
 
 urlpatterns += [

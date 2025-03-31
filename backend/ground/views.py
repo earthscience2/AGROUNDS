@@ -31,3 +31,33 @@ class searchGrounds(APIView):
             ]
         
         return Response({"result" : result})
+
+class getCoordinate(APIView):
+    def post(self, request):
+        ground_code =request.data.get('ground_code')
+
+        if ground_code is None:
+            return Response({'error': 'Missing required field: keyword'}, status=400)
+
+        return Response({
+            "x" : "37.249703911962435",
+            "y" : "127.16515904465132",
+            "corner_gps": [
+            [
+                "36.59091881154825",
+                "127.30071061240957"
+            ],
+            [
+                "36.5917218938796",
+                "127.30118028327796"
+            ],
+            [
+                "36.5914882341232",
+                "127.30181914054529"
+            ],
+            [
+                "36.59067387602467",
+                "127.30135500807022"
+            ]
+            ]
+        }) 
