@@ -8,4 +8,7 @@ const getCoordinate = (data) => {
   return client.post('/api/ground/get-coordinate/', data)
 }
 
-export {findStadium, getCoordinate};
+const AddMatchInfo = (data) => {
+  return client.post('/api/upload/add-match-info/', data)
+}
+export {findStadium, getCoordinate, AddMatchInfo};

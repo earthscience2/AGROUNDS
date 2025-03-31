@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Circle_common_btn from "./Circle_common_btn";
 
-const WheelDateTimePicker = ({setStartTime, setEndTime, onClose, onTimeSelect}) => {
+const WheelDateTimePicker = ({ setStartTime, setEndTime, onClose, onTimeSelect }) => {
   const ampmRef = useRef(null);
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
-  
-  const [ampm, setAmpm] = useState('오전');
-  const [hour, setHour] = useState('1');
-  const [minute, setMinute] = useState('30');
+
+  const [ampm, setAmpm] = useState("오전");
+  const [hour, setHour] = useState(1);
+  const [minute, setMinute] = useState(30);
 
   const ampmOptions = ["", "", "오전", "오후", "", ""];
   const hourOptions = ["", "", ...Array.from({ length: 12 }, (_, i) => i + 1), "", ""];
@@ -17,17 +17,24 @@ const WheelDateTimePicker = ({setStartTime, setEndTime, onClose, onTimeSelect}) 
 
   const handleScroll = (ref, setter, options) => {
     if (ref.current) {
-      const index = Math.round(ref.current.scrollTop / (ref.current.clientHeight / 5));
-      setter(options[index]); 
+      const itemHeight = ref.current.clientHeight / 5;
+      const index = Math.round(ref.current.scrollTop / itemHeight);
+      setter(options[index]);
     }
   };
 
   useEffect(() => {
-    const itemHeight = '5vh'; 
+    const scrollTo = (ref, index) => {
+      if (ref.current) {
+        const itemHeight = ref.current.clientHeight / 5;
+        ref.current.scrollTop = index * itemHeight;
+      }
+    };
+
     setTimeout(() => {
-      ampmRef.current.scrollTop = (ampm === "오전" ? 2 : 3) * itemHeight;
-      hourRef.current.scrollTop = (hour + 1) * itemHeight;
-      minuteRef.current.scrollTop = (minute + 2) * itemHeight;
+      scrollTo(ampmRef, ampm === "오전" ? 2 : 3);
+      scrollTo(hourRef, hour + 1);
+      scrollTo(minuteRef, minute + 2);
     }, 0);
   }, []);
 
@@ -36,11 +43,10 @@ const WheelDateTimePicker = ({setStartTime, setEndTime, onClose, onTimeSelect}) 
     const formattedTime = `${hour24.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
     if (setStartTime) setStartTime(formattedTime);
     if (setEndTime) setEndTime(formattedTime);
-    onTimeSelect(formattedTime);
+    if (onTimeSelect) onTimeSelect(formattedTime);
     onClose();
   };
 
-  
   return (
     <WheelDateTimePickerS>
       <TimePickerContainer>
@@ -61,11 +67,10 @@ const WheelDateTimePicker = ({setStartTime, setEndTime, onClose, onTimeSelect}) 
           ))}
         </PickerColumn>
       </TimePickerContainer>
-      <ModalBox >
-        <Circle_common_btn title={'확인'} onClick={() => handleConfirm()}/>
+      <ModalBox>
+        <Circle_common_btn title={'확인'} onClick={handleConfirm} />
       </ModalBox>
     </WheelDateTimePickerS>
-    
   );
 };
 
@@ -77,7 +82,8 @@ const WheelDateTimePickerS = styled.div`
   position: relative;
   overflow: hidden;
   width: 100%;
-`
+`;
+
 const TimePickerContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -118,11 +124,12 @@ const Divider = styled.div`
   background: rgba(0, 0, 0, 0.05);
   pointer-events: none;
   transform: translateY(-50%);
-  border-radius:1vh;
+  border-radius: 1vh;
 `;
 
 const ModalBox = styled.div`
   width: 100%;
-  padding: 0 0 5vh   0;
-`
+  padding: 0 0 5vh 0;
+`;
+
 export default WheelDateTimePicker;

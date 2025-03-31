@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Back_btn from '../../components/Back_btn';
 import Login_title from '../../components/Login_title';
@@ -6,14 +6,26 @@ import Search from '../../components/Search';
 import { findStadium } from '../../function/GpsApi';
 import location from '../../assets/location_noback.png';
 import { useNavigate } from 'react-router-dom';
+import { useFieldContext } from '../../function/Context';
 
 const FindStadium = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [stadiumResult, setStadiumResult] = useState([]);
+  const {fieldData, updateFieldData} = useFieldContext();
 
+  // useEffect(() => {
+  //   window.getMatchDataFromFlutter = (match_code, user_code, match_date, url) => {
+  //     if(sessionStorage.getItem('user_code') !== user_code)
+  //       // 에러 처리
+  //       return;
+    
+  //   }
+  // }, [])
+  
   const data = {
     'keyword': searchTerm
   }
+
   const onSearchSubmit = () => {
     findStadium(data)
     .then((response) => {
@@ -28,6 +40,15 @@ const FindStadium = () => {
   const DirectInputStadium = () => {
     navigate('/app/direct-input-stadium')
   }
+
+  const handleNext = (ground_code) => {
+    navigate('/app/search-stadium-by-map', {state: {groundCode: ground_code}})
+    const data = {
+      user_code: sessionStorage.getItem('userCode'),
+      match_code: 'aaa' //matchcode session에 새로 set, flutter 연동 필요
+    }
+    updateFieldData(data);
+  }
   return (
     <FindStadiumStyle>
       <Back_btn />
@@ -40,7 +61,7 @@ const FindStadium = () => {
         :
         (
           stadiumResult.map((stadium) => (
-            <div key={stadium.ground_code} className='resultbox' onClick={() => navigate('/app/search-stadium-by-map', {state: {groundCode: stadium.ground_code}})}>
+            <div key={stadium.ground_code} className='resultbox' onClick={() => handleNext(stadium.ground_code)}>
               <img src={location} />
               <div className='contentbox'>
                 <p className='ground_name'>{stadium.ground_name}</p>

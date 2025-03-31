@@ -6,12 +6,13 @@ import Back_btn from '../../components/Back_btn';
 import { useFieldContext } from '../../function/Context';
 import { useNavigate } from 'react-router-dom';
 import SetQuarter from '../../components/SetQuarter';
+import { AddMatchInfo } from '../../function/GpsApi';
 
 const SetQuarterSide = () => {
-  const { fieldData } = useFieldContext();
+  const { fieldData, updateFieldData } = useFieldContext();
   const navigate = useNavigate();
   const [quarters, setQuarters] = useState([]);
-
+  
   console.log(fieldData)
   useEffect(() => {
     const initial = fieldData.quarter_info.map((q, idx) => {
@@ -23,12 +24,24 @@ const SetQuarterSide = () => {
       };
     });
     setQuarters(initial.length > 0 ? initial : [{ id: 1, data: '데이터 없음', home: '' }]);
+    
   }, [fieldData]);
 
   const handleEdit = (quarter) => {
     navigate('/app/campside', { state: { quarter} });
   };
 
+  const handleEnd = () => {
+    
+    console.log(fieldData)
+    AddMatchInfo(fieldData)
+    .then((response) => {
+      console.log('success!')
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
 
 
   return (
@@ -52,7 +65,7 @@ const SetQuarterSide = () => {
         ))}
       </div>
       <div className='btn'>
-        <Circle_common_btn title='다음' onClick={() => navigate('/app/next-page')} />
+        <Circle_common_btn title='다음' onClick={handleEnd} />
       </div>
     </SetQuarterSideStyle>
   );
