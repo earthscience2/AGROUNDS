@@ -6,15 +6,9 @@ import left from '../assets/ico_ground-left.png';
 import right from '../assets/ico_ground-right.png';
 import rightbtn from '../assets/right.png';
 import { useFieldContext } from '../function/Context';
-import { useLocation, useNavigate } from 'react-router-dom';
 
-const SetQuarter = ({ quarter, data, first = false, onDelete, edit, onClick, home }) => {
+const SetQuarter = ({ quarter, data, first = false, onDelete, edit, onClick, home,  }) => {
   const { fieldData } = useFieldContext();
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const quarter1 = location.state?.quarter;
-  console.log(quarter1);
 
   return (
     <SetQuarterStyle>
@@ -30,8 +24,8 @@ const SetQuarter = ({ quarter, data, first = false, onDelete, edit, onClick, hom
       )
         :
         (
-        <div className='button' onClick={() => navigate('/app/campside', {state: {quarter: quarter1}})}>
-          {fieldData.quarter_info.home === 'left'
+        <div className='button' onClick={onClick}>
+          {fieldData.quarter_info[quarter - 1].home === 'left'
             ? <img src={left} className='left'/>
             : <img src={right} className='left'/>
           }

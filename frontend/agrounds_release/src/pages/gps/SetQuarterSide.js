@@ -1,4 +1,3 @@
-// SetQuarterSide.js
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Circle_common_btn from '../../components/Circle_common_btn';
@@ -13,6 +12,7 @@ const SetQuarterSide = () => {
   const navigate = useNavigate();
   const [quarters, setQuarters] = useState([]);
 
+  console.log(fieldData)
   useEffect(() => {
     const initial = fieldData.quarter_info.map((q, idx) => {
       const isValid = q.match_start_time && q.match_end_time && q.status;
@@ -26,8 +26,7 @@ const SetQuarterSide = () => {
   }, [fieldData]);
 
   const handleEdit = (quarter) => {
-    navigate('/app/campside', { state: { quarter } });
-    console.log(quarter)
+    navigate('/app/campside', { state: { quarter} });
   };
 
 

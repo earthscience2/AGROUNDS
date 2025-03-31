@@ -18,12 +18,13 @@ const CampSide = () => {
   const { updateFieldData, fieldData } = useFieldContext();
   const location = useLocation();
   const navigate = useNavigate();
+
   const quarter = location.state?.quarter;
-  console.log(quarter);
+
   const handleComplete = () => {
-    const quarterIndex = location.state?.quarter - 1;
+    const quarterIndex = quarter - 1;
     if (isNaN(quarterIndex)) {
-      console.error('쿼터 인덱스가 잘못됨:', location.state?.quarter);
+      console.error('쿼터 인덱스가 잘못됨:', quarter);
       return;
     }
     const updated = [...fieldData.quarter_info];
@@ -35,7 +36,7 @@ const CampSide = () => {
     navigate('/app/set-quarter-side');
 
   };
-
+  console.log(checkSide);
   return (
     <CampSideStyle>
       <BackTitle_Btn navTitle={`${quarter}쿼터`} />

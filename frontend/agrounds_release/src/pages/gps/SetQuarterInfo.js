@@ -64,7 +64,6 @@ const SetQuarterInfo = () => {
       },
     });
   };
-  console.log(fieldData)
   return (
     <SetQuarterInfoStyle>
       <Back_btn />

@@ -6,7 +6,6 @@ import Search from '../../components/Search';
 import { findStadium } from '../../function/GpsApi';
 import location from '../../assets/location_noback.png';
 import { useNavigate } from 'react-router-dom';
-import plus from '../../assets/white-plus.png';
 
 const FindStadium = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,7 +17,6 @@ const FindStadium = () => {
   const onSearchSubmit = () => {
     findStadium(data)
     .then((response) => {
-      console.log(response.data.result)
       setStadiumResult(response.data.result)
     })
     .catch((error) => {
