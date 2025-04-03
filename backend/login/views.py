@@ -147,6 +147,12 @@ class kakaoSignup(APIView):
 # 애플 로그인 - callback view
 class AppleLoginCallback(APIView):
     def get(self, request):
+        # 클라이언트에서 최초 리다이렉션
+        code = request.GET.get("code")
+        if not code:
+            return redirect("{CLIENT_URL}/app/loading-for-login/?type=apple")
+        
+    def post(self, request):
         code = request.GET.get("code")
         if not code:
             return redirect("{CLIENT_URL}/app/loading-for-login/?type=apple")
