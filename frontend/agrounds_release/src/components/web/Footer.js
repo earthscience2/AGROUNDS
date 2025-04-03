@@ -9,7 +9,7 @@ const Footer = () => {
           <div>개인정보처리방침</div>
           <div>이용약관</div>
         </div>
-        <div className='address'>주소 : 인천광역시 미추홀구 인하로 100, 김현태인하드림센터 203호 <br /> 문의 : slgh@hanmail.net</div>
+        <div className='address'>주소 : 인천광역시 미추홀구 인하로 100, 김현태인하드림센터 203호 <br /> 문의 : slhg@hanmail.net</div>
   
         <div className='copyright'>© 에이그라운즈, All rights reserved</div>
       </div>

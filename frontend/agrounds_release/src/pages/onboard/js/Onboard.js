@@ -8,13 +8,16 @@ import Symbol from '../../../assets/symbol.png';
 import LoginModal from './LoginModal';
 import kakao from '../../../assets/kakao.png'
 import apple from '../../../assets/apple-logo.png'
+import useAppleRedirectLogin from '../../../hooks/useAppleRedirectLogin';
 
 const Onboard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
 
+
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
 
+  const { signInWithApple } = useAppleRedirectLogin();
   const kakaoLogin = () => { // 카카오 로그인 처리를 위해 서버 측 url로 redirect
     window.location.replace(process.env.REACT_APP_BASE_URL + "/api/login/kakao/?hostname=" + window.location.hostname);
   };
@@ -34,7 +37,10 @@ const Onboard = () => {
           <p className="modal-description">
             GPS와 AI CAM을 통해 나의 경기 데이터를 <br/>분석하고 더 높이 성장해보세요.
           </p>
-          <Rec_half_btn onClick={kakaoLogin} backgroundColor='#F7DE0C' title='카카오 로그인' color='black' src={kakao}></Rec_half_btn>
+          <div className="modal-button-area">
+            <Rec_half_btn onClick={kakaoLogin} backgroundColor='#F7DE0C' title='카카오 로그인' color='black' src={kakao}></Rec_half_btn>
+            <Rec_half_btn onClick={signInWithApple} backgroundColor='#F4F4F4' title='Apple 로그인' color='black' src={apple}></Rec_half_btn>
+          </div>
         </div>
       </LoginModal>
     </div>

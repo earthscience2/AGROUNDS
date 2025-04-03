@@ -23,6 +23,11 @@ from staticfiles import cryptographysss
 import json
 import requests
 
+import requests, time
+from jwt.algorithms import RSAAlgorithm
+from django.shortcuts import redirect
+from django.contrib.auth import get_user_model
+
 env = environ.Env(DEBUG=(bool, True)) #환경변수를 불러올 수 있는 상태로 세팅
 
 # 클라이언트 / 서버 주소
@@ -31,7 +36,12 @@ SERVER_URL = env("SERVER_URL")
 
 KAKAO_CALLBACK_URI = SERVER_URL + "/api/login/kakao/callback/"
 KAKAO_REDIRECT_URI = SERVER_URL + "/api/login/kakao/"
-KAKAO_CLIENT_ID = "31b5a921fbd3a1e8f96e06d992364864"
+KAKAO_CLIENT_ID = env("KAKAO_CLIENT_ID")
+APPLE_CLIENT_ID = env("APPLE_CLIENT_ID")
+APPLE_TEAM_ID = env("APPLE_TEAM_ID")
+APPLE_KEY_ID = env("APPLE_KEY_ID")
+APPLE_PRIVATE_KEY_PATH = env("APPLE_PRIVATE_KEY_PATH")
+APPLE_REDIRECT_URI = env("APPLE_REDIRECT_URI")
 
 # 닉네임 중복확인
 class nickname(APIView):
@@ -124,6 +134,112 @@ class kakaoSignup(APIView):
             data["user_id"] = user_id
             data["password"] = "0"
             data["login_type"] = "kakao"
+            serializer = User_Info_Serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            new_user = serializer.data
+            return Response({"code" : login.getTokensForUser(login, SimpleNamespace(**new_user))['access']}, status=status.HTTP_200_OK)
+        except KeyError as e:
+            return JsonResponse({"error": f"Missing required field: {str(e)}"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
+
+# 애플 로그인 - callback view
+class AppleLoginCallback(APIView):
+    def get(self, request):
+        code = request.GET.get("code")
+        if not code:
+            return redirect("{CLIENT_URL}/app/loading-for-login/?type=apple")
+
+        token_url = "https://appleid.apple.com/auth/token"
+        client_secret = self._generate_client_secret()
+
+        data = {
+            "client_id": settings.APPLE_CLIENT_ID,
+            "client_secret": client_secret,
+            "code": code,
+            "grant_type": "authorization_code",
+            "redirect_uri": settings.APPLE_REDIRECT_URI,
+        }
+
+        res = requests.post(token_url, data=data).json()
+        id_token = res.get("id_token")
+        if not id_token:
+            return redirect("{CLIENT_URL}/app/loading-for-login/?type=apple")
+
+        apple_user_info = self._verify_token_and_get_user_email_name(id_token)
+        email = apple_user_info['email']
+        name = apple_user_info['name']
+
+        user = UserInfo.objects.filter(user_code = email).first()
+
+        # 가입된 유저정보가 있을 경우 로그인
+        if user is None:  
+            # 가입되어있지 않은 유저의 경우 자동으로 가입하고 로그인 진행
+            print("회원가입 진행")
+            signup_data = {
+                "user_id": email,
+                "password": "0",
+                "user_birth": "1990-01-01",
+                "user_name": name,
+                "user_gender": "unknown",
+                "user_nickname": name,
+                "marketing_agree": False,
+                "login_type": "apple",
+                "user_height": 175,
+                "user_weight": 65,
+                "user_position": "CM"
+            }
+
+            try:
+                serializer = User_Info_Serializer(data=signup_data)
+                serializer.is_valid(raise_exception=True)
+                user = serializer.save()
+            except KeyError as e:
+                return JsonResponse({"error": f"Missing required field: {str(e)}"}, status=400)
+            except Exception as e:
+                return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
+        
+        token = login.getTokensForUser(login, user)['access']
+        return redirect(f"{CLIENT_URL}/app/loading-for-login/?type=apple&code={token}")
+    
+    
+    def _generate_client_secret(self):
+        headers = {"kid": settings.APPLE_KEY_ID, "alg": "ES256"}
+        payload = {
+            "iss": settings.APPLE_TEAM_ID,
+            "iat": int(time.time()),
+            "exp": int(time.time()) + 86400 * 180,
+            "aud": "https://appleid.apple.com",
+            "sub": settings.APPLE_CLIENT_ID,
+        }
+        with open(settings.APPLE_PRIVATE_KEY_PATH, "r") as f:
+            private_key = f.read()
+        return jwt.encode(payload, private_key, algorithm="ES256", headers=headers)
+
+    def _verify_token_and_get_user_email_name(self, id_token):
+        keys = requests.get("https://appleid.apple.com/auth/keys").json()["keys"]
+        header = jwt.get_unverified_header(id_token)
+        key = next(k for k in keys if k["kid"] == header["kid"])
+        public_key = RSAAlgorithm.from_jwk(key)
+
+        payload = jwt.decode(id_token, public_key, algorithms=["RS256"], audience=settings.APPLE_CLIENT_ID)
+        sub = payload["sub"]
+        email = payload.get("email")
+        name = payload.get("name")
+
+        return {"email":email, "name":name}
+
+# 애플 로그인 - 회원가입
+class AppleSignup(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            decoded_string = unquote(data["user_id"])
+            user_id = cryptographysss.decrypt_aes(decoded_string)
+            data["user_id"] = user_id
+            data["password"] = "0"
+            data["login_type"] = "apple"
             serializer = User_Info_Serializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()

@@ -4,13 +4,15 @@ import client from '../../client';
 import { useNavigate } from 'react-router-dom';
 
 const LoadingPage = () => {
-    const token = new URL(window.location.href).searchParams.get('code');
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get('code');
+    const type = url.searchParams.get('type');
 
     const navigate = useNavigate();
     // 카카오 로그인 시 token이 url parameter로 들어오는지 검사하고,
     // 들어오고 있으면 token을 api에 전송하여 유저 정보 불러옴
     useEffect(()=>{
-        if (token === '0'){
+        if (token === '0' && type !== 'apple'){
             window.location.replace(process.env.REACT_APP_BASE_URL+"/api/login/kakao/?hostname=" + window.location.hostname);
         } else {
             setTimeout(loader, 1000 * 1);
@@ -20,10 +22,9 @@ const LoadingPage = () => {
     function loader() {
         if(token === null){
             console.log('token is not comming');
-            alert('카카오 로그인 실퍠 : 토큰이 null 입니다.');
+            alert('로그인 실패 : 토큰이 null 입니다.');
             window.location.replace('/app');
         } else {
-            console.log('token : ' + token);
             client.defaults.headers.common['Authorization'] = token;
             client.get('/api/login/get-user-info')
             .then(function(response){

@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos
 
+# key
+.p8
+
 ### macOS ###
 # General
 .DS_Store
@@ -175,6 +178,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+backend/venv
 ENV/
 env.bak/
 venv.bak/
