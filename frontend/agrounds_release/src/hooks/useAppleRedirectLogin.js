@@ -17,11 +17,11 @@ export default function useAppleRedirectLogin() {
       window.AppleID.auth.signIn().then(({ authorization }) => {
         const id_token = authorization.id_token;
 
-        // window.location.replace(
-        //   process.env.REACT_APP_BASE_URL + 
-        //   "/api/login/apple/?hostname=" + 
-        //   window.location.hostname + 
-        //   "&id_token=" + id_token);
+        window.location.replace(
+          process.env.REACT_APP_BASE_URL + 
+          "/api/login/apple/callback/?hostname=" + 
+          window.location.hostname + 
+          "&id_token=" + id_token);
 
         console.log(id_token)
       })

@@ -166,25 +166,31 @@ class AppleLoginCallback(APIView):
         public_key = RSAAlgorithm.from_jwk(key)
 
         try:
-            payload = jwt.decode(id_token, public_key, algorithms=["RS256"], audience=settings.APPLE_CLIENT_ID)
+            payload = jwt.decode(id_token, public_key, algorithms=["RS256"], audience=env("APPLE_CLIENT_ID"))
             email = payload.get("email")
             name = payload.get("name", "AppleUser")
             sub = payload.get("sub")  # 고유 사용자 ID
 
-            user = UserInfo.objects.filter(user_code = email).first()
+            user = UserInfo.objects.filter(user_id = email).first()
 
             # 가입된 유저정보가 있을 경우 로그인
             if user is None:  
                 # 가입되어있지 않은 유저의 경우 자동으로 가입하고 로그인 진행
                 print("회원가입 진행")
+                
                 random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+                nickname = f'A_{random_string}'
+                while(UserInfo.objects.filter(user_nickname=nickname).exists()):
+                    random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+                    nickname = f'A_{random_string}'
+
                 signup_data = {
                     "user_id": email,
                     "password": "0",
                     "user_birth": "1990-01-01",
                     "user_name": name,
                     "user_gender": "unknown",
-                    "user_nickname": f"{name}_{random_string}",
+                    "user_nickname": nickname,
                     "marketing_agree": False,
                     "login_type": "apple",
                     "user_height": 175,
@@ -195,8 +201,8 @@ class AppleLoginCallback(APIView):
                 serializer.is_valid(raise_exception=True)
                 user = serializer.save()
 
-                token = login.getTokensForUser(login, user)['access']
-                return redirect(f"{client_url}/app/loading-for-login/?type=apple&code={token}")
+            token = login.getTokensForUser(login, user)['access']
+            return redirect(f"{client_url}/app/loading-for-login/?type=apple&code={token}")
         except jwt.ExpiredSignatureError:
             return Response({"error": "Token expired"}, status=400)
         except KeyError as e:
