@@ -100,7 +100,7 @@ class addMatchInfo(APIView):
         upload_quarter_info["ground_name"] = ground_name
         upload_quarter_info["standard"] = data["standard"]
         upload_quarter_info["quarter_info"] = {
-            "total_quarters" : len(quarter_info),
+            "total_quarters" : len(formatted_quarter_info),
             "quarters" : formatted_quarter_info
         }
 
