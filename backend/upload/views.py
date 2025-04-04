@@ -4,7 +4,10 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from datetime import datetime
+from DB.models import GroundInfo
+from staticfiles.file_uploader import S3FileUploader
 import json
+import io
 
 class addMatchInfo(APIView):
     def post(self, request, *args, **kwargs):
@@ -71,6 +74,49 @@ class addMatchInfo(APIView):
                             {"error": f"'{field}' 필드는 올바른 datetime 문자열이 아닙니다."},
                             status=status.HTTP_400_BAD_REQUEST
                         )
+                    
+        # 분석 코드 요구사항에 맞는 quater_info 형식으로 변환
+        formatted_quarter_info = []
+        for quarter in data["quarter_info"]:
+            formatted_quarter_info.append({
+                "quarter" : quarter["quarter_name"],
+                "start_time" : quarter["start_time"],
+                "end_time" : quarter["end_time"],
+                "status" : quarter["status"],
+                "home" : "west" if quarter["home"] == "left" else "east" if quarter["home"] == "right" else "no"
+            })
 
-        # 모든 유효성 검사를 통과한 경우
+        # ground_code로 ground_name 조회
+        ground_name = get_object_or_404(GroundInfo, ground_code = data["ground_code"]).ground_name
+
+        # 경기 날짜 추출 yyyymmdd 형식
+        date_string = data["quarter_info"][0]["match_start_time"]
+        dt = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
+        formatted_date = dt.strftime("%Y%m%d")
+
+        # 분석 코드에서 필요한 quarter_info.json파일 생성 후 s3에 업로드
+        upload_quarter_info = {}
+        upload_quarter_info["data_file"] = f"gps/{data['match_code']}/{data['user_code']}/{data['user_code']}_{formatted_date}.txt"
+        upload_quarter_info["ground_name"] = ground_name
+        upload_quarter_info["standard"] = data["standard"]
+        upload_quarter_info["quarter_info"] = {
+            "total_quarters" : len(quarter_info),
+            "quarters" : formatted_quarter_info
+        }
+
+        # json파일로 변환
+        json_str = json.dumps(upload_quarter_info)
+        json_bytes = json_str.encode('utf-8')
+
+        quarter_info_file = io.BytesIO(json_bytes)
+        setattr(quarter_info_file, 'content_type', 'application/json')
+
+        # s3에 json 파일 업로드
+        try:
+            fileUploader = S3FileUploader(quarter_info_file, f"gps/{data['match_code']}/{data['user_code']}/quarter_info.json")
+            fileUploader.upload()
+        except Exception as e:
+            return Response({"error" : f"파일 업로드 실패: {e}"})
+
+        # 모든 유효성 검사를 통과하고 파일 업로드까지 성공한 경우
         return Response({"result" : "success"})

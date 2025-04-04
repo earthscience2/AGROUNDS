@@ -255,6 +255,28 @@ class UserAnalMatch(models.Model):
         managed = False
         db_table = 'user_anal_match'
 
+class GroundInfo(models.Model):
+    ground_code = models.CharField(max_length=45, primary_key=True)
+    ground_name = models.CharField(max_length=45)
+    corner_gps = models.JSONField()
+    corner_utm = models.JSONField()
+    center = models.JSONField()
+    long_side_length = models.FloatField()
+    short_side_length = models.FloatField()
+    angle = models.FloatField()
+    new_short = models.JSONField()
+    new_long = models.JSONField()
+    extend_short = models.JSONField()
+    extend_long = models.JSONField()
+    north_side_utm = models.JSONField()
+    south_side_utm = models.JSONField()
+    east_side_utm = models.JSONField()
+    west_side_utm = models.JSONField()
+    rotate_deg = models.FloatField()
+    rotated_corners = models.JSONField()
+
+    class Meta:
+        db_table = 'ground_info'
         
 
 
