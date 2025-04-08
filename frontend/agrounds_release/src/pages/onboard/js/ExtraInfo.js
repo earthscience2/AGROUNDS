@@ -68,7 +68,10 @@ const ExtraInfo = () => {
       client.post('/api/login/kakao/signup/', mergedFormData)
       .then((res)=>{
         console.log(res);
-        window.location.replace(process.env.REACT_APP_BASE_URL + "/api/login/kakao/")
+        let hostname = window.location.hostname
+        if(hostname !== 'localhost')
+            hostname = 'agrounds.com'
+        window.location.replace(process.env.REACT_APP_BASE_URL + "/api/login/kakao/?hostname=" + hostname)
       }).catch((err)=>{
         console.log(err);
         alert("회원가입 실패. agronds 팀에 문의부탁드립니다.");
@@ -89,7 +92,7 @@ const ExtraInfo = () => {
         <img src={right}/>
       </div>
       {errorNum===0 && selectedPosition ? <CircleBtn title='다음' style={{position:'fixed', bottom:'5vh'}} onClick={openModal}/> : 
-      <CircleBtn title='다음' backgroundColor='#F4F4F4' color='C6C6C6' style={{position:'fixed', bottom:'5vh'}}/>}
+      <CircleBtn title='다음' backgroundColor='#F4F4F4' color='C6C6C6' style={{maxWidth:'500px', position:'fixed', bottom:'5vh'}}/>}
 
       {viewPosition ? <PreferPosition 
         exit={()=>setViewPosition(false)}

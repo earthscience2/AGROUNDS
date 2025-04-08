@@ -13,7 +13,10 @@ const LoadingPage = () => {
     // 들어오고 있으면 token을 api에 전송하여 유저 정보 불러옴
     useEffect(()=>{
         if (token === '0' && type !== 'apple'){
-            window.location.replace(process.env.REACT_APP_BASE_URL+"/api/login/kakao/?hostname=" + window.location.hostname);
+            let hostname = window.location.hostname
+            if(hostname !== 'localhost')
+                hostname = 'agrounds.com'
+            window.location.replace(process.env.REACT_APP_BASE_URL+"/api/login/kakao/?hostname=" + hostname);
         } else {
             setTimeout(loader, 1000 * 1);
         }

@@ -154,7 +154,7 @@ const EssencialInfo = () => {
         <Gender gender='female' isSelected={selectedGender === 'female'} onClick={() => setSelectedGender('female')}/>
       </div>
       {errorNum===0 && nicknameCheck==='success'? <CircleBtn title='다음' style={{position:'fixed', bottom:'5vh'}} onClick={onNext}/> : 
-      <CircleBtn title='다음' backgroundColor='#F4F4F4' color='C6C6C6' style={{position:'fixed', bottom:'5vh'}}/>}
+      <CircleBtn title='다음' backgroundColor='#F4F4F4' color='C6C6C6' style={{maxWidth:'500px', position:'fixed', bottom:'5vh'}}/>}
     </div>
   );
 };

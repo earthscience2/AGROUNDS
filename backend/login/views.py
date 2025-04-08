@@ -81,13 +81,17 @@ class kakao(APIView):
 class kakaoCallback(APIView):
     def get(self, request, format=None):
         client_url = CLIENT_URL
-        if request.query_params.get('hostname') == 'localhost' :
+        hostname = request.query_params.get('hostname')
+        if hostname == "localhost":
             client_url = "http://localhost:3000"
+        else:
+            hostname = "agrounds.com"
+            
         try:
             data = {
                 "grant_type"    :"authorization_code",
                 "client_id"     :KAKAO_CLIENT_ID,
-                "redirect_uri"  :f"{KAKAO_CALLBACK_URI}?hostname={request.query_params.get('hostname')}",
+                "redirect_uri"  :f"{KAKAO_CALLBACK_URI}?hostname={hostname}",
                 "code"          :request.query_params.get("code")
             }
             kakao_token_api = "https://kauth.kakao.com/oauth/token"
@@ -97,8 +101,8 @@ class kakaoCallback(APIView):
             header = {"Authorization":f"Bearer ${access_token}"}
             user_info_from_kakao = requests.get(kakao_user_api, headers=header).json()
             kakao_email = user_info_from_kakao["kakao_account"]["email"]
-        except Exception:
-            return JsonResponse({'error' : '카카오로부터 정보를 가져오지 못하였습니다.'}, status=402)
+        except Exception as e:
+            return JsonResponse({'error' : f'카카오로부터 정보를 가져오지 못하였습니다. : {e}'}, status=402)
 
         # 카카오 서버로부터 가져온 유저 이메일이 우리 서비스에 가입되어 있는지 검사 
         try:
