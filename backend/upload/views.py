@@ -24,6 +24,9 @@ class addMatchInfo(APIView):
                 )
 
         quarter_info = data["quarter_info"]
+        user_code = data["user_code"]
+        match_code = data["match_code"]
+        ground_code = data["ground_code"]
 
         # quarter_info가 리스트인지 검사하고, 문자열이면 변환 시도
         if not isinstance(quarter_info, list):
@@ -87,16 +90,16 @@ class addMatchInfo(APIView):
             })
 
         # ground_code로 ground_name 조회
-        ground_name = get_object_or_404(GroundInfo, ground_code = data["ground_code"]).ground_name
+        ground_name = get_object_or_404(GroundInfo, ground_code = ground_code).ground_name
 
         # 경기 날짜 추출 yyyymmdd 형식
         date_string = data["quarter_info"][0]["match_start_time"]
         dt = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
-        formatted_date = dt.strftime("%Y%m%d")
+        formatted_date = dt.strftime("%Y%m%d%H%M")[2:] #yymmddhhmm 형식
 
         # 분석 코드에서 필요한 quarter_info.json파일 생성 후 s3에 업로드
         upload_quarter_info = {}
-        upload_quarter_info["data_file"] = f"gps/{data['match_code']}/{data['user_code']}/{data['user_code']}_{formatted_date}.txt"
+        upload_quarter_info["data_file"] = f"/home/ubuntu/my_folder/data/edit_data/{user_code}_{match_code}_{formatted_date}_edit.txt"
         upload_quarter_info["ground_name"] = ground_name
         upload_quarter_info["standard"] = data["standard"]
         upload_quarter_info["quarter_info"] = {
