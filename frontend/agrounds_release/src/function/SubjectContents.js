@@ -58,8 +58,10 @@ const NoTeam = () => {
 
   return (
     <NoTeamStyle>
-      <div className='noteamment'>함께할 팀을 찾고<br/>합류해보세요</div>
-      <div className='noteambtn' onClick={() => navigate('/app/jointeam')}>팀 찾기</div>
+      <dib style={{height:'10vh', display:'flex', alignItems: 'center'}}>
+        <div className='noteamment'>함께할 팀을 찾고<br/>합류해보세요</div>
+      </dib>
+      <div className='searchteam' onClick={() => navigate('/app/jointeam')}>팀 찾기</div>
     </NoTeamStyle>
   )
 }
@@ -357,14 +359,13 @@ const NoTeamStyle = styled.div`
     text-align: center;
     font-family: 'Pretendard';
   }
-  .noteambtn{
+  .searchteam{
     background-color: #0EAC6A;
     color: white;
     font-weight: 700;
     font-size: 1.8vh;
-    margin-top: 3vh;
-    margin-bottom: -3vh;
     border-radius: 3vh;
+    margin-top: 2vh;
     font-family: 'Pretendard';
     height: 4vh;
     width: 80%;
@@ -374,7 +375,6 @@ const NoTeamStyle = styled.div`
     align-items: center;
     border: none;
   }
-
 `
 const MyOvrStyle = styled.div`
   width: 100%;

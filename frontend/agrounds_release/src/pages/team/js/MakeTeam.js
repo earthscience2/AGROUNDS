@@ -50,6 +50,7 @@ const MakeTeam = () => {
       .then((res) => {
         console.log(res.data.team_code)
         sessionStorage.setItem('teamCode', res.data.team_code)
+        sessionStorage.setItem('userType', 'coach');
         navigate('/app/completemaketeam');
       })
       .catch((error) => {

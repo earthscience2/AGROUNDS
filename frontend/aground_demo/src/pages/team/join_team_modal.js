@@ -44,7 +44,7 @@ const JoinTeamModal = ({onClose}) => {
             alert('가입되었습니다.');
             sessionStorage.setItem('teamcode', joinTeam);
             sessionStorage.setItem('teamname', teamName);
-            sessionStorage.setItem('usertype', 1)
+            sessionStorage.setItem('usertype', 'player')
             navigate('/MainPage')
         })
         .catch(function(error){

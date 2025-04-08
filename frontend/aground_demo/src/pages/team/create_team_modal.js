@@ -29,7 +29,7 @@ const CreateTeam = ({onClose}) => {
         .then(function(response){
             sessionStorage.setItem('teamcode', response.data.v2_team_code)
             sessionStorage.setItem('teamname', teamName)
-            sessionStorage.setItem('usertype', 0)
+            sessionStorage.setItem('usertype', 'coach')
             
             console.log(response)
             alert(`${teamName}팀을 생성했어요`);
