@@ -11,4 +11,5 @@ const getCoordinate = (data) => {
 const AddMatchInfo = (data) => {
   return client.post('/api/upload/add-match-info/', data)
 }
+
 export {findStadium, getCoordinate, AddMatchInfo};

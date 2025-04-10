@@ -13,18 +13,29 @@ const SetQuarterInfo = () => {
   const navigate = useNavigate();
   const [quarters, setQuarters] = useState([]);
 
-  useEffect(() => {
-    const initial = fieldData.quarter_info.map((q, idx) => {
-      const isValid = q.match_start_time && q.match_end_time && q.status;
-      return {
-        id: idx + 1,
-        data: isValid
-          ? `${q.match_start_time} - ${q.match_end_time} / ${q.status}`
-          : '데이터 없음',
-      };
-    });
+  const formatTime = (value) => {
+    if (!value || typeof value !== 'string') return "??:??";
+  
+    const timePart = value.split(' ')[1];
+    if (!timePart) return "??:??";
+  
+    const [hour, minute] = timePart.split(':');
+    return `${hour}:${minute}`;
+  };
 
-    setQuarters(initial.length > 0 ? initial : [{ id: 1, data: '데이터 없음' }]);
+  
+  useEffect(() => {
+      const initial = fieldData.quarter_info.map((q, idx) => {
+        const isValid = q.match_start_time && q.match_end_time && q.status;
+        return {
+          id: idx + 1,
+          data: isValid
+            ? `${formatTime(q.match_start_time)} - ${formatTime(q.match_end_time)} / ${q.status}`
+            : '데이터 없음',
+        };
+      });
+    
+      setQuarters(initial.length > 0 ? initial : [{ id: 1, data: '데이터 없음' }]);
   }, [fieldData]);
 
   const handleAddQuarter = () => {
@@ -119,6 +130,7 @@ const SetQuarterInfoStyle = styled.div`
 
   .btn {
     width: 100%;
+    max-width: 500px;
     position: fixed;
     bottom: 5vh;
   }
