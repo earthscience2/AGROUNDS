@@ -37,7 +37,7 @@ const Footer = () => {
         />
         <p className={`title ${isActive('/app/analysis') ? 'active' : ''}`}>경기분석</p>
       </div>
-      <div className='box' onClick={() => navigate('/app/findstadium')}>
+      <div className='box' onClick={triggerUpload}>
         <img
           className='icon'
           src={isActive('/app/findstadium') ? connectBlack : connectGrey}

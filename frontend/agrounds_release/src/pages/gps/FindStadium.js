@@ -13,6 +13,8 @@ const FindStadium = () => {
   const [stadiumResult, setStadiumResult] = useState([]);
   const {fieldData, updateFieldData} = useFieldContext();
 
+  
+
   // useEffect(() => {
   //   window.getMatchDataFromFlutter = (match_code, user_code, match_date, url) => {
   //     if(sessionStorage.getItem('user_code') !== user_code)
@@ -30,6 +32,7 @@ const FindStadium = () => {
     findStadium(data)
     .then((response) => {
       setStadiumResult(response.data.result)
+      console.log(response.data)
     })
     .catch((error) => {
       console.log(error)
