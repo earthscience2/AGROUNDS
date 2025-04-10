@@ -6,7 +6,7 @@ import TimePicker from '../../components/TimePicker';
 import check from '../../assets/check.png';
 import Circle_common_btn from '../../components/Circle_common_btn';
 import { useFieldContext } from '../../function/Context';
-
+import { createDateTimeFromLocalStorage } from '../../function/ Conversion';
 const SetQuarterDetail = () => {
   const location = useLocation();
   const state = location.state;
@@ -31,10 +31,10 @@ const SetQuarterDetail = () => {
     updatedQuarterInfo[quarterIndex] = {
       ...updatedQuarterInfo[quarterIndex],
       quarter_name: `${state?.quarter}쿼터`,
-      match_start_time: playingSTime,
-      match_end_time: playingETime,
-      start_time: attendanceSTime,
-      end_time: attendanceETime,
+      match_start_time: createDateTimeFromLocalStorage(playingSTime),
+      match_end_time: createDateTimeFromLocalStorage(playingETime),
+      start_time: createDateTimeFromLocalStorage(attendanceSTime),
+      end_time: createDateTimeFromLocalStorage(attendanceETime),
       status: attendanceStatus,
     };
   
@@ -44,7 +44,7 @@ const SetQuarterDetail = () => {
   
     navigate('/app/set-quarter-info');
   };
-  
+  console.log(playingETime)
   return (
     <SetQuarterDetailStyle>
       <BackTitle_Btn navTitle={`${state?.quarter}쿼터`} />

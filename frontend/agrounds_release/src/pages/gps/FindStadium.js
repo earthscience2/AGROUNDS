@@ -12,11 +12,9 @@ const FindStadium = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [stadiumResult, setStadiumResult] = useState([]);
   const {fieldData, updateFieldData} = useFieldContext();
-  const [params, setParams] = ({
+  const [params, setParams] = useState({
     userCode: "",
     matchCode: "",
-    startTime: "",
-    endTime: ""
   })
   
 
@@ -25,9 +23,9 @@ const FindStadium = () => {
     setParams({
       userCode: searchParams.get("user_code") || "",
       matchCode: searchParams.get("match_code") || "",
-      startTime: searchParams.get("start_time") || "",
-      endTime: searchParams.get("end_time") || "",
     })
+    localStorage.setItem('startTime', searchParams.get("start_time") || "")
+    localStorage.setItem('endTime', searchParams.get("end_time") || "")
   }, [])
   
   const data = {
@@ -38,7 +36,6 @@ const FindStadium = () => {
     findStadium(data)
     .then((response) => {
       setStadiumResult(response.data.result)
-      console.log(response.data)
     })
     .catch((error) => {
       console.log(error)

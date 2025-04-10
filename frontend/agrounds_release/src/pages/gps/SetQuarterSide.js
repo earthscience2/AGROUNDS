@@ -14,12 +14,22 @@ const SetQuarterSide = () => {
   const [quarters, setQuarters] = useState([]);
   
   console.log(fieldData)
+  const formatTime = (value) => {
+    if (!value || typeof value !== 'string') return "??:??";
+  
+    const timePart = value.split(' ')[1]; 
+    if (!timePart) return "??:??";
+  
+    const [hour, minute] = timePart.split(':');
+    return `${hour}:${minute}`;
+  };
+
   useEffect(() => {
     const initial = fieldData.quarter_info.map((q, idx) => {
       const isValid = q.match_start_time && q.match_end_time && q.status;
       return {
         id: idx + 1,
-        data: isValid ? `${q.match_start_time} - ${q.match_end_time} / ${q.status}` : '데이터 없음',
+        data: isValid ? `${formatTime(q.match_start_time)} - ${formatTime(q.match_end_time)} / ${q.status}` : '데이터 없음',
         home: q.home,
       };
     });
@@ -32,7 +42,6 @@ const SetQuarterSide = () => {
   };
 
   const handleEnd = () => {
-    
     console.log(fieldData)
     AddMatchInfo(fieldData)
     .then((response) => {
