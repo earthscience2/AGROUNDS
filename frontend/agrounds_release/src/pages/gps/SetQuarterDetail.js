@@ -107,6 +107,7 @@ const SetQuarterDetailStyle = styled.div`
   width: 100%;
   .btn {
     width: 100%;
+    max-width: 500px;
     position: fixed;
     bottom: 5vh;
   }

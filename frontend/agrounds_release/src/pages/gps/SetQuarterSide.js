@@ -88,6 +88,7 @@ const SetQuarterSideStyle = styled.div`
   }
   .btn {
     width: 100%;
+    max-width: 500px;
     position: fixed;
     bottom: 10vh;
   }

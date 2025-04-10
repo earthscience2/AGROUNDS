@@ -93,7 +93,7 @@ const CampSideStyle = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-
+  max-width: 500px;
   .rest {
     width: 90%;
     height: 5vh;
@@ -112,6 +112,7 @@ const CampSideStyle = styled.div`
     width: 100%;
     position: fixed;
     bottom: 10vh;
+    max-width: 500px;
   }
 
   .selectbox {
@@ -119,13 +120,17 @@ const CampSideStyle = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 100%;
     margin-top: 5vh;
+    max-width: 500px;
+    width: 100%;
+
 
     & > img {
       width: 90%;
       height: 28vh;
       position: absolute;
+      max-width: 450px;
+      
     }
 
     .leftbox {

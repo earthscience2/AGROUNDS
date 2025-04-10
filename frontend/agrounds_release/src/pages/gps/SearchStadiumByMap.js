@@ -129,6 +129,7 @@ const MapContainer = styled.div`
 
 const Modal = styled.div`
   width: 100%;
+  max-width: 500px;
   height: 27vh;
   display: flex;
   flex-direction: column;

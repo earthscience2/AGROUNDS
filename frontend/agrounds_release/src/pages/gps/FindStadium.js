@@ -12,17 +12,23 @@ const FindStadium = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [stadiumResult, setStadiumResult] = useState([]);
   const {fieldData, updateFieldData} = useFieldContext();
-
+  const [params, setParams] = ({
+    userCode: "",
+    matchCode: "",
+    startTime: "",
+    endTime: ""
+  })
   
 
-  // useEffect(() => {
-  //   window.getMatchDataFromFlutter = (match_code, user_code, match_date, url) => {
-  //     if(sessionStorage.getItem('user_code') !== user_code)
-  //       // 에러 처리
-  //       return;
-    
-  //   }
-  // }, [])
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setParams({
+      userCode: searchParams.get("user_code") || "",
+      matchCode: searchParams.get("match_code") || "",
+      startTime: searchParams.get("start_time") || "",
+      endTime: searchParams.get("end_time") || "",
+    })
+  }, [])
   
   const data = {
     'keyword': searchTerm
@@ -47,8 +53,8 @@ const FindStadium = () => {
   const handleNext = (ground_code) => {
     navigate('/app/search-stadium-by-map', {state: {groundCode: ground_code}})
     const data = {
-      user_code: sessionStorage.getItem('userCode'),
-      match_code: 'aaa' //matchcode session에 새로 set, flutter 연동 필요
+      user_code: params.userCode,
+      match_code: params.matchCode
     }
     updateFieldData(data);
   }
