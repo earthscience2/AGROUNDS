@@ -51,6 +51,15 @@ import ErrorPage from './pages/ErrorPage';
 import InfoFix from './pages/mypage/js/InfoFix';
 import HighlightVideo from './pages/video/js/HighlightVideo';
 import TeamRank from './pages/main/js/TeamRank';
+import CampSide from './pages/gps/CampSide';
+import SelectRest from './pages/gps/SelectRest';
+import FindStadium from './pages/gps/FindStadium';
+import SetQuarterInfo from './pages/gps/SetQuarterInfo';
+import SetQuarterDetail from './pages/gps/SetQuarterDetail';
+import SearchStadiumByMap from './pages/gps/SearchStadiumByMap';
+import { FieldProvider } from './function/Context';
+import DirectInputStadium from './pages/gps/DirectInputStadium';
+import SetQuarterSide from './pages/gps/SetQuarterSide';
 
 
 const useBodyClass = (className) => {
@@ -179,6 +188,14 @@ const router = createBrowserRouter([
       { path: "errorpage", element: <ErrorPage /> },
       { path: "infofix", element: <InfoFix /> },
       { path: "teamrank", element: <TeamRank /> },
+      { path: "campside", element: <CampSide /> },
+      { path: "selectrest", element: <SelectRest /> },
+      { path: "findstadium", element: <FindStadium /> },
+      { path: "set-quarter-info", element: <SetQuarterInfo /> },
+      { path: "set-quarter-detail", element: <SetQuarterDetail /> },
+      { path: "search-stadium-by-map", element: <SearchStadiumByMap /> },
+      { path: "direct-input-stadium", element: <DirectInputStadium /> },
+      { path: "set-quarter-side", element: <SetQuarterSide /> },
     ],
   },
 ]);
@@ -186,6 +203,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <FieldProvider>
+      <RouterProvider router={router} />
+    </FieldProvider>
   </React.StrictMode>
 );
