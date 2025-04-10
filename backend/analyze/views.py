@@ -280,4 +280,5 @@ class getOverall(APIView):
             }
         }
 
-        return Response(result)
+        # return Response(result)
+        return Response({"error" : "데이터가 존재하지 않습니다."}, status=404)

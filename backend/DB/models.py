@@ -258,6 +258,7 @@ class UserAnalMatch(models.Model):
 class GroundInfo(models.Model):
     ground_code = models.CharField(max_length=45, primary_key=True)
     ground_name = models.CharField(max_length=45)
+    ground_address = models.CharField(max_length=45)
     corner_gps = models.JSONField()
     corner_utm = models.JSONField()
     center = models.JSONField()
