@@ -83,8 +83,8 @@ class getPlayerVideoList(APIView):
         
         video_infos = VideoInfo.objects.filter(user_code=user_code, type='player')
 
-        if not video_infos.exists():
-            return self.returnExampleData()
+        # if not video_infos.exists():
+        #     return self.returnExampleData()
         
         serializer = Video_List_Serializer(video_infos, many = True)
 
@@ -160,8 +160,8 @@ class getTeamVideoList(APIView):
 
         team_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='team')
 
-        if not team_videos.exists():
-            return self.returnExampleData()
+        # if not team_videos.exists():
+        #     return self.returnExampleData()
 
         serializer = Video_List_Serializer(team_videos, many=True)
 
@@ -239,8 +239,8 @@ class getFullVideoList(APIView):
 
         full_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='full')
 
-        if not full_videos.exists():
-            return self.returnExampleData()
+        # if not full_videos.exists():
+        #     return self.returnExampleData()
         
         serializer = Video_List_Serializer(full_videos, many=True)
 
@@ -356,7 +356,7 @@ class getHighlightVideoList(APIView):
             },
         ]
 
-        return Response({'result':result})
+        return Response({'result':[]})
 
 class getMatchVideoInfo(APIView):
     def post(self, request):
@@ -384,8 +384,8 @@ class getMatchVideoInfo(APIView):
             video_info.filter(user_code=user_code)
 
         if not video_info.exists():
-            # return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
-            return self.returnExampleData(type=type)
+            return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
+            # return self.returnExampleData(type=type)
 
         video_info = video_info.first()
         match_info = get_object_or_404(UserMatchInfo, match_code=match_code)
