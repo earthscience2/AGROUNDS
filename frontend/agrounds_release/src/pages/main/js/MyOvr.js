@@ -10,6 +10,7 @@ const MyOvr = () => {
   const userCode = sessionStorage.getItem('userCode');
   const [ovrData, setOvrData] = useState([]);
   const [RaderData, setRaderData] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     getOverallApi({'user_code' : userCode})
@@ -18,25 +19,31 @@ const MyOvr = () => {
         setOvrData(response.data);
         setRaderData(Object.values(response.data.point));
       } else {
-        console.log("response.data.point가 존재하지 않습니다.");
         setRaderData([]);
       }
     })
     .catch((error) => {
-      console.log(error);
+      setError(true);
     })
   }, [])
 
   return (
     <div className="myovr">
       <Back_btn />
-      <Login_title
-        title="나의 OVR"
-        explain={"경기 데이터를 기반으로 설정된 \n현재 나의 능력치를 확인하고 더 발전해보세요"}
-      />
-      <div style={{marginTop: '-10vh'}}></div>
-      <p className='rader-rate'>{RaderData[0]}</p>
-      {RaderData && <RayderChart data={RaderData} /> }
+      {error 
+      ? 
+        <Login_title title="나의 OVR" />
+      :
+        <Login_title title="나의 OVR" explain={"경기 데이터를 기반으로 설정된 \n현재 나의 능력치를 확인하고 더 발전해보세요"}
+        />
+      }
+      
+      <div style={{marginTop: '-5vh'}}></div>
+      {error 
+      ? <p className='rader-rate' style={{color: '#878D96'}}>{RaderData[0]}</p>
+      : <p className='rader-rate' >{RaderData[0]}</p>
+      }
+      {RaderData && <RayderChart data={RaderData} error={error}/> }
     
       <div className="avescorebox">
         <Main_Subject BG="white" color="black" arrow={false}>
