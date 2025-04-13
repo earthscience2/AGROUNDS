@@ -40,23 +40,23 @@ const MyOvr = () => {
       
       <div style={{marginTop: '-5vh'}}></div>
       {error 
-      ? <p className='rader-rate' style={{color: '#878D96'}}>{RaderData[0]}</p>
+      ? <p className='rader-rate-e' style={{color: '#878D96'}}>{RaderData[0]}</p>
       : <p className='rader-rate' >{RaderData[0]}</p>
       }
       {RaderData && <RayderChart data={RaderData} error={error}/> }
     
       <div className="avescorebox">
         <Main_Subject BG="white" color="black" arrow={false}>
-          {ovrData.point_trend && <AverageScore data={ovrData.point_trend}/>}
+          <AverageScore data={ovrData.point_trend} error={error}/>
         </Main_Subject>
         <Main_Subject BG="white" color="black" arrow={false}>
-          {ovrData && <AttackAve data={ovrData}/>}
+          <AttackAve data={ovrData} error={error}/>
         </Main_Subject>
       </div>
    
       <div className="myovrchartbox">
         <Main_Subject title="OVR지수 추세" BG="white" color="black" arrow={true}>
-          {RaderData && <OvrBarChart data={RaderData}/>}
+          <OvrBarChart data={RaderData} error={error}/>
         </Main_Subject>
       </div>
     </div>

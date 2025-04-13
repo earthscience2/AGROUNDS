@@ -15,8 +15,15 @@
     font-size: 3vh;
     font-weight: 700;
     position: relative;
-    top: 23.5vh;
+    top: 25.5vh;
     right: 1vh;
+  }
+  .rader-rate-e{
+    font-size: 3.5vh;
+    font-weight: 700;
+    position: relative;
+    top: 26.5vh;
+    right: .8vh;
   }
   .avescorebox{
     @include display(flex, row, center, center);
