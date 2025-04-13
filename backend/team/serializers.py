@@ -88,3 +88,18 @@ class User_Team_Serializer(serializers.ModelSerializer):
         if UserTeam.objects.filter(user_code=value).exists():
             raise serializers.ValidationError(f"user_code({value})는 이미 팀에 소속되어 있습니다.")
         return value
+    
+    def create(self, validated_data):
+        # UserTeam 인스턴스 저장
+        user_team = super().create(validated_data)
+
+        # 해당 user의 타입을 player로 변경
+        user_code = validated_data['user_code']
+        try:
+            user = UserInfo.objects.get(user_code=user_code)
+            user.user_type = 'player'
+            user.save()
+        except UserInfo.DoesNotExist:
+            raise serializers.ValidationError(f"user_code({user_code})에 해당하는 유저가 존재하지 않습니다.")
+
+        return user_team

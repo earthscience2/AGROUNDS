@@ -20,8 +20,8 @@ class getUserMatchList(APIView):
         match_codes = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
         user_matchs = UserMatchInfo.objects.filter(match_code__in=match_codes)
 
-        if not user_matchs.exists():
-            return self.returnExampleData()
+        # if not user_matchs.exists():
+        #     return self.returnExampleData()
         
         serializer = User_Match_Info_Serializer(instance=user_matchs, user_code=user_code, many=True)
 
@@ -139,8 +139,8 @@ class getTeamMatchList(APIView):
         match_codes = TeamMatch.objects.filter(team_code = team_code).values_list('match_code', flat=True)
         team_matchs = TeamMatchInfo.objects.filter(match_code__in = match_codes)
 
-        if not team_matchs.exists():
-            return self.returnExampleData()
+        # if not team_matchs.exists():
+        #     return self.returnExampleData()
 
         serializer = Team_Match_Info_Serializer(team_matchs, many = True)
 
