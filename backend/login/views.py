@@ -30,6 +30,11 @@ from jwt.algorithms import RSAAlgorithm
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 
+import traceback
+import logging
+
+logger = logging.getLogger('django')
+
 env = environ.Env(DEBUG=(bool, True)) #환경변수를 불러올 수 있는 상태로 세팅
 
 # 클라이언트 / 서버 주소
@@ -117,7 +122,7 @@ class kakaoCallback(APIView):
         return redirect(client_url+"/app/loading-for-login/?code="+login.getTokensForUser(login, user)['access'])
 
 # 카카오 로그인 - 회원가입
-class kakaoSignup(APIView):
+class kakaoSignup_(APIView):
     """
     json 형식
     {
@@ -148,6 +153,41 @@ class kakaoSignup(APIView):
         except KeyError as e:
             return JsonResponse({"error": f"Missing required field: {str(e)}"}, status=400)
         except Exception as e:
+            logger.error(f"[카카오 회원가입] 예외 발생: {str(e)}\n{traceback.format_exc()}")
+            return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
+
+class kakaoSignup(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            logger.info(f"[카카오 회원가입] 수신된 데이터: {request.data}")
+            
+            data = request.data
+            decoded_string = unquote(data["user_id"])
+            logger.info(f"[카카오 회원가입] 디코딩된 user_id: {decoded_string}")
+
+            user_id = cryptographysss.decrypt_aes(decoded_string)
+            logger.info(f"[카카오 회원가입] 복호화된 user_id: {user_id}")
+
+            data["user_id"] = user_id
+            data["password"] = "0"
+            data["login_type"] = "kakao"
+
+            serializer = User_Info_Serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            new_user = serializer.data
+            token = login.getTokensForUser(login, SimpleNamespace(**new_user))['access']
+            logger.info(f"[카카오 회원가입] 회원가입 완료. 토큰 발급: {token}")
+
+            return Response({"code": token}, status=status.HTTP_200_OK)
+
+        except KeyError as e:
+            logger.warning(f"[카카오 회원가입] 필수 필드 누락: {str(e)}")
+            return JsonResponse({"error": f"Missing required field: {str(e)}"}, status=400)
+
+        except Exception as e:
+            logger.error(f"[카카오 회원가입] 예기치 못한 에러: {str(e)}\n{traceback.format_exc()}")
             return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
 # 애플 로그인 - callback view
