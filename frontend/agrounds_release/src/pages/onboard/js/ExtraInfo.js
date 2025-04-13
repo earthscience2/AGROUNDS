@@ -17,8 +17,8 @@ const ExtraInfo = () => {
 
   const [viewPosition, setViewPosition] = useState(false);
 
-  const [userWeight, setUserWeight] = useState();
-  const [userHeight, setUserHeight] = useState();
+  const [userWeight, setUserWeight] = useState('');
+  const [userHeight, setUserHeight] = useState('');
   const [selectedPosition, setSelectedPosition] = useState(null);
 
   const [errorNum, setErrorNum] = useState(1); //0: 정상, 1: 몸무게 에러, 2: 신장 에러, 3: 포지션 에러
@@ -52,6 +52,17 @@ const ExtraInfo = () => {
     }
   }, [userWeight, userHeight, selectedPosition])
 
+  const weightChange = (e) => {
+    const input = e.target.value;
+    const onlyNums = input.replace(/[^0-9]/g, '');
+    setUserWeight(onlyNums);
+  }
+
+  const heightChange = (e) => {
+    const input = e.target.value;
+    const onlyNums = input.replace(/[^0-9]/g, '');
+    setUserHeight(onlyNums);
+  }
   const onNext = () => {
     if(errorNum===0 && selectedPosition) {
       const formData = {
@@ -63,8 +74,6 @@ const ExtraInfo = () => {
   
       const mergedFormData = {...receivedFormData, ...formData};
   
-      console.log(mergedFormData);
-
       client.post('/api/login/kakao/signup/', mergedFormData)
       .then((res)=>{
         console.log(res);
@@ -83,9 +92,9 @@ const ExtraInfo = () => {
     <div className='extraBG'>
       <Back_btn />
       <Login_title title='추가정보 입력' explain='분석을 위해 필요한 정보로 외부에 공개되지 않아요.' />
-      <Login_input borderRadius='15px 15px 0 0' placeholder='몸무게' type='number' value={userWeight} onChange={(event)=>setUserWeight(event.target.value)}/>
+      <Login_input borderRadius='15px 15px 0 0' placeholder='몸무게' type='number' step="1" inputMode="numeric"value={userWeight} onChange={weightChange}/>
       <div style={{height: '0.5vh'}}/>
-      <Login_input borderRadius='0' placeholder='키' type='number' value={userHeight} onChange={(event)=>setUserHeight(event.target.value)}/>
+      <Login_input borderRadius='0' placeholder='키' type='number' step="1" inputMode="numeric" value={userHeight} onChange={heightChange}/>
       <div style={{height: '0.5vh'}}/>
       <div className='prefpo' onClick={() => setViewPosition(true)}>
         <div style={selectedPosition ? {} : {color:'#C1C7CD'}}>{selectedPosition || '선호 포지션'}</div>
