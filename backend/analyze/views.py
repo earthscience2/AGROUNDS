@@ -280,5 +280,7 @@ class getOverall(APIView):
             }
         }
 
-        # return Response(result)
+        if data['user_code'] == 'u_61143evsqg32' :
+            return Response(result)
+        
         return Response({"error" : "데이터가 존재하지 않습니다."}, status=404)
