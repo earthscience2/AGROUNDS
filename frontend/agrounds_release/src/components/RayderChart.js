@@ -20,10 +20,10 @@ ChartJS.register(
   Legend,
 );
 
-const RayderChart = ({ data, rate }) => {
+const RayderChart = ({ data, error}) => {
   const chartRef = useRef();
 
-  const convertedData = data.map(value => value * 10);
+  const convertedData = error ? [50, 50, 50, 50, 50, 50] : data.map(value => value * 10);
 
   const chartData = {
     labels: ['평점', '스프린트', '가속도', '스피드', '적극성', '체력'],
@@ -31,8 +31,8 @@ const RayderChart = ({ data, rate }) => {
       {
         label: '',
         data: convertedData,
-        backgroundColor: 'rgba(0, 255, 0, 0.2)',
-        borderColor: '#10CC7E80',
+        backgroundColor: error ? 'rgba(193,199,205, 0.2)' : 'rgba(0, 255, 0, 0.2)',
+        borderColor: error ? '#C1C7CD' : '#10CC7E80',
         borderWidth: 2,
         pointBackgroundColor: 'rgba(0,0,0,0)', 
         pointBorderColor: 'rgba(0, 0, 0, 0)', 
@@ -91,6 +91,7 @@ const RayderChart = ({ data, rate }) => {
 
   return (
     <RaderStyle>
+
       <Radar ref={chartRef} data={chartData} options={chartOptions} />
     </RaderStyle>
   );
