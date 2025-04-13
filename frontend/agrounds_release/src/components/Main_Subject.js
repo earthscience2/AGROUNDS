@@ -28,6 +28,7 @@ const MainSubjectStyle = styled.div`
   flex-direction: column;
   align-items: center;
   border-radius: 2vh;
+  font-family: 'Pretendard';
   .titlebox{
     width: 80%;
     display: flex;
@@ -36,7 +37,7 @@ const MainSubjectStyle = styled.div`
     align-items: center;
     .title{
       font-size: 1.9vh;
-      font-weight: 500;
+      font-weight: 700;
       margin: 2vh 0 0vh 0;
     }
     .rightarrow{
