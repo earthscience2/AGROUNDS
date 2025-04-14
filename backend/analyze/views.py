@@ -29,10 +29,11 @@ class getAnalyzeResult(APIView):
         user_anal_match = UserAnalMatch.objects.filter(match_code=match_code, user_code=user_code)
 
         if not user_anal_match.exists():
-            filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
-            with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
-                data = json.load(file)
-                return Response(data)
+            # filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
+            # with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
+            #     data = json.load(file)
+            #     return Response(data)
+            return Response({'error':'데이터가 없습니다.'}, status=404)
 
         user_anal_match = sorted(
             user_anal_match,
@@ -87,7 +88,8 @@ class getTeamAnalyzeResult(APIView):
         try:
             team_match_info = TeamMatchInfo.objects.get(match_code=match_code)
         except TeamMatchInfo.DoesNotExist:
-            return self.returnExampleData()
+            return Response({'error' : '데이터가 없습니다.'}, status=404)
+            # return self.returnExampleData()
         
         user_anal_matchs = UserAnalMatch.objects.filter(match_code=match_code)
 
