@@ -13,12 +13,40 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const OvrBarChart = ({ data }) => {
+const OvrBarChart = ({ data, error }) => {
   const chartRef = useRef();
+
+  useEffect(() => {
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+    };
+  }, []);
+
+  const labels = ['체력', '순발력', '스피드', '가속도', '스프린트'];
+
+  if (error) {
+    return (
+      <ChartContainer>
+        <PlaceholderContainer>
+          {labels.map((label, idx) => (
+            <BarBoxWrapper key={idx}>
+              <BarBox>
+                <BarValue>-</BarValue>
+              </BarBox>
+              <BarLabel>{label}</BarLabel>
+            </BarBoxWrapper>
+          ))}
+        </PlaceholderContainer>
+      </ChartContainer>
+
+    );
+  }
 
   const convertedData = data.map(value => value * 10);
   const chartData = {
-    labels: ['체력', '순발력', '스피드', '가속도', '스프린트'],
+    labels: labels,
     datasets: [
       {
         label: '',
@@ -32,12 +60,8 @@ const OvrBarChart = ({ data }) => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: false,
-      },
+      legend: { display: false },
+      title: { display: false },
       dataLabelPlugin: {
         afterDatasetsDraw: (chart) => {
           const { ctx } = chart;
@@ -86,14 +110,6 @@ const OvrBarChart = ({ data }) => {
     },
   };
 
-  useEffect(() => {
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
-      }
-    };
-  }, []);
-
   return (
     <ChartContainer>
       <Bar ref={chartRef} data={chartData} options={chartOptions} />
@@ -105,7 +121,43 @@ export default OvrBarChart;
 
 const ChartContainer = styled.div`
   width: 90%;
-  margin: 0;
+  margin: 3vh 0 0 0;
   border: none;
   margin-top: 1.5vh;
+`;
+
+const PlaceholderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1vw;
+`;
+
+const BarBoxWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const BarBox = styled.div`
+  width: 100%;
+  height: 7vh;
+  background-color: #f2f4f8;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 16px;        
+`;
+
+const BarValue = styled.div`
+  font-size: 1.7vh;
+  font-weight: bold;
+  color: black;
+`;
+
+const BarLabel = styled.div`
+  margin-top: 2vh;
+  font-size: 1.5vh;
+  color: #525252;
+  text-align: center;
 `;

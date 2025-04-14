@@ -13,10 +13,10 @@ import {
 } from 'chart.js';
 
 ChartJS.register(
-  LineElement, 
+  LineElement,
   PointElement,
-  LinearScale, 
-  CategoryScale, 
+  LinearScale,
+  CategoryScale,
   Filler,
   Title,
   Tooltip,
@@ -24,29 +24,24 @@ ChartJS.register(
 );
 
 const CustomLineChart = ({ data, speed }) => {
-  const LineColor = () => {
-    if(data[4] > data[3]){
-      return '#10CC7E';
-    }else {
-      return '#EC5858';
-    }
-  }
+  const isEmpty = !data || data.length !== 5;
+
+  const placeholderData = [0, 0, 0, 0, 0]; 
+
   const lineChartData = {
-    labels: ['_','_','_','_','_'] ,
+    labels: ['_', '_', '_', '_', '_'],
     datasets: [
       {
         label: '_',
-        data: data, 
-        borderColor: LineColor,
+        data: isEmpty ? placeholderData : data.map((value) => value * 10),
+        borderColor: isEmpty ? 'rgba(0,0,0,0)' : data[4] > data[3] ? '#10CC7E' : '#EC5858',
         borderWidth: 2,
-        backgroundColor: 'rgba(206, 212, 218, 0.2)', 
-        tension: .3, 
+        backgroundColor: 'rgba(0,0,0,0)',
+        tension: 0.3,
         fill: false,
-        pointRadius: 0, 
+        pointRadius: 0,
         pointHoverRadius: 0,
-        color: '#FFFFFF'
       },
-      
     ],
   };
 
@@ -54,29 +49,31 @@ const CustomLineChart = ({ data, speed }) => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: false, 
-      },
-      datalabels: {
-        display: false, 
-      }
+      legend: { display: false },
+      tooltip: { enabled: false },
     },
     scales: {
       x: {
-        display: false,
-      },
-      y: {
-        display: true, 
-        ticks: {
-          display: false, 
-        },
+        display: true,
         grid: {
-          drawBorder: false, 
-          drawOnChartArea: true, 
-          drawTicks: false, 
+        drawBorder: true,       
+        drawOnChartArea: false,
+        drawTicks: false,        
+      },
+        ticks: {
+          display: false,
+        },
+       },
+      y: {
+        display: true,
+        min: 0,
+        max: 100,
+        ticks: { display: false },
+        grid: {
+          drawBorder: false,
+          drawOnChartArea: !isEmpty,
+          drawTicks: false,
+          color: '#E0E0E0',
         },
       },
     },
@@ -85,21 +82,51 @@ const CustomLineChart = ({ data, speed }) => {
   return (
     <div style={{ width: '100%', height: '6vh', position: 'relative' }}>
       <Line data={lineChartData} options={lineChartOptions} />
-      <div
-        style={{
-          position: 'absolute',
-          top: '-10%',
-          right: '-5%',
-          transform: 'translateY(-50%)',
-          fontSize: '1.8vh',
-          color: '#525252',
-          fontWeight: 'bold',
-        }}
-      >
-          {speed ? data[4] : data[4] * 10 || "N/A" }
-      </div>
+
+      {isEmpty && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '8%',
+            right: '8%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            transform: 'translateY(-50%)',
+          }}
+        >
+          {Array.from({ length: 10 }).map((_, i) => (
+            <div
+              key={i}
+              style={{
+                height: '2px',
+                backgroundColor: '#DADADA',
+                width: '7%',
+                borderRadius: '2px',
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {!isEmpty && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '-10%',
+            right: '-5%',
+            transform: 'translateY(-50%)',
+            fontSize: '1.8vh',
+            color: '#525252',
+            fontWeight: 'bold',
+          }}
+        >
+          {speed ? data[4] : data[4] * 10 || 'N/A'}
+        </div>
+      )}
     </div>
   );
 };
+
 
 export default CustomLineChart;

@@ -169,20 +169,23 @@ const RecentMatchS = ({logo1, logo2}) => {
 };
 
 
-const AverageScore = ({data}) => {
+const AverageScore = ({data, error}) => {
   const [matchData, setMatchData] = useState([]);
   const [recentData, setRecentData] = useState([]);
   
   useEffect(() => {
     setMatchData(data || []);
-    setRecentData(data.recent_match || []);
+    setRecentData(data?.recent_match || []);
   }, [data])
 
   return(
     <AverageScoreStyle>
       <p className='title'>평점지수 추이</p>
       <div className='scorebox'>
-        <p className='score'>{matchData.average_point}</p>
+        {error 
+          ? <p className='score'>0</p>
+          : <p className='score'>{matchData.average_point}</p>
+        } 
         <p className='scoretitle'>평균 평점</p>
       </div>
 
@@ -205,14 +208,14 @@ const AverageScore = ({data}) => {
   )
 }
 
-const AttackAve = ({data}) => {
+const AttackAve = ({data, error}) => {
   const [attackData, setAttackData] = useState([]);
   const [defenseData, setDefenseData] = useState([]);
 
 
   useEffect(() => {
-    setAttackData(data.attack_trend);
-    setDefenseData(data.defense_trend);
+    setAttackData(data?.attack_trend);
+    setDefenseData(data?.defense_trend);
     
   }, [data])
 
@@ -221,20 +224,20 @@ const AttackAve = ({data}) => {
     <AttackAveStyle>
       <p className='title'>공격지수 추이</p>
       <div className='chart'>
-        {attackData && <LineChart data={attackData}/>}
+        <LineChart data={attackData}/>
       </div>
       <p className='title'>수비지수 추이</p>
       <div className='chart'>
-        {defenseData && <LineChart data={defenseData}/>}
+        <LineChart data={defenseData}/>
       </div>
     </AttackAveStyle>
   )
 }
 
-const OvrBarChart = ({data}) => {
+const OvrBarChart = ({data, error}) => {
   return(
     <OvrBarChartStyle>
-      <BarChart data={data}/>
+      <BarChart data={data} error={error}/>
     </OvrBarChartStyle> 
   )
 }
@@ -609,4 +612,5 @@ const OvrBarChartStyle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `
