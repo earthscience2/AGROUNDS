@@ -12,8 +12,10 @@ import { PositionDotColor } from '../../../function/PositionColor';
 
 const MemberManage = () => {
   const navigate = useNavigate();
+  const url = new URL(window.location.href);
+  const tab = url.searchParams.get('activeTab');
 
-  const [activeTab, setActiveTab] = useState("팀원");
+  const [activeTab, setActiveTab] = useState(tab||"팀원");
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
@@ -92,6 +94,7 @@ const MemberManage = () => {
                 onClick={() =>
                   navigate("/app/userinfo", { state: { userCode: player.user_code } })
                 }
+
               />
             ))
           ) : (

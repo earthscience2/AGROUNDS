@@ -254,7 +254,6 @@ class AppleLoginCallback(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=400)
         
-
 # 애플 로그인 - 회원가입
 class AppleSignup(APIView):
     def post(self, request, *args, **kwargs):
