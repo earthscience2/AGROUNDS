@@ -109,7 +109,7 @@ class VideoInfo(models.Model):
     type = models.CharField(max_length=20, null=True, blank=True)
     title = models.CharField(max_length=45)
     date = models.DateField()
-    path = models.CharField(max_length=100, null=True)
+    path = models.JSONField(null=True, blank=True)
 
     class Meta:
         managed = False

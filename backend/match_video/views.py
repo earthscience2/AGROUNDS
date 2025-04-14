@@ -402,8 +402,10 @@ class getMatchVideoInfo(APIView):
                 "match_location" : match_location,
                 "date" : match_date,
                 "thumbnail" : thumnails[0],
-                "link" : get_link(video_info, quarter),
-                "download_link" : get_download_link(video_info, quarter)
+                # "link" : get_link(video_info, quarter),
+                # "download_link" : get_download_link(video_info, quarter)
+                "link" : video_info.path.get(quarter),
+                "download_link" : ""
             }
             result.append(video_json)
             

@@ -38,9 +38,9 @@ class Video_Info_Serializer(serializers.ModelSerializer):
     def get_thumbnail(self, obj):
         return get_file_url('video/thumbnail/thumbnail1.png')
 
-    def get_link(self, obj):
+    def get_link_(self, obj):
         path = obj.path
-        if path.startswith("http"):
+        if path is not None:
             return path
         elif path != '':
             return get_file_url(path)
