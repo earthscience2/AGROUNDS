@@ -1,7 +1,7 @@
 import React from 'react';
 import YouTube from 'react-youtube';
 
-const VideoPlayer = ({ url }) => {
+const VideoPlayer = ({ url, height='390', width='640' }) => {
   // YouTube URL에서 비디오 ID 추출
   const getVideoId = (url) => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -12,8 +12,8 @@ const VideoPlayer = ({ url }) => {
   const videoId = getVideoId(url);
 
   const opts = {
-    height: '390',
-    width: '640',
+    height: height,
+    width: width,
     playerVars: {
       autoplay: 0,
     },

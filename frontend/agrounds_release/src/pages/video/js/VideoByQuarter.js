@@ -154,8 +154,8 @@ const VideoByQuarter = () => {
       {videoData
         .filter((_, index) => activeTab === `${index + 1}쿼터`)
         .map((video) => (
-          <div className='video' key={video.video_code}>
-            <VideoPlayer url={video.link} />
+          <div className='video' style={{display:'flex', alignItems:'center'}} key={video.video_code}>
+            <VideoPlayer url={video.link} height='190' width='340'/>
           </div>
         ))
       }
