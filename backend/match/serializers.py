@@ -45,24 +45,45 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
     
     def get_distance(self, obj):
         self.match_info = UserAnalMatch.objects.filter(match_code=obj.match_code, user_code=self.user_code)
+        print(self.match_info)
         if self.match_info.exists():
-            self.match_info = self.match_info.first()
+            # 모든 객체의 T_D 값을 리스트로 추출
+            t_d_values = [item.T_D for item in self.match_info if item.T_D is not None]
+            if t_d_values:
+                # 평균 계산
+                return sum(t_d_values) / len(t_d_values)
+            else:
+                return '-'
         else:
-            self.match_info = None
+            return '-'
 
-        if self.match_info is not None:
-            return self.match_info.T_D
-        return '-'
     
     def get_top_speed(self, obj):
-        if self.match_info is not None:
-            return self.match_info.T_HS
+        # match_info 대신 새로운 쿼리셋 생성 (또는 get_distance에서 저장한 match_info2 재활용)
+        match_info = UserAnalMatch.objects.filter(
+            match_code=obj.match_code, 
+            user_code=self.user_code
+        )
+        
+        if match_info.exists():
+            # 모든 객체의 T_HS 값을 추출
+            t_hs_values = [item.T_HS for item in match_info if item.T_HS is not None]
+            return f"{sum(t_hs_values)/len(t_hs_values):.1f}" if t_hs_values else '-'
         return '-'
     
     def get_rating(self, obj):
-        if self.match_info is not None:
-            return self.match_info.point['total']
+        # 새로운 쿼리셋 생성 (기존 match_info 재사용 X)
+        match_data = UserAnalMatch.objects.filter(
+            match_code=obj.match_code, 
+            user_code=self.user_code
+        )
+        
+        if match_data.exists():
+            # 모든 객체의 point 값 추출
+            points = [item.point.get('total', 0) for item in match_data if item.point]
+            return f"{sum(points)/len(points):.1f}" if points else '-'
         return '-'
+
     
     def get_home_team(self, obj):
         team_match = TeamMatch.objects.filter(match_code = obj.match_code)
