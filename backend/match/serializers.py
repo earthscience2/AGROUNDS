@@ -44,18 +44,24 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
         return obj.match_name
     
     def get_distance(self, obj):
-        self.match_info = UserAnalMatch.objects.filter(match_code=obj.match_code, user_code=self.user_code)
-        print(self.match_info)
+        self.match_info = UserAnalMatch.objects.filter(
+            match_code=obj.match_code, 
+            user_code=self.user_code
+        )
+        
         if self.match_info.exists():
-            # 모든 객체의 T_D 값을 리스트로 추출
+            # 모든 객체의 T_D 값 추출 (None 제외)
             t_d_values = [item.T_D for item in self.match_info if item.T_D is not None]
+            
             if t_d_values:
-                # 평균 계산
-                return sum(t_d_values) / len(t_d_values)
+                # ▶▶ 합계 계산로 변경
+                total_sum = sum(t_d_values) 
+                return total_sum  # 정수 변환 (필요시 제거)
             else:
                 return '-'
         else:
             return '-'
+
 
     
     def get_top_speed(self, obj):
