@@ -4,6 +4,7 @@ from staticfiles.get_file_url import get_file_url
 from rest_framework.generics import get_object_or_404
 from django.db.models import Min
 from staticfiles.make_file_key import get_link, get_download_link
+from staticfiles.get_youtube_info import extract_video_id, thumbnail_url
 
 from .serializers import *
 
@@ -396,12 +397,16 @@ class getMatchVideoInfo(APIView):
         result = []
 
         for quarter in video_info.quarter_name_list:
+            url = video_info.path.get(quarter)
+            thumnail = thumbnail_url(extract_video_id(url))
+            if thumnail is None:
+                thumnail = thumnails[0]
             video_json = {
                 "quarter" : quarter,
                 "title" : video_title,
                 "match_location" : match_location,
                 "date" : match_date,
-                "thumbnail" : thumnails[0],
+                "thumbnail" : thumnail,
                 # "link" : get_link(video_info, quarter),
                 # "download_link" : get_download_link(video_info, quarter)
                 "link" : video_info.path.get(quarter),
