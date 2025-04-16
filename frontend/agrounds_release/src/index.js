@@ -60,6 +60,9 @@ import SearchStadiumByMap from './pages/gps/SearchStadiumByMap';
 import { FieldProvider } from './function/Context';
 import DirectInputStadium from './pages/gps/DirectInputStadium';
 import SetQuarterSide from './pages/gps/SetQuarterSide';
+import ServiceOfTerms from './pages/mypage/js/term/ServiceOfTerms';
+import CollectPrivacy from './pages/mypage/js/term/CollectPrivacy';
+import GpsTerms from './pages/mypage/js/term/GpsTerms';
 
 
 const useBodyClass = (className) => {
@@ -196,6 +199,9 @@ const router = createBrowserRouter([
       { path: "search-stadium-by-map", element: <SearchStadiumByMap /> },
       { path: "direct-input-stadium", element: <DirectInputStadium /> },
       { path: "set-quarter-side", element: <SetQuarterSide /> },
+      { path: "serviceterm", element: <ServiceOfTerms /> },
+      { path: "privacyterm", element: <CollectPrivacy /> },
+      { path: "gpsterm", element: <GpsTerms /> },
     ],
   },
 ]);

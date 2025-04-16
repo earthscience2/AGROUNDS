@@ -256,11 +256,15 @@ const InfoFix = () => {
           onClick={() => setSelectedGender('female')}
         />
       </div>
-      {isModified ? (
-        <CircleBtn title='수정완료' style={{ position: 'fixed', bottom: '5vh' }} onClick={onSendBtn} />
-      ) : (
-        <CircleBtn title='수정하기' backgroundColor='#F4F4F4' color='#C6C6C6' style={{ position: 'fixed', bottom: '5vh' }} />
-      )}
+
+      
+        {isModified ? (
+          <div className='btnbackgbox'><CircleBtn title='수정완료' style={{ position: 'fixed', bottom: '5vh' ,maxWidth: '499px'}} onClick={onSendBtn} /></div>
+        ) : (
+          <div className='btnbackgbox'><CircleBtn title='수정하기' backgroundColor='#F4F4F4' color='#C6C6C6' style={{ position: 'fixed', bottom: '5vh'  ,maxWidth: '499px'}} /></div>
+        )}
+      
+      
       <Input_error_tooltip text={errorText} style={{position: 'fixed', bottom: '14vh'}}/>
     </div>
   );
