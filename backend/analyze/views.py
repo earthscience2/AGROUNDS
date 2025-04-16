@@ -44,16 +44,20 @@ class getAnalyzeResult(APIView):
 
         file_key = makeGptJosnKey(match_code, user_code)
 
-        reader = CloudFrontTxtFileReader(get_base_url())
-        file_content = reader.read(file_key)
         json_data = {
-            "total" : "",
-            "attack" : "",
-            "defense" : ""
-        }
-        if file_content:
-            json_data = json.loads(file_content)
-
+                "total" : "",
+                "attack" : "",
+                "defense" : ""
+            }
+        
+        try:
+            reader = CloudFrontTxtFileReader(get_base_url())
+            file_content = reader.read(file_key)
+            if file_content:
+                json_data = json.loads(file_content)
+        except Exception as e:
+            print("gpt.json 파일 가져오기 실패")
+    
         result['ai_summation'] = json_data
 
         serializer = Match_Analyze_Result_Serializer(user_anal_match, many=True)
@@ -61,7 +65,7 @@ class getAnalyzeResult(APIView):
         result['analyze'] = serializer.data
 
         return Response(result)
-        
+            
     def map_string_to_number(self, input_string):
         if len(input_string) > 45:
             raise ValueError("입력 문자열은 45자 이하여야 합니다.")

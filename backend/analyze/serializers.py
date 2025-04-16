@@ -32,10 +32,26 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
         return active_ratio
     
     def get_speed_change(self, obj):
-        return obj.TI_ST
+        speed_change = obj.TI_ST
+        new_speed_change = []
+        divider = len(speed_change)/5
+
+        for i in range(0, len(speed_change)):
+            if i % divider == 1:
+                new_speed_change.append(speed_change[i])
+
+        return new_speed_change
 
     def get_acceleration_change(self, obj):
-        return obj.TI_SA
+        acceleration_change = obj.TI_SA
+        new_acceleration_change = []
+        divider = len(acceleration_change)/5
+
+        for i in range(0, len(acceleration_change)):
+            if i % divider == 1:
+                new_acceleration_change.append(acceleration_change[i])
+
+        return new_acceleration_change
 
     def get_total(self, obj):
         total = {
