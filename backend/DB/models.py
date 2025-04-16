@@ -248,8 +248,6 @@ class UserAnalMatch(models.Model):
     D_LSD = models.FloatField(null=True, blank=True)
     D_SDPD = models.FloatField(null=True, blank=True)
     D_S_L = models.JSONField(null=True, blank=True)
-    speed_change = models.JSONField(null=True, blank=True)
-    acceleration_change = models.JSONField(null=True, blank=True)
 
 
     point = models.JSONField (null=True, blank=True)
