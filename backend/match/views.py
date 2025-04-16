@@ -17,7 +17,7 @@ class getUserMatchList(APIView):
         if not UserInfo.objects.filter(user_code=user_code).exists():
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
-        match_codes = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+        match_codes = UserMatch.objects.filter(user_code=user_code, match_type="player").values_list('match_code', flat=True)
         user_matchs = UserMatchInfo.objects.filter(match_code__in=match_codes)
 
         # if not user_matchs.exists():
