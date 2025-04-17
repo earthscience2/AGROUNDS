@@ -1,35 +1,82 @@
 import React from 'react';
-import YouTube from 'react-youtube';
+import YouTubeLogo from '../assets/youtube.svg'; // SVG 경로 확인 필수
 
-const VideoPlayer = ({ url, height='390', width='640' }) => {
-  // YouTube URL에서 비디오 ID 추출
-  const getVideoId = (url) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
+const VideoPlayer = ({ url, height = '390', width = '640' }) => {
+  const extractYouTubeID = (url) => {
+    const regex = /(?:youtube\.com\/(?:.*[?&]v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
   };
 
-  const videoId = getVideoId(url);
+  const videoId = extractYouTubeID(url);
+  if (!videoId) return <p>유효하지 않은 유튜브 URL입니다.</p>;
 
-  const opts = {
-    height: height,
-    width: width,
-    playerVars: {
-      autoplay: 0,
-    },
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+  function getPlatform() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    if (/android/i.test(ua)) return "android";
+    if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return "ios";
+    return "desktop";
+  }
+
+  const handleClick = () => {
+    const platform = getPlatform();
+    const videoId = extractYouTubeID(url);
+    const webUrl = `https://www.youtube.com/watch?v=${videoId}`;
+    let appUrl;
+  
+    if (platform === "android") {
+      appUrl = `vnd.youtube://${videoId}`;
+    } else if (platform === "ios") {
+      appUrl = `youtube://watch?v=${videoId}`;
+    } else {
+      // ✅ 데스크탑은 팝업 차단 없이 바로 열기
+      window.open(webUrl, "_blank");
+      return;
+    }
+  
+    // 앱 실행 시도
+    window.location.href = appUrl;
+  
+    // fallback: 앱이 열리지 않으면 1.5초 후 새 탭에 YouTube 웹 열기
+    setTimeout(() => {
+      // 새 창이 막혔거나 닫혔으면 현재 탭에서 fallback
+      window.location.href = webUrl;
+    }, 1500);
   };
+  
+  
 
   return (
-    <div style={{maxWidth: '500px', height: 'maxContent', width: '100%', display: 'flex', justifyContent:'center', alignItems: 'center'}}>
-      {videoId ? (
-        <YouTube
-          videoId={videoId}
-          opts={opts}
-          style={{margin: 'auto', width: '100%', maxWidth: '500px'}}
-        />
-      ) : (
-        <p>유효하지 않은 YouTube URL입니다.</p>
-      )}
+    <div
+      onClick={handleClick}
+      style={{
+        marginTop: "4px",
+        cursor: "pointer",
+        width: "99vw",
+        maxWidth: "500px",
+        aspectRatio: "16/9",
+        backgroundImage: `url(${thumbnailUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        borderRadius: "12px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* YouTube 로고 오버레이 */}
+      <img
+        src={YouTubeLogo}
+        alt="Play YouTube Video"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "64px",
+        }}
+      />
     </div>
   );
 };
