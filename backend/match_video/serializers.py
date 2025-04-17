@@ -14,11 +14,12 @@ class Video_List_Serializer(serializers.ModelSerializer):
             return get_file_url('video/thumbnail/thumbnail1.png')
         
         first_quarter = obj.quarter_name_list[0]
-        url = obj.path.get(first_quarter)
-        thumbnail = thumbnail_url(extract_video_id(url))
 
-        if thumbnail is None:
+        if not obj.path:
             thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
+        else:
+            url = obj.path.get(first_quarter)
+            thumbnail = thumbnail_url(extract_video_id(url))         
             
         return thumbnail
 

@@ -22,7 +22,7 @@ class getUserMatchList(APIView):
         match_codes = UserMatch.objects.filter(user_code=user_code, match_type="player").values_list('match_code', flat=True)
         
         if is_super_user(user_code):
-            match_codes = UserMatch.objects.all()
+            match_codes = UserMatch.objects.filter(match_type="player").values_list('match_code', flat=True)
 
         user_matchs = UserMatchInfo.objects.filter(match_code__in=match_codes)
 

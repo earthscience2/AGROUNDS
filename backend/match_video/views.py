@@ -6,6 +6,8 @@ from django.db.models import Min
 from staticfiles.make_file_key import get_link, get_download_link
 from staticfiles.get_youtube_info import extract_video_id, thumbnail_url
 
+from staticfiles.super_user import is_super_user
+
 from .serializers import *
 
 link = {
@@ -39,13 +41,21 @@ class getVideoSummation(APIView):
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
         player_videos = VideoInfo.objects.filter(user_code = user_code, type = 'player')
-        player_videos_number = player_videos.count()
         
         user_matchs = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
 
         team_videos = VideoInfo.objects.filter(match_code__in=user_matchs, type='team')
 
         full_videos = VideoInfo.objects.filter(match_code__in=user_matchs, type='full')
+
+        if is_super_user(user_code):
+            player_videos = VideoInfo.objects.filter(type = 'player')
+
+            team_videos = VideoInfo.objects.filter(type='team')
+
+            full_videos = VideoInfo.objects.filter(type='full')
+
+        player_videos_number = player_videos.count()
         
         team_videos_number = len(team_videos)
 
@@ -83,6 +93,9 @@ class getPlayerVideoList(APIView):
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
         video_infos = VideoInfo.objects.filter(user_code=user_code, type='player')
+
+        if is_super_user(user_code):
+            video_infos = VideoInfo.objects.filter(type='player')
 
         # if not video_infos.exists():
         #     return self.returnExampleData()
@@ -160,6 +173,9 @@ class getTeamVideoList(APIView):
         user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
 
         team_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='team')
+
+        if is_super_user(user_code):
+            team_videos = VideoInfo.objects.filter(type='team')
 
         # if not team_videos.exists():
         #     return self.returnExampleData()
@@ -239,6 +255,9 @@ class getFullVideoList(APIView):
         user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
 
         full_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='full')
+
+        if is_super_user(user_code):
+            full_videos = VideoInfo.objects.filter(type='full')
 
         # if not full_videos.exists():
         #     return self.returnExampleData()

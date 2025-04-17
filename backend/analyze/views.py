@@ -10,7 +10,7 @@ from staticfiles.s3 import CloudFrontTxtFileReader
 from .serializers import *
 
 from staticfiles.get_file_url import get_base_url
-# Create your views here.
+from staticfiles.super_user import is_super_user
 
 default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
 
@@ -27,6 +27,9 @@ class getAnalyzeResult(APIView):
         user_code = data['user_code']
 
         user_anal_match = UserAnalMatch.objects.filter(match_code=match_code, user_code=user_code)
+
+        if is_super_user(user_code):
+            user_anal_match = UserAnalMatch.objects.filter(match_code=match_code)
 
         if not user_anal_match.exists():
             # filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
@@ -102,8 +105,10 @@ class getTeamAnalyzeResult(APIView):
         
         user_anal_matchs = UserAnalMatch.objects.filter(match_code__in=match_code_list)
 
-        if user_code is not None:
-            if not user_anal_matchs.filter(user_code=user_code).exists():
+        if is_super_user(user_code):
+            # 슈퍼 유저의 경우 경기에 참여한 임의의 선수의 user_code를 활용
+            user_code = user_anal_matchs.first().user_code
+        elif not user_anal_matchs.filter(user_code=user_code).exists():
                 return Response({"error" : "해당 경기에 참여하지 않았습니다."})
 
         for quarter in team_match_info.quarter_name_list :
