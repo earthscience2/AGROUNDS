@@ -97,8 +97,8 @@ class getTeamAnalyzeResult(APIView):
 
         match_code_list = team_match_info.match_code_list
 
-        if (match_code_list is None or len(match_code_list) == 0):
-            return Response({'error' : '데이터가 없습니다.'}, status=404)
+        if not match_code_list:
+            return Response({'error': '데이터가 없습니다.'}, status=404)
         
         user_anal_matchs = UserAnalMatch.objects.filter(match_code__in=match_code_list)
 
