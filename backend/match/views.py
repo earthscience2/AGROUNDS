@@ -5,6 +5,8 @@ from staticfiles.get_file_url import get_upload_url
 
 from staticfiles.get_file_url import get_file_url
 
+from staticfiles.super_user import is_super_user
+
 from .serializers import *
 
 class getUserMatchList(APIView):
@@ -18,6 +20,10 @@ class getUserMatchList(APIView):
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
         
         match_codes = UserMatch.objects.filter(user_code=user_code, match_type="player").values_list('match_code', flat=True)
+        
+        if is_super_user(user_code):
+            match_codes = UserMatch.objects.all()
+
         user_matchs = UserMatchInfo.objects.filter(match_code__in=match_codes)
 
         # if not user_matchs.exists():
