@@ -97,6 +97,7 @@ class TeamMatchInfo(models.Model):
     quarter_name_list = models.JSONField()
     match_result = models.CharField(max_length=8, null=True, blank=True)
     match_mom = models.CharField(max_length=45, null=True, blank=True)
+    match_code_list = models.JSONField(null=True, blank=True)
 
     class Meta:
         managed = False

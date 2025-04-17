@@ -94,8 +94,10 @@ class getTeamAnalyzeResult(APIView):
         except TeamMatchInfo.DoesNotExist:
             return Response({'error' : '데이터가 없습니다.'}, status=404)
             # return self.returnExampleData()
+
+        match_code_list = team_match_info.match_code_list
         
-        user_anal_matchs = UserAnalMatch.objects.filter(match_code=match_code)
+        user_anal_matchs = UserAnalMatch.objects.filter(match_code__in=match_code_list)
 
         if user_code is not None:
             if not user_anal_matchs.filter(user_code=user_code).exists():
