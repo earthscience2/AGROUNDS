@@ -30,6 +30,7 @@ class getAnalyzeResult(APIView):
 
         if is_super_user(user_code):
             user_anal_match = UserAnalMatch.objects.filter(match_code=match_code)
+            user_code = user_anal_match.first().user_code
 
         if not user_anal_match.exists():
             # filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
