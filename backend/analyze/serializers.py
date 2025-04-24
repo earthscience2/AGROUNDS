@@ -56,7 +56,7 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
     def get_total(self, obj):
         total = {
             "hitmap": getHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "total"),
-            "high_speed_hitmap": getHighSpeedHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "total"),
+            "high_speed_hitmap": getSprintMapUrl(obj.match_code, obj.user_code, obj.quarter_name),
             "change_direction": getChangeDirectionUrl(obj.match_code, obj.user_code, obj.quarter_name, "total"),
             "T": obj.T_T,
             "D": obj.T_D,
@@ -82,7 +82,7 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
     def get_attack(self, obj):
         attack = {
             "hitmap": getHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "attack"),
-            "high_speed_hitmap": getHighSpeedHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "attack"),
+            "high_speed_hitmap": getSprintMapUrl(obj.match_code, obj.user_code, obj.quarter_name),
             "change_direction": getChangeDirectionUrl(obj.match_code, obj.user_code, obj.quarter_name, "attack"),
             "T": obj.A_T,
             "D": obj.A_D,
@@ -108,7 +108,7 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
     def get_defense(self, obj):
         defense = {
             "hitmap": getHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "defense"),
-            "high_speed_hitmap": getHighSpeedHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "defense"),
+            "high_speed_hitmap": getSprintMapUrl(obj.match_code, obj.user_code, obj.quarter_name),
             "change_direction": getChangeDirectionUrl(obj.match_code, obj.user_code, obj.quarter_name, "defense"),
             "T": obj.D_T,
             "D": obj.D_D,
