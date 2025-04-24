@@ -138,7 +138,9 @@ class GroundInfo(models.Model):
     rotated_corners = models.JSONField()
 
     class Meta:
+        managed = False
         db_table = 'ground_info'
+
 
 class UserAnalMatch(models.Model):
     anal_code = models.AutoField(primary_key=True)
@@ -151,7 +153,6 @@ class UserAnalMatch(models.Model):
     position = models.CharField(max_length=45, null=True, blank=True)
     home = models.CharField(max_length=45, null=True, blank=True)
 
-    # T_ prefix fields
     T_D = models.FloatField(null=True, blank=True)
     T_T = models.IntegerField(null=True, blank=True)
     T_DPM = models.FloatField(null=True, blank=True)
@@ -188,7 +189,6 @@ class UserAnalMatch(models.Model):
     T_HSS = models.FloatField(null=True, blank=True)
     T_HSA = models.FloatField(null=True, blank=True)
 
-    # A_ prefix fields
     A_D = models.FloatField(null=True, blank=True)
     A_T = models.IntegerField(null=True, blank=True)
     A_TPT = models.IntegerField(null=True, blank=True)
@@ -209,7 +209,6 @@ class UserAnalMatch(models.Model):
     A_HA = models.FloatField(null=True, blank=True)
     A_HA_T = models.CharField(max_length=45, null=True, blank=True)
 
-    # D_ prefix fields
     D_D = models.FloatField(null=True, blank=True)
     D_T = models.IntegerField(null=True, blank=True)
     D_TPT = models.IntegerField(null=True, blank=True)
@@ -233,13 +232,11 @@ class UserAnalMatch(models.Model):
     point = models.JSONField(null=True, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'user_anal_match'
+        managed = True
+
+
         
-
-
-
-
 # ===========================================
 
 # =============== old version ===============

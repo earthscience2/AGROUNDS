@@ -32,7 +32,7 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
         return active_ratio
     
     def get_speed_change(self, obj):
-        speed_change = obj.TI_ST
+        speed_change = obj.T_AS_L
         new_speed_change = []
         divider = len(speed_change)/5
 
@@ -43,7 +43,7 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
         return new_speed_change
 
     def get_acceleration_change(self, obj):
-        acceleration_change = obj.TI_SA
+        acceleration_change = obj.T_AA_L
         new_acceleration_change = []
         divider = len(acceleration_change)/5
 
@@ -94,14 +94,14 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
             "HS": obj.A_HS,
             "AA": obj.A_AA,
             "HA": obj.A_HA,
-            "S": obj.A_S,
-            "ASD": obj.A_ASD,
-            "ASS": obj.A_ASS,
-            "ASA": obj.A_ASA,
-            "TSD": obj.A_TSD,
-            "HSD": obj.A_HSD,
-            "LSD": obj.A_LSD,
-            "SDPD": obj.A_SDPD
+            "S": obj.T_S,
+            "ASD": obj.T_ASD,
+            "ASS": obj.T_ASS,
+            "ASA": obj.T_ASA,
+            "TSD": obj.T_TSD,
+            "HSD": obj.T_HSD,
+            "LSD": obj.T_LSD,
+            "SDPD": obj.T_SDPD
         }
         return attack
     
@@ -120,13 +120,13 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
             "HS": obj.D_HS,
             "AA": obj.D_AA,
             "HA": obj.D_HA,
-            "S": obj.D_S,
-            "ASD": obj.D_ASD,
-            "ASS": obj.D_ASS,
-            "ASA": obj.D_ASA,
-            "TSD": obj.D_TSD,
-            "HSD": obj.D_HSD,
-            "LSD": obj.D_LSD,
-            "SDPD": obj.D_SDPD
+            "S": obj.T_S,
+            "ASD": obj.T_ASD,
+            "ASS": obj.T_ASS,
+            "ASA": obj.T_ASA,
+            "TSD": obj.T_TSD,
+            "HSD": obj.T_HSD,
+            "LSD": obj.T_LSD,
+            "SDPD": obj.T_SDPD
         }
         return defense
