@@ -408,9 +408,14 @@ class getMatchVideoInfo(APIView):
             # return self.returnExampleData(type=type)
 
         video_info = video_info.first()
-        match_info = get_object_or_404(UserMatchInfo, match_code=match_code)
+        match_location = ""
+
+        match_info = TeamMatchInfo.objects.get(match_code=match_code)
+        if not match_info:
+            match_info = get_object_or_404(UserMatchInfo, match_code=match_code)
+            
         video_title = video_info.title
-        match_location = match_info.ground_name
+        
         match_date = video_info.date
 
         result = []
