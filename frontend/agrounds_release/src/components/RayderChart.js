@@ -64,7 +64,7 @@ const RayderChart = ({ data, error}) => {
         },
         ticks: {
           display: false,
-          stepSize: 25,
+          stepSize: 100,
         },
       },
     },
@@ -91,7 +91,6 @@ const RayderChart = ({ data, error}) => {
 
   return (
     <RaderStyle>
-
       <Radar ref={chartRef} data={chartData} options={chartOptions} />
     </RaderStyle>
   );
