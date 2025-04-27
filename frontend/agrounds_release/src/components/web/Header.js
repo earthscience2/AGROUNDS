@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import AgroundsLogo from '../../assets/web/AgroundsLogo.png';
-import menuIcon from '../../assets/web/menu.png';
+import AgroundsLogo from '../../assets/web/AgroundsLogo.webp';
+import menuIcon from '../../assets/web/menu.webp';
 
 const Header = ({ tab, setTab }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

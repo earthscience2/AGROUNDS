@@ -1,11 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import section1 from '../../assets/web/section1.png';
+import section1 from '../../assets/web/section1.webp';
 import styled from 'styled-components';
-import section2 from '../../assets/web/section2.png';
-import section3 from '../../assets/web/section3.png';
-import section4 from '../../assets/web/section4.png';
-import section5 from '../../assets/web/section5.png';
-import section7 from '../../assets/web/section7.png';
+import section2 from '../../assets/web/section2.webp';
+import section3 from '../../assets/web/section3.webp';
+import section4 from '../../assets/web/section4.webp';
+import section5 from '../../assets/web/section5.webp';
+import section7 from '../../assets/web/section7.webp';
 import YouTube from 'react-youtube';
 import useIsMobile from '../../hooks/useIsMobile';
 
