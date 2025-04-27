@@ -223,3 +223,10 @@ LOGGING = {
         },
     },
 }
+
+SUPERUSER_CODES = [
+    env("SUPERUSER_CODE_0"),
+    env("SUPERUSER_CODE_1"),
+    env("SUPERUSER_CODE_2"),
+    env("SUPERUSER_CODE_3"),
+]

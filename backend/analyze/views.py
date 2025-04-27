@@ -10,7 +10,7 @@ from staticfiles.s3 import CloudFrontTxtFileReader
 from .serializers import *
 
 from staticfiles.get_file_url import get_base_url
-# Create your views here.
+from staticfiles.super_user import is_super_user
 
 default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
 
@@ -28,11 +28,16 @@ class getAnalyzeResult(APIView):
 
         user_anal_match = UserAnalMatch.objects.filter(match_code=match_code, user_code=user_code)
 
+        if is_super_user(user_code):
+            user_anal_match = UserAnalMatch.objects.filter(match_code=match_code)
+            user_code = user_anal_match.first().user_code
+
         if not user_anal_match.exists():
-            filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
-            with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
-                data = json.load(file)
-                return Response(data)
+            # filename = ['analyze.json', 'analyze2.json', 'analyze3.json']
+            # with open(os.path.join(settings.STATIC_ROOT, filename[self.map_string_to_number(match_code)]), encoding='utf-8') as file:
+            #     data = json.load(file)
+            #     return Response(data)
+            return Response({'error':'데이터가 없습니다.'}, status=404)
 
         user_anal_match = sorted(
             user_anal_match,
@@ -43,16 +48,20 @@ class getAnalyzeResult(APIView):
 
         file_key = makeGptJosnKey(match_code, user_code)
 
-        reader = CloudFrontTxtFileReader(get_base_url())
-        file_content = reader.read(file_key)
         json_data = {
-            "total" : "",
-            "attack" : "",
-            "defense" : ""
-        }
-        if file_content:
-            json_data = json.loads(file_content)
-
+                "total" : "",
+                "attack" : "",
+                "defense" : ""
+            }
+        
+        try:
+            reader = CloudFrontTxtFileReader(get_base_url())
+            file_content = reader.read(file_key)
+            if file_content:
+                json_data = json.loads(file_content)
+        except Exception as e:
+            print("gpt.json 파일 가져오기 실패")
+    
         result['ai_summation'] = json_data
 
         serializer = Match_Analyze_Result_Serializer(user_anal_match, many=True)
@@ -60,7 +69,7 @@ class getAnalyzeResult(APIView):
         result['analyze'] = serializer.data
 
         return Response(result)
-        
+            
     def map_string_to_number(self, input_string):
         if len(input_string) > 45:
             raise ValueError("입력 문자열은 45자 이하여야 합니다.")
@@ -87,12 +96,20 @@ class getTeamAnalyzeResult(APIView):
         try:
             team_match_info = TeamMatchInfo.objects.get(match_code=match_code)
         except TeamMatchInfo.DoesNotExist:
-            return self.returnExampleData()
-        
-        user_anal_matchs = UserAnalMatch.objects.filter(match_code=match_code)
+            return Response({'error' : '데이터가 없습니다.'}, status=404)
+            # return self.returnExampleData()
 
-        if user_code is not None:
-            if not user_anal_matchs.filter(user_code=user_code).exists():
+        match_code_list = team_match_info.match_code_list
+
+        if not match_code_list:
+            return Response({'error': '데이터가 없습니다.'}, status=404)
+        
+        user_anal_matchs = UserAnalMatch.objects.filter(match_code__in=match_code_list)
+
+        if is_super_user(user_code):
+            # 슈퍼 유저의 경우 경기에 참여한 임의의 선수의 user_code를 활용
+            user_code = user_anal_matchs.first().user_code
+        elif not user_anal_matchs.filter(user_code=user_code).exists():
                 return Response({"error" : "해당 경기에 참여하지 않았습니다."})
 
         for quarter in team_match_info.quarter_name_list :

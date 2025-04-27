@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from DB.models import *
 from staticfiles.get_file_url import get_file_url
+from staticfiles.get_youtube_info import extract_video_id, thumbnail_url
 
 class Video_List_Serializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField()
@@ -9,7 +10,18 @@ class Video_List_Serializer(serializers.ModelSerializer):
         fields = ['match_code', 'title', 'date', 'thumbnail']
 
     def get_thumbnail(self, obj):
-        return get_file_url('video/thumbnail/thumbnail1.png')
+        if not obj.quarter_name_list:
+            return get_file_url('video/thumbnail/thumbnail1.png')
+        
+        first_quarter = obj.quarter_name_list[0]
+
+        if not obj.path:
+            thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
+        else:
+            url = obj.path.get(first_quarter)
+            thumbnail = thumbnail_url(extract_video_id(url))         
+            
+        return thumbnail
 
 class Video_Info_Serializer(serializers.ModelSerializer):
     quarter = serializers.SerializerMethodField()
@@ -38,9 +50,9 @@ class Video_Info_Serializer(serializers.ModelSerializer):
     def get_thumbnail(self, obj):
         return get_file_url('video/thumbnail/thumbnail1.png')
 
-    def get_link(self, obj):
+    def get_link_(self, obj):
         path = obj.path
-        if path.startswith("http"):
+        if path is not None:
             return path
         elif path != '':
             return get_file_url(path)

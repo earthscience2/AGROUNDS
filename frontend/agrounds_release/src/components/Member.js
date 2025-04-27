@@ -37,23 +37,22 @@ const Member = ({ userCode, img, player, age, position, color, onClick, activeTa
         AcceptPlayerApi({"team_code": teamCode, "user_code": userCode, "accept": "true"})
         .then((response) => {
           alert(`${player}님의 요청을 수락했습니다.`);
-          window.location.reload();
+          window.location.replace('managemember?activeTab=신규')
         })
         .catch((error) => {
           console.log(error)
         });
-        
         break;
       case 'refuse':
         AcceptPlayerApi({"team_code": teamCode, "user_code": userCode, "accept": "false"});
         alert(`${player}님의 요청을 거절했습니다.`);
-        window.location.reload();
+        window.location.replace('managemember?activeTab=신규')
         break;
       default:
         break;
     }
     closeModal();
-    navigate('/app/teamsetting');
+    // navigate('/app/teamsetting');
   };
 
   return (

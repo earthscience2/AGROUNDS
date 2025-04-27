@@ -11,10 +11,12 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
     total = serializers.SerializerMethodField()
     attack = serializers.SerializerMethodField()
     defense = serializers.SerializerMethodField()
+    speed_change = serializers.SerializerMethodField()
+    acceleration_change = serializers.SerializerMethodField()
 
     class Meta:
         model = UserAnalMatch
-        fields = ['quarter', 'point', 'active_ratio', 'total', 'attack', 'defense', 'position']
+        fields = ['quarter', 'point', 'active_ratio', 'total', 'attack', 'defense', 'position', 'speed_change', 'acceleration_change']
 
     def get_quarter(self, obj):
         return obj.quarter_name
@@ -29,13 +31,33 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
         }
         return active_ratio
     
+    def get_speed_change(self, obj):
+        speed_change = obj.T_AS_L
+        new_speed_change = []
+        divider = len(speed_change)/5
+
+        for i in range(0, len(speed_change)):
+            if i % divider == 1:
+                new_speed_change.append(speed_change[i])
+
+        return new_speed_change
+
+    def get_acceleration_change(self, obj):
+        acceleration_change = obj.T_AA_L
+        new_acceleration_change = []
+        divider = len(acceleration_change)/5
+
+        for i in range(0, len(acceleration_change)):
+            if i % divider == 1:
+                new_acceleration_change.append(acceleration_change[i])
+
+        return new_acceleration_change
+
     def get_total(self, obj):
         total = {
             "hitmap": getHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "total"),
-            "high_speed_hitmap": getHighSpeedHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "total"),
+            "high_speed_hitmap": getSprintMapUrl(obj.match_code, obj.user_code, obj.quarter_name),
             "change_direction": getChangeDirectionUrl(obj.match_code, obj.user_code, obj.quarter_name, "total"),
-            "speed_change": getSpeedChangeUrl(obj.match_code, obj.user_code, obj.quarter_name, "total"),
-            "acceleration_change": getAccelerationChangeUrl(obj.match_code, obj.user_code, obj.quarter_name, "total"),
             "T": obj.T_T,
             "D": obj.T_D,
             "DPM": obj.T_DPM,
@@ -60,10 +82,8 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
     def get_attack(self, obj):
         attack = {
             "hitmap": getHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "attack"),
-            "high_speed_hitmap": getHighSpeedHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "attack"),
+            "high_speed_hitmap": getSprintMapUrl(obj.match_code, obj.user_code, obj.quarter_name),
             "change_direction": getChangeDirectionUrl(obj.match_code, obj.user_code, obj.quarter_name, "attack"),
-            "speed_change": getSpeedChangeUrl(obj.match_code, obj.user_code, obj.quarter_name, "attack"),
-            "acceleration_change": getAccelerationChangeUrl(obj.match_code, obj.user_code, obj.quarter_name, "attack"),
             "T": obj.A_T,
             "D": obj.A_D,
             "DPM": obj.A_DPM,
@@ -74,24 +94,22 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
             "HS": obj.A_HS,
             "AA": obj.A_AA,
             "HA": obj.A_HA,
-            "S": obj.A_S,
-            "ASD": obj.A_ASD,
-            "ASS": obj.A_ASS,
-            "ASA": obj.A_ASA,
-            "TSD": obj.A_TSD,
-            "HSD": obj.A_HSD,
-            "LSD": obj.A_LSD,
-            "SDPD": obj.A_SDPD
+            "S": obj.T_S,
+            "ASD": obj.T_ASD,
+            "ASS": obj.T_ASS,
+            "ASA": obj.T_ASA,
+            "TSD": obj.T_TSD,
+            "HSD": obj.T_HSD,
+            "LSD": obj.T_LSD,
+            "SDPD": obj.T_SDPD
         }
         return attack
     
     def get_defense(self, obj):
         defense = {
             "hitmap": getHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "defense"),
-            "high_speed_hitmap": getHighSpeedHitmapUrl(obj.match_code, obj.user_code, obj.quarter_name, "defense"),
+            "high_speed_hitmap": getSprintMapUrl(obj.match_code, obj.user_code, obj.quarter_name),
             "change_direction": getChangeDirectionUrl(obj.match_code, obj.user_code, obj.quarter_name, "defense"),
-            "speed_change": getSpeedChangeUrl(obj.match_code, obj.user_code, obj.quarter_name, "defense"),
-            "acceleration_change": getAccelerationChangeUrl(obj.match_code, obj.user_code, obj.quarter_name, "defense"),
             "T": obj.D_T,
             "D": obj.D_D,
             "DPM": obj.D_DPM,
@@ -102,13 +120,13 @@ class Match_Analyze_Result_Serializer(serializers.ModelSerializer):
             "HS": obj.D_HS,
             "AA": obj.D_AA,
             "HA": obj.D_HA,
-            "S": obj.D_S,
-            "ASD": obj.D_ASD,
-            "ASS": obj.D_ASS,
-            "ASA": obj.D_ASA,
-            "TSD": obj.D_TSD,
-            "HSD": obj.D_HSD,
-            "LSD": obj.D_LSD,
-            "SDPD": obj.D_SDPD
+            "S": obj.T_S,
+            "ASD": obj.T_ASD,
+            "ASS": obj.T_ASS,
+            "ASA": obj.T_ASA,
+            "TSD": obj.T_TSD,
+            "HSD": obj.T_HSD,
+            "LSD": obj.T_LSD,
+            "SDPD": obj.T_SDPD
         }
         return defense

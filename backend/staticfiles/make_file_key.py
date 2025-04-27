@@ -35,11 +35,11 @@ def makeResultJsonKey(match_code, user_code, quarter_name):
 def getHitmapUrl(match_code, user_code, quarter_name, section):
     file_url = get_file_url(f"{makeGpsMatchDir(match_code, user_code)}/img/{quarter_name}_{section}_")
     if(section == "total"):
-        file_url += "TI_H.png"
+        file_url += "T_H_L.png"
     elif(section == "attack"):
-        file_url += "AI_H.png"
-    else:
-        file_url += "DI_H.png"
+        file_url += "A_H_L.png"
+    elif(section == "defense"):
+        file_url += "D_H_L.png"
     return file_url
 
 def getHighSpeedHitmapUrl(match_code, user_code, quarter_name, section):
@@ -50,6 +50,10 @@ def getHighSpeedHitmapUrl(match_code, user_code, quarter_name, section):
         file_url += "AI_HH.png"
     else:
         file_url += "DI_HH.png"
+    return file_url
+
+def getSprintMapUrl(match_code, user_code, quarter_name):
+    file_url = get_file_url(f"{makeGpsMatchDir(match_code, user_code)}/img/{quarter_name}_sprint.png")
     return file_url
 
 def getChangeDirectionUrl(match_code, user_code, quarter_name, section):

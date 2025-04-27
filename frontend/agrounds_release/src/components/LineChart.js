@@ -26,14 +26,18 @@ ChartJS.register(
 const CustomLineChart = ({ data, speed }) => {
   const isEmpty = !data || data.length !== 5;
 
-  const placeholderData = [0, 0, 0, 0, 0]; 
+  const placeholderData = [0, 0, 0, 0, 0];
+  const processedData = isEmpty ? placeholderData : data.map((value) => value * 10);
+
+  const minY = Math.min(...processedData);
+  const maxY = Math.max(...processedData);
 
   const lineChartData = {
     labels: ['_', '_', '_', '_', '_'],
     datasets: [
       {
         label: '_',
-        data: isEmpty ? placeholderData : data.map((value) => value * 10),
+        data: processedData,
         borderColor: isEmpty ? 'rgba(0,0,0,0)' : data[4] > data[3] ? '#10CC7E' : '#EC5858',
         borderWidth: 2,
         backgroundColor: 'rgba(0,0,0,0)',
@@ -56,18 +60,18 @@ const CustomLineChart = ({ data, speed }) => {
       x: {
         display: true,
         grid: {
-        drawBorder: true,       
-        drawOnChartArea: false,
-        drawTicks: false,        
-      },
+          drawBorder: true,
+          drawOnChartArea: false,
+          drawTicks: false,
+        },
         ticks: {
           display: false,
         },
-       },
+      },
       y: {
         display: true,
-        min: 0,
-        max: 100,
+        min: isEmpty ? 0 : Math.floor(minY - 5),
+        max: isEmpty ? 100 : Math.ceil(maxY + 5),
         ticks: { display: false },
         grid: {
           drawBorder: false,
@@ -78,6 +82,7 @@ const CustomLineChart = ({ data, speed }) => {
       },
     },
   };
+
 
   return (
     <div style={{ width: '100%', height: '6vh', position: 'relative' }}>
