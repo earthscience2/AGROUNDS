@@ -41,7 +41,12 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
         <div />
         <RaderDate>{chartPoints[0]}</RaderDate>
         <RayderChart data={chartPoints} rate={rate} />
-        <Anal_Detail title="히트맵 / 스프린트 / 방향전환" detail={<Map data={positionData()} />} />
+        {currentIndex === 0 ? 
+          <Anal_Detail title="히트맵 / 스프린트 / 방향전환" detail={<Map data={positionData()} currentIndex={currentIndex}/>} />
+        :
+          <Anal_Detail title="히트맵 / 방향전환" detail={<Map data={positionData()} currentIndex={currentIndex}/>} />
+        }
+        
         <Anal_Detail title="활동량" detail={<ActivityLevel attack={attack} defence={defence} data={positionData()} />} />
         <Anal_Detail title="속도 및 가속도" detail={<Speed data={data} positionData={positionData()}/>} />
         <Anal_Detail title="스프린트" detail={<Sprint data={positionData()} />} />
@@ -52,7 +57,7 @@ const DynamicQuarter = ({ data, currentIndex, setCurrentIndex, type }) => {
   const renderTeamContent = () => {
     return <TeamAnalTotal data={data} />
   };
-  console.log(data)
+
   return (
     <div
       style={{

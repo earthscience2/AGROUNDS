@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import SpecificGravity from '../components/SpecificGravity';
 import LineChart from '../components/LineChart';
 
-const Map = ({ data }) => {
+const Map = ({ data, currentIndex }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const swiperRef = useRef(null);
 
-  const slides = [data.hitmap, data.high_speed_hitmap, data.change_direction];
+  const slides = currentIndex === 0
+    ? [data.hitmap, data.sprintmap, data.change_direction]
+    : [data.hitmap, data.change_direction];
 
   const handleScroll = () => {
     const swiper = swiperRef.current;
@@ -43,21 +45,30 @@ const Map = ({ data }) => {
     };
   }, []);
 
+  // 🔥 currentIndex가 바뀌면 슬라이드 초기화
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    if (swiper) {
+      swiper.scrollTo({
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+    setCurrentSlide(0);
+  }, [currentIndex]);
+
   return (
     <SwiperContainer>
       <SwiperWrapper ref={swiperRef}>
-        <SwiperItem>
-          <img src={slides[0]} alt="Heatmap" />
-        </SwiperItem>
-        <SwiperItem>
-          <img src={slides[1]} alt="Accel" />
-        </SwiperItem>
-        <SwiperItem>
-          <img src={slides[2]} alt="High Heatmap" />
-        </SwiperItem>
+        {slides.map((slideSrc, idx) => (
+          <SwiperItem key={idx}>
+            <img src={slideSrc} alt={`Slide ${idx}`} />
+          </SwiperItem>
+        ))}
       </SwiperWrapper>
+      
       <DotsContainer>
-        {[0, 1, 2].map((index) => (
+        {slides.map((_, index) => (
           <Dot
             key={index}
             active={currentSlide === index}
@@ -68,6 +79,7 @@ const Map = ({ data }) => {
     </SwiperContainer>
   );
 };
+
 
   
 
