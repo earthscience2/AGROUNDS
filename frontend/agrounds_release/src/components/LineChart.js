@@ -114,21 +114,21 @@ const CustomLineChart = ({ data, speed }) => {
         </div>
       )}
 
-      {!isEmpty && (
+      {/* {!isEmpty && (
         <div
           style={{
             position: 'absolute',
             top: '-10%',
             right: '-5%',
             transform: 'translateY(-50%)',
-            fontSize: '1.8vh',
+            fontSize: '1.5vh',
             color: '#525252',
             fontWeight: 'bold',
           }}
         >
           {speed ? data[4] : data[4] * 10 || 'N/A'}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
