@@ -23,6 +23,7 @@
   .titlebox{
     @include display(flex, row, center, space-between);
     width: 100%;
+    cursor: pointer;
     &:last-child{
       margin-bottom: 3vh;
     }

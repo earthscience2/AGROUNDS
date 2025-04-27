@@ -10,6 +10,7 @@
   align-items: center;
   font-family: 'Pretendard';
   width: 100%;
+  max-width: 499px;
   .info-fix-title{
     @include font(2vh, 700,#262626);
     width: 90%;
@@ -46,5 +47,12 @@
     justify-content: space-between;
     align-items: center;
     margin: -38vh 0 20vh 0;
+  }
+  .btnbackgbox{
+    max-width: 499px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

@@ -23,6 +23,24 @@
     @include display(flex, row, center, start);
     width: 90%;
     
+    .image-compbox{
+      .camera-bg{
+        width: 4vh;
+        height: 4vh;
+        background-color: #343A3F;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        top: 18vh;
+        left: 10vh;
+        .camera{
+          width: 60%;
+       
+        }
+      }
+    }
     .infotext{
       margin-left: 3vh;
       .ename{

@@ -4,7 +4,7 @@ import agroundslogo from '../assets/agrounds_circle_logo.png';
 import pencil from '../assets/pencil.png';
 
 const UserProfile = ({selectedImage, setSelectedImage}) => {
-  const [imgObjUrl, setImgObjUrl] = useState(null)
+  const [imgObjUrl, setImgObjUrl] = useState(null);
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -27,7 +27,7 @@ const UserProfile = ({selectedImage, setSelectedImage}) => {
         {imgObjUrl ? (
           <ProfileImage src={imgObjUrl} alt="프로필 미리보기" />
         ) : (
-          <DefaultImage src={imgObjUrl} />
+          <DefaultImage src={agroundslogo} />
         )}
       </Preview>
       <FileInput

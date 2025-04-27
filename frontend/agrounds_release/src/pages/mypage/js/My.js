@@ -6,13 +6,20 @@ import logo from '../../../assets/user-grey.png';
 import BasicInfo from '../../../components/BasicInfo';
 import MyChapter from '../../../components/MyChapter';
 import Footer from '../../../components/Footer';
+import camera from '../../../assets/camera.png';
 
 const My = () => {
   return (
     <div className='mypage'>
       <LogoBellNav />
       <div className='my-infobox'>
-        <Image_Comp width="12vh" img={logo}/>
+        <div className='image-compbox' style={{overflow: 'hidden', width:'12vh', height: '12vh', borderRadius: '50%'}}>
+          <img src={logo} style={{objectFit: 'contain', width: '12vh'}}/>
+          <div className='camera-bg'>
+            <img src={camera} className='camera'/>
+          </div>
+        </div>
+        
         <div className='infotext'>
           <p className='ename'>{sessionStorage.getItem('userNickname')}</p>
           <p className='kname'>{sessionStorage.getItem('userName')}</p>

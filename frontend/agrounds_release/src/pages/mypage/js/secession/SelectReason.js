@@ -28,7 +28,7 @@ const SelectReason = () => {
       <Contents title='보안이 걱정돼요' onClick={() => navigate('/app/secessionlast', {state: {reason: '보안이 걱정돼요'}})} />
       <Contents title='개인정보가 불안해요' onClick={() => navigate('/app/secessionlast', {state: {reason: '개인정보가 불안해요'}})} />
       <Contents title='특별한 이유 없음' onClick={() => navigate('/app/secessionlast', {state: {reason: '특별한 이유 없음'}})} />
-      <Contents title='기타' onClick='/app/secession-other-reason' />
+      <Contents title='기타' onClick={() => navigate('/app/secession-other-reason')} />
     </div>
   );
 };

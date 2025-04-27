@@ -84,5 +84,6 @@ const SecessionOtherReasonStyle = styled.div`
     position: absolute;
     bottom: 6vh;
     width: 100%;
+    max-width: 499px;
   }
 `

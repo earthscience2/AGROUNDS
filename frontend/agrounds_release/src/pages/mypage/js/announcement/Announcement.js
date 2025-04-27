@@ -27,6 +27,7 @@ const AnnouncementStyle = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
+  font-family: 'Pretendard';
   .title{
     font-size: 2.2vh;
     font-weight: 600;
