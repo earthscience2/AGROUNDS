@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import service from '../../assets/web/service-wide.png';
-import servicem1 from '../../assets/web/servicem1.png';
-import servicem2 from '../../assets/web/servicem2.png';
-import servicem3 from '../../assets/web/servicem3.png';
-import servicem4 from '../../assets/web/servicem4.png';
-import servicem5 from '../../assets/web/servicem5.png';
-import servicem6 from '../../assets/web/servicem6.png';
+import servicem1 from '../../assets/web/servicem1.webp';
+import servicem2 from '../../assets/web/servicem2.webp';
+import servicem3 from '../../assets/web/servicem3.webp';
+import servicem4 from '../../assets/web/servicem4.webp';
+import servicem5 from '../../assets/web/servicem5.webp';
+import servicem6 from '../../assets/web/servicem6.webp';
 
 const Service = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);

@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import introsec1 from '../../assets/web/introsec1.png';
+import introsec1 from '../../assets/web/introsec1.webp';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css'; 
 import 'swiper/css/navigation'; 
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import heegu from '../../assets/web/heegu.png';
-import sowon from '../../assets/web/sowon.png';
-import jayou from '../../assets/web/jayou.png';
-import uichan from '../../assets/web/uichan.png';
-import soyeong from '../../assets/web/soyeong.png';
-import introsecm1 from '../../assets/web/introsecm1.png';
-import introsecm2 from '../../assets/web/introsecm2.png';
-import introsecm3 from '../../assets/web/introsecm3.png';
-import introsecm4 from '../../assets/web/introsecm4.png';
+import heegu from '../../assets/web/heegu.webp';
+import sowon from '../../assets/web/sowon.webp';
+import jayou from '../../assets/web/jayou.webp';
+import uichan from '../../assets/web/uichan.webp';
+import soyeong from '../../assets/web/soyeong.webp';
+import introsecm1 from '../../assets/web/introsecm1.webp';
+import introsecm2 from '../../assets/web/introsecm2.webp';
+import introsecm3 from '../../assets/web/introsecm3.webp';
+import introsecm4 from '../../assets/web/introsecm4.webp';
 
 
 const CompanyIntroduction = () => {
