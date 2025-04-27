@@ -45,7 +45,6 @@ const Map = ({ data, currentIndex }) => {
     };
   }, []);
 
-  // 🔥 currentIndex가 바뀌면 슬라이드 초기화
   useEffect(() => {
     const swiper = swiperRef.current;
     if (swiper) {
