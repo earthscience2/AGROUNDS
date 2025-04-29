@@ -39,7 +39,7 @@ const TotalAnal = ({ data, type }) => {
               </div>
               <div className='detaildatarow'>
                 <p className='title'>스프린트</p>
-                <p className='data'>{data.rating}회</p>
+                <p className='data'>{data.sprint}회</p>
               </div>
               <button
                 className='button'
