@@ -135,7 +135,13 @@ class getUserMatchList(APIView):
 class getTeamMatchList(APIView):
     def post(self, response):
         team_code = response.data.get('team_code')
-        
+        user_code = response.data.get('user_code')
+
+        if is_super_user(user_code):
+            team_matchs = TeamMatchInfo.objects.all()
+            serializer = Team_Match_Info_Serializer(team_matchs, many = True)
+            return Response({'result' : serializer.data})
+
         if team_code is None:
             return Response({'error': 'Missing required field: team_code'}, status=400)
         
