@@ -98,9 +98,9 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
         )
 
         if match_info.exists():
-            # 모든 객체의 T_HS 값을 추출
+            # 모든 객체의 T_S 값을 추출
             t_s_values = [item.T_S for item in match_info if item.T_S is not None]
-            return f"{sum(t_s_values)/len(t_s_values):.1f}" if t_s_values else '-'
+            return f"{sum(t_s_values)}" if t_s_values else '-'
         return '-'
 
     
