@@ -24,7 +24,7 @@ const Anal = () => {
       })
       .catch((error) => console.log(error));
 
-    getTeamMatchList({ team_code: sessionStorage.getItem('teamCode') })
+    getTeamMatchList({ team_code: sessionStorage.getItem('teamCode'), user_code: sessionStorage.getItem('userCode') })
       .then((response) => {
         setTeamMatchData(response.data.result || []);
       })

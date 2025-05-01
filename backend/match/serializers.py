@@ -18,6 +18,7 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
     home_team_logo = serializers.SerializerMethodField()
     away_team = serializers.SerializerMethodField()
     away_team_logo = serializers.SerializerMethodField()
+    sprint = serializers.SerializerMethodField()
 
 
     class Meta:
@@ -25,7 +26,7 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
         fields = ['match_code', 'match_schedule', 'match_location',
                     'thumbnail', 'match_title', 'match_time', 'distance', 
                     'top_speed', 'rating', 'home_team', 'home_team_logo', 'away_team',
-                  'away_team_logo']
+                  'away_team_logo', 'sprint']
         
     default_team_logo = get_file_url('img/teamlogo/default-team-logo.png')
     default_thumbnail = get_file_url('video/thumbnail/thumbnail1.png')
@@ -54,9 +55,9 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
             t_d_values = [item.T_D for item in self.match_info if item.T_D is not None]
             
             if t_d_values:
-                # ▶▶ 합계 계산로 변경
+                # 합계 계산 변경
                 total_sum = sum(t_d_values) 
-                return total_sum  # 정수 변환 (필요시 제거)
+                return int(total_sum * 100) / 100 # 소숫점 2자리로 절삭
             else:
                 return '-'
         else:
@@ -79,15 +80,27 @@ class User_Match_Info_Serializer(serializers.ModelSerializer):
     
     def get_rating(self, obj):
         # 새로운 쿼리셋 생성 (기존 match_info 재사용 X)
-        match_data = UserAnalMatch.objects.filter(
+        match_info = UserAnalMatch.objects.filter(
             match_code=obj.match_code, 
             user_code=self.user_code
         )
         
-        if match_data.exists():
+        if match_info.exists():
             # 모든 객체의 point 값 추출
-            points = [item.point.get('total', 0) for item in match_data if item.point]
+            points = [item.point.get('total', 0) for item in match_info if item.point]
             return f"{sum(points)/len(points):.1f}" if points else '-'
+        return '-'
+
+    def get_sprint(self, obj):
+        match_info = UserAnalMatch.objects.filter(
+            match_code=obj.match_code, 
+            user_code=self.user_code
+        )
+
+        if match_info.exists():
+            # 모든 객체의 T_S 값을 추출
+            t_s_values = [item.T_S for item in match_info if item.T_S is not None]
+            return f"{sum(t_s_values)}" if t_s_values else '-'
         return '-'
 
     
