@@ -203,7 +203,7 @@ export { Map, ActivityLevel, Speed, Sprint };
 const SwiperContainer = styled.div`
   position: relative;
   width: 85%;
-  height: 28vh;
+  height: 30vh;
   overflow: hidden;
   margin-top: 2vh;
 `;
@@ -234,8 +234,7 @@ const SwiperItem = styled.div`
 
   img {
     width: 100%;
-    height: auto;
-    object-fit: cover;
+    height: 100%;
   }
 `;
 
