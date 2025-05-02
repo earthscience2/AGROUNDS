@@ -401,7 +401,8 @@ class getMatchVideoInfo(APIView):
         if type == 'player':
             if user_code is None:
                 return Response({"error" : f"type이 {type}인 경우 user_code는 필수입니다."}, status=400)
-            video_info.filter(user_code=user_code)
+            if not is_super_user(user_code):
+                video_info = video_info.filter(user_code=user_code)
 
         if not video_info.exists():
             return Response({'error':'해당 영상이 존재하지 않습니다.'}, status=400)
