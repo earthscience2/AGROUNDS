@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from collections import defaultdict
 import json
 import os
 from django.conf import settings
@@ -264,6 +265,86 @@ class getOverall(APIView):
         if errors:
             return Response(errors, status=400)
         
+        user_code = data['user_code']
+
+        records = UserAnalMatch.objects.filter(user_code=user_code)
+        if is_super_user(user_code):
+            records = UserAnalMatch.objects.all()
+
+        match_groups = defaultdict(list)
+        for r in records:
+            match_groups[r.match_code].append(r)
+
+        match_summary = []
+        for match_code, group in match_groups.items():
+            latest_record = max((r for r in group if r.start), key=lambda x: x.start, default=None)
+            if latest_record:
+                match_summary.append((match_code, latest_record.start, group))
+
+        match_summary.sort(key=lambda x: x[1], reverse=True)
+        recent_matches = match_summary[:5]
+
+        total_point = defaultdict(list)
+        attack_trend = []
+        defense_trend = []
+        point_trend_recent = []
+
+        for match_code, latest_start, match_list in recent_matches:
+            a_tpt_list = []
+            d_tpt_list = []
+            match_points = []
+
+            for record in match_list:
+                if record.point:
+                    for k, v in record.point.items():
+                        total_point[k].append(v)
+                        match_points.append(v)  # 전체 합에도 반영
+                if record.A_TPT is not None:
+                    a_tpt_list.append(record.A_TPT)
+                if record.D_TPT is not None:
+                    d_tpt_list.append(record.D_TPT)
+
+            # attack/defense trend
+            if a_tpt_list:
+                attack_trend.append(round(sum(a_tpt_list) / len(a_tpt_list), 2))
+            if d_tpt_list:
+                defense_trend.append(round(sum(d_tpt_list) / len(d_tpt_list), 2))
+
+            # point trend
+            if match_points:
+                match_point_avg = round(sum(match_points) / len(match_points), 2)
+                point_trend_recent.append({
+                    "team_logo": default_team_logo,
+                    "match_date": latest_start.strftime("%Y-%m-%d"),
+                    "point": match_point_avg
+                })
+
+        # point 전체 평균
+        all_points = defaultdict(list)
+        for r in records:
+            if r.point:
+                for k, v in r.point.items():
+                    all_points[k].append(v)
+        avg_point = {k: round(sum(v)/len(v), 2) for k, v in all_points.items()}
+
+        # point_trend 평균
+        all_match_points = [entry["point"] for entry in point_trend_recent]
+        average_point = round(sum(all_match_points) / len(all_match_points), 2) if all_match_points else 0
+
+        def pad_trend(trend_list):
+            return trend_list + [0] * (5 - len(trend_list)) if len(trend_list) < 5 else trend_list
+
+        return Response({
+            "point": avg_point,
+            "attack_trend": pad_trend(attack_trend),
+            "defense_trend": pad_trend(defense_trend),
+            "point_trend": {
+                "recent_match": point_trend_recent,
+                "average_point": average_point
+            }
+        })
+        
+
         result = {
             "point": {
                 "total": 6.7,
@@ -296,8 +377,7 @@ class getOverall(APIView):
                 "average_point" : 7.2
             }
         }
-
-        if data['user_code'] == 'u_61143evsqg32' :
-            return Response(result)
         
         return Response({"error" : "데이터가 존재하지 않습니다."}, status=404)
+    
+    
