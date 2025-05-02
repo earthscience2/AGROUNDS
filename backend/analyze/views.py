@@ -281,8 +281,8 @@ class getOverall(APIView):
             if latest_record:
                 match_summary.append((match_code, latest_record.start, group))
 
-        match_summary.sort(key=lambda x: x[1], reverse=True)
-        recent_matches = match_summary[:5]
+        match_summary.sort(key=lambda x: x[1])
+        recent_matches = match_summary[-5:]
 
         total_point = defaultdict(list)
         attack_trend = []
@@ -332,7 +332,7 @@ class getOverall(APIView):
         average_point = round(sum(all_match_points) / len(all_match_points), 2) if all_match_points else 0
 
         def pad_trend(trend_list):
-            return trend_list + [0] * (5 - len(trend_list)) if len(trend_list) < 5 else trend_list
+            return [0] * (5 - len(trend_list)) + trend_list if len(trend_list) < 5 else trend_list
 
         return Response({
             "point": avg_point,
