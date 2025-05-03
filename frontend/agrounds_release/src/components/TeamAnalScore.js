@@ -7,10 +7,10 @@ import blue from '../assets/rank-blue.png';
 import green from '../assets/rank-green.png';
 import yellow from '../assets/rank-yellow.png';
 
-const TeamAnalScore = ({data}) => {
+const TeamAnalScore = ({data, title}) => {
   const rankingData = data || [];
-
-  const fPosition = data?.[0]?.position || ""
+  console.log(data)
+  const fPosition = data?.[0]?.position || 'ST'
 
   const backgroundImg = () => {
     if (fPosition === "LWF" || fPosition === "ST" || fPosition === "RWF") {
@@ -21,6 +21,20 @@ const TeamAnalScore = ({data}) => {
       return blue;
     } else {
       return yellow;
+    }
+  }
+
+  const unitTool = () => {
+    if (title === '평점'){
+      return '점'
+    } else if (title === '이동거리'){
+      return 'km'
+    } else if (title === '스프린트') {
+      return '회'
+    } else if (title === '최고속력') {
+      return 'm'
+    } else {
+      return ''
     }
   }
   return(
@@ -37,7 +51,7 @@ const TeamAnalScore = ({data}) => {
                     <div className='color' style={{backgroundColor: PositionDotColor(rank.position)}}></div>
                     <div className='po'>{rank.position}</div>
                   </div>
-                  <div className='value'>{rank.value}</div>
+                  <div className='value'>{rank.value} {unitTool()}</div>
                 </div>
                 <div className='img-box'>
                   {rank.profile ? <img src={rank.profile} className='img'/> : <img src={user} className='img'/>}
@@ -61,7 +75,7 @@ const TeamAnalScore = ({data}) => {
                   
                 </div>
               </div>
-              <div className='value'>{rank.value}</div>
+              <div className='value'>{rank.value}{unitTool()}</div>
             </div>
           )
         ))}

@@ -5,7 +5,7 @@ const RankBox = ({titleData, title, rank , km}) => {
   return (
     <RankBoxStyle>
       <div className='first-box'>
-        {km ? <div>{titleData} km</div> : <div>{titleData}</div> }
+        <div>{titleData} {km}</div>
         <div>{title}</div>
       </div>
       <div className='second-box'>
