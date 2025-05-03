@@ -22,7 +22,6 @@ ChartJS.register(
 
 const RayderChart = ({ data, error}) => {
   const chartRef = useRef();
-  console.log(data)
 
   const convertedData = error ? [50, 50, 50, 50, 50, 50] : data;
 
