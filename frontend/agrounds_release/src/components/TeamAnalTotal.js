@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 const TeamAnalTotal = ({data}) => {
   const topData = data.total.top_players;
   const myData = data.total.my_rankings;
-
+  
   const navigate = useNavigate();
 
   return(
