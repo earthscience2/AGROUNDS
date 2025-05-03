@@ -7,10 +7,10 @@ import blue from '../assets/rank-blue.png';
 import green from '../assets/rank-green.png';
 import yellow from '../assets/rank-yellow.png';
 
-const TeamAnalScore = ({data}) => {
+const TeamAnalScore = ({data, title}) => {
   const rankingData = data || [];
-
-  const fPosition = data?.[0]?.position || ""
+  
+  const fPosition = data?.[0]?.position || 'ST'
 
   const backgroundImg = () => {
     if (fPosition === "LWF" || fPosition === "ST" || fPosition === "RWF") {
@@ -21,6 +21,20 @@ const TeamAnalScore = ({data}) => {
       return blue;
     } else {
       return yellow;
+    }
+  }
+
+  const unitTool = () => {
+    if (title === '평점'){
+      return '점'
+    } else if (title === '이동거리'){
+      return 'km'
+    } else if (title === '스프린트') {
+      return '회'
+    } else if (title === '최고속력') {
+      return 'km/h'
+    } else {
+      return ''
     }
   }
   return(
@@ -37,7 +51,7 @@ const TeamAnalScore = ({data}) => {
                     <div className='color' style={{backgroundColor: PositionDotColor(rank.position)}}></div>
                     <div className='po'>{rank.position}</div>
                   </div>
-                  <div className='value'>{rank.value}</div>
+                  <div className='value'>{rank.value} <span className='valueunit'>{unitTool()}</span></div>
                 </div>
                 <div className='img-box'>
                   {rank.profile ? <img src={rank.profile} className='img'/> : <img src={user} className='img'/>}
@@ -61,7 +75,7 @@ const TeamAnalScore = ({data}) => {
                   
                 </div>
               </div>
-              <div className='value'>{rank.value}</div>
+              <div className='value'>{rank.value}<span className='valueunit'>{unitTool()}</span></div>
             </div>
           )
         ))}
@@ -147,7 +161,11 @@ const TeamAnalScoreStyle = styled.div`
               font-size: 2.4vh;
               font-weight: 700;
               color: white;
+  
             }
+            .valueunit{
+                font-size: 2vh;
+              }
           }
           .img-box{
             height: 7vh;
@@ -174,8 +192,12 @@ const TeamAnalScoreStyle = styled.div`
       margin: auto;
       border-bottom: 1px solid #F2F4F8;
       height: 8vh;
-      width: 85%;
+      width: 100%;
       .rank{
+        width: 18%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 2vh;
         font-weight: 700;
       }
@@ -183,10 +205,12 @@ const TeamAnalScoreStyle = styled.div`
         display: flex;
         flex-direction: row;
         align-items: center;
-        width: 65%;
+        flex: 1;
+        /* width: 25vh;
+        max-width: 65%; */
         .img-box{
-          height: 4vh;
-          width: 4vh;
+          height: 4.5vh;
+          width: 4.5vh;
           border-radius: 50%;
           overflow: hidden; 
           display: flex;
@@ -227,12 +251,16 @@ const TeamAnalScoreStyle = styled.div`
         }
       }
       .value{
-          font-size: 2.3vh;
-          font-weight: 700;
-          color: #697077;
-          text-align: center;
-          min-width: 5vh;
-        }
+        width: 30%;
+        font-size: 2.3vh;
+        font-weight: 700;
+        color: #697077;
+        text-align: center;
+        min-width: 5vh;
+      }
+      .valueunit{
+        font-size: 1.8vh;
+      }
     }
   }
 `

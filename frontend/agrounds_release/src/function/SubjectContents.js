@@ -535,7 +535,7 @@ const AverageScoreStyle = styled.div`
     width: 80%;
     align-items: end;
     .score{
-      font-size: 3.5vh;
+      font-size: 3vh;
       font-weight: 700;
       font-family: 'Pretendard';
       margin: 0;
