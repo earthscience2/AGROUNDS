@@ -141,9 +141,9 @@ class getTeamAnalyzeResult(APIView):
 
             activity_ranking = []
 
-            anal_match_sorted_by_activity = self.sort_by_target(user_anal_matchs_in_quarter, 'point_positiveness')
+            anal_match_sorted_by_activity = self.sort_by_target(user_anal_matchs_in_quarter, 'T_D')
             for anal_match in anal_match_sorted_by_activity:
-                activity_ranking.append(self.get_player_info(anal_match, 'point_positiveness'))
+                activity_ranking.append(self.get_player_info(anal_match, 'T_D'))
 
             sprint_ranking = []
             anal_match_sorted_by_sprint = self.sort_by_target(user_anal_matchs_in_quarter, 'T_S')
@@ -225,7 +225,6 @@ class getTeamAnalyzeResult(APIView):
 
         top_players['top_point'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'point_total')
         top_players['top_activity'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_D')
-        top_players['top_sprint'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_S')
         top_players['top_sprint'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_S')
         top_players['top_speed'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_HS')
 
