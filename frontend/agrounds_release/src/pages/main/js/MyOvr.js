@@ -18,6 +18,7 @@ const MyOvr = () => {
       if (response.data && response.data.point) {
         setOvrData(response.data);
         setRaderData(Object.values(response.data.point));
+        console.log(response.data.point)
       } else {
         setRaderData([]);
       }
@@ -27,6 +28,21 @@ const MyOvr = () => {
     })
   }, [])
 
+  const chartPoints = [
+    ovrData.point?.total || 0,
+    ovrData.point?.sprint || 0,
+    ovrData.point?.acceleration || 0,
+    ovrData.point?.speed || 0,
+    ovrData.point?.positiveness || 0,
+    ovrData.point?.stamina || 0,
+  ];
+  const barChartPoints = [
+    ovrData.point?.stamina || 0,
+    ovrData.point?.positiveness || 0,
+    ovrData.point?.speed || 0,
+    ovrData.point?.acceleration || 0,
+    ovrData.point?.sprint || 0,
+  ];
   return (
     <div className="myovr">
       <Back_btn />
@@ -40,10 +56,10 @@ const MyOvr = () => {
       
       <div style={{marginTop: '-5vh'}}></div>
       {error 
-      ? <p className='rader-rate-e' style={{color: '#878D96'}}>{RaderData[0]}</p>
-      : <p className='rader-rate' >{RaderData[0]}</p>
+      ? <p className='rader-rate-e' style={{color: '#878D96'}}>{ovrData.point?.total}</p>
+      : <p className='rader-rate' >{ovrData.point?.total}</p>
       }
-      {RaderData && <RayderChart data={RaderData} error={error}/> }
+      {RaderData && <RayderChart data={chartPoints} error={error}/> }
     
       <div className="avescorebox">
         <Main_Subject BG="white" color="black" arrow={false}>
@@ -56,7 +72,7 @@ const MyOvr = () => {
    
       <div className="myovrchartbox">
         <Main_Subject title="OVR지수 추세" BG="white" color="black" arrow={true}>
-          <OvrBarChart data={RaderData} error={error}/>
+          <OvrBarChart data={barChartPoints} error={error}/>
         </Main_Subject>
       </div>
     </div>
