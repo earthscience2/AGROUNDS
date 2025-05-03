@@ -21,7 +21,7 @@ const TeamAnalTotal = ({data}) => {
         </div>
         <div className="high-column">
           <HighBox img={topData.top_sprint.profile} position={topData.top_sprint.position} name={topData.top_sprint.nickname} title='스프린트' titleData={topData.top_sprint.value} km='회' onClick={() => navigate('/app/teamrank', {state: {title: '스프린트', data: data.ranking.sprint_ranking}})}/>
-          <HighBox img={topData.top_speed.profile} position={topData.top_speed.position} name={topData.top_speed.nickname} title='최고속력' titleData={topData.top_speed.value} km='m/h' onClick={() => navigate('/app/teamrank', {state: {title: '최고속력', data: data.ranking.speed_ranking}})}/>
+          <HighBox img={topData.top_speed.profile} position={topData.top_speed.position} name={topData.top_speed.nickname} title='최고속력' titleData={topData.top_speed.value} km='km/h' onClick={() => navigate('/app/teamrank', {state: {title: '최고속력', data: data.ranking.speed_ranking}})}/>
         </div>
       </div>
       <div className="title2">나의 순위</div>
@@ -32,7 +32,7 @@ const TeamAnalTotal = ({data}) => {
         </div>
         <div className="rank-column">
           <RankBox title='스프린트' titleData={myData.sprint.value} rank={myData.sprint.rank} km={'회'}/>
-          <RankBox title='최고속력' titleData={myData.speed.value} rank={myData.speed.rank} km={'m/h'}/>
+          <RankBox title='최고속력' titleData={myData.speed.value} rank={myData.speed.rank} km={'km/h'}/>
         </div>
       </div>
     </TeamAnalTotalStyle>
