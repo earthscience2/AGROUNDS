@@ -22,8 +22,9 @@ ChartJS.register(
 
 const RayderChart = ({ data, error}) => {
   const chartRef = useRef();
+  console.log(data)
 
-  const convertedData = error ? [50, 50, 50, 50, 50, 50] : data.map(value => value * 10);
+  const convertedData = error ? [50, 50, 50, 50, 50, 50] : data;
 
   const chartData = {
     labels: ['평점', '스프린트', '가속도', '스피드', '적극성', '체력'],
@@ -64,7 +65,7 @@ const RayderChart = ({ data, error}) => {
         },
         ticks: {
           display: false,
-          stepSize: 100,
+          stepSize: 20,
         },
       },
     },
