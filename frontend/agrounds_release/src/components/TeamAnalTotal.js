@@ -9,8 +9,7 @@ const TeamAnalTotal = ({data}) => {
   const myData = data.total.my_rankings;
 
   const navigate = useNavigate();
-  console.log('평점',data.ranking.point_ranking)
-  console.log('이동거리',data.ranking.activity_ranking)
+
   return(
     <TeamAnalTotalStyle>
       <div className="title">팀내 항목별 최고 순위</div>

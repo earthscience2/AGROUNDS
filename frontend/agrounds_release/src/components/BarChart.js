@@ -15,7 +15,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const OvrBarChart = ({ data, error }) => {
   const chartRef = useRef();
-  console.log('barchart', data)
+
   useEffect(() => {
     return () => {
       if (chartRef.current) {

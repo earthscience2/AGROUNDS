@@ -18,7 +18,7 @@ const MyOvr = () => {
       if (response.data && response.data.point) {
         setOvrData(response.data);
         setRaderData(Object.values(response.data.point));
-        console.log(response.data.point)
+
       } else {
         setRaderData([]);
       }

@@ -9,7 +9,7 @@ import yellow from '../assets/rank-yellow.png';
 
 const TeamAnalScore = ({data, title}) => {
   const rankingData = data || [];
-  console.log(data)
+  
   const fPosition = data?.[0]?.position || 'ST'
 
   const backgroundImg = () => {

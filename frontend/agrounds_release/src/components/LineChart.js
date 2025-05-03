@@ -25,7 +25,7 @@ ChartJS.register(
 
 const CustomLineChart = ({ data, speed }) => {
   const isEmpty = !data || data.length !== 5;
-  console.log('linechart',data)
+  
   const placeholderData = [0, 0, 0, 0, 0];
   const processedData = isEmpty ? placeholderData : data.map((value) => value * 10);
 
