@@ -24,7 +24,7 @@ const OvrBarChart = ({ data, error }) => {
     };
   }, []);
 
-  const labels = ['체력', '순발력', '스피드', '가속도', '스프린트'];
+  const labels = ['체력', '적극성', '스피드', '가속도', '스프린트'];
 
   if (error) {
     return (
@@ -44,13 +44,12 @@ const OvrBarChart = ({ data, error }) => {
     );
   }
 
-  const convertedData = data.map(value => value * 10);
   const chartData = {
     labels: labels,
     datasets: [
       {
         label: '',
-        data: convertedData,
+        data: data,
         backgroundColor: ['#5BECB0', '#29E2A0', '#1BD39E', '#14C19A', '#18BDA5'],
       },
     ],

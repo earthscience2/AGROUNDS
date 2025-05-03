@@ -7,14 +7,14 @@ import {useLocation} from 'react-router-dom';
 const TeamRank = () => {
   const location = useLocation();
   const { title, data } = location.state || {}
-
+  
   return (
     <TeamRankStyle>
       <Back_btn />
       <div className='title'>
         {title} 순위
       </div>
-      <TeamAnalScore data={data}/>
+      <TeamAnalScore title={title} data={data}/>
     </TeamRankStyle>
   );
 };

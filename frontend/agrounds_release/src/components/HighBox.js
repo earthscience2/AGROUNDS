@@ -19,6 +19,7 @@ const HighBox = ({ img, name, title, titleData, km, position, onClick }) => {
       return yellow;
     }
   }
+  
   return (
     <HighBoxStyle onClick={onClick}>
       <div className='first-box'>
