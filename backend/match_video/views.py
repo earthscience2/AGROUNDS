@@ -5,6 +5,7 @@ from rest_framework.generics import get_object_or_404
 from django.db.models import Min
 from staticfiles.make_file_key import get_link, get_download_link
 from staticfiles.get_youtube_info import extract_video_id, thumbnail_url
+from django.db.models import Q
 
 from staticfiles.super_user import is_super_user
 
@@ -42,11 +43,20 @@ class getVideoSummation(APIView):
         
         player_videos = VideoInfo.objects.filter(user_code = user_code, type = 'player')
         
-        user_matchs = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+        user_team = UserTeam.objects.filter(user_code=user_code)
+        user_matches = []
 
-        team_videos = VideoInfo.objects.filter(match_code__in=user_matchs, type='team')
+        if user_team.exists():
+            team_code = user_team.first().team_code
+            user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+            team_matches = TeamMatch.objects.filter(team_code=team_code).values_list('match_code', flat=True)
+            user_matches = list(set(user_matches) | set(team_matches))
+        else:
+            user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
 
-        full_videos = VideoInfo.objects.filter(match_code__in=user_matchs, type='full')
+        team_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='team')
+
+        full_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='full')
 
         if is_super_user(user_code):
             player_videos = VideoInfo.objects.filter(type = 'player')
@@ -169,8 +179,17 @@ class getTeamVideoList(APIView):
             user_info = UserInfo.objects.get(user_code=user_code)
         except UserInfo.DoesNotExist:
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
+        
+        user_team = UserTeam.objects.filter(user_code=user_code)
+        user_matches = []
 
-        user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+        if user_team.exists():
+            team_code = user_team.first().team_code
+            user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+            team_matches = TeamMatch.objects.filter(team_code=team_code).values_list('match_code', flat=True)
+            user_matches = list(set(user_matches) | set(team_matches))
+        else:
+            user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
 
         team_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='team')
 
@@ -252,7 +271,16 @@ class getFullVideoList(APIView):
         except UserInfo.DoesNotExist:
             return Response({'error': f'user_code({user_code})에 해당하는 유저가 존재하지 않습니다.'})
 
-        user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+        user_team = UserTeam.objects.filter(user_code=user_code)
+        user_matches = []
+
+        if user_team.exists():
+            team_code = user_team.first().team_code
+            user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
+            team_matches = TeamMatch.objects.filter(team_code=team_code).values_list('match_code', flat=True)
+            user_matches = list(set(user_matches) | set(team_matches))
+        else:
+            user_matches = UserMatch.objects.filter(user_code=user_code).values_list('match_code', flat=True)
 
         full_videos = VideoInfo.objects.filter(match_code__in=user_matches, type='full')
 
