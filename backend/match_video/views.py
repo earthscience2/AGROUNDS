@@ -73,15 +73,15 @@ class getVideoSummation(APIView):
         
         result = {
             "player_cam" : {
-                "thumbnail" : thumnails,
+                "thumbnail" : self.get_thumnail_list(player_videos),
                 "number_of_videos" : player_videos_number
             },
             "team_cam" : {
-                "thumbnail" : thumnails,
+                "thumbnail" : self.get_thumnail_list(team_videos),
                 "number_of_videos" : team_videos_number
             },
             "full_cam" : {
-                "thumbnail" : thumnails,
+                "thumbnail" : self.get_thumnail_list(full_videos),
                 "number_of_videos" : full_videos_number
             },
             "highlight_cam" : {
@@ -91,6 +91,30 @@ class getVideoSummation(APIView):
         }
 
         return Response(result)
+    
+    def get_thumnail_list(self, videos):
+        thumbnails = []
+        for i in range (0, min(len(videos), 3)):
+            thumbnail = get_file_url(f'video/thumbnail/thumbnail{i+1}.png')
+
+            if not videos[i].quarter_name_list or not videos[i].path:
+                thumbnails.append(thumbnail)
+                continue
+        
+            first_quarter = videos[i].quarter_name_list[0]
+            
+            url = videos[i].path.get(first_quarter)
+
+            thumbnail = thumbnail_url(extract_video_id(url))
+            
+            thumbnails.append(thumbnail)
+
+        if len(thumbnails) < 3:
+            for i in range (2 - len(thumbnails), 3 - len(thumbnails)):
+                thumbnail = get_file_url(f'video/thumbnail/thumbnail{i+1}.png')
+                thumbnails.append(thumbnail)
+
+        return thumbnails
 
 class getPlayerVideoList(APIView):
     def post(self, request):
