@@ -191,7 +191,7 @@ STATICFILES_DIRS = [  # 리액트 앱 빌드 디렉토리
 # AWS S3 bucket 설정
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'agrounds-image-bucket'
+AWS_STORAGE_BUCKET_NAME = 'aground-gps'
 AWS_S3_REGION_NAME = 'ap-northeast-2'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
