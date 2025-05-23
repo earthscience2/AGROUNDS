@@ -141,9 +141,9 @@ class getTeamAnalyzeResult(APIView):
 
             activity_ranking = []
 
-            anal_match_sorted_by_activity = self.sort_by_target(user_anal_matchs_in_quarter, 'point_positiveness')
+            anal_match_sorted_by_activity = self.sort_by_target(user_anal_matchs_in_quarter, 'T_D')
             for anal_match in anal_match_sorted_by_activity:
-                activity_ranking.append(self.get_player_info(anal_match, 'point_positiveness'))
+                activity_ranking.append(self.get_player_info(anal_match, 'T_D'))
 
             sprint_ranking = []
             anal_match_sorted_by_sprint = self.sort_by_target(user_anal_matchs_in_quarter, 'T_S')
@@ -152,9 +152,9 @@ class getTeamAnalyzeResult(APIView):
 
 
             speed_ranking = []
-            anal_match_sorted_by_speed = self.sort_by_target(user_anal_matchs_in_quarter, 'T_AS')
+            anal_match_sorted_by_speed = self.sort_by_target(user_anal_matchs_in_quarter, 'T_HS')
             for anal_match in anal_match_sorted_by_speed:
-                speed_ranking.append(self.get_player_info(anal_match, 'T_AS'))
+                speed_ranking.append(self.get_player_info(anal_match, 'T_HS'))
 
             ranking['point_ranking'] = point_ranking
             ranking['activity_ranking'] = activity_ranking
@@ -189,24 +189,28 @@ class getTeamAnalyzeResult(APIView):
     def get_player_info(self, user_anal_match, target):
         profile = default_team_logo
         user_code = nickname = value = position = '-'
-
-        if user_anal_match is not None:
-            user_code = user_anal_match.user_code
-            value = self.get_value_by_target(user_anal_match, target)
-            position = user_anal_match.position
-
         result = {
             "profile" : profile,
             "nickname" : nickname,
             "value" : value,
             "position" : position
         }
-        if user_code == '-':
+
+        if user_anal_match is None:
             return result
+        
+        user_code = user_anal_match.user_code
+        value = self.get_value_by_target(user_anal_match, target)
+        position = user_anal_match.position
+
         try:
             user_info = UserInfo.objects.get(user_code=user_code)
-            # result['profile'] = '-'
+            # result['profile'] = ''
             result['nickname'] = user_info.user_nickname
+            if not position:
+                result['position'] = user_info.user_position
+            result['value'] = value
+            
             return result
         except UserInfo.DoesNotExist:
             return result
@@ -221,7 +225,6 @@ class getTeamAnalyzeResult(APIView):
 
         top_players['top_point'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'point_total')
         top_players['top_activity'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_D')
-        top_players['top_sprint'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_S')
         top_players['top_sprint'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_S')
         top_players['top_speed'] = self.get_top_player_info(user_anal_matchs_in_quarter, 'T_HS')
 

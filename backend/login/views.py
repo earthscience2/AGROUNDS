@@ -32,6 +32,8 @@ from django.contrib.auth import get_user_model
 
 import traceback
 import logging
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 logger = logging.getLogger('django')
 
@@ -429,3 +431,22 @@ class login(APIView):
 #         user_info_serializer.is_valid(raise_exception=True)
 #         user_info_serializer.save()
 #         return Response(user_info_serializer.data, status=status.HTTP_200_OK)
+
+class UserDelete(APIView):
+    """
+    회원 탈퇴 API (DELETE)
+    헤더에 JWT 토큰 필요
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        user = request.user
+        try:
+            user_info = UserInfo.objects.get(user_code=user.user_code)
+            user_info.delete()
+            return Response({"message": "회원 탈퇴가 완료되었습니다."}, status=200)
+        except UserInfo.DoesNotExist:
+            return Response({"error": "해당 사용자가 존재하지 않습니다."}, status=404)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
