@@ -18,7 +18,7 @@ class Pending_Invite_Team_Serializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errors)
         
         if PendingInviteTeam.objects.filter(team_code=data['team_code'], user_code=data['user_code']).exists():
-            raise serializers.ValidationError({"error":"이미 요청하였습니다."})
+            raise serializers.ValidationError({"error":"이미 해당팀에 요청이 완료되어, 수락 대기 중입니다."})
         
         if UserTeam.objects.filter(user_code=data['user_code']).exists():
             raise serializers.ValidationError({"error":"이미 팀에 소속되어 있습니다."})
