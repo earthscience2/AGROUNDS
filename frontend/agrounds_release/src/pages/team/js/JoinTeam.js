@@ -62,8 +62,7 @@ const JoinTeam = () => {
           closeModal();
         })
         .catch((error) => {
-          console.log(error)
-          alert("신청 중 오류가 발생했습니다.");
+          alert(error.error?.[0] ?? "알 수 없는 오류가 발생했습니다.");
         });
     }
   };
