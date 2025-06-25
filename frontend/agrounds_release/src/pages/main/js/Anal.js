@@ -31,6 +31,12 @@ const Anal = () => {
       .catch((error) => console.log(error));
   }, []);
 
+  // participation이 0이 아닌 데이터만 필터링하는 함수
+  const filterParticipationData = (data) => {
+    return data.filter(item => item.participation !== 0);
+  };
+
+  // 정렬 함수
   const getSortedData = (data) => {
     return [...data].sort((a, b) => {
       if (sortOrder === 'newest') {
@@ -41,7 +47,21 @@ const Anal = () => {
     });
   };
 
-  const currentData = activeTab === 'personal' ? getSortedData(personalMatchData) : getSortedData(teamMatchData);
+  // 필터링과 정렬을 함께 처리하는 함수
+  const getProcessedData = (data, isTeamData = false) => {
+    let processedData = data;
+    
+    // 팀 데이터인 경우에만 participation 필터링 적용
+    if (isTeamData) {
+      processedData = filterParticipationData(data);
+    }
+    
+    return getSortedData(processedData);
+  };
+
+  const currentData = activeTab === 'personal' 
+    ? getProcessedData(personalMatchData, false) 
+    : getProcessedData(teamMatchData, true);
 
   return (
     <div className="anal">

@@ -178,7 +178,7 @@ class Team_Match_Info_Serializer(serializers.ModelSerializer):
         return '-'
     
     def get_participation(self, obj):
-        return UserMatch.objects.filter(match_code=obj.match_code).count()
+        return len(obj.match_code_list) if obj.match_code_list else 0
     
     def get_home_team(self, obj):
         team_match = TeamMatch.objects.filter(match_code = obj.match_code)
