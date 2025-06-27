@@ -125,17 +125,15 @@ class GroundInfo(models.Model):
     center = models.JSONField()
     long_side_length = models.FloatField()
     short_side_length = models.FloatField()
-    angle = models.FloatField()
-    new_short = models.JSONField()
+    rotate_deg = models.FloatField()
+    rotated_corners = models.JSONField()
     new_long = models.JSONField()
-    extend_short = models.JSONField()
-    extend_long = models.JSONField()
+    new_short = models.JSONField()
     north_side_utm = models.JSONField()
     south_side_utm = models.JSONField()
     east_side_utm = models.JSONField()
     west_side_utm = models.JSONField()
-    rotate_deg = models.FloatField()
-    rotated_corners = models.JSONField()
+    who_add = models.CharField(max_length=45)
 
     class Meta:
         managed = False
