@@ -23,11 +23,20 @@ ChartJS.register(
   Legend
 );
 
-const CustomLineChart = ({ data, speed }) => {
+const CustomLineChart = ({ data, speed, dates }) => {
   const isEmpty = !data || data.length !== 5;
   
   const placeholderData = [0, 0, 0, 0, 0];
   const processedData = isEmpty ? placeholderData : data.map((value) => value * 10);
+
+  // 날짜 포맷팅 함수 (월.일 형식)
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${month}.${day}`;
+  };
 
   const minY = Math.min(...processedData);
   const maxY = Math.max(...processedData);
@@ -112,6 +121,40 @@ const CustomLineChart = ({ data, speed }) => {
             />
           ))}
         </div>
+      )}
+
+      {/* 시작과 끝 점에 날짜 표시 */}
+      {!isEmpty && dates && dates.length >= 2 && (
+        <>
+          {/* 시작점 날짜 */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '-15%',
+              left: '8%',
+              fontSize: '1.2vh',
+              color: '#525252',
+              fontWeight: '500',
+              transform: 'translateX(-50%)',
+            }}
+          >
+            {formatDate(dates[0])}
+          </div>
+          {/* 끝점 날짜 */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '-15%',
+              right: '8%',
+              fontSize: '1.2vh',
+              color: '#525252',
+              fontWeight: '500',
+              transform: 'translateX(50%)',
+            }}
+          >
+            {formatDate(dates[dates.length - 1])}
+          </div>
+        </>
       )}
 
       {/* {!isEmpty && (

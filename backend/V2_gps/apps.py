@@ -1,6 +1,0 @@
-from django.apps import AppConfig
-
-
-class V2GpsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'V2_gps'

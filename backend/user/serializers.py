@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from DB.models import *
+from DB.models import UserInfo
 import re
 
 class User_main_page(serializers.ModelSerializer):

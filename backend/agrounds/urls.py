@@ -1,10 +1,15 @@
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from rest_framework import routers
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+# user 앱의 뷰 임포트
+from user import views as user_views
 
 router = routers.DefaultRouter()
 
@@ -27,17 +32,19 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # 백엔드 api
 
-    # test page
-    path("api/test_page/", include("test_page.urls")),
-
     # app
     path("api/user/", include("user.urls")),
     path("api/login/", include("login.urls")),
-    path("api/team/", include("team.urls")),
-    path("api/player/", include("player.urls")),
     path("api/match/", include("match.urls")),
-    path("api/video/", include("match_video.urls")),
-    path("api/analyze/", include("analyze.urls")),
+    path("api/anal/", include("anal.urls")),
+    
+    # analysis 엔드포인트 (user 앱의 뷰를 직접 사용)
+    path("api/analysis/", include([
+        path("get-ovr-data/", user_views.GetUserOvrDataView.as_view()),
+        path("get-stats-data/", user_views.GetUserStatsDataView.as_view()),
+        path("get-point-data/", user_views.GetUserPointDataView.as_view()),
+    ])),
+
     path("api/ground/", include("ground.urls")),
     path("api/upload/", include("upload.urls")),
 ]
@@ -47,3 +54,7 @@ urlpatterns += [
    path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
    path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
+
+# 개발 환경에서 로컬 미디어 파일 서빙
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,63 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.mypage{
+  @include display(flex, column, center, start);
+  background-color: rgb(247,248,250);
+  width: 100%;
+  max-width: 499px;
+  &:last-child{
+    margin-bottom: 10vh;
+  }
+  .my-infobox{
+    @include display(flex, row, center, start);
+    width: 90%;
+    
+    .image-compbox{
+      .camera-bg{
+        width: 4vh;
+        height: 4vh;
+        background-color: #343A3F;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        top: 18vh;
+        left: 10vh;
+        .camera{
+          width: 60%;
+       
+        }
+      }
+    }
+    .infotext{
+      margin-left: 3vh;
+      .ename{
+        @include font(3vh, 700, #333333);
+        margin: 0;
+        font-family: 'Pretendard';
+      }
+      .kname{
+        @include font(1.5vh, 600, #AFAFAF);
+        margin: 1vh 0 0 0;
+        font-family: 'Pretendard';
+      }
+      .fc{
+        @include font(1.8vh, 600, #333333);
+        margin: 1vh 0 0 0;
+        font-family: 'Pretendard';
+      }
+    }
+  }
+}

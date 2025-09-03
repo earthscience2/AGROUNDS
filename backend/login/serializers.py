@@ -1,13 +1,9 @@
 from rest_framework import serializers
-from DB.models import UserInfo
-
-
-from rest_framework import serializers
-
 from django.contrib.auth.hashers import make_password
-from staticfiles.make_code import make_code
-
 import re
+
+from DB.models import UserInfo
+from staticfiles.make_code import make_code
 
 class User_Info_Serializer(serializers.ModelSerializer):
     class Meta:

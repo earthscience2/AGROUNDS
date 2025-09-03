@@ -25,13 +25,12 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     # Local apps
     "DB",
-    "test_page",
     "login",
-    "team",
-    "player",
+    "ground",
+    "upload",
+    "user",
     "match",
-    "match_video",
-    "analyze",
+    "anal",
     # Third party apps
     "rest_framework",
     "drf_yasg",
@@ -170,6 +169,7 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
+
     "http://localhost:3000",
 ]
 
@@ -179,7 +179,7 @@ LANGUAGE_CODE = "ko-kr"
 TIME_ZONE = "Asia/Seoul"
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -195,9 +195,16 @@ AWS_STORAGE_BUCKET_NAME = 'aground-gps'
 AWS_S3_REGION_NAME = 'ap-northeast-2'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
-# S3에 저장되는 파일의 URL 구성
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-DEFAULT_FILE_STORAGE = 'agrounds.storage_backends.MediaStorage'
+# 로컬 미디어 파일 설정 (프로필 이미지 등)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 개발 환경에서는 로컬 미디어 URL 사용, 프로덕션에서는 S3 사용
+if DEBUG:
+    MEDIA_URL = '/media/'
+else:
+    # S3에 저장되는 파일의 URL 구성
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    DEFAULT_FILE_STORAGE = 'agrounds.storage_backends.MediaStorage'
 
 LOGGING = {
     'version': 1,

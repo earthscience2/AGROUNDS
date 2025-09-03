@@ -1,0 +1,490 @@
+.card-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease;
+
+  // 카드 색상별 배경 그라데이션
+  &.bg-blue {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 30%, #bfdbfe 60%, #f8fafc 100%);
+  }
+
+  &.bg-green {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 30%, #a7f3d0 60%, #f8fafc 100%);
+  }
+
+  &.bg-orange {
+    background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 30%, #fdba74 60%, #f8fafc 100%);
+  }
+
+  &.bg-yellow {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%, #fde68a 60%, #f8fafc 100%);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+
+    .back-button {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    h1 {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      font-weight: 600;
+      color: #1f2937;
+      margin: 0;
+    }
+  }
+
+  .player-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    margin-bottom: 40px;
+
+    .player-card {
+      width: 350px;
+      height: 500px;
+      border-radius: 24px;
+      padding: 24px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+
+      &.blue {
+        background-color: #3b82f6;
+      }
+
+      &.green {
+        background-color: #10b981;
+      }
+
+      &.orange {
+        background-color: #f59e0b;
+      }
+
+      &.yellow {
+        background-color: #eab308;
+      }
+
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 32px;
+        flex: 0 0 auto;
+
+        .player-info {
+          flex: 1;
+          
+          .player-name {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            margin: 0 0 8px 0;
+            line-height: 1.1;
+            font-family: 'Paperlogy-8ExtraBold', sans-serif;
+          }
+
+          .player-age {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+            font-weight: 500;
+          }
+        }
+
+        .player-specs {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          text-align: right;
+          flex: 0 0 auto;
+
+          .spec-item {
+            .spec-label,
+            .spec-value {
+              font-size: 16px;
+              color: white;
+              font-weight: 600;
+              display: block;
+            }
+          }
+        }
+      }
+
+      .card-middle {
+        position: relative;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        margin: 20px 0;
+
+        .position-display {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+
+          .position {
+            font-size: 120px;
+            font-weight: 900;
+            color: white;
+            letter-spacing: 4px;
+            font-family: 'Paperlogy-8ExtraBold', sans-serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+          }
+        }
+
+        .position-image {
+          flex: 0 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .position-icon {
+            width: 120px;
+            height: 120px;
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+          }
+        }
+
+        // 점 패턴 추가 (이미지 참고)
+        &::before {
+          content: '';
+          position: absolute;
+          right: 60px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 8px;
+          height: 120px;
+          background: repeating-linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.3) 0px,
+            rgba(255, 255, 255, 0.3) 8px,
+            transparent 8px,
+            transparent 16px
+          );
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: 80px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 8px;
+          height: 100px;
+          background: repeating-linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.4) 0px,
+            rgba(255, 255, 255, 0.4) 8px,
+            transparent 8px,
+            transparent 16px
+          );
+        }
+      }
+
+      .card-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex: 0 0 auto;
+        margin-top: auto;
+        padding-top: 20px;
+
+        .agrounds-logo {
+          flex: 0 0 auto;
+          
+          img {
+            width: 60px;
+            height: auto;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+          }
+        }
+
+        .team-info {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex: 1;
+          justify-content: flex-end;
+
+          .team-logo {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+          }
+
+          .team-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            font-family: 'Paperlogy-8ExtraBold', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+          }
+        }
+      }
+    }
+  }
+
+
+
+  .loading,
+  .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    font-size: 18px;
+    color: #6b7280;
+  }
+
+  .error {
+    color: #ef4444;
+  }
+}
+
+// PC 화면 최적화
+@media (min-width: 1200px) {
+  .card-page {
+    .player-card-container {
+      .player-card {
+        width: 400px;
+        height: 560px;
+        padding: 32px;
+
+        .card-top {
+          margin-bottom: 40px;
+
+          .player-info {
+            .player-name {
+              font-size: 56px;
+            }
+
+            .player-age {
+              font-size: 22px;
+            }
+          }
+
+          .player-specs {
+            .spec-item {
+              .spec-label,
+              .spec-value {
+                font-size: 18px;
+              }
+            }
+          }
+        }
+
+        .card-middle {
+          .position-display {
+            .position {
+              font-size: 140px;
+            }
+          }
+
+          .position-image {
+            .position-icon {
+              width: 140px;
+              height: 140px;
+            }
+          }
+        }
+
+        .card-bottom {
+          .agrounds-logo {
+            img {
+              width: 70px;
+            }
+          }
+
+          .team-info {
+            .team-name {
+              font-size: 22px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// 반응형 디자인
+@media (max-width: 768px) {
+  .card-page {
+    padding: 15px;
+
+    .player-card-container {
+      .player-card {
+        width: 320px;
+        height: 450px;
+        padding: 20px;
+
+        .card-top {
+          margin-bottom: 24px;
+
+          .player-info {
+            .player-name {
+              font-size: 44px;
+              margin: 0 0 6px 0;
+            }
+
+            .player-age {
+              font-size: 18px;
+            }
+          }
+
+          .player-specs {
+            .spec-item {
+              .spec-label,
+              .spec-value {
+                font-size: 15px;
+              }
+            }
+          }
+        }
+
+        .card-middle {
+          .position-display {
+            .position {
+              font-size: 100px;
+            }
+          }
+
+          .position-image {
+            .position-icon {
+              width: 100px;
+              height: 100px;
+            }
+          }
+        }
+
+        .card-bottom {
+          .agrounds-logo {
+            img {
+              width: 50px;
+            }
+          }
+
+          .team-info {
+            .team-name {
+              font-size: 18px;
+            }
+          }
+        }
+      }
+    }
+
+
+  }
+}
+
+@media (max-width: 480px) {
+  .card-page {
+    padding: 10px;
+
+    .player-card-container {
+      .player-card {
+        width: 280px;
+        height: 400px;
+        padding: 16px;
+
+        .card-top {
+          margin-bottom: 20px;
+
+          .player-info {
+            .player-name {
+              font-size: 38px;
+              margin: 0 0 4px 0;
+            }
+
+            .player-age {
+              font-size: 16px;
+            }
+          }
+
+          .player-specs {
+            .spec-item {
+              .spec-label,
+              .spec-value {
+                font-size: 14px;
+              }
+            }
+          }
+        }
+
+        .card-middle {
+          .position-display {
+            .position {
+              font-size: 80px;
+            }
+          }
+
+          .position-image {
+            .position-icon {
+              width: 80px;
+              height: 80px;
+            }
+          }
+        }
+
+        .card-bottom {
+          .agrounds-logo {
+            img {
+              width: 45px;
+            }
+          }
+
+          .team-info {
+            .team-name {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

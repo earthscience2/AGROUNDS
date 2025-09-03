@@ -211,11 +211,35 @@ const AverageScore = ({data, error}) => {
 const AttackAve = ({data, error}) => {
   const [attackData, setAttackData] = useState([]);
   const [defenseData, setDefenseData] = useState([]);
+  const [attackDates, setAttackDates] = useState([]);
+  const [defenseDates, setDefenseDates] = useState([]);
 
 
   useEffect(() => {
-    setAttackData(data?.attack_trend);
-    setDefenseData(data?.defense_trend);
+    // 실제 API 응답 구조에 맞게 수정
+    // mini_chart_data에서 데이터 추출
+    const miniChartData = data?.mini_chart_data;
+    
+    if (miniChartData) {
+      // 공격지수와 수비지수는 임시로 같은 데이터 사용 (실제로는 별도 API 필요)
+      setAttackData(miniChartData.point_total || []);
+      setDefenseData(miniChartData.point_total || []);
+      
+      // 날짜 데이터 추출
+      const dates = miniChartData.dates || [];
+      setAttackDates(dates);
+      setDefenseDates(dates);
+    } else {
+      // 기존 방식도 유지 (하위 호환성)
+      setAttackData(data?.attack_trend || []);
+      setDefenseData(data?.defense_trend || []);
+      
+      if (data?.attack_trend && data.attack_trend.length > 0) {
+        const dates = data.attack_trend.map(item => item.date || item.match_date);
+        setAttackDates(dates);
+        setDefenseDates(dates);
+      }
+    }
     
   }, [data])
 
@@ -224,11 +248,11 @@ const AttackAve = ({data, error}) => {
     <AttackAveStyle>
       <p className='title'>공격지수 추이</p>
       <div className='chart'>
-        <LineChart data={attackData}/>
+        <LineChart data={attackData} dates={attackDates}/>
       </div>
       <p className='title'>수비지수 추이</p>
       <div className='chart'>
-        <LineChart data={defenseData}/>
+        <LineChart data={defenseData} dates={defenseDates}/>
       </div>
     </AttackAveStyle>
   )

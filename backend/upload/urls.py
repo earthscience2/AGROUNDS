@@ -3,5 +3,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path("add-match-info/", views.addMatchInfo.as_view())
+    # upload 앱은 파일 업로드 관련 기능만 담당
+    # 경기 정보 추가는 match 앱에서 처리
 ]
