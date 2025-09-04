@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "user",
     "match",
     "anal",
+    "video",
     # Third party apps
     "rest_framework",
     "drf_yasg",

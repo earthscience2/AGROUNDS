@@ -15,7 +15,8 @@ import positionOrange from '../../../assets/position/orange.png';
 import positionYellow from '../../../assets/position/yellow.png';
 
 import { AnalPositionColor } from '../../../function/PositionColor';
-import { GetUserAnalysisDataApi, GetUserOvrDataApi, GetUserStatsDataApi, GetUserPointDataApi } from '../../../function/api/user/userApi';
+import { GetUserOvrLast5MatchesApi, GetUserPointLast5MatchesApi, GetQuarterDataApi } from '../../../function/api/anal/analApi';
+import { GetUserInfoApi, EditUserInfoApi } from '../../../function/api/user/userApi';
 
 const Main = () => {
   const navigate = useNavigate();
@@ -34,8 +35,10 @@ const Main = () => {
   const handleFindTeamNavigation = () => {
     navigate('/app/jointeam');
   };
-  const userType = sessionStorage.getItem('userType');
-  const userCode = sessionStorage.getItem('userCode');
+  const [userType, setUserType] = useState(sessionStorage.getItem('userType'));
+  const [userCode, setUserCode] = useState(sessionStorage.getItem('userCode'));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [lastLoginTimestamp, setLastLoginTimestamp] = useState(sessionStorage.getItem('loginTimestamp'));
   
   // 사용자 데이터 상태
   const [userData, setUserData] = useState({
@@ -74,16 +77,125 @@ const Main = () => {
 
 
   
+  // 로그인 상태 감지 및 상태 초기화
+  useEffect(() => {
+    const currentUserCode = sessionStorage.getItem('userCode');
+    const currentToken = sessionStorage.getItem('token');
+    const currentLoginTimestamp = sessionStorage.getItem('loginTimestamp');
+    const loginCompleted = sessionStorage.getItem('loginCompleted');
+    
+    console.log('🔍 로그인 상태 체크:', {
+      currentUserCode,
+      userCode,
+      currentLoginTimestamp,
+      lastLoginTimestamp,
+      loginCompleted
+    });
+    
+    // URL 파라미터 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceRefresh = urlParams.get('refresh');
+    const forceLogout = urlParams.get('logout');
+    
+    // 강제 로그아웃 처리
+    if (forceLogout === 'true') {
+      console.log('🚪 강제 로그아웃 실행');
+      sessionStorage.clear();
+      localStorage.clear();
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+      window.location.href = '/app';
+      return;
+    }
+    
+    // 강제 초기화 조건들
+    const shouldForceReset = 
+      forceRefresh === 'true' ||
+      loginCompleted === 'true' ||
+      (currentUserCode && currentUserCode !== userCode) ||
+      (currentLoginTimestamp && currentLoginTimestamp !== lastLoginTimestamp);
+    
+    if (shouldForceReset) {
+      console.log('🔄 강제 초기화 실행 - 모든 데이터 리셋');
+      
+      // URL 정리
+      if (forceRefresh === 'true') {
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+      }
+      
+      // 로그인 완료 플래그 제거
+      if (loginCompleted === 'true') {
+        sessionStorage.removeItem('loginCompleted');
+      }
+      
+      // 🔥 모든 상태 강제 초기화
+      setUserData({
+        name: "",
+        age: 0,
+        position: "",
+        ovr: 0,
+        maxSpeed: 0,
+        sprint: 0,
+        attackIndex: 0,
+        defenseIndex: 0
+      });
+      
+      setOvrData({
+        ovr: 0,
+        matches_count: 0,
+        quarter_count: 0,
+        message: "데이터를 불러오는 중..."
+      });
+      
+      setRadarData({
+        point_total: 0,
+        point_sprint: 0,
+        point_acceleration: 0,
+        point_speed: 0,
+        point_positiveness: 0,
+        point_stamina: 0
+      });
+      
+      setMiniChartData({
+        point_total: [0, 0, 0, 0, 0],
+        distance: [0, 0, 0, 0, 0],
+        max_speed: [0, 0, 0, 0, 0],
+        sprint: [0, 0, 0, 0, 0]
+      });
+      
+      // 상태 업데이트
+      setUserCode(currentUserCode);
+      setUserType(sessionStorage.getItem('userType'));
+      setLastLoginTimestamp(currentLoginTimestamp);
+      setIsLoggedIn(true);
+      setLoading(true); // 로딩 상태로 설정
+      
+      return; // 상태 초기화 후 useEffect 재실행
+    }
+    
+    // 일반적인 로그인 상태 확인
+    if (currentUserCode && currentToken) {
+      if (!isLoggedIn) {
+        setUserCode(currentUserCode);
+        setUserType(sessionStorage.getItem('userType'));
+        setLastLoginTimestamp(currentLoginTimestamp);
+        setIsLoggedIn(true);
+      }
+    } else {
+      // 로그아웃 상태
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   // API에서 사용자 데이터 가져오기 (새로운 DB 구조 반영)
   useEffect(() => {
-    if (userCode) {
-      // API 비활성화로 인한 세션 스토리지 사용
-      Promise.resolve({ data: {
-        name: sessionStorage.getItem('userName') || '사용자',
-        birth: sessionStorage.getItem('userBirth') || '1999-01-01',
-        preferred_position: sessionStorage.getItem('userPosition') || 'CB'
-      }})
+    if (userCode && isLoggedIn) {
+      // 실제 API 사용하여 최신 사용자 정보 조회
+      console.log('🔄 사용자 정보 API 호출 시작:', userCode);
+      GetUserInfoApi(userCode)
         .then((response) => {
+          console.log('✅ 사용자 정보 API 성공:', response.data);
           const data = response.data;
           
           // 나이 계산 (birth가 'YYYY-MM-DD' 형식이라고 가정)
@@ -115,13 +227,8 @@ const Main = () => {
           const loadOvrData = async () => {
             // 1차: 새로 구현된 OVR API 시도 (실제 데이터 파싱)
             try {
-              console.log('🔍 실제 OVR 데이터 API 호출 중...');
-              const response = await GetUserOvrDataApi(userCode);
+              const response = await GetUserOvrLast5MatchesApi(userCode);
               const data = response.data;
-              
-              console.log('✅ OVR API 성공 (실제 데이터):', data);
-              console.log('🔍 레이더 차트 데이터 확인:', data.radar_data);
-              console.log('🔍 포인트 데이터 확인:', data.point);
               
               return {
                 ovr: data.ovr || 0,
@@ -155,14 +262,11 @@ const Main = () => {
                 }
               };
             } catch (ovrError) {
-              console.log('❌ OVR API 실패:', ovrError.response?.status, ovrError.response?.data);
               
-              // 2차: 통합 분석 데이터 API 시도 (수정된 API 경로 우선)
+              // 2차: 대체 분석 데이터 API 시도
               const fallbackEndpoints = [
-                { name: 'OVR 데이터', api: () => GetUserOvrDataApi(userCode) },
-                { name: '통계 데이터', api: () => GetUserStatsDataApi(userCode) },
-                { name: '포인트 데이터', api: () => GetUserPointDataApi(userCode) },
-                { name: '통합 분석 데이터', api: () => GetUserAnalysisDataApi(userCode) }
+                { name: 'OVR 데이터', api: () => GetUserOvrLast5MatchesApi(userCode) },
+                { name: '포인트 데이터', api: () => GetUserPointLast5MatchesApi(userCode) }
               ];
 
               for (const endpoint of fallbackEndpoints) {
@@ -244,10 +348,6 @@ const Main = () => {
                 .then((ovrResponse) => {
                   const data = ovrResponse.data;
                   
-                  // 디버깅 정보가 있으면 콘솔에 출력 (개발 환경에서만)
-                  if (data.debug_info && process.env.NODE_ENV === 'development') {
-                    console.log('🔍 OVR API 디버깅 정보:', data.debug_info);
-                  }
                   
                   // 데이터 유효성 검사 함수
                   const validateData = (data) => {
@@ -279,7 +379,6 @@ const Main = () => {
                     
                     // 레이더 차트 데이터 설정
                     if (data.radar_data) {
-                      console.log('🔍 원본 레이더 데이터:', data.radar_data);
                       const normalizedRadarData = {
                         point_total: normalizeValue(data.radar_data.point_total),
                         point_sprint: normalizeValue(data.radar_data.point_sprint),
@@ -288,7 +387,6 @@ const Main = () => {
                         point_positiveness: normalizeValue(data.radar_data.point_positiveness),
                         point_stamina: normalizeValue(data.radar_data.point_stamina)
                       };
-                      console.log('🔍 정규화된 레이더 데이터:', normalizedRadarData);
                       setRadarData(normalizedRadarData);
                     }
                     
@@ -378,7 +476,41 @@ const Main = () => {
                 });
         })
         .catch((error) => {
-          console.error('사용자 정보 로드 실패:', error);
+          console.error('사용자 정보 API 로드 실패:', error);
+          console.log('🔄 sessionStorage fallback 사용');
+          
+          // API 실패 시 sessionStorage fallback 사용
+          const fallbackData = {
+            name: sessionStorage.getItem('userName') || '사용자',
+            birth: sessionStorage.getItem('userBirth') || '1999-01-01',
+            preferred_position: sessionStorage.getItem('userPosition') || 'CB'
+          };
+          
+          console.log('📦 fallback 데이터:', fallbackData);
+          
+          // 나이 계산
+          const calculateAge = (birthDate) => {
+            if (!birthDate) return 25;
+            const birth = new Date(birthDate);
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+              age--;
+            }
+            return age;
+          };
+          
+          setUserData({
+            name: fallbackData.name,
+            age: calculateAge(fallbackData.birth),
+            position: fallbackData.preferred_position,
+            ovr: 0,
+            maxSpeed: 0,
+            sprint: 0,
+            attackIndex: 0,
+            defenseIndex: 0
+          });
           
           // 사용자 정보 로드 실패 알림
           let errorMessage = "사용자 정보를 불러올 수 없습니다.";
@@ -424,7 +556,37 @@ const Main = () => {
     } else {
       setLoading(false);
     }
-  }, [userCode]);
+  }, [userCode, isLoggedIn]);
+
+  // 페이지 포커스 시 로그인 상태 재확인 (재로그인 감지)
+  useEffect(() => {
+    const handleFocus = () => {
+      const currentUserCode = sessionStorage.getItem('userCode');
+      const currentLoginTimestamp = sessionStorage.getItem('loginTimestamp');
+      const loginCompleted = sessionStorage.getItem('loginCompleted');
+      
+      console.log('👁️ 페이지 포커스 - 로그인 상태 확인');
+      
+      // 새로운 로그인이나 사용자 변경 감지
+      if (
+        loginCompleted === 'true' ||
+        (currentUserCode && currentUserCode !== userCode) ||
+        (currentLoginTimestamp && currentLoginTimestamp !== lastLoginTimestamp)
+      ) {
+        console.log('🔄 포커스 시 새로운 로그인 감지 - 페이지 새로고침');
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    // 가시성 변경 이벤트도 추가
+    document.addEventListener('visibilitychange', handleFocus);
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleFocus);
+    };
+  }, [userCode, lastLoginTimestamp]);
 
   // 부드러운 곡선을 만들기 위한 Cubic Bezier 계산
   const createSmoothPath = (data, width, height) => {
@@ -532,9 +694,6 @@ const Main = () => {
     { label: '체력', value: radarData.point_stamina || 0 }
   ];
 
-  // 디버깅: 레이더 차트 데이터 로깅
-  console.log('🔍 레이더 차트 렌더링 데이터:', radarChartData);
-  console.log('🔍 현재 radarData 상태:', radarData);
 
   // 6가지 지표의 평균 계산
   const calculateAverageOVR = () => {
@@ -622,9 +781,35 @@ const Main = () => {
     );
   }
 
+  // 강제 로그아웃 함수
+  const handleForceLogout = () => {
+    console.log('🚪 강제 로그아웃 실행');
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = '/app';
+  };
+
   return (
     <div className='main'>
       <LogoBellNav logo={true}/>
+      
+      {/* 임시 로그아웃 버튼 - 테스트용 */}
+      <div style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 9999 }}>
+        <button 
+          onClick={handleForceLogout}
+          style={{
+            background: '#ff4444',
+            color: 'white',
+            border: 'none',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            cursor: 'pointer'
+          }}
+        >
+          강제 로그아웃
+        </button>
+      </div>
       
       {/* 사용자 정보 섹션 - 디자인 시스템 적용 */}
       <div className="user-info-section">

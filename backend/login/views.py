@@ -1,38 +1,29 @@
-from django.forms import model_to_dict
-from django.shortcuts import redirect
-from django.http import JsonResponse, HttpResponse
-from urllib.parse import quote, unquote
-
-import jwt
-import environ
+import json
+import logging
 import random
 import string
-from django.conf import settings
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from DB.models import User, UserInfo, TeamInfo, PlayerTeamCross
-from .serializers import User_Info_Serializer
-from staticfiles.make_code import make_code
-from django.contrib.auth.hashers import check_password
+import time
+import traceback
+from urllib.parse import quote, unquote
 
+import environ
+import jwt
+import requests
+from django.conf import settings
+from django.contrib.auth.hashers import check_password
+from django.forms import model_to_dict
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import redirect
+from jwt.algorithms import RSAAlgorithm
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from DB.models import User, UserInfo, TeamInfo, PlayerTeamCross
+from .serializers import User_Info_Serializer
 from staticfiles import cryptographysss
-
-import json
-import requests
-
-import requests, time
-from jwt.algorithms import RSAAlgorithm
-from django.shortcuts import redirect
-from django.contrib.auth import get_user_model
-
-import traceback
-import logging
-from rest_framework.permissions import IsAuthenticated
-from django.db import models as dj_models
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from staticfiles.make_code import make_code
 
 logger = logging.getLogger('django')
 
@@ -69,6 +60,84 @@ try:
 except Exception:
     NAVER_CLIENT_SECRET = None
 
+# 공통 헬퍼 함수들
+def extract_token_from_header(auth_header):
+    """Authorization 헤더에서 토큰을 추출하는 헬퍼 함수"""
+    if not auth_header:
+        return None
+    
+    # Bearer 토큰이면 두 번째 부분을, 아니면 첫 번째 부분을 사용
+    if auth_header.startswith('Bearer '):
+        return auth_header.split(' ')[1]
+    else:
+        return auth_header.split(' ')[0]
+
+def decode_jwt_token(token):
+    """JWT 토큰을 디코딩하는 헬퍼 함수"""
+    try:
+        return jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+        raise ValueError("Token has expired")
+    except jwt.InvalidTokenError:
+        raise ValueError("Invalid token")
+
+def get_user_from_token(request):
+    """요청에서 토큰을 추출하고 사용자 정보를 반환하는 헬퍼 함수"""
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return None, Response({'detail': 'Authorization header missing or invalid'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    token = extract_token_from_header(auth_header)
+    if not token:
+        return None, Response({'detail': 'Invalid token format'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    try:
+        decoded_token = decode_jwt_token(token)
+        user_code = decoded_token.get('user_code')
+        if not user_code:
+            return None, Response({'detail': 'Invalid token payload'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        user = User.objects.get(user_code=user_code)
+        return user, None
+    except ValueError as e:
+        return None, Response({'detail': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+    except User.DoesNotExist:
+        return None, Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return None, Response({'detail': 'Token validation failed'}, status=status.HTTP_401_UNAUTHORIZED)
+
+def create_user_and_info(user_email, login_type, user_name, user_birth, user_gender, 
+                        preferred_position=None, activity_area=None, ai_type=None):
+    """사용자와 사용자 정보를 생성하는 공통 함수"""
+    user_code = generate_unique_user_code('u')
+    
+    # User 생성
+    user = User.objects.create(
+        user_code=user_code,
+        user_id=user_email,
+        password="0",
+        login_type=login_type
+    )
+    
+    # UserInfo 생성
+    user_info = UserInfo.objects.create(
+        user_code=user_code,
+        name=user_name,
+        birth=user_birth,
+        gender=user_gender,
+        preferred_position=preferred_position,
+        activity_area=activity_area,
+        ai_type=ai_type
+    )
+    
+    return user, user_info, user_code
+
+def handle_api_error(error_message, status_code=500, exception=None):
+    """API 에러 처리를 위한 공통 함수"""
+    if exception:
+        logger.error(f"{error_message}: {str(exception)}\n{traceback.format_exc()}")
+    return JsonResponse({"error": error_message}, status=status_code)
+
 def generate_unique_user_code(prefix: str = 'u', max_attempts: int = 20) -> str:
     """고유한 user_code를 생성합니다. DB에 존재 여부를 검사하며, 충돌 시 재시도합니다."""
     for attempt in range(max_attempts):
@@ -82,320 +151,8 @@ def generate_unique_user_code(prefix: str = 'u', max_attempts: int = 20) -> str:
     fallback = make_code(prefix) + random_suffix
     return fallback
 
-# 닉네임 중복확인
-class nickname(APIView):
-    def get(self, request, format=None):
-        nickname = request.query_params.get("user_nickname")
-        try:
-            if nickname is None:
-                return Response(
-                    {"error": "user_nickname 필드는 필수입니다."}, status=status.HTTP_404_NOT_FOUND
-                )
-            if UserInfo.objects.filter(user_nickname=nickname).exists():
-                # 닉네임이 이미 존재하는 경우
-                return Response({"isAvailable": False})
-            else:
-                # 사용 가능한 닉네임인 경우
-                return Response({"isAvailable": True})
-        except UserInfo.DoesNotExist:
-            return Response(
-                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
-            )
-        except (TypeError, ValueError):
-            # 유효하지 않은 입력 처리
-            return Response(
-                {"error": "Invalid input"}, status=status.HTTP_400_BAD_REQUEST
-            )
-
-# 카카오 로그인
-class kakao(APIView):
-    def get(self, request):
-        hostname = request.query_params.get('hostname')
-        client = request.query_params.get('client')
-        # 실제 카카오가 호출할 콜백 주소 (동작 가능한 서버)
-        if hostname == "localhost":
-            callback_uri = "http://localhost:8000/api/login/kakao/callback/"
-        else:
-            callback_uri = "https://agrounds.com/api/login/kakao/callback/"
-
-        # 최종 리다이렉트 타겟(client_url)을 state로 전달 (콜백 서버와 분리 가능)
-        if client in ["localhost", "agrounds.com"]:
-            state = client
-        else:
-            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
-
-        return redirect(
-            f"https://kauth.kakao.com/oauth/authorize?client_id={KAKAO_CLIENT_ID}&redirect_uri={callback_uri}&response_type=code&state={state}&theme=light"
-        )
-
-# 카카오 로그인 - callback view
-class kakaoCallback(APIView):
-    def get(self, request, format=None):
-        client_url = CLIENT_URL or "https://agrounds.com"
-        # state는 최종 리다이렉트 대상(클라이언트) 구분 용도만 사용
-        state = request.query_params.get('state')
-        if state == "localhost":
-            client_url = "http://localhost:3000"
-        else:
-            client_url = "https://agrounds.com"
-
-        # 실제 토큰 교환에 사용할 redirect_uri는 현재 호출된 콜백 주소와 동일해야 함
-        scheme = "https" if request.is_secure() else "http"
-        host = request.get_host()
-        callback_uri = f"{scheme}://{host}/api/login/kakao/callback/"
-            
-        try:
-            # 최초 authorize에 사용한 redirect_uri와 정확히 동일해야 함
-            dynamic_callback = callback_uri
-            logger.info(f"[Kakao] Callback URL: {dynamic_callback}")
-            data = {
-                "grant_type"    :"authorization_code",
-                "client_id"     :KAKAO_CLIENT_ID,
-                "redirect_uri"  : dynamic_callback,
-                "code"          :request.query_params.get("code"),
-                "state"         : state,
-            }
-            if KAKAO_CLIENT_SECRET:
-                data["client_secret"] = KAKAO_CLIENT_SECRET
-            logger.info(f"[Kakao] Token request data: {data}")
-            kakao_token_api = "https://kauth.kakao.com/oauth/token"
-            token_resp = requests.post(kakao_token_api, data)
-            logger.info(f"[Kakao] Token response status: {token_resp.status_code}")
-            if token_resp.status_code != 200:
-                logger.error(f"[Kakao] Token API error {token_resp.status_code}: {token_resp.text}")
-                return JsonResponse({'error': '카카오 토큰 발급 실패', 'detail': token_resp.text}, status=502)
-
-            token_json = token_resp.json()
-            logger.info(f"[Kakao] Token response: {token_json}")
-            if "access_token" not in token_json:
-                logger.error(f"[Kakao] access_token 누락: {token_json}")
-                return JsonResponse({'error': '카카오 토큰 응답에 access_token이 없습니다.', 'detail': token_json}, status=502)
-
-            access_token = token_json["access_token"]
-
-            kakao_user_api = "https://kapi.kakao.com/v2/user/me"
-            header = {"Authorization":f"Bearer {access_token}"}
-            logger.info(f"[Kakao] User API request header: {header}")
-            user_resp = requests.get(kakao_user_api, headers=header)
-            logger.info(f"[Kakao] User response status: {user_resp.status_code}")
-            if user_resp.status_code != 200:
-                logger.error(f"[Kakao] User API error {user_resp.status_code}: {user_resp.text}")
-                return JsonResponse({'error': '카카오 사용자 정보 조회 실패', 'detail': user_resp.text}, status=502)
-
-            user_info_from_kakao = user_resp.json()
-            logger.info(f"[Kakao] User info: {user_info_from_kakao}")
-
-            kakao_email = user_info_from_kakao.get("kakao_account", {}).get("email")
-            if kakao_email is None:
-                logger.warning(f"[Kakao] 이메일 미제공: {user_info_from_kakao}")
-                return JsonResponse({'error': '카카오에서 이메일 제공에 동의하지 않았습니다. 이메일 제공 동의를 해주세요.'}, status=400)
-        except requests.exceptions.RequestException as e:
-            logger.error(f"[Kakao] Network error: {str(e)}")
-            return JsonResponse({'error': '카카오 API 네트워크 오류', 'detail': str(e)}, status=502)
-        except Exception as e:
-            logger.error(f"[Kakao] Unexpected error: {str(e)}")
-            return JsonResponse({'error': '카카오 처리 중 예상치 못한 오류', 'detail': str(e)}, status=500)
-
-        try:
-            # 카카오 서버로부터 가져온 이메일이 user에 존재하는지 검사 (login_type 포함)
-            exists = User.objects.filter(user_id=kakao_email, login_type="kakao").exists()
-
-            # 미가입자는 로그인 페이지로 보내 확인 문구를 띄운 뒤 회원가입으로 안내
-            if not exists:
-                try:
-                    encrypted_email = cryptographysss.encrypt_aes(kakao_email)
-                    id_param = quote(encrypted_email)
-                except Exception:
-                    id_param = ''
-                # 로컬에서 시작한 경우에는 로컬 절대주소로, 그 외에는 상대경로로 반환
-                target_base = "http://localhost:3000" if state == "localhost" else ""
-                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
-
-            # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
-            user = User.objects.get(user_id=kakao_email, login_type="kakao")
-            
-            # JWT 토큰 생성
-            refresh = RefreshToken()
-            refresh['user_code'] = user.user_code
-            access_token = str(refresh.access_token)
-            
-            # 로딩 페이지로 리다이렉트 (토큰을 파라미터로 전달)
-            target_base = "http://localhost:3000" if state == "localhost" else ""
-            target = f"{target_base}/app/loading?code={access_token}"
-            html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
-            return HttpResponse(html)
-        except Exception as e:
-            logger.error(f"[Kakao] 가입자 분기 처리 중 오류: {str(e)}\n{traceback.format_exc()}")
-            return JsonResponse({'error': '가입자 처리 중 서버 오류', 'detail': str(e)}, status=500)
-
-# 네이버 로그인
-class naver(APIView):
-    def get(self, request):
-        hostname = request.query_params.get('hostname')
-        client = request.query_params.get('client')
-        # 실제 네이버가 호출할 콜백 주소 (동작 가능한 서버)
-        if hostname == "localhost":
-            callback_uri = "http://localhost:8000/api/login/naver/callback/"
-        else:
-            callback_uri = "https://agrounds.com/api/login/naver/callback/"
-
-        # 최종 리다이렉트 타겟(client_url)을 state로 전달 (카카오와 동일 패턴)
-        if client in ["localhost", "agrounds.com"]:
-            state = client
-        else:
-            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
-
-        if not NAVER_CLIENT_ID:
-            return JsonResponse({'error': 'NAVER_CLIENT_ID 미설정'}, status=500)
-
-        return redirect(
-            f"https://nid.naver.com/oauth2.0/authorize?client_id={NAVER_CLIENT_ID}&redirect_uri={callback_uri}&response_type=code&state={state}&scope=email"
-        )
-
-# 네이버 로그인 - callback view
-class naverCallback(APIView):
-    def get(self, request, format=None):
-        client_url = CLIENT_URL or "https://agrounds.com"
-        # state는 최종 리다이렉트 대상(클라이언트) 구분 용도만 사용
-        state = request.query_params.get('state')
-        if state == "localhost":
-            client_url = "http://localhost:3000"
-        else:
-            client_url = "https://agrounds.com"
-
-        # 실제 토큰 교환에 사용할 redirect_uri는 현재 호출된 콜백 주소와 동일해야 함
-        scheme = "https" if request.is_secure() else "http"
-        host = request.get_host()
-        callback_uri = f"{scheme}://{host}/api/login/naver/callback/"
-
-        try:
-            if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
-                return JsonResponse({'error': '네이버 클라이언트 환경변수 미설정'}, status=500)
-
-            data = {
-                "grant_type": "authorization_code",
-                "client_id": NAVER_CLIENT_ID,
-                "client_secret": NAVER_CLIENT_SECRET,
-                "code": request.query_params.get("code"),
-                "state": state,
-                "redirect_uri": callback_uri,
-            }
-            naver_token_api = "https://nid.naver.com/oauth2.0/token"
-            token_resp = requests.post(naver_token_api, data)
-            logger.info(f"[Naver] Token response status: {token_resp.status_code}")
-            if token_resp.status_code != 200:
-                logger.error(f"[Naver] Token API error {token_resp.status_code}: {token_resp.text}")
-                return JsonResponse({'error': '네이버 토큰 발급 실패', 'detail': token_resp.text}, status=502)
-
-            token_json = token_resp.json()
-            logger.info(f"[Naver] Token response: {token_json}")
-            access_token = token_json.get("access_token")
-            if not access_token:
-                return JsonResponse({'error': '네이버 토큰 응답에 access_token이 없습니다.', 'detail': token_json}, status=502)
-
-            # 유저 정보 조회
-            naver_user_api = "https://openapi.naver.com/v1/nid/me"
-            header = {"Authorization": f"Bearer {access_token}"}
-            user_resp = requests.get(naver_user_api, headers=header)
-            logger.info(f"[Naver] User response status: {user_resp.status_code}")
-            if user_resp.status_code != 200:
-                logger.error(f"[Naver] User API error {user_resp.status_code}: {user_resp.text}")
-                return JsonResponse({'error': '네이버 사용자 정보 조회 실패', 'detail': user_resp.text}, status=502)
-
-            user_info_from_naver = user_resp.json()
-            logger.info(f"[Naver] User info: {user_info_from_naver}")
-
-            # Naver 응답 구조: { resultcode: "00", message: "success", response: { email: "...", ... } }
-            naver_email = (user_info_from_naver.get("response") or {}).get("email")
-            if naver_email is None:
-                return JsonResponse({'error': '네이버에서 이메일 제공에 동의하지 않았습니다. 이메일 제공 동의를 해주세요.'}, status=400)
-        except requests.exceptions.RequestException as e:
-            logger.error(f"[Naver] Network error: {str(e)}")
-            return JsonResponse({'error': '네이버 API 네트워크 오류', 'detail': str(e)}, status=502)
-        except Exception as e:
-            logger.error(f"[Naver] Unexpected error: {str(e)}")
-            return JsonResponse({'error': '네이버 처리 중 예상치 못한 오류', 'detail': str(e)}, status=500)
-
-        try:
-            # 가입 여부 확인 (user 기준, login_type 포함)
-            exists = User.objects.filter(user_id=naver_email, login_type="naver").exists()
-
-            # 미가입자는 로그인 페이지로 보내 확인 문구를 띄운 뒤 회원가입으로 안내
-            if not exists:
-                try:
-                    encrypted_email = cryptographysss.encrypt_aes(naver_email)
-                    id_param = quote(encrypted_email)
-                except Exception:
-                    id_param = ''
-                target_base = "http://localhost:3000" if state == "localhost" else ""
-                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
-
-            # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
-            user = User.objects.get(user_id=naver_email, login_type="naver")
-            
-            # JWT 토큰 생성
-            refresh = RefreshToken()
-            refresh['user_code'] = user.user_code
-            access_token = str(refresh.access_token)
-            
-            # 로딩 페이지로 리다이렉트 (토큰을 파라미터로 전달)
-            target_base = "http://localhost:3000" if state == "localhost" else ""
-            target = f"{target_base}/app/loading?code={access_token}"
-            html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
-            return HttpResponse(html)
-        except Exception as e:
-            logger.error(f"[Naver] 가입자 분기 처리 중 오류: {str(e)}\n{traceback.format_exc()}")
-            return JsonResponse({'error': '가입자 처리 중 서버 오류', 'detail': str(e)}, status=500)
-
-# 애플 로그인 시작 (카카오/네이버와 동일 패턴)
-class apple(APIView):
-    def get(self, request):
-        hostname = request.query_params.get('hostname')
-        client = request.query_params.get('client')
-        if hostname == "localhost":
-            callback_uri = "http://localhost:8000/api/login/apple/callback/"
-        else:
-            callback_uri = "https://agrounds.com/api/login/apple/callback/"
-
-        if client in ["localhost", "agrounds.com"]:
-            state = client
-        else:
-            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
-
-        # Apple 권고: response_mode=form_post 로 POST로 전달받도록 설정
-        authorize_url = (
-            "https://appleid.apple.com/auth/authorize"
-            f"?client_id={APPLE_CLIENT_ID}"
-            f"&redirect_uri={callback_uri}"
-            f"&response_type=code%20id_token"
-            f"&response_mode=form_post"
-            f"&scope=name%20email"
-            f"&state={state}"
-        )
-        return redirect(authorize_url)
-
-# 이메일 존재 여부 확인 (user 기준)
-class check_user_exists(APIView):
-    def get(self, request):
-        email = request.query_params.get('email')
-        enc_id = request.query_params.get('id')
-        login_type_param = request.query_params.get('login_type')
-        if not email and enc_id:
-            try:
-                decoded = unquote(enc_id)
-                email = cryptographysss.decrypt_aes(decoded)
-            except Exception as e:
-                return JsonResponse({"error":"invalid id"}, status=400)
-        if not email:
-            return JsonResponse({"error":"email 또는 id 파라미터가 필요합니다."}, status=400)
-        if login_type_param:
-            exists = User.objects.filter(user_id=email, login_type=login_type_param).exists()
-        else:
-            exists = User.objects.filter(user_id=email).exists()
-        return JsonResponse({"exists": exists}, status=200)
-
-# (삭제됨) 구버전 kakaoSignup_
-
+# =============================== 카카오  ===============================
+# 카카오 회원가입
 class kakaoSignup(APIView):
     def post(self, request, *args, **kwargs):
         try:
@@ -513,7 +270,131 @@ class kakaoSignup(APIView):
             logger.error(f"[카카오 회원가입] 예기치 못한 에러: {str(e)}\n{traceback.format_exc()}")
             return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
-# 네이버 로그인 - 회원가입 (카카오와 동일 로직)
+
+# 카카오 로그인
+class kakao(APIView):
+    def get(self, request):
+        hostname = request.query_params.get('hostname')
+        client = request.query_params.get('client')
+        # 실제 카카오가 호출할 콜백 주소 (동작 가능한 서버)
+        if hostname == "localhost":
+            callback_uri = "http://localhost:8000/api/login/kakao/callback/"
+        else:
+            callback_uri = "https://agrounds.com/api/login/kakao/callback/"
+
+        # 최종 리다이렉트 타겟(client_url)을 state로 전달 (콜백 서버와 분리 가능)
+        if client in ["localhost", "agrounds.com"]:
+            state = client
+        else:
+            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+
+        return redirect(
+            f"https://kauth.kakao.com/oauth/authorize?client_id={KAKAO_CLIENT_ID}&redirect_uri={callback_uri}&response_type=code&state={state}&theme=light"
+        )
+
+
+# 카카오 로그인 - callback view
+class kakaoCallback(APIView):
+    def get(self, request, format=None):
+        client_url = CLIENT_URL or "https://agrounds.com"
+        # state는 최종 리다이렉트 대상(클라이언트) 구분 용도만 사용
+        state = request.query_params.get('state')
+        if state == "localhost":
+            client_url = "http://localhost:3000"
+        else:
+            client_url = "https://agrounds.com"
+
+        # 실제 토큰 교환에 사용할 redirect_uri는 현재 호출된 콜백 주소와 동일해야 함
+        scheme = "https" if request.is_secure() else "http"
+        host = request.get_host()
+        callback_uri = f"{scheme}://{host}/api/login/kakao/callback/"
+            
+        try:
+            # 최초 authorize에 사용한 redirect_uri와 정확히 동일해야 함
+            dynamic_callback = callback_uri
+            logger.info(f"[Kakao] Callback URL: {dynamic_callback}")
+            data = {
+                "grant_type"    :"authorization_code",
+                "client_id"     :KAKAO_CLIENT_ID,
+                "redirect_uri"  : dynamic_callback,
+                "code"          :request.query_params.get("code"),
+                "state"         : state,
+            }
+            if KAKAO_CLIENT_SECRET:
+                data["client_secret"] = KAKAO_CLIENT_SECRET
+            logger.info(f"[Kakao] Token request data: {data}")
+            kakao_token_api = "https://kauth.kakao.com/oauth/token"
+            token_resp = requests.post(kakao_token_api, data)
+            logger.info(f"[Kakao] Token response status: {token_resp.status_code}")
+            if token_resp.status_code != 200:
+                logger.error(f"[Kakao] Token API error {token_resp.status_code}: {token_resp.text}")
+                return JsonResponse({'error': '카카오 토큰 발급 실패', 'detail': token_resp.text}, status=502)
+
+            token_json = token_resp.json()
+            logger.info(f"[Kakao] Token response: {token_json}")
+            if "access_token" not in token_json:
+                logger.error(f"[Kakao] access_token 누락: {token_json}")
+                return JsonResponse({'error': '카카오 토큰 응답에 access_token이 없습니다.', 'detail': token_json}, status=502)
+
+            access_token = token_json["access_token"]
+
+            kakao_user_api = "https://kapi.kakao.com/v2/user/me"
+            header = {"Authorization":f"Bearer {access_token}"}
+            logger.info(f"[Kakao] User API request header: {header}")
+            user_resp = requests.get(kakao_user_api, headers=header)
+            logger.info(f"[Kakao] User response status: {user_resp.status_code}")
+            if user_resp.status_code != 200:
+                logger.error(f"[Kakao] User API error {user_resp.status_code}: {user_resp.text}")
+                return JsonResponse({'error': '카카오 사용자 정보 조회 실패', 'detail': user_resp.text}, status=502)
+
+            user_info_from_kakao = user_resp.json()
+            logger.info(f"[Kakao] User info: {user_info_from_kakao}")
+
+            kakao_email = user_info_from_kakao.get("kakao_account", {}).get("email")
+            if kakao_email is None:
+                logger.warning(f"[Kakao] 이메일 미제공: {user_info_from_kakao}")
+                return JsonResponse({'error': '카카오에서 이메일 제공에 동의하지 않았습니다. 이메일 제공 동의를 해주세요.'}, status=400)
+        except requests.exceptions.RequestException as e:
+            logger.error(f"[Kakao] Network error: {str(e)}")
+            return JsonResponse({'error': '카카오 API 네트워크 오류', 'detail': str(e)}, status=502)
+        except Exception as e:
+            logger.error(f"[Kakao] Unexpected error: {str(e)}")
+            return JsonResponse({'error': '카카오 처리 중 예상치 못한 오류', 'detail': str(e)}, status=500)
+
+        try:
+            # 카카오 서버로부터 가져온 이메일이 user에 존재하는지 검사 (login_type 포함)
+            exists = User.objects.filter(user_id=kakao_email, login_type="kakao").exists()
+
+            # 미가입자는 로그인 페이지로 보내 확인 문구를 띄운 뒤 회원가입으로 안내
+            if not exists:
+                try:
+                    encrypted_email = cryptographysss.encrypt_aes(kakao_email)
+                    id_param = quote(encrypted_email)
+                except Exception:
+                    id_param = ''
+                # 로컬에서 시작한 경우에는 로컬 절대주소로, 그 외에는 상대경로로 반환
+                target_base = "http://localhost:3000" if state == "localhost" else ""
+                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
+
+            # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
+            user = User.objects.get(user_id=kakao_email, login_type="kakao")
+            
+            # JWT 토큰 생성
+            refresh = RefreshToken()
+            refresh['user_code'] = user.user_code
+            access_token = str(refresh.access_token)
+            
+            # 로딩 페이지로 리다이렉트 (토큰을 파라미터로 전달)
+            target_base = "http://localhost:3000" if state == "localhost" else ""
+            target = f"{target_base}/app/loading?code={access_token}"
+            html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
+            return HttpResponse(html)
+        except Exception as e:
+            logger.error(f"[Kakao] 가입자 분기 처리 중 오류: {str(e)}\n{traceback.format_exc()}")
+            return JsonResponse({'error': '가입자 처리 중 서버 오류', 'detail': str(e)}, status=500)
+
+# =============================== 네이버  ===============================
+# 네이버 회원가입
 class naverSignup(APIView):
     def post(self, request, *args, **kwargs):
         try:
@@ -622,91 +503,104 @@ class naverSignup(APIView):
             logger.error(f"[네이버 회원가입] 예기치 못한 에러: {str(e)}\n{traceback.format_exc()}")
             return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
-# 애플 로그인 - callback view
-class AppleLoginCallback(APIView):
+
+# 네이버 로그인
+class naver(APIView):
     def get(self, request):
-        client_url = CLIENT_URL or "https://agrounds.com"
-        if request.query_params.get('hostname') == 'localhost' :
-            client_url = "http://localhost:3000"
+        hostname = request.query_params.get('hostname')
+        client = request.query_params.get('client')
+        # 실제 네이버가 호출할 콜백 주소 (동작 가능한 서버)
+        if hostname == "localhost":
+            callback_uri = "http://localhost:8000/api/login/naver/callback/"
+        else:
+            callback_uri = "https://agrounds.com/api/login/naver/callback/"
 
-        id_token = request.query_params.get("id_token")
-        code = request.query_params.get("code")
+        # 최종 리다이렉트 타겟(client_url)을 state로 전달 (카카오와 동일 패턴)
+        if client in ["localhost", "agrounds.com"]:
+            state = client
+        else:
+            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+
+        if not NAVER_CLIENT_ID:
+            return JsonResponse({'error': 'NAVER_CLIENT_ID 미설정'}, status=500)
+
+        return redirect(
+            f"https://nid.naver.com/oauth2.0/authorize?client_id={NAVER_CLIENT_ID}&redirect_uri={callback_uri}&response_type=code&state={state}&scope=email"
+        )
+
+
+# 네이버 로그인 - callback view
+class naverCallback(APIView):
+    def get(self, request, format=None):
+        client_url = CLIENT_URL or "https://agrounds.com"
+        # state는 최종 리다이렉트 대상(클라이언트) 구분 용도만 사용
         state = request.query_params.get('state')
-        if not id_token and not code:
-            return Response({"error":"토큰이 없습니다."},status=400)
-
-        try:
-            email = None
-            if id_token:
-                # Apple 공개키 가져오기 및 id_token 검증
-                res = requests.get("https://appleid.apple.com/auth/keys")
-                apple_keys = res.json()["keys"]
-                header = jwt.get_unverified_header(id_token)
-                key = next(k for k in apple_keys if k["kid"] == header["kid"])
-                public_key = RSAAlgorithm.from_jwk(key)
-                payload = jwt.decode(id_token, public_key, algorithms=["RS256"], audience=env("APPLE_CLIENT_ID"))
-                email = payload.get("email")
-
-            # 동일 분기: 이메일만으로 가입 여부 확인
-            if not email:
-                return Response({"error":"이메일을 확인할 수 없습니다."}, status=400)
-
-            exists = User.objects.filter(user_id=email, login_type="apple").exists()
-            if not exists:
-                try:
-                    encrypted_email = cryptographysss.encrypt_aes(email)
-                    id_param = quote(encrypted_email)
-                except Exception:
-                    id_param = ''
-                target_base = "http://localhost:3000" if state == "localhost" else ""
-                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
-
-            # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
-            user = User.objects.get(user_id=email, login_type="apple")
-            
-            # JWT 토큰 생성
-            refresh = RefreshToken()
-            refresh['user_code'] = user.user_code
-            access_token = str(refresh.access_token)
-            
-            # 로딩 페이지로 리다이렉트 (토큰을 파라미터로 전달)
-            target_base = "http://localhost:3000" if state == "localhost" else ""
-            target = f"{target_base}/app/loading?code={access_token}"
-            html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
-            return HttpResponse(html)
-        except Exception as e:
-            return Response({"error": str(e)}, status=400)
-
-    def post(self, request):
-        # Apple은 response_mode=form_post로 전달하는 경우 POST로 콜백 호출
-        client_url = CLIENT_URL or "https://agrounds.com"
-        if request.data.get('hostname') == 'localhost' :
+        if state == "localhost":
             client_url = "http://localhost:3000"
+        else:
+            client_url = "https://agrounds.com"
 
-        id_token = request.data.get("id_token")
-        code = request.data.get("code")
-        state = request.data.get('state')
-        if not id_token and not code:
-            return Response({"error":"토큰이 없습니다."},status=400)
+        # 실제 토큰 교환에 사용할 redirect_uri는 현재 호출된 콜백 주소와 동일해야 함
+        scheme = "https" if request.is_secure() else "http"
+        host = request.get_host()
+        callback_uri = f"{scheme}://{host}/api/login/naver/callback/"
 
         try:
-            email = None
-            if id_token:
-                res = requests.get("https://appleid.apple.com/auth/keys")
-                apple_keys = res.json()["keys"]
-                header = jwt.get_unverified_header(id_token)
-                key = next(k for k in apple_keys if k["kid"] == header["kid"])
-                public_key = RSAAlgorithm.from_jwk(key)
-                payload = jwt.decode(id_token, public_key, algorithms=["RS256"], audience=env("APPLE_CLIENT_ID"))
-                email = payload.get("email")
+            if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
+                return JsonResponse({'error': '네이버 클라이언트 환경변수 미설정'}, status=500)
 
-            if not email:
-                return Response({"error":"이메일을 확인할 수 없습니다."}, status=400)
+            data = {
+                "grant_type": "authorization_code",
+                "client_id": NAVER_CLIENT_ID,
+                "client_secret": NAVER_CLIENT_SECRET,
+                "code": request.query_params.get("code"),
+                "state": state,
+                "redirect_uri": callback_uri,
+            }
+            naver_token_api = "https://nid.naver.com/oauth2.0/token"
+            token_resp = requests.post(naver_token_api, data)
+            logger.info(f"[Naver] Token response status: {token_resp.status_code}")
+            if token_resp.status_code != 200:
+                logger.error(f"[Naver] Token API error {token_resp.status_code}: {token_resp.text}")
+                return JsonResponse({'error': '네이버 토큰 발급 실패', 'detail': token_resp.text}, status=502)
 
-            exists = User.objects.filter(user_id=email, login_type="apple").exists()
+            token_json = token_resp.json()
+            logger.info(f"[Naver] Token response: {token_json}")
+            access_token = token_json.get("access_token")
+            if not access_token:
+                return JsonResponse({'error': '네이버 토큰 응답에 access_token이 없습니다.', 'detail': token_json}, status=502)
+
+            # 유저 정보 조회
+            naver_user_api = "https://openapi.naver.com/v1/nid/me"
+            header = {"Authorization": f"Bearer {access_token}"}
+            user_resp = requests.get(naver_user_api, headers=header)
+            logger.info(f"[Naver] User response status: {user_resp.status_code}")
+            if user_resp.status_code != 200:
+                logger.error(f"[Naver] User API error {user_resp.status_code}: {user_resp.text}")
+                return JsonResponse({'error': '네이버 사용자 정보 조회 실패', 'detail': user_resp.text}, status=502)
+
+            user_info_from_naver = user_resp.json()
+            logger.info(f"[Naver] User info: {user_info_from_naver}")
+
+            # Naver 응답 구조: { resultcode: "00", message: "success", response: { email: "...", ... } }
+            naver_email = (user_info_from_naver.get("response") or {}).get("email")
+            if naver_email is None:
+                return JsonResponse({'error': '네이버에서 이메일 제공에 동의하지 않았습니다. 이메일 제공 동의를 해주세요.'}, status=400)
+        except requests.exceptions.RequestException as e:
+            logger.error(f"[Naver] Network error: {str(e)}")
+            return JsonResponse({'error': '네이버 API 네트워크 오류', 'detail': str(e)}, status=502)
+        except Exception as e:
+            logger.error(f"[Naver] Unexpected error: {str(e)}")
+            return JsonResponse({'error': '네이버 처리 중 예상치 못한 오류', 'detail': str(e)}, status=500)
+
+        try:
+            # 가입 여부 확인 (user 기준, login_type 포함)
+            exists = User.objects.filter(user_id=naver_email, login_type="naver").exists()
+
+            # 미가입자는 로그인 페이지로 보내 확인 문구를 띄운 뒤 회원가입으로 안내
             if not exists:
                 try:
-                    encrypted_email = cryptographysss.encrypt_aes(email)
+                    encrypted_email = cryptographysss.encrypt_aes(naver_email)
                     id_param = quote(encrypted_email)
                 except Exception:
                     id_param = ''
@@ -714,7 +608,7 @@ class AppleLoginCallback(APIView):
                 return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
 
             # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
-            user = User.objects.get(user_id=email, login_type="apple")
+            user = User.objects.get(user_id=naver_email, login_type="naver")
             
             # JWT 토큰 생성
             refresh = RefreshToken()
@@ -727,8 +621,11 @@ class AppleLoginCallback(APIView):
             html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
             return HttpResponse(html)
         except Exception as e:
-            return Response({"error": str(e)}, status=400)
-        
+            logger.error(f"[Naver] 가입자 분기 처리 중 오류: {str(e)}\n{traceback.format_exc()}")
+            return JsonResponse({'error': '가입자 처리 중 서버 오류', 'detail': str(e)}, status=500)
+
+# =============================== 애플  ===============================
+# 애플 로그인 시작 (카카오/네이버와 동일 패턴)
 # 애플 로그인 - 회원가입
 class AppleSignup(APIView):
     def post(self, request, *args, **kwargs):
@@ -837,61 +734,165 @@ class AppleSignup(APIView):
             logger.error(f"[애플 회원가입] 예기치 못한 에러: {str(e)}\n{traceback.format_exc()}")
             return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
-# 토큰으로 사용자 정보 받아오기
-class getUserInfo(APIView):
-    """
-    헤더에 토큰을 넣고 get요청을 보내면 유저 정보를 리턴해줍니다.
-    client.defaults.headers.common['Authorization'] = token;
-    """
-    # permission_classes = [IsAuthenticated]
 
+class apple(APIView):
     def get(self, request):
-        auth_header = request.headers.get('Authorization')
-        if auth_header is None:
-            return Response({'detail': 'Authorization header missing or invalid'}, status=status.HTTP_401_UNAUTHORIZED)
-        token = auth_header.split(' ')[0]
+        hostname = request.query_params.get('hostname')
+        client = request.query_params.get('client')
+        if hostname == "localhost":
+            callback_uri = "http://localhost:8000/api/login/apple/callback/"
+        else:
+            callback_uri = "https://agrounds.com/api/login/apple/callback/"
 
-        # 토큰 decoding
+        if client in ["localhost", "agrounds.com"]:
+            state = client
+        else:
+            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+
+        # Apple 권고: response_mode=form_post 로 POST로 전달받도록 설정
+        authorize_url = (
+            "https://appleid.apple.com/auth/authorize"
+            f"?client_id={APPLE_CLIENT_ID}"
+            f"&redirect_uri={callback_uri}"
+            f"&response_type=code%20id_token"
+            f"&response_mode=form_post"
+            f"&scope=name%20email"
+            f"&state={state}"
+        )
+        return redirect(authorize_url)
+
+
+# 애플 로그인 - callback view
+class AppleLoginCallback(APIView):
+    def get(self, request):
+        client_url = CLIENT_URL or "https://agrounds.com"
+        if request.query_params.get('hostname') == 'localhost' :
+            client_url = "http://localhost:3000"
+
+        id_token = request.query_params.get("id_token")
+        code = request.query_params.get("code")
+        state = request.query_params.get('state')
+        if not id_token and not code:
+            return Response({"error":"토큰이 없습니다."},status=400)
+
         try:
-            decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            return Response({'detail': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
-        except jwt.InvalidTokenError:
-            return Response({'detail': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        user_code = decoded_token.get('user_code')
-        try:
-            user = UserInfo.objects.get(user_code = user_code)
-            user_dict = model_to_dict(user)
-            new_token = login.getTokensForUser(login, user)
-            user_dict.pop('password')
-            user_dict['token'] = new_token['access']
+            email = None
+            if id_token:
+                # Apple 공개키 가져오기 및 id_token 검증
+                res = requests.get("https://appleid.apple.com/auth/keys")
+                apple_keys = res.json()["keys"]
+                header = jwt.get_unverified_header(id_token)
+                key = next(k for k in apple_keys if k["kid"] == header["kid"])
+                public_key = RSAAlgorithm.from_jwk(key)
+                payload = jwt.decode(id_token, public_key, algorithms=["RS256"], audience=env("APPLE_CLIENT_ID"))
+                email = payload.get("email")
 
-            user_team = None
+            # 동일 분기: 이메일만으로 가입 여부 확인
+            if not email:
+                return Response({"error":"이메일을 확인할 수 없습니다."}, status=400)
 
-            if user.user_type == 'coach' : 
-                user_team = TeamInfo.objects.filter(team_host = user_code).first()
-            elif user.user_type == 'player' :
-                user_team = PlayerTeamCross.objects.filter(user_code = user_code).first()
+            exists = User.objects.filter(user_id=email, login_type="apple").exists()
+            if not exists:
+                try:
+                    encrypted_email = cryptographysss.encrypt_aes(email)
+                    id_param = quote(encrypted_email)
+                except Exception:
+                    id_param = ''
+                target_base = "http://localhost:3000" if state == "localhost" else ""
+                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
+
+            # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
+            user = User.objects.get(user_id=email, login_type="apple")
             
-            if user_team is None:
-                user_dict['team_code'] = ''
-            else:
-                user_dict['team_code'] = user_team.team_code
+            # JWT 토큰 생성
+            refresh = RefreshToken()
+            refresh['user_code'] = user.user_code
+            access_token = str(refresh.access_token)
+            
+            # 로딩 페이지로 리다이렉트 (토큰을 파라미터로 전달)
+            target_base = "http://localhost:3000" if state == "localhost" else ""
+            target = f"{target_base}/app/loading?code={access_token}"
+            html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
+            return HttpResponse(html)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
-            # 가입 후 첫 로그인 시 uesr_type을 individual로 변경
-            if user.user_type == '-1':
-                user.user_type = 'individual'
-                user.save()
+    def post(self, request):
+        # Apple은 response_mode=form_post로 전달하는 경우 POST로 콜백 호출
+        client_url = CLIENT_URL or "https://agrounds.com"
+        if request.data.get('hostname') == 'localhost' :
+            client_url = "http://localhost:3000"
 
-        except UserInfo.DoesNotExist:
-            return Response(
-                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
-            )
-        return JsonResponse(user_dict, status=200)
-    
+        id_token = request.data.get("id_token")
+        code = request.data.get("code")
+        state = request.data.get('state')
+        if not id_token and not code:
+            return Response({"error":"토큰이 없습니다."},status=400)
+
+        try:
+            email = None
+            if id_token:
+                res = requests.get("https://appleid.apple.com/auth/keys")
+                apple_keys = res.json()["keys"]
+                header = jwt.get_unverified_header(id_token)
+                key = next(k for k in apple_keys if k["kid"] == header["kid"])
+                public_key = RSAAlgorithm.from_jwk(key)
+                payload = jwt.decode(id_token, public_key, algorithms=["RS256"], audience=env("APPLE_CLIENT_ID"))
+                email = payload.get("email")
+
+            if not email:
+                return Response({"error":"이메일을 확인할 수 없습니다."}, status=400)
+
+            exists = User.objects.filter(user_id=email, login_type="apple").exists()
+            if not exists:
+                try:
+                    encrypted_email = cryptographysss.encrypt_aes(email)
+                    id_param = quote(encrypted_email)
+                except Exception:
+                    id_param = ''
+                target_base = "http://localhost:3000" if state == "localhost" else ""
+                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
+
+            # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
+            user = User.objects.get(user_id=email, login_type="apple")
+            
+            # JWT 토큰 생성
+            refresh = RefreshToken()
+            refresh['user_code'] = user.user_code
+            access_token = str(refresh.access_token)
+            
+            # 로딩 페이지로 리다이렉트 (토큰을 파라미터로 전달)
+            target_base = "http://localhost:3000" if state == "localhost" else ""
+            target = f"{target_base}/app/loading?code={access_token}"
+            html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
+            return HttpResponse(html)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+
+# 이메일 존재 여부 확인 (user 기준)
+class check_user_exists(APIView):
+    def get(self, request):
+        email = request.query_params.get('email')
+        enc_id = request.query_params.get('id')
+        login_type_param = request.query_params.get('login_type')
+        if not email and enc_id:
+            try:
+                decoded = unquote(enc_id)
+                email = cryptographysss.decrypt_aes(decoded)
+            except Exception as e:
+                return JsonResponse({"error":"invalid id"}, status=400)
+        if not email:
+            return JsonResponse({"error":"email 또는 id 파라미터가 필요합니다."}, status=400)
+        if login_type_param:
+            exists = User.objects.filter(user_id=email, login_type=login_type_param).exists()
+        else:
+            exists = User.objects.filter(user_id=email).exists()
+        return JsonResponse({"exists": exists}, status=200)
+
+
 # 로그인
-class login(APIView):
+class Login(APIView):
     """
     {
         'user_id' : {String},
@@ -970,87 +971,27 @@ class login(APIView):
                                 'team_name' : team_name,
                                 }, status=200)
 
-# # 회원가입
-# class signup(APIView):
-#     """
-#     json 형식
-#     {
-#         "user_id": "jayou1223@gmail.com",
-#         "password": "1q2w3e4r!",
-#         "user_birth": "20011223",
-#         "user_name": "구자유",
-#         "user_gender": "male",
-#         "user_nickname": "jayou",
-#         "marketing_agree": false
-#     }
-#     """
-#     def post(self, request, *args, **kwargs):
-#         data = request.data
-#         data['login_type'] = 0
-#         user_info_serializer = User_info_Serializer(data=data)
-        
-#         user_info_serializer.is_valid(raise_exception=True)
-#         user_info_serializer.save()
-#         return Response(user_info_serializer.data, status=status.HTTP_200_OK)
 
-class UserDelete(APIView):
-    """
-    회원 탈퇴 API (DELETE)
-    헤더에 JWT 토큰 필요
-    """
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def delete(self, request):
-        user = request.user
-        try:
-            user_info = UserInfo.objects.get(user_code=user.user_code)
-            user_info.delete()
-            return Response({"message": "회원 탈퇴가 완료되었습니다."}, status=200)
-        except UserInfo.DoesNotExist:
-            return Response({"error": "해당 사용자가 존재하지 않습니다."}, status=404)
-        except Exception as e:
-            return Response({"error": str(e)}, status=500)
-
-# V3 토큰으로 사용자 정보 받아오기
-class getV3UserInfo(APIView):
-    """
-    헤더에 토큰을 넣고 get요청을 보내면 V3 유저 정보를 리턴해줍니다.
-    client.defaults.headers.common['Authorization'] = token;
-    """
+# 토큰으로 사용자 정보 받아오기
+class Get_UserInfo_For_Token(APIView):
     def get(self, request):
-        auth_header = request.headers.get('Authorization')
-        if auth_header is None:
-            return Response({'detail': 'Authorization header missing or invalid'}, status=status.HTTP_401_UNAUTHORIZED)
+        # 헬퍼 함수를 사용하여 사용자 정보 가져오기
+        user, error_response = get_user_from_token(request)
+        if error_response:
+            return error_response
         
-        # Bearer 토큰이면 두 번째 부분을, 아니면 첫 번째 부분을 사용
-        if auth_header.startswith('Bearer '):
-            token = auth_header.split(' ')[1]
-        else:
-            token = auth_header.split(' ')[0]
-
-        # 토큰 decoding
         try:
-            decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            return Response({'detail': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
-        except jwt.InvalidTokenError:
-            return Response({'detail': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        user_code = decoded_token.get('user_code')
-        try:
-            # User와 UserInfo에서 정보 가져오기
-            user = User.objects.get(user_code=user_code)
-            user_info = UserInfo.objects.get(user_code=user_code)
+            # UserInfo에서 정보 가져오기
+            user_info = UserInfo.objects.get(user_code=user.user_code)
             
             # 새로운 토큰 생성
             refresh = RefreshToken()
-            refresh['user_code'] = user_code
+            refresh['user_code'] = user.user_code
             new_token = str(refresh.access_token)
             
             # 응답 데이터 구성
             user_dict = {
-                'user_code': user_code,
+                'user_code': user.user_code,
                 'user_id': user.user_id,
                 'user_name': user_info.name,
                 'user_birth': user_info.birth,
@@ -1068,10 +1009,10 @@ class getV3UserInfo(APIView):
 
         except User.DoesNotExist:
             return Response(
-                {"error": "V3 User not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
             )
         except UserInfo.DoesNotExist:
             return Response(
-                {"error": "V3 User info not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "User info not found"}, status=status.HTTP_404_NOT_FOUND
             )
         return JsonResponse(user_dict, status=200)

@@ -1,7 +1,5 @@
 from django.db import models
 
-##================ 현재 사용중인 실제 DB 테이블 ==================
-
 # 사용자 기본 정보 테이블
 class User(models.Model):
     user_code = models.CharField(primary_key=True, max_length=45)

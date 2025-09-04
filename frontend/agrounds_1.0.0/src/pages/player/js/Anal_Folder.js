@@ -5,7 +5,7 @@ import MatchActionModal from '../../../components/MatchActionModal';
 import '../css/Anal_Folder.scss';
 
 // API
-import { GetUserPlayerMatchesApi, UpdateMatchNameApi, DeleteMatchApi } from '../../../function/api/user/userApi';
+import { UpdateMatchNameApi, DeleteMatchApi, GetUserMatchesApi } from '../../../function/api/match/matchApi';
 
 // 필요한 아이콘들 import
 import folderIcon from '../../../assets/common/folder.png';
@@ -39,7 +39,9 @@ const Anal_Folder = () => {
       }
 
       console.log(`경기 목록 로드 시작: ${userCode}`);
-      const response = await GetUserPlayerMatchesApi(userCode, 20);
+      
+      // 실제 API 호출
+      const response = await GetUserMatchesApi(userCode);
       
       if (!response || !response.data) {
         throw new Error('비어있는 응답 데이터');
@@ -52,16 +54,23 @@ const Anal_Folder = () => {
       
       if (apiMatches.length === 0) {
         console.log('경기 데이터가 없습니다.');
+        setMatches([]);
+        return;
       }
       
+      // API 응답 데이터를 컴포넌트에서 사용할 형식으로 변환
       const normalized = apiMatches.map((m, idx) => ({
         id: m.match_code || `match_${idx}`,
         match_code: m.match_code || `match_${idx}`,
-        name: m.name || m.title || '경기',
-        title: m.title || m.name || '경기',
+        name: m.match_name || '경기',
+        title: m.match_name || '경기',
         quarter: m.quarter_count > 0 ? `${m.quarter_count}쿼터` : '쿼터 없음',
-        date: m.date || '날짜 미정',
-        time: m.time || '',
+        date: m.match_date || '날짜 미정',
+        time: m.match_time || '',
+        ground_name: m.ground_name || '알 수 없는 경기장',
+        total_duration: m.total_duration_minutes || 0,
+        max_speed: m.max_speed || 0,
+        total_distance: m.total_distance || 0,
         rawData: m  // 디버깅용
       }));
       

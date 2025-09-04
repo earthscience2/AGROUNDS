@@ -5,7 +5,8 @@ import MatchActionModal from '../../../components/MatchActionModal';
 import '../css/Anal.scss';
 
 // API
-import { GetUserAnalysisDataApi, GetMatchDetailApi, GetUserOvrDataApi, GetUserStatsDataApi, GetUserPointDataApi, UpdateMatchNameApi, DeleteMatchApi, UpdateQuarterNameApi, DeleteQuarterApi } from '../../../function/api/user/userApi';
+import { GetUserAnalysisDataApi, GetUserOvrDataApi, GetUserStatsDataApi, GetUserPointDataApi } from '../../../function/api/anal/analApi';
+import { GetMatchDetailApi, UpdateMatchNameApi, DeleteMatchApi, UpdateQuarterNameApi, DeleteQuarterApi } from '../../../function/api/match/matchApi';
 
 // 아이콘 import
 import folderIcon from '../../../assets/common/folder.png';
@@ -97,33 +98,52 @@ const Anal = () => {
 
       console.log(`분석 데이터 로드 시작: ${userCode}, matchId: ${matchId}`);
 
-      // 매치 상세 정보 먼저 가져오기
+      // 매치 상세 정보 먼저 가져오기 (userCode도 함께 전달하여 사용자 정보 포함)
       const matchDetailResponse = await GetMatchDetailApi(userCode, matchId);
       
       console.log('API 응답 전체:', matchDetailResponse);
       console.log('API 응답 데이터:', matchDetailResponse.data);
       
-      if (!matchDetailResponse.data || !matchDetailResponse.data.success) {
+      if (!matchDetailResponse.data) {
         const errorMsg = matchDetailResponse.data?.error || matchDetailResponse.data?.message || '경기 데이터를 불러올 수 없습니다.';
         throw new Error(errorMsg);
       }
       
-      const matchDetail = matchDetailResponse.data.data;
+      const matchDetail = matchDetailResponse.data;
       console.log('매치 상세 정보:', matchDetail);
       console.log('AI 요약 데이터:', matchDetail.ai_summary);
       console.log('디버깅 정보:', matchDetail.debug_info);
 
       // API 데이터를 화면 표시용 형태로 변환
+      const userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || '사용자';
+      const userPosition = sessionStorage.getItem('userPosition') || localStorage.getItem('userPosition') || 
+                          sessionStorage.getItem('preferred_position') || localStorage.getItem('preferred_position') || 'MF';
+      
       const formattedData = {
-        playerName: matchDetail.user_info?.user_name || sessionStorage.getItem('userName') || '사용자',
-        playerPosition: matchDetail.user_info?.user_position || '포지션 미설정',
+        playerName: matchDetail.user_info?.user_name || userName,
+        playerPosition: matchDetail.user_info?.user_position || userPosition,
         playerRole: matchDetail.match_info?.ground_name || matchDetail.match_info?.name || '경기 분석',
         matchTime: `${matchDetail.match_stats?.total_duration_minutes || 0}분`,
         quarterCount: `${matchDetail.match_stats?.quarter_count || 0}쿼터`,
         maxSpeed: `${matchDetail.match_stats?.max_speed || 0}km/h`,
         totalDistance: `${(matchDetail.match_stats?.total_distance || 0).toFixed(2)}km`,
 
-        aiAnalysis: matchDetail.ai_summary || ['AI 분석이 완료되었습니다.'],
+        aiAnalysis: matchDetail.ai_summary?.feedback_list || ['AI 분석이 완료되었습니다.'],
+        
+        // 경기 날짜/시간 정보 처리
+        matchDate: matchDetail.match_info?.start_time ? 
+          new Date(matchDetail.match_info.start_time).toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }) : '날짜 미정',
+        matchStartTime: matchDetail.match_info?.start_time ? 
+          new Date(matchDetail.match_info.start_time).toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          }) : '',
+        
         quarters: (matchDetail.quarters || [])
           .sort((a, b) => {
             // start_time 기준으로 오래된 순(오름차순) 정렬
@@ -131,23 +151,74 @@ const Anal = () => {
             const timeB = new Date(b.start_time || 0);
             return timeA - timeB;
           })
-          .map((quarter, index) => ({
-            quarter: index + 1,
-            quarter_code: quarter.quarter_code,
-            name: quarter.name || `${index + 1}쿼터`,
-            duration: quarter.duration || 0,
-            actual_move_time: quarter.actual_move_time || 0,  // 실제 이동시간
-            status: quarter.status || '완료',
-            points: Math.round(quarter.points || 0),
-            distance: quarter.distance ? `${quarter.distance.toFixed(2)}km` : '0km',
-            max_speed: quarter.max_speed ? `${quarter.max_speed}km/h` : '0km/h',
-            start_time: quarter.start_time,  // start_time 정보 보존
-            end_time: quarter.end_time,      // end_time 정보 보존
-            sprint_count: quarter.sprint_count,  // 스프린트 횟수 보존
-            radar_scores: quarter.radar_scores   // 레이더 차트 점수 보존
-          })),
+          .map((quarter, index) => {
+            // 백엔드에서 제공하는 duration_minutes 직접 사용
+            const duration = Math.round(quarter.duration_minutes || 0);
+
+            return {
+              quarter: index + 1,
+              quarter_code: quarter.quarter_code,
+              name: quarter.name || `${index + 1}쿼터`,
+              duration: duration,
+              actual_move_time: duration,  // 실제 이동시간
+              status: quarter.status || '완료',
+              points: Math.round(quarter.points || 0),  // 백엔드에서 직접 제공
+              distance: quarter.distance ? `${quarter.distance.toFixed(2)}km` : '0km',  // 백엔드에서 직접 제공
+              max_speed: quarter.max_speed ? `${quarter.max_speed.toFixed(1)}km/h` : '0km/h',  // 백엔드에서 직접 제공
+              avg_speed: quarter.avg_speed ? `${quarter.avg_speed.toFixed(1)}km/h` : '0km/h',  // 백엔드에서 직접 제공
+              start_time: quarter.start_time,  // start_time 정보 보존
+              end_time: quarter.end_time,      // end_time 정보 보존
+              sprint_count: quarter.sprint_count || 0,  // 스프린트 횟수 보존
+              movement_ratio: quarter.movement_ratio || 0,  // 활동 비율 보존
+              radar_scores: quarter.radar_scores || {}   // 레이더 차트 점수 보존
+            };
+          }),
         matchInfo: matchDetail.match_info || {}
       };
+      
+      console.log('🔧 변환된 데이터:', formattedData);
+      console.log('🔧 사용자 정보:', {
+        playerName: formattedData.playerName,
+        playerPosition: formattedData.playerPosition,
+        userName: userName,
+        userPosition: userPosition
+      });
+      console.log('🔧 AI 분석 데이터:', formattedData.aiAnalysis);
+      console.log('🔧 백엔드 원시 쿼터 데이터:');
+      (matchDetail.quarters || []).forEach((quarter, index) => {
+        console.log(`  백엔드 쿼터 ${index + 1}:`, {
+          quarter_code: quarter.quarter_code,
+          name: quarter.name,
+          duration_minutes: quarter.duration_minutes,
+          points: quarter.points,
+          distance: quarter.distance,
+          max_speed: quarter.max_speed,
+          avg_speed: quarter.avg_speed
+        });
+      });
+      
+      console.log('🔧 변환된 쿼터 데이터:', formattedData.quarters);
+      console.log('🔧 변환된 쿼터별 상세 정보:');
+      formattedData.quarters.forEach((quarter, index) => {
+        console.log(`  변환된 쿼터 ${index + 1}:`, {
+          name: quarter.name,
+          duration: quarter.duration,
+          points: quarter.points,
+          distance: quarter.distance,
+          max_speed: quarter.max_speed
+        });
+      });
+      console.log('🔧 경기 통계:', {
+        matchTime: formattedData.matchTime,
+        quarterCount: formattedData.quarterCount,
+        maxSpeed: formattedData.maxSpeed,
+        totalDistance: formattedData.totalDistance
+      });
+      console.log('🔧 경기 날짜/시간:', {
+        matchDate: formattedData.matchDate,
+        matchStartTime: formattedData.matchStartTime,
+        originalStartTime: matchDetail.match_info?.start_time
+      });
       
       setMatchData(formattedData);
       
@@ -167,6 +238,7 @@ const Anal = () => {
       if (passedMatchData) {
         const fallbackData = {
           playerName: sessionStorage.getItem('userName') || '사용자',
+          playerPosition: sessionStorage.getItem('userPosition') || localStorage.getItem('preferred_position') || 'MF',
           playerRole: passedMatchData.title || '경기 분석',
           matchTime: '분석 중',
           quarterCount: `${passedMatchData.quarter_count || 0}쿼터`,
@@ -174,6 +246,8 @@ const Anal = () => {
           totalDistance: '분석 중',
           avgSpeed: '분석 중',
           totalPoints: 0,
+          matchDate: passedMatchData.match_date || '날짜 미정',
+          matchStartTime: passedMatchData.match_time || '',
           aiAnalysis: ['경기 데이터를 분석 중입니다. 잠시 후 다시 확인해주세요.'],
           quarters: []
         };
@@ -344,7 +418,7 @@ const Anal = () => {
             </div>
             <div className="match-location text-body">{matchData.playerRole}</div>
             <div className="match-datetime text-body">
-              {matchData.matchInfo?.date || '날짜 미정'} {matchData.matchInfo?.time || ''}
+              {matchData.matchDate} {matchData.matchStartTime}
             </div>
           </div>
           <div className="match-info-divider"></div>

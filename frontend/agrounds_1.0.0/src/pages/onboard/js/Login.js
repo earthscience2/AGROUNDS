@@ -8,6 +8,7 @@ import startLogo from '../../../assets/logo/start_logo.png';
 import bottomLogo from '../../../assets/logo/buttom_logo.png';
 import blackLogo from '../../../assets/logo/black_logo.png';
 import leftArrow from '../../../assets/common/left.png';
+import { GetUserInfoForTokenApi } from '../../../function/login/loginApi';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -74,17 +75,11 @@ const Login = () => {
   // 유저 정보 확인 및 리다이렉트 처리
   const checkUserInfoAndRedirect = async () => {
     try {
-      // 실제 구현에서는 로그인 후 받은 토큰이나 사용자 ID로 유저 정보 확인
-      const response = await fetch(`/api/user/info/`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // 실제 토큰 사용
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const userData = await response.json();
+      // loginApi를 사용하여 사용자 정보 조회
+      const response = await GetUserInfoForTokenApi();
+      
+      if (response.status === 200) {
+        const userData = response.data;
         if (userData && userData.user_code) {
           // 유저 정보가 있으면 메인 페이지로 이동
           navigate('/app/main');

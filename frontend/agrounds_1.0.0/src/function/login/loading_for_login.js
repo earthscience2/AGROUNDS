@@ -53,13 +53,20 @@ const LoadingPage = () => {
             // API 호출 전 토큰을 직접 헤더에 지정 (인터셉터 충돌 방지)
             console.log('Making API call with direct Authorization header');
             
-            client.get('/api/login/get-v3-user-info', {
+            client.get('/api/login/get-user-info/', {
                 headers: {
                     'Authorization': token
                 }
             })
             .then(function(response){
                 console.log(response);
+                
+                // 🔥 모든 저장소 완전 초기화
+                console.log('🧹 로그인 성공 - 모든 저장소 초기화');
+                sessionStorage.clear();
+                localStorage.clear();
+                
+                // 🆕 새로운 사용자 정보만 저장
                 sessionStorage.setItem('token', response.data.token)
                 sessionStorage.setItem('userCode', response.data.user_code);
                 sessionStorage.setItem('userId', response.data.user_id);
@@ -74,11 +81,16 @@ const LoadingPage = () => {
                 sessionStorage.setItem('userWeight', response.data.user_weight);
                 sessionStorage.setItem('userPosition', response.data.user_position);
                 sessionStorage.setItem('teamCode', response.data.team_code);
+                
+                // 로그인 완료 플래그 설정
+                sessionStorage.setItem('loginCompleted', 'true');
+                sessionStorage.setItem('loginTimestamp', Date.now().toString());
 
                 if(response.data.user_type === '-1') { // 가입 후 첫 로그인시 팀 가입 유도 페이지로 이동
                     window.location.replace('/app/completesignup');
                 } else {
-                    navigate('/app/main');
+                    // 강제 새로고침으로 이전 상태 완전 초기화
+                    window.location.replace('/app/main?refresh=true');
                 }
             })
             .catch(function(error){

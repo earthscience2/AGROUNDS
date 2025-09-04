@@ -8,8 +8,6 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-# user 앱의 뷰 임포트
-from user import views as user_views
 
 router = routers.DefaultRouter()
 
@@ -37,13 +35,7 @@ urlpatterns = [
     path("api/login/", include("login.urls")),
     path("api/match/", include("match.urls")),
     path("api/anal/", include("anal.urls")),
-    
-    # analysis 엔드포인트 (user 앱의 뷰를 직접 사용)
-    path("api/analysis/", include([
-        path("get-ovr-data/", user_views.GetUserOvrDataView.as_view()),
-        path("get-stats-data/", user_views.GetUserStatsDataView.as_view()),
-        path("get-point-data/", user_views.GetUserPointDataView.as_view()),
-    ])),
+    path("api/video/", include("video.urls")),
 
     path("api/ground/", include("ground.urls")),
     path("api/upload/", include("upload.urls")),

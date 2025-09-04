@@ -82,6 +82,7 @@
   min-height: 100vh;
   font-family: var(--font-text);
   overflow-x: hidden;
+  overflow-y: visible; /* sticky 요소가 작동하도록 */
   padding-bottom: 80px;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
@@ -147,11 +148,40 @@
     }
   }
 
+  // Sticky 쿼터 컨테이너
+  .sticky-quarter-container {
+    position: -webkit-sticky; /* Safari 지원 */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    background: var(--bg-primary);
+    
+    // 스크롤 시 고정된 상태
+    &.scrolled {
+      background: rgba(242, 244, 246, 0.98);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    
+    // JavaScript로 fixed 설정되었을 때
+    &[style*="position: fixed"] {
+      position: fixed !important;
+      background: rgba(242, 244, 246, 0.98);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+  }
+
   // 쿼터 탭
   .quarter-tabs {
     display: flex;
     gap: var(--spacing-sm);
-    padding: 0 var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
+    padding: var(--spacing-md) var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     
@@ -194,7 +224,6 @@
     .quarter-info-section {
       display: flex;
       align-items: center;
-      margin-top: var(--spacing-lg);
       gap: var(--spacing-lg);
 
       .quarter-info-left {
@@ -285,7 +314,7 @@
           }
 
           .stat-value {
-            margin: 0;
+            margin-right: 10px;
             color: var(--text-primary);
             font-weight: 600;
             font-size: 14px;
@@ -338,6 +367,45 @@
         border-radius: 12px;
         font-size: 11px;
       }
+
+      .collapse-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: var(--spacing-xs);
+        border-radius: 6px;
+        color: var(--text-secondary);
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        margin-left: auto;
+
+        &:hover {
+          background: var(--bg-primary);
+          color: var(--text-primary);
+        }
+
+        &:focus {
+          outline: 2px solid var(--primary);
+          outline-offset: 2px;
+        }
+
+        .collapse-icon {
+          width: 16px;
+          height: 16px;
+          transition: all 0.2s ease;
+          opacity: 0.7;
+        }
+
+        &:hover .collapse-icon {
+          opacity: 1;
+        }
+      }
     }
   }
 
@@ -367,66 +435,425 @@
 
   // 비디오 섹션
   .video-section {
-    .video-thumbnail {
-      border-radius: 12px;
-      overflow: hidden;
-      background: var(--bg-primary);
-      height: 180px;
+    .video-loading {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 120px;
+      gap: var(--spacing-sm);
       
-      .video-placeholder {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: var(--spacing-sm);
-        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        cursor: pointer;
-        transition: background 0.2s ease;
-        
-        &:hover {
-          background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      .loading-spinner {
+        width: 24px;
+        height: 24px;
+        border: 2px solid var(--border);
+        border-top: 2px solid var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      p {
+        margin: 0;
+        color: var(--text-secondary);
+      }
+    }
+    
+    .video-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      
+      .video-item {
+        .video-thumbnail {
+          border-radius: 12px;
+          overflow: hidden;
+          background: var(--bg-primary);
+          height: 0;
+          padding-bottom: 56.25%; // 16:9 비율 (9/16 = 0.5625)
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border: 2px solid var(--border);
+          position: relative;
+          
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+          }
+          
+          .video-thumbnail-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            
+            .thumbnail-img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center;
+            }
+            
+            .video-fallback {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+              
+              .play-icon {
+                font-size: 24px;
+                color: var(--primary);
+              }
+            }
+            
+            .video-overlay {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.3);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              opacity: 0;
+              transition: opacity 0.2s ease;
+              
+              .play-icon {
+                font-size: 32px;
+                color: white;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+              }
+            }
+          }
+          
+          &:hover .video-overlay {
+            opacity: 1;
+          }
+          
+          .video-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            gap: var(--spacing-lg);
+            
+            .play-icon {
+              font-size: 24px;
+              color: var(--primary);
+              flex-shrink: 0;
+            }
+            
+            .video-info {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              gap: var(--spacing-xs);
+              
+              .video-title {
+                margin: 0;
+                color: var(--text-primary);
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 1.4;
+              }
+              
+              .video-date {
+                margin: 0;
+                color: var(--text-disabled);
+                font-size: 12px;
+              }
+            }
+          }
+          
         }
-        
-        .play-icon {
-          font-size: 32px;
-          color: var(--primary);
-        }
-        
-        p {
-          margin: 0;
-          color: var(--text-secondary);
-        }
+      }
+    }
+    
+    .video-placeholder {
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: var(--bg-primary);
+      border-radius: 12px;
+      border: 2px dashed var(--border);
+      
+      .play-icon {
+        font-size: 32px;
+        color: var(--text-disabled);
+      }
+      
+      p {
+        margin: 0;
+        color: var(--text-secondary);
+      }
+    }
+  }
+
+  // 경기장 분석 탭 (경기장 박스 스타일)
+  .map-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-xs);
+    background: var(--bg-primary);
+    border-radius: 12px;
+    
+    .map-tab {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      padding: var(--spacing-md) var(--spacing-sm);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      
+      &:hover {
+        color: var(--primary);
+        background: rgba(255, 255, 255, 0.5);
+        transform: translateY(-1px);
+      }
+      
+      &.active {
+        color: var(--primary);
+        background: var(--bg-surface);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  // 활동량 탭 (경기장 박스 스타일)
+  .activity-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-xs);
+    background: var(--bg-primary);
+    border-radius: 12px;
+    
+    .activity-tab {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      padding: var(--spacing-md) var(--spacing-sm);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      
+      &:hover {
+        color: var(--primary);
+        background: rgba(255, 255, 255, 0.5);
+        transform: translateY(-1px);
+      }
+      
+      &.active {
+        color: var(--primary);
+        background: var(--bg-surface);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  // 속력/가속도 탭 (경기장 박스 스타일)
+  .speed-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-xs);
+    background: var(--bg-primary);
+    border-radius: 12px;
+    
+    .speed-tab {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      padding: var(--spacing-md) var(--spacing-sm);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      
+      &:hover {
+        color: var(--primary);
+        background: rgba(255, 255, 255, 0.5);
+        transform: translateY(-1px);
+      }
+      
+      &.active {
+        color: var(--primary);
+        background: var(--bg-surface);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
       }
     }
   }
 
   // 히트맵
   .heatmap-container {
-    .field-svg {
+    .heatmap-field-container {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 66.67%; // 3:2 비율 (360:240) - 히트맵 SVG viewBox와 일치
       border-radius: 12px;
+      overflow: hidden;
       border: 2px solid var(--border);
-      background: #4F7942;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: white; // 흰색 배경 기본 설정
       
-      .heatmap-point {
-        opacity: 0.8;
-        transition: opacity 0.2s ease;
+      
+      .field-background {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%; // 경기장 이미지 크기
+        object-fit: contain; // 전체 이미지가 보이도록
+        object-position: center; // 중앙 정렬
+        z-index: 1; // 배경 레이어
+      }
+      
+      .heatmap-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%; // 경기장 이미지와 동일한 크기
+        pointer-events: none; // 마우스 이벤트 방지
+        z-index: 2; // 경기장 이미지 위에 표시
         
-        &:hover {
-          opacity: 1;
+        .heatmap-svg {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 96%;
+          height: 96%;
         }
       }
     }
     
+    .heatmap-placeholder {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 0;
+      padding-bottom: 66.67%; // 3:2 비율 (360:240) - 히트맵 SVG viewBox와 일치
+      background: var(--bg-surface);
+      border-radius: 12px;
+      border: 2px dashed var(--border);
+      position: relative;
+      
+      p {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+      }
+    }
+    
+    .heatmap-point {
+      transition: all 0.2s ease;
+      cursor: pointer;
+      
+      &:hover {
+        r: 6; // 호버 시 크기 증가
+        opacity: 1;
+      }
+    }
+    
     .heatmap-legend {
-      margin-top: var(--spacing-sm);
+      margin-top: 8px;
       text-align: center;
-      color: var(--text-disabled);
+      color: var(--text-secondary);
+      font-size: 12px;
     }
   }
 
-  // 활동량 차트
+  // 활동량 비율 차트 (탭 위에 위치)
+  .activity-ratio-chart {
+    margin-bottom: var(--spacing-xl);
+    
+    .ratio-bar-container {
+      position: relative;
+      
+      .ratio-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-sm);
+        
+        .ratio-label-left,
+        .ratio-label-right {
+          color: var(--text-secondary);
+          font-weight: 500;
+          font-size: 12px;
+        }
+      }
+      
+      .ratio-bar {
+        display: flex;
+        height: 30px;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: var(--spacing-lg);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        
+        .ratio-attack,
+        .ratio-defense {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: 600;
+          font-size: 14px;
+          transition: all 0.3s ease;
+          position: relative;
+          min-width: 60px; // 최소 너비 보장
+          
+          .ratio-text {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+
+  // 활동량 차트 (기존 호환성)
   .activity-chart {
+    
     .activity-bar {
       position: relative;
       height: 40px;
@@ -475,7 +902,214 @@
     }
   }
 
-  // 속력 차트
+  // 5x2 그리드 스타일 (스프린트 섹션용)
+  .activity-stats-grid.sprint-grid-2x5 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: var(--spacing-md);
+    
+    .activity-stat {
+      display: flex;
+      flex-direction: column;
+      padding: var(--spacing-lg);
+      background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+      
+      .stat-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-xs);
+        font-weight: 500;
+      }
+      
+      .stat-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+    }
+  }
+
+  // 활동량 상세 정보 (스프린트 스타일 적용)
+  .activity-details {
+    .activity-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, 1fr);
+      gap: var(--spacing-md);
+      
+      .activity-stat {
+        display: flex;
+        flex-direction: column;
+        padding: var(--spacing-lg);
+        background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(255, 255, 255, 0.02) 100%);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        transition: all 0.2s ease;
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-label {
+          font-size: 12px;
+          color: var(--text-secondary);
+          margin-bottom: var(--spacing-xs);
+          font-weight: 500;
+        }
+        
+        .stat-value {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+      }
+    }
+  }
+
+  // 속력/가속도 분석
+  .speed-content {
+    .speed-analysis,
+    .acceleration-analysis {
+      .speed-charts,
+      .acceleration-charts {
+        margin-bottom: var(--spacing-xl);
+        
+        .speed-chart-row,
+        .acceleration-chart-row {
+          display: flex;
+          gap: var(--spacing-xl);
+          justify-content: space-around;
+          margin-bottom: var(--spacing-xl);
+          
+          .speed-item,
+          .acceleration-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-sm);
+            
+            .speed-label,
+            .acceleration-label {
+              color: var(--text-disabled);
+              text-align: center;
+              font-weight: 500;
+              margin-bottom: var(--spacing-sm);
+            }
+            
+            .speed-graph,
+            .acceleration-graph {
+              height: 140px;
+              width: 70px;
+              background: var(--bg-primary);
+              border-radius: 25px;
+              display: flex;
+              align-items: flex-end;
+              padding: 6px;
+              
+              .speed-line,
+              .acceleration-bar {
+                width: 100%;
+                border-radius: 16px;
+                transition: height 0.8s ease;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              }
+            }
+
+            // 그래프 아이템 스타일
+            &.speed-graph-item,
+            &.acceleration-graph-item {
+              .speed-chart-container,
+              .acceleration-chart-container {
+                height: 140px;
+                width: 100%;
+                background: transparent;
+                padding: 0;
+                margin-bottom: var(--spacing-md);
+                
+                .speed-chart,
+                .acceleration-chart {
+                  width: 100%;
+                  height: 100%;
+                  
+                  polyline {
+                    stroke-width: 2;
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                  }
+                  
+                  circle {
+                    transition: r 0.2s ease;
+                    
+                    &:hover {
+                      r: 3;
+                    }
+                  }
+                }
+              }
+            }
+            
+            .speed-value,
+            .acceleration-value {
+              color: var(--text-primary);
+              font-weight: 600;
+              text-align: center;
+              min-height: 20px;
+            }
+          }
+        }
+      }
+      
+      .speed-stats-grid,
+      .acceleration-stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+        gap: var(--spacing-md);
+        
+        .speed-stat,
+        .acceleration-stat {
+          display: flex;
+          flex-direction: column;
+          padding: var(--spacing-lg);
+          background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(255, 255, 255, 0.02) 100%);
+          border-radius: 12px;
+          border: 1px solid var(--border);
+          transition: all 0.2s ease;
+          
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          }
+          
+          .stat-label {
+            font-size: 12px;
+         color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+          }
+          
+          .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+          }
+        }
+      }
+    }
+  }
+
+  // 기존 속력 차트 (하위 호환성)
   .speed-charts {
     .speed-chart-row {
       display: flex;
@@ -541,7 +1175,141 @@
     }
   }
 
-  // 스프린트 통계
+  // 스프린트 테이블
+  .sprint-table {
+    .table-header {
+      margin-bottom: var(--spacing-lg);
+      
+      .table-title {
+        text-align: center;
+        color: var(--text-primary);
+        margin: 0;
+      }
+    }
+    
+    .table-content {
+      margin-bottom: var(--spacing-xl);
+      max-height: 120px;
+      overflow-y: auto;
+      border-radius: 12px;
+      
+      // 스크롤바 스타일링
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: var(--bg-primary);
+        border-radius: 3px;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: var(--text-disabled);
+        border-radius: 3px;
+        
+        &:hover {
+          background: var(--text-secondary);
+        }
+      }
+      
+      .stats-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-surface);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        
+        thead {
+          background: var(--bg-primary);
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          
+          tr {
+            th {
+              padding: var(--spacing-md) var(--spacing-lg);
+              text-align: left;
+              color: var(--text-secondary);
+              font-weight: 600;
+              border-bottom: 1px solid var(--border);
+              background: var(--bg-primary);
+              
+              &:nth-child(2) {
+                text-align: center;
+              }
+              
+              &:nth-child(3) {
+                text-align: center;
+              }
+            }
+          }
+        }
+        
+        tbody {
+          tr {
+            transition: background-color 0.2s ease;
+            
+            &:hover {
+              background: var(--bg-primary);
+            }
+            
+            &:not(:last-child) {
+              border-bottom: 1px solid var(--border);
+            }
+            
+            td {
+              padding: var(--spacing-md) var(--spacing-lg);
+              
+              &.stat-name {
+                color: var(--text-secondary);
+                font-weight: 500;
+              }
+              
+              &.stat-number {
+                text-align: center;
+                color: var(--text-primary);
+                font-weight: 600;
+              }
+              
+              &.stat-unit {
+                text-align: center;
+                color: var(--text-disabled);
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    .sprint-summary {
+      display: flex;
+      gap: var(--spacing-lg);
+      
+      .summary-item {
+        flex: 1;
+        text-align: center;
+        padding: var(--spacing-lg);
+        background: var(--bg-primary);
+        border-radius: 12px;
+        
+        .summary-value {
+          margin: 0 0 var(--spacing-sm) 0;
+          color: var(--primary);
+          font-weight: 800;
+        }
+        
+        .summary-label {
+          margin: 0;
+          color: var(--text-secondary);
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  // 기존 스프린트 통계 (하위 호환성)
   .sprint-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -578,7 +1346,7 @@
     }
 
     .quarter-tabs {
-      padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+      padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
       
       .quarter-tab {
         padding: var(--spacing-md) var(--spacing-lg);
@@ -597,19 +1365,101 @@
       padding: var(--spacing-lg);
     }
 
-    .activity-stats {
-      grid-template-columns: 1fr;
-      gap: var(--spacing-md);
+    // 히트맵 반응형 조정
+    .heatmap-container {
+      .heatmap-field-container {
+        border-radius: 8px; // 모바일에서 조금 더 작은 radius
+      }
     }
 
-    .acceleration-stats {
+    .activity-stats,
+    .activity-stats-grid {
       grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: var(--spacing-md);
+      
+      .activity-stat {
+        padding: var(--spacing-md);
+        
+        .stat-label {
+          font-size: 12px;
+        }
+        
+        .stat-value {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .acceleration-stats,
+    .speed-stats-grid,
+    .acceleration-stats-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
       gap: var(--spacing-md);
     }
 
     .sprint-stats {
       grid-template-columns: 1fr;
       gap: var(--spacing-md);
+    }
+
+    .sprint-summary {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .speed-chart-row,
+    .acceleration-chart-row {
+      gap: var(--spacing-lg);
+    }
+
+    // 비디오 섹션 모바일 최적화
+    .video-section {
+      .video-list {
+        .video-item {
+          .video-thumbnail {
+            height: 0;
+            padding-bottom: 56.25%; // 16:9 비율 유지
+            
+            .video-thumbnail-image {
+              .video-overlay {
+                .play-icon {
+                  font-size: 24px;
+                }
+              }
+            }
+            
+            .video-content {
+              padding: var(--spacing-md);
+              gap: var(--spacing-md);
+              
+              .play-icon {
+                font-size: 20px;
+              }
+              
+              .video-info {
+                .video-title {
+                  font-size: 13px;
+                }
+                
+                .video-date {
+                  font-size: 11px;
+                }
+              }
+            }
+            
+          }
+        }
+      }
+      
+      .video-placeholder {
+        height: 100px;
+        
+        .play-icon {
+          font-size: 28px;
+        }
+      }
     }
   }
 }
@@ -621,7 +1471,7 @@
     }
 
     .quarter-tabs {
-      padding: 0 var(--spacing-md) var(--spacing-lg) var(--spacing-md);
+      padding: var(--spacing-md) var(--spacing-md) var(--spacing-lg) var(--spacing-md);
       
       .quarter-tab {
         padding: var(--spacing-sm) var(--spacing-md);
@@ -638,6 +1488,14 @@
     .analysis-section {
       margin: 0 var(--spacing-md) var(--spacing-lg) var(--spacing-md);
       padding: var(--spacing-md);
+    }
+
+    // 히트맵 작은 화면 조정
+    .heatmap-container {
+      .heatmap-field-container {
+        border-radius: 6px; // 더 작은 화면에서 더 작은 radius
+        border-width: 1px; // 테두리 두께 줄이기
+      }
     }
 
     .radar-chart {
@@ -657,11 +1515,31 @@
       }
     }
 
-    .speed-chart-row {
-      gap: var(--spacing-lg);
+    .activity-stats-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
       
-      .speed-item {
-        .speed-graph {
+      .activity-stat {
+        padding: var(--spacing-sm) var(--spacing-md);
+        
+        .stat-label {
+          font-size: 11px;
+        }
+        
+        .stat-value {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .speed-chart-row,
+    .acceleration-chart-row {
+      gap: var(--spacing-md);
+      
+      .speed-item,
+      .acceleration-item {
+        .speed-graph,
+        .acceleration-graph {
           height: 60px;
           width: 30px;
         }
@@ -673,5 +1551,75 @@
         font-size: 36px;
       }
     }
+
+    .stats-table {
+      thead th,
+      tbody td {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 14px;
+      }
+    }
+
+    .sprint-summary {
+      .summary-item {
+        padding: var(--spacing-md);
+        
+        .summary-value {
+          font-size: 18px;
+        }
+      }
+    }
+
+    // 비디오 섹션 작은 화면 최적화
+    .video-section {
+      .video-list {
+        gap: var(--spacing-sm);
+        
+        .video-item {
+          .video-thumbnail {
+            height: 0;
+            padding-bottom: 56.25%; // 16:9 비율 유지
+            
+            .video-thumbnail-image {
+              .video-overlay {
+                .play-icon {
+                  font-size: 20px;
+                }
+              }
+            }
+            
+            .video-content {
+              padding: var(--spacing-sm) var(--spacing-md);
+              gap: var(--spacing-sm);
+              
+              .play-icon {
+                font-size: 18px;
+              }
+              
+              .video-info {
+                .video-title {
+                  font-size: 12px;
+                }
+                
+                .video-date {
+                  font-size: 10px;
+                }
+              }
+            }
+            
+          }
+        }
+      }
+      
+      .video-placeholder {
+        height: 80px;
+        
+        .play-icon {
+          font-size: 24px;
+        }
+      }
+    }
   }
 }
+
+// 히트맵 스타일 (페이지 하단부 - 중복 제거됨)

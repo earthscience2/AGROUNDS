@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// 삭제된 API 임포트 제거
 import '../css/Card.scss';
+import { GetUserInfoApi } from '../../../function/api/user/userApi';
 
 // 카드 배경 이미지 import
 import cardBlue from '../../../assets/card/card_blue.png';
@@ -104,55 +104,94 @@ const Card = () => {
           return;
         }
 
-        // API 비활성화로 인한 세션 스토리지 사용
+        // 실제 API를 사용하여 사용자 정보 조회
         console.log('사용자 코드:', userCode);
-        const response = { data: {
-          name: sessionStorage.getItem('userName') || '사용자',
-          birth: sessionStorage.getItem('userBirth') || '1999-01-01',
-          preferred_position: sessionStorage.getItem('userPosition') || 'CB'
-        }};
-        console.log('세션 데이터 응답:', response);
-        
-        if (response.data) {
-          const userInfo = response.data;
-          console.log('사용자 정보:', userInfo);
+        try {
+          const response = await GetUserInfoApi(userCode);
+          console.log('사용자 정보 API 응답:', response);
           
-          // 나이 계산 (birth가 'YYYY-MM-DD' 형식이라고 가정)
-          const calculateAge = (birthDate) => {
-            if (!birthDate) return 25;
-            const birth = new Date(birthDate);
-            const today = new Date();
-            let age = today.getFullYear() - birth.getFullYear();
-            const monthDiff = today.getMonth() - birth.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-              age--;
-            }
-            return age;
-          };
+          if (response.data) {
+            const userInfo = response.data;
+            console.log('사용자 정보:', userInfo);
+            
+            // 나이 계산 (birth가 'YYYY-MM-DD' 형식이라고 가정)
+            const calculateAge = (birthDate) => {
+              if (!birthDate) return 25;
+              const birth = new Date(birthDate);
+              const today = new Date();
+              let age = today.getFullYear() - birth.getFullYear();
+              const monthDiff = today.getMonth() - birth.getMonth();
+              if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+              }
+              return age;
+            };
 
-          const userData = {
-            name: userInfo.name || "사용자",
-            age: calculateAge(userInfo.birth),
-            height: userInfo.height ? `${Math.round(userInfo.height)}cm` : "175cm",
-            weight: userInfo.weight ? `${Math.round(userInfo.weight)}kg` : "70kg",
-            position: userInfo.preferred_position || "CB",
-            team: null, // V3에서는 아직 팀 기능이 없으므로 null
-            gender: userInfo.gender === 'male' ? '남성' : userInfo.gender === 'female' ? '여성' : '남성'
-          };
-          
-          setPlayerData(userData);
-        } else {
-          // API 응답이 없는 경우 기본값
-          const defaultData = {
-            name: "사용자",
-            age: 25,
-            height: "175cm",
-            weight: "70kg",
-            position: "CB",
-            team: null,
-            gender: "남성"
-          };
-          setPlayerData(defaultData);
+            const userData = {
+              name: userInfo.name || "사용자",
+              age: calculateAge(userInfo.birth),
+              height: userInfo.height ? `${Math.round(userInfo.height)}cm` : "175cm",
+              weight: userInfo.weight ? `${Math.round(userInfo.weight)}kg` : "70kg",
+              position: userInfo.preferred_position || "CB",
+              team: null, // V3에서는 아직 팀 기능이 없으므로 null
+              gender: userInfo.gender === 'male' ? '남성' : userInfo.gender === 'female' ? '여성' : '남성'
+            };
+            
+            setPlayerData(userData);
+          } else {
+            throw new Error('사용자 정보를 가져올 수 없습니다.');
+          }
+        } catch (error) {
+          console.error('사용자 정보 API 호출 실패:', error);
+          // API 실패 시 세션 스토리지 사용 (fallback)
+          const response = { data: {
+            name: sessionStorage.getItem('userName') || '사용자',
+            birth: sessionStorage.getItem('userBirth') || '1999-01-01',
+            preferred_position: sessionStorage.getItem('userPosition') || 'CB'
+          }};
+          console.log('세션 데이터 응답 (fallback):', response);
+        
+          if (response.data) {
+            const userInfo = response.data;
+            console.log('사용자 정보 (fallback):', userInfo);
+            
+            // 나이 계산 (birth가 'YYYY-MM-DD' 형식이라고 가정)
+            const calculateAge = (birthDate) => {
+              if (!birthDate) return 25;
+              const birth = new Date(birthDate);
+              const today = new Date();
+              let age = today.getFullYear() - birth.getFullYear();
+              const monthDiff = today.getMonth() - birth.getMonth();
+              if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+              }
+              return age;
+            };
+
+            const userData = {
+              name: userInfo.name || "사용자",
+              age: calculateAge(userInfo.birth),
+              height: userInfo.height ? `${Math.round(userInfo.height)}cm` : "175cm",
+              weight: userInfo.weight ? `${Math.round(userInfo.weight)}kg` : "70kg",
+              position: userInfo.preferred_position || "CB",
+              team: null, // V3에서는 아직 팀 기능이 없으므로 null
+              gender: userInfo.gender === 'male' ? '남성' : userInfo.gender === 'female' ? '여성' : '남성'
+            };
+            
+            setPlayerData(userData);
+          } else {
+            // API 응답이 없는 경우 기본값
+            const defaultData = {
+              name: "사용자",
+              age: 25,
+              height: "175cm",
+              weight: "70kg",
+              position: "CB",
+              team: null,
+              gender: "남성"
+            };
+            setPlayerData(defaultData);
+          }
         }
         
         setLoading(false);
