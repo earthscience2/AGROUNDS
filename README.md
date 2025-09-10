@@ -1,4 +1,4 @@
-f
+
 <div align='center'>
 
 # ⚽️ AGROUNDS Demo
@@ -49,6 +49,11 @@ f
 | 패키지 | <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=NPM&logoColor=ffffff"> |
 | 기타 도구 | <img src="https://img.shields.io/badge/createreactapp-09D3AC?style=for-the-badge&logo=createreactapp&logoColor=white"> <img src="https://img.shields.io/badge/Canvas-FF7139?style=for-the-badge&logo=canvas&logoColor=white" alt="Canvas Badge"> |
 | 협업 | <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Figma-d90f42?style=for-the-badge&logo=Figma&logoColor=white"> |
+| 아키텍처 | <img  alt="Adobe Express - file (1)" src="https://github.com/user-attachments/assets/04a03309-efc4-4608-80cf-271f124a9b8a" />
+
+
+
+
 
 <br/>
 
@@ -65,24 +70,54 @@ AGROUNDS는 아마추어 축구 커뮤니티의 요구를 반영하여 기획된
       <td>페이지</td>
     </tr>
     <tr>
-      <td><b>로그인/회원가입:<br/>자체 회원가입, 로그인 기능 구현<br/>카카오 회원가입 자체구현<br/>로그인 후 추가정보 입력 구현</b></td>
-      <td><img width="150" src="https://github.com/user-attachments/assets/6a4649df-40e3-4e58-b176-c058ad22c779"/><img src="https://github.com/user-attachments/assets/4bc7f047-c4ee-4cfb-aaf1-9b1601ebe9e1" width="150"/><img src="https://github.com/user-attachments/assets/9352db62-0a90-498f-a73c-8548cd949da4" width="150"/></td>
+      <td><b>로그인/회원가입</b></td>
+      <td><img width = "150" src="https://github.com/user-attachments/assets/88abbef1-7a8d-4911-ac57-7a5a9ed76100" /><img width="150" src="https://github.com/user-attachments/assets/de33f29d-fd92-473a-956d-9daef1fae029" /><img width="150" src="https://github.com/user-attachments/assets/0425fce3-8ce0-46d1-ab80-01ee61f7c5b0" /></td>
     </tr>
     <tr>
-      <td><b>첫 로그인 후 참가단위 선택:<br/>개인으로 참가<br/>팀 생성하기<br/>팀 가입하기</b></td>
-      <td><img width="150" src="https://github.com/user-attachments/assets/d06b69cf-3291-4996-ab0d-a36ce2ce9ce9"/><img src="https://github.com/user-attachments/assets/5949617b-8a0a-4dd0-bc78-5f05e57b3188" width="150"/><img src="https://github.com/user-attachments/assets/9ebe72b7-837c-4ce9-b550-394799158c47" width="150"/></td>
+      <td><b>첫 로그인 후 참가단위 선택:<br/>팀 생성하기<br/>매니저 화면</b></td>
+      <td><img width="150" src="https://github.com/user-attachments/assets/3c6120ec-26b6-4ede-ab34-34f7e5ae8c35" />
+<img width="150" src="https://github.com/user-attachments/assets/39201424-49bf-4405-ab29-fe7f64e0c9e2" />
+<img width="150" src="https://github.com/user-attachments/assets/7d436298-be72-47e3-be9b-19e51cc237fa" />
+        <img width="150" src="https://github.com/user-attachments/assets/8aa533dc-4e32-4685-a49e-1ae705216241" />
+        <img width="150" src="https://github.com/user-attachments/assets/2efaa4d5-aa87-4309-b992-6fcf2e7b75aa" />
+        <img width="150" src="https://github.com/user-attachments/assets/6ecd9dbe-3938-4499-bb6e-5075d6608c61" />
+</td>
     </tr>
     <tr>
-      <td><b>메인페이지(선수가 뛴, 뛸 경기 리스트)<br/>팀원 목록 확인<br/>마이 프로필 확인</b></td>
-      <td><img width="150" src="https://github.com/user-attachments/assets/90d441d2-fa25-4669-8009-954f486786ff"/><img src="https://github.com/user-attachments/assets/91aede4f-de2f-4536-accb-b6bebd7e7d31" width="150"/><img src="https://github.com/user-attachments/assets/e4ded296-85cb-4c97-b47f-dac8a93ead2c" width="150"/></td>
+      <td><b>첫 로그인 후 참가단위 선택:<br/>팀 가입하기</b></td>
+      <td><img width="150" src="https://github.com/user-attachments/assets/47dfa061-089e-46f9-bba6-15b1c46664bf" />
+<img width="150" src="https://github.com/user-attachments/assets/b8fd9c4d-27a7-4be5-9230-dd5010536101" />
+<img width="150" src="https://github.com/user-attachments/assets/2c509f58-aaab-488f-beb6-585557e9b69a" />
+
+</td>
+    </tr>
+        <tr>
+      <td><b>메인페이지<br/>팀원 목록 확인<br/>마이 프로필 확인</b></td>
+      <td><img width="150" src="https://github.com/user-attachments/assets/567bacd9-354b-4fff-a6e6-085cc0c91c74" />
+<img width="150" height = "429" src="https://github.com/user-attachments/assets/72fe64b7-cf6f-4432-b288-5e33eb4d0330" />
+<img width="150" height = "429" src="https://github.com/user-attachments/assets/802b7d68-d347-4cd3-92cb-75c9f0e89bbd" />
+</td>
     </tr>
     <tr>
-      <td><b>경기 전 매치된 일정 추가<br/>경기 후 경기결과 기록(score, 참여선수, gps 달고 뛴 선수)<br/>최종 경기 결과 확인 페이지</td>
-      <td><img width="150" src="https://github.com/user-attachments/assets/753bce17-40e9-4507-ac10-47e3c9a23944"/><img src="https://github.com/user-attachments/assets/db85bdd4-b7a8-4163-a056-ccce0ff1ead6" width="150"/><img src="https://github.com/user-attachments/assets/c42e169e-fdd3-47d5-9a46-d0e113150ec1" width="150"/></td>
+      <td><b>개인 경기 분석<br/>AI요약, 히트맵, 활동량, 속력 및 가속도, 스프린트</td>
+      <td><img width="150" height="315" src="https://github.com/user-attachments/assets/bc2425b1-f1af-4171-abe7-5ed11fc21c35" />
+        <img width="150" height="315" src="https://github.com/user-attachments/assets/a986025e-73ca-412e-afd5-78c332235309" />
+
+<img width="150" src="https://github.com/user-attachments/assets/194c3f5a-c541-4da8-a7bf-387bb734a084" />
+<img width="150"  src="https://github.com/user-attachments/assets/9a48a6db-dca7-41d4-86e3-7ad47608df09" />
+<img width="150"  src="https://github.com/user-attachments/assets/cdede966-1ad8-454f-b4a1-ac9b00de4021" />
+
+
+
+
+</td>
     </tr>
     <tr>
-      <td><b>팀 분석결과 페이지: 선수들의 경기 이동 애니메이션, 스프린트 순위, <br/>이동거리 순위 등 확인<br/>선수 개인 분석 페이지로 쿼터별 이동경로, <br/>히트맵, 스프린트 정보를 얻을 수 있는 페이지<br/>개인 분석 페이지에서 추가적으로 9가지 데이터를 더 얻을 수 있음.</td>
-      <td><img width="150" src="https://github.com/user-attachments/assets/f6f740c8-3bb9-492e-abc5-197ebd474074"/><img src="https://github.com/user-attachments/assets/d35028ca-9076-4161-b978-e1be5cc4b764" width="150"/><img src="https://github.com/user-attachments/assets/75d2ffdd-9a04-4cd8-8e23-d277b91c9e6b" width="150"/></td>
+      <td><b>팀 경기 분석 <br> 팀내 항목별 최고 순위, 평점, 활동량 등 <br> 나의 순위</td>
+      <td><img width="150" height="382" src="https://github.com/user-attachments/assets/465d5e41-3f3f-4699-b122-8aa32b0d66a4" />
+<img width="150" height="382" alt="image" src="https://github.com/user-attachments/assets/dcbe3c4d-1848-4b05-876a-df57b408f258" />
+<img width="150" src="https://github.com/user-attachments/assets/bfe7da63-8db9-41e2-98f9-ec3b05b1258e" />
+</td>
     </tr>
   </tbody>
 </table>
@@ -92,11 +127,18 @@ AGROUNDS는 아마추어 축구 커뮤니티의 요구를 반영하여 기획된
 
 # 📅 프로젝트 일정
 
-### 개발 일정
-- **2024.06.01 ~ 2024.06.25**: 레이아웃 및 간단한 api 연결
-- **2024.06.26 ~ 2024.07.15**: 팀 gps + 선수 이동 구현
-- **2024.07.16 ~ 2024.08.05**: 경기영상 추가
-- **2024.08.15 ~ 2024.08.31**: 전술분석 데이터 추가
+### 주요 일정
+23년 9월 ~ 11월 : 사업 모델 구체화 및 IR Deck 기획
+
+23년 12월 ~ 24년 1월 : 시장 가설 검증
+
+24년 1월 ~ 24년 5월 : 팀 빌딩 및 MVP 개발
+
+24년 5월 : 2024년 정부 지원 사업 선정(예비창업패키지 예비창업자 선정 - 약 5000만원 규모 )
+
+24년 5월 ~ 24년 9월 : 프로덕트 고도화 및 론칭 준비
+
+24년 10월 ~ 25년 6월: 스마트 디바이스 개발 및 필드 테스트
 
 
 <br/>
