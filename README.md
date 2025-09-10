@@ -39,7 +39,9 @@
 
 <br/>
 
-# 🛠️ 프론트엔드 기술 스택
+# 🛠️ 기술 스택
+
+## 🖥️ 프론트엔드
 
 |  | 기술 스택 |
 | :---: | :----------------------------- |
@@ -49,7 +51,20 @@
 | 패키지 | <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=NPM&logoColor=ffffff"> |
 | 기타 도구 | <img src="https://img.shields.io/badge/createreactapp-09D3AC?style=for-the-badge&logo=createreactapp&logoColor=white"> <img src="https://img.shields.io/badge/Canvas-FF7139?style=for-the-badge&logo=canvas&logoColor=white" alt="Canvas Badge"> |
 | 협업 | <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Figma-d90f42?style=for-the-badge&logo=Figma&logoColor=white"> |
-| 아키텍처 | <img  alt="Adobe Express - file (1)" src="https://github.com/user-attachments/assets/04a03309-efc4-4608-80cf-271f124a9b8a" />
+
+## 🛠️ 백엔드
+
+|  | 기술 스택 |
+| :---: | :----------------------------- |
+| 언어 | <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"> |
+| 라이브러리 / 프레임워크 | <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white"> <img src="https://img.shields.io/badge/boto3-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white"> <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white"> |
+| DB | <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/AWS RDS-527FFF?style=for-the-badge&logo=amazonaws&logoColor=white"> |
+| 클라우드/인프라 | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/EC2-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/Lambda-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white"> |
+| 기타 기술 / 연동 | <img src="https://img.shields.io/badge/Bluetooth-0099FF?style=for-the-badge&logo=bluetooth&logoColor=white"> |
+| 협업 | <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> |
+
+
+
 
 
 
