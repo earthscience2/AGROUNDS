@@ -1,7 +1,7 @@
 
 <div align='center'>
 
-# ⚽️ AGROUNDS Demo
+# ⚽️ AGROUNDS
 
 <img width="400" src="https://github.com/user-attachments/assets/2b457afa-2e75-49dc-bd75-2f85843d2daf"/>
 
