@@ -5,8 +5,8 @@
 
 <img width="400" src="https://github.com/user-attachments/assets/2b457afa-2e75-49dc-bd75-2f85843d2daf"/>
 
-<b> 아마추어 축구 리그 관리와 GPS 기반의 전술 분석을 제공하는 웹 서비스입니다.</b> <br/>
-저희 서비스를 통해 리그 참가, 팀 관리, 실시간 경기 분석 및 데이터 기록 기능을 경험할 수 있습니다.
+<b> 아마추어 축구 리그 관리와 GPS 기반의 전술 분석을 제공하는 웹/앱 서비스입니다.</b> <br/>
+저희 서비스를 통해 리그 참가, 팀 관리, 경기 분석 및 데이터 기록 기능을 경험할 수 있습니다.
 
 👉 배포 주소: [https://agrounds.com](https://agrounds.com)
 
