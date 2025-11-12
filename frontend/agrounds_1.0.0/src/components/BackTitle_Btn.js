@@ -31,6 +31,6 @@ const BackTitleNav = styled.div`
     margin: auto;
     position: relative;
     left: -1vh;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
   }
 `

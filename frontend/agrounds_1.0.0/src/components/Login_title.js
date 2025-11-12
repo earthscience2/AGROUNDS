@@ -22,7 +22,7 @@ const LoginTitleStyle = styled.div`
     font-size: 24px;
     font-weight: 800;
     color: #262626;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
 
   }
   .login_explain{
@@ -31,7 +31,7 @@ const LoginTitleStyle = styled.div`
     line-height: 1.5;
     font-weight: 500;
     color: #6F6F6F;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
     word-wrap: break-word;  
     white-space: pre-wrap;
     

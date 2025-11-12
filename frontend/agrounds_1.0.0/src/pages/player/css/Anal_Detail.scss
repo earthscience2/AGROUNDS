@@ -82,7 +82,7 @@
   min-height: 100vh;
   font-family: var(--font-text);
   overflow-x: hidden;
-  overflow-y: visible; /* sticky 요소가 작동하도록 */
+  /* overflow-y 제거 - 기본값 사용 */
   padding-bottom: 80px;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
@@ -90,6 +90,77 @@
   margin: 0;
   padding-top: 0;
   color-scheme: light;
+  
+  /* contain 속성 제거 - sticky 방해 요소 */
+
+  // 표준 컨테이너 (좌우 패딩만)
+  .anal-detail-container {
+    padding: 0 var(--spacing-xl);
+    
+    @media (max-width: 768px) {
+      padding: 0 var(--spacing-lg);
+    }
+  }
+
+  // 표준 헤더 구조
+  .header {
+    padding: 6px 0 0 0;
+
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-2xl);
+
+      .back-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--bg-surface);
+        border: none;
+        min-height: 44px;
+        min-width: 44px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        
+        img {
+          width: 20px;
+          height: 20px;
+        }
+        
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        &:focus {
+          outline: 2px solid var(--primary);
+          outline-offset: 2px;
+        }
+      }
+
+      .empty-space {
+        width: 40px;
+      }
+    }
+
+    .header-content {
+      text-align: center;
+      margin-bottom: var(--spacing-lg);
+
+      h1 {
+        margin: 0 0 var(--spacing-sm) 0;
+      }
+
+      .subtitle {
+        margin: 0;
+      }
+    }
+  }
 
   // 로딩 컨테이너
   .loading-container {
@@ -116,6 +187,68 @@
     }
   }
 
+  // 쿼터 전환 로딩 오버레이
+  &.loading-overlay-active {
+    position: relative;
+    
+    // 화면 전체를 blur 처리
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 9998;
+      pointer-events: none;
+    }
+  }
+
+  .quarter-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background: transparent;
+    
+    .quarter-loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-lg);
+      padding: var(--spacing-2xl);
+      background: var(--bg-surface);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      min-width: 200px;
+      
+      .quarter-loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--border);
+        border-top: 3px solid var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      .quarter-loading-text {
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+
   // 에러 컨테이너
   .error-container {
     display: flex;
@@ -130,50 +263,22 @@
     }
   }
 
-  // 페이지 헤더
-  .page-header {
-    padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
-    margin: 0 0 var(--spacing-xs) 0;
-    background-color: var(--bg-primary);
-    text-align: center;
-    
-    .quarter-title {
-      margin: var(--spacing-sm) 0 var(--spacing-xs) 0;
-    }
-    
-    .quarter-description {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: 14px;
-    }
-  }
 
   // Sticky 쿼터 컨테이너
   .sticky-quarter-container {
-    position: -webkit-sticky; /* Safari 지원 */
-    position: sticky;
-    top: 0;
-    z-index: 1000;
     width: 100%;
     background: var(--bg-primary);
+    margin: 0;
+    padding: var(--spacing-lg) 0; /* 상하 패딩만 */
     
-    // 스크롤 시 고정된 상태
     &.scrolled {
       background: rgba(242, 244, 246, 0.98);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    }
-    
-    // JavaScript로 fixed 설정되었을 때
-    &[style*="position: fixed"] {
-      position: fixed !important;
-      background: rgba(242, 244, 246, 0.98);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid var(--border);
+      max-width: 499px; /* PC에서 최대 너비 제한 */
+      margin: 0 auto; /* 중앙 정렬 */
     }
   }
 
@@ -181,9 +286,14 @@
   .quarter-tabs {
     display: flex;
     gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
+    padding: 0 var(--spacing-xl); /* 좌우 패딩: 컨테이너와 동일하게 20px */
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    background: inherit;
+    
+    @media (max-width: 768px) {
+      padding: 0 var(--spacing-lg); /* 모바일에서는 16px (컨테이너와 동일) */
+    }
     
     .quarter-tab {
       flex-shrink: 0;
@@ -197,6 +307,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
+      position: relative;
       
       &:hover {
         border-color: var(--primary);
@@ -208,7 +319,191 @@
         background: var(--primary);
         border-color: var(--primary);
         color: var(--bg-surface);
-        box-shadow: 0 4px 12px rgba(7, 150, 105, 0.3);
+      }
+      
+      // 로딩 상태 스타일 (데이터 캐싱 최적화)
+      &.loading {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+    }
+  }
+
+  // 팀 분석에서 진입 시 선수 프로필 카드 (Team_Info.scss의 member-card 스타일 참고)
+  .player-profile-card {
+    background: var(--bg-surface);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    margin: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      position: relative;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--border);
+        background: var(--bg-primary);
+      }
+    }
+    
+    .profile-info {
+      flex: 1;
+      
+      .profile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-xs);
+        gap: var(--spacing-sm);
+        
+        .player-name {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--text-primary);
+          flex: 1;
+        }
+        
+        .player-role {
+          font-size: 11px;
+          font-weight: 600;
+          padding: 2px var(--spacing-sm);
+          border-radius: 4px;
+          text-transform: uppercase;
+          white-space: nowrap;
+          flex-shrink: 0;
+          
+          &.owner {
+            background: var(--primary);
+            color: var(--bg-surface);
+          }
+          
+          &.manager {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+          }
+          
+          &.member {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+          }
+        }
+      }
+      
+      .profile-details {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-xs);
+        
+        .player-age,
+        .player-number,
+        .player-position {
+          font-size: 13px;
+          color: var(--text-primary);
+          font-weight: 500;
+        }
+        
+        .player-number {
+          color: var(--primary);
+          font-weight: 600;
+        }
+        
+        .player-position {
+          font-weight: 600;
+          
+          // 포지션별 텍스트 색상 (Team_Info.scss와 동일)
+          &.position-striker {
+            color: #EC5C3A; // 공격수
+          }
+          
+          &.position-midfielder {
+            color: #1DB48B; // 미드필더
+          }
+          
+          &.position-defender {
+            color: #5872FD; // 수비수
+          }
+          
+          &.position-goalkeeper {
+            color: #C5A922; // 골키퍼
+          }
+          
+          &.position-default {
+            color: var(--text-secondary);
+          }
+        }
+        
+        .player-divider {
+          color: var(--text-disabled);
+          font-size: 12px;
+        }
+      }
+      
+      .profile-meta {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        
+        .player-location {
+          font-size: 11px;
+          color: var(--text-disabled);
+        }
+      }
+    }
+    
+    @media (max-width: 768px) {
+      padding: var(--spacing-md);
+      margin: var(--spacing-lg) var(--spacing-lg) var(--spacing-md) var(--spacing-lg);
+      gap: var(--spacing-md);
+      
+      .profile-avatar {
+        width: 48px;
+        height: 48px;
+      }
+      
+      .profile-info {
+        .profile-header {
+          .player-name {
+            font-size: 15px;
+          }
+          
+          .player-role {
+            font-size: 10px;
+            padding: 2px 6px;
+          }
+        }
+        
+        .profile-details {
+          .player-age,
+          .player-number,
+          .player-position {
+            font-size: 12px;
+          }
+        }
+        
+        .profile-meta {
+          .player-location {
+            font-size: 10px;
+          }
+        }
       }
     }
   }
@@ -820,6 +1115,14 @@
           font-weight: 500;
           font-size: 12px;
         }
+        
+        .ratio-label-left {
+          margin-left: 5px;
+        }
+        
+        .ratio-label-right {
+          margin-right: 5px;
+        }
       }
       
       .ratio-bar {
@@ -1341,12 +1644,9 @@
 // 반응형 디자인
 @media (max-width: 768px) {
   .anal-detail-page {
-    .page-header {
-      padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
-    }
 
     .quarter-tabs {
-      padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+      padding: 0 var(--spacing-lg); /* 좌우 패딩만 설정 (컨테이너와 동일) */
       
       .quarter-tab {
         padding: var(--spacing-md) var(--spacing-lg);
@@ -1466,12 +1766,9 @@
 
 @media (max-width: 480px) {
   .anal-detail-page {
-    .page-header {
-      padding: var(--spacing-sm) var(--spacing-md) var(--spacing-lg) var(--spacing-md);
-    }
 
     .quarter-tabs {
-      padding: var(--spacing-md) var(--spacing-md) var(--spacing-lg) var(--spacing-md);
+      padding: 0 var(--spacing-md); /* 좌우 패딩만 설정 (컨테이너와 동일) */
       
       .quarter-tab {
         padding: var(--spacing-sm) var(--spacing-md);

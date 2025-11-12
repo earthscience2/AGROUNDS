@@ -25,7 +25,7 @@ const ErrorPageStyle = styled.div`
     margin: auto;
     font-size: 2.2vh;
     font-weight: 700;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
     margin-top: 25vh;
   }
 

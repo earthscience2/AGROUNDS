@@ -65,7 +65,7 @@ const HeaderStyle = styled.div`
   left: 0;
   background-color: white;
   z-index: 1999;
-  font-family: 'Pretendard';
+  font-family: var(--font-text);
 
   .header-width {
     width: 60%;

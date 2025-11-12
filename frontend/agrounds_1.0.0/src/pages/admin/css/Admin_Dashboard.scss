@@ -1,0 +1,1762 @@
+// Import 관리자 페이지 스타일 모듈
+@import './Admin_Dashboard_Content.scss';
+@import './Admin_Dashboard_Modal.scss';
+
+// 전역 스타일 초기화 (관리자 페이지용)
+.admin-dashboard, 
+.admin-dashboard * {
+  box-sizing: border-box !important;
+}
+
+// 관리자 페이지 body 클래스 강제 적용
+body.admin-body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  background-color: var(--bg-primary) !important;
+}
+
+body.admin-body #root {
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  background-color: var(--bg-primary) !important;
+}
+
+// 모든 상위 요소 강제 설정
+body.admin-body,
+html.admin-body,
+html.admin-body body,
+body.admin-body html {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  background-color: var(--bg-primary) !important;
+  box-sizing: border-box !important;
+}
+
+// 매우 강한 우선순위로 재정의
+body.admin-body.admin-body,
+html.admin-body.admin-body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  background-color: #F2F4F6 !important; // 직접 색상값 사용
+  box-sizing: border-box !important;
+}
+
+// 디버깅용 규칙 제거 - 실제 운영에서는 불필요
+
+// 관리자 대시보드
+.admin-dashboard {
+  position: fixed; // 고정 위치로 전체 화면 보장
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  height: 100vh !important; // 전체 뷰포트 높이 강제 사용
+  max-height: 100vh !important; // 높이 제한 없음
+  background: var(--bg-primary) !important;
+  width: 100vw !important; // 전체 뷰포트 너비 사용
+  max-width: none !important; // 최대 너비 제한 해제
+  min-width: 100vw !important; // 최소 너비도 전체 화면으로 설정
+  margin: 0 !important; // 모든 마진 제거
+  padding: 0 !important; // 모든 패딩 제거
+  box-sizing: border-box !important; // 박스 모델 보정
+  overflow: hidden !important; // 오버플로우 완전 제어
+
+  // 사이드바
+  .admin-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px; // PC에서 기본 너비 설정
+    background: linear-gradient(180deg, var(--bg-surface) 0%, #f8fafc 100%);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: none; // 크기 조절 시 딜레이 제거
+    z-index: 1000;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+    overflow-x: hidden;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+    
+    // 기본 상태 (모바일에서 닫힌 상태)
+    @media (max-width: 768px) {
+      width: 0;
+      overflow: hidden;
+    }
+
+    &.open {
+      width: 280px;
+      overflow: visible;
+    }
+    
+    // 사이드바 크기 조절 핸들
+    .sidebar-resize-handle {
+      position: absolute;
+      top: 0;
+      right: -2px;
+      width: 6px;
+      height: 100%;
+      background: transparent;
+      cursor: col-resize;
+      z-index: 1001;
+      transition: all 0.2s ease;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 2px;
+        height: 40px;
+        background: var(--border);
+        border-radius: 1px;
+        transition: all 0.2s ease;
+      }
+      
+      &:hover {
+        &::before {
+          background: var(--primary);
+          height: 60px;
+          width: 3px;
+          box-shadow: 0 0 8px rgba(7, 150, 105, 0.3);
+        }
+      }
+      
+      &:active {
+        &::before {
+          background: var(--primary-hover);
+          height: 80px;
+          width: 4px;
+          box-shadow: 0 0 12px rgba(7, 150, 105, 0.5);
+        }
+      }
+    }
+
+    &.closed {
+      width: 80px;
+      overflow: visible;
+    }
+
+    .sidebar-header {
+      padding: var(--spacing-2xl);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80px;
+
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        flex: 1;
+
+        .sidebar-logo {
+          width: 40px;
+          height: 40px;
+          object-fit: contain;
+        }
+
+        span {
+          font-size: 20px;
+          font-weight: 800;
+          background: linear-gradient(135deg, var(--primary) 0%, #068A5B 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          white-space: nowrap;
+          letter-spacing: -0.5px;
+        }
+      }
+
+      .sidebar-toggle {
+        background: var(--primary);
+        color: var(--bg-surface);
+        border: none;
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        
+        .toggle-icon {
+          width: 16px;
+          height: 16px;
+          filter: brightness(0) invert(1);
+        }
+
+        &:hover {
+          background: var(--primary-hover);
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: var(--spacing-xl) var(--spacing-md);
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      .nav-item {
+        width: calc(100% - 16px);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        padding: 14px 18px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--text-secondary);
+        text-align: left;
+        min-height: 52px;
+        border-radius: 12px;
+        margin: 0 8px 8px 8px;
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 0;
+          background: linear-gradient(135deg, var(--primary) 0%, #068A5B 100%);
+          border-radius: 12px 0 0 12px;
+          transition: width 0.3s ease;
+        }
+
+        .nav-icon {
+          width: 22px;
+          height: 22px;
+          object-fit: contain;
+          border-radius: 4px;
+          transition: all 0.3s ease;
+          z-index: 1;
+        }
+
+        .nav-label {
+          white-space: nowrap;
+          font-weight: 500;
+          z-index: 1;
+        }
+
+        &:hover {
+          background: rgba(7, 150, 105, 0.08);
+          color: var(--primary);
+          transform: translateX(4px);
+          box-shadow: 0 4px 12px rgba(7, 150, 105, 0.15);
+          
+          .nav-icon {
+            transform: scale(1.15);
+            filter: brightness(1.1);
+          }
+        }
+
+        &.active {
+          background: rgba(7, 150, 105, 0.12);
+          color: var(--primary);
+          font-weight: 600;
+          transform: translateX(6px);
+          box-shadow: 0 6px 20px rgba(7, 150, 105, 0.2);
+          
+          &::before {
+            width: 4px;
+          }
+          
+          .nav-icon {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+          }
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--primary);
+          outline-offset: -2px;
+        }
+      }
+    }
+
+    .sidebar-footer {
+      padding: var(--spacing-2xl);
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+
+      .admin-info {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        margin-bottom: var(--spacing-sm);
+
+        .admin-id,
+        .admin-type {
+          color: var(--text-secondary);
+          margin: 0;
+          line-height: 1.4;
+        }
+      }
+
+      .logout-btn {
+        width: 100%;
+        padding: var(--spacing-md);
+        background: var(--error);
+        color: var(--bg-surface);
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--font-text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-xs);
+
+        .logout-text {
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .logout-icon {
+          width: 16px;
+          height: 16px;
+          object-fit: contain;
+        }
+
+        &:hover {
+          background: #dc2626;
+          transform: translateY(-1px);
+          
+          .logout-icon {
+            transform: scale(1.1);
+          }
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+
+    &.closed {
+      .sidebar-header {
+        padding: var(--spacing-xl);
+        justify-content: center;
+
+        .logo-section {
+          justify-content: center;
+        }
+      }
+
+      .nav-item {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        justify-content: center;
+
+        .nav-icon {
+          margin: 0;
+        }
+      }
+
+      .sidebar-footer {
+        padding: var(--spacing-xl);
+        align-items: center;
+
+        .logout-btn {
+          font-size: 20px;
+          padding: var(--spacing-sm);
+        }
+      }
+    }
+  }
+
+  // 메인 콘텐츠
+  .admin-main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: none; // 크기 조절 시 딜레이 제거
+    height: 100vh; // 전체 뷰포트 높이 사용
+    max-height: 100vh; // 높이 제한 없음
+    width: calc(100vw - 280px); // 사이드바 고려한 너비
+    max-width: none; // 최대 너비 제한 해제
+    position: absolute; // 절대 위치 사용
+    right: 0; // 오른쪽 끝까지 사용
+    top: 0; // 상단에 정렬
+    bottom: 0; // 하단 끝까지 사용
+    background: linear-gradient(135deg, var(--bg-primary) 0%, #f1f5f9 100%);
+    overflow-x: hidden !important; // 가로 스크롤 숨기기
+    overflow-y: auto !important; // 세로 스크롤 허용
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(7, 150, 105, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    margin: 0 !important; // 모든 마진 초기화
+    padding: 0 !important; // 모든 패딩 초기화
+    box-sizing: border-box !important; // 박스 모델 보정
+
+    // 기본 상태에서는 여백 없음 (모바일 우선)
+    margin-left: 0;
+
+    &.sidebar-open {
+      width: calc(100vw - 280px); // 사이드바 고려한 너비
+    }
+
+    &.sidebar-closed {
+      width: calc(100vw - 80px); // 사이드바 고려한 너비
+    }
+
+    .content-header {
+      width: 100% !important;
+      max-width: none !important;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px 28px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      position: relative;
+      z-index: 10;
+
+      .header-title-section {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        
+        h1 {
+          margin: 0;
+          background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          font-size: 24px;
+          font-weight: 800;
+          letter-spacing: -0.3px;
+        }
+        
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        span {
+          color: var(--text-secondary);
+          font-size: 12px;
+          font-weight: 500;
+          padding: 6px 14px;
+          background: rgba(7, 150, 105, 0.06);
+          border-radius: 16px;
+          border: 1px solid rgba(7, 150, 105, 0.12);
+        }
+
+        .btn-primary {
+          padding: 8px 18px;
+          font-size: 13px;
+          min-height: 34px;
+        }
+      }
+    }
+
+    .content-body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      width: 100% !important;
+      max-width: none !important;
+      min-width: 100% !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+      background-color: var(--bg-primary); // 바디 배경색 명시적 설정
+      overflow-x: hidden !important; // 가로 스크롤 완전 차단
+      overflow-y: auto !important; // 세로 스크롤 허용
+    }
+
+  // 탭 콘텐츠
+  .tab-content-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+
+    h2 {
+      margin: 0 0 var(--spacing-lg) 0;
+      color: var(--text-primary);
+    }
+  }
+
+  .content-card {
+    background: var(--bg-surface);
+    border-radius: 16px;
+    padding: var(--spacing-2xl);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    h3 {
+      margin: 0 0 var(--spacing-lg) 0;
+      color: var(--text-primary);
+    }
+
+    p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--spacing-lg);
+    }
+  }
+
+  .placeholder-content {
+    background: var(--bg-primary);
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: var(--spacing-4xl);
+    text-align: center;
+    color: var(--text-disabled);
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      margin: 0;
+      font-size: 16px;
+    }
+  }
+
+  // 디자인 시스템 섹션
+  .color-palette {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+
+    .color-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-sm);
+
+      .color-box {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 2px solid var(--border);
+      }
+
+      span {
+        color: var(--text-secondary);
+        text-align: center;
+      }
+    }
+  }
+
+  .typography-examples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    background: var(--bg-primary);
+    border-radius: 12px;
+
+    > * {
+      padding: var(--spacing-sm) 0;
+      border-bottom: 1px solid var(--border);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  // 반응형 디자인
+  @media (max-width: 1024px) {
+    .admin-sidebar {
+      &.open {
+        width: 240px;
+      }
+    }
+
+    .admin-main-content {
+      &.sidebar-open {
+        margin-left: 240px;
+      }
+    }
+
+    .content-header {
+      padding: var(--spacing-xl) var(--spacing-2xl);
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+
+    .content-body {
+      padding: var(--spacing-2xl);
+    }
+  }
+
+  @media (max-width: 768px) {
+    // 모바일에서 사이드바 숨기기
+    .admin-sidebar {
+      position: fixed;
+      left: -280px; // 완전히 화면 밖으로
+      top: 0;
+      z-index: 9999;
+      transition: left 0.3s ease;
+      width: 280px !important; // 모바일에서 고정 너비
+      overflow: visible !important;
+      
+      &.open {
+        left: 0;
+        background: var(--bg-surface);
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+      }
+
+      &.closed {
+        left: -280px;
+      }
+    }
+
+    // 모바일 오버레이 추가
+    .mobile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s ease;
+      cursor: pointer;
+    }
+
+    .admin-main-content {
+      margin-left: 0 !important;
+      width: 100%;
+
+      .content-header {
+        position: relative;
+        padding: var(--spacing-lg) var(--spacing-xl);
+        
+        // 모바일 메뉴 버튼 추가
+        .mobile-menu-btn {
+          position: absolute;
+          left: var(--spacing-xl);
+          top: 50%;
+          transform: translateY(-50%);
+          background: var(--primary);
+          color: var(--bg-surface);
+          border: none;
+          width: 40px;
+          height: 40px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          cursor: pointer;
+          
+          .menu-icon {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+          }
+          z-index: 2;
+          
+          &:hover {
+            background: var(--primary-hover);
+          }
+        }
+
+        h1 {
+          margin-left: 60px; // 메뉴 버튼 공간 확보
+          font-size: 20px;
+        }
+
+        .header-actions {
+          position: absolute;
+          right: var(--spacing-xl);
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 12px;
+        }
+      }
+    }
+
+    .color-palette {
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+
+      .color-item .color-box {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .admin-sidebar {
+      width: 100vw;
+      
+      &.open {
+        width: 100vw;
+        max-width: 300px;
+      }
+    }
+
+    .mobile-menu-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 16px;
+    }
+
+    .content-header {
+      padding: var(--spacing-md);
+      
+      h1 {
+        margin-left: 50px;
+        font-size: 18px;
+      }
+      
+      .header-actions {
+        font-size: 11px;
+      }
+    }
+
+    .content-body {
+      padding: var(--spacing-md);
+    }
+
+    .content-card {
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .placeholder-content {
+      padding: var(--spacing-lg);
+      min-height: 120px;
+      
+      p {
+        font-size: 11px;
+      }
+    }
+
+    .color-palette {
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: var(--spacing-md);
+
+      .color-item {
+        .color-box {
+          width: 40px;
+          height: 40px;
+        }
+        
+        span {
+          font-size: 9px;
+        }
+      }
+    }
+
+    .typography-examples {
+      padding: var(--spacing-md);
+      
+      > * {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Desktop에서는 모바일 메뉴 버튼 숨기기 및 레이아웃 최적화
+@media (min-width: 769px) {
+  .admin-dashboard {
+    .mobile-menu-btn {
+      display: none !important;
+    }
+    
+    // PC에서는 항상 사이드바가 열린 상태로 고정
+    .admin-sidebar {
+      width: 280px !important; // 항상 열린 상태로 강제
+      left: 0 !important; // 항상 화면에 표시
+      overflow: visible !important; // 콘텐츠 표시
+      
+      .sidebar-toggle {
+        display: none; // 토글 버튼 숨기기
+      }
+      
+      .logo-section {
+        justify-content: flex-start; // 로고 왼쪽 정렬 유지
+        width: auto;
+      }
+    }
+    
+    .admin-main-content {
+      position: absolute !important; // 절대 위치 사용
+      left: 280px !important; // 사이드바 너비(280px)만큼 띄우기
+      top: 0 !important; // 상단에 정렬
+      right: 0 !important; // 오른쪽 끝까지 사용
+      bottom: 0 !important; // 하단 끝까지 사용
+      width: calc(100vw - 280px) !important;
+      height: 100vh !important; // 강제로 전체 높이 사용
+      background-color: var(--bg-primary); // 배경색 명시적 설정
+      overflow-x: hidden !important; // 가로 스크롤 숨기기
+      overflow-y: auto !important; // 세로 스크롤 허용
+      margin: 0 !important; // 모든 마진 초기화
+      padding: 0 !important; // 모든 패딩 초기화
+      box-sizing: border-box !important; // 박스 모델 보정
+      
+      .content-header {
+        width: 100% !important;
+        max-width: none !important;
+        background-color: var(--bg-surface); // 헤더 배경색 명시적 설정
+        
+        h1 {
+          margin-left: 0 !important;
+        }
+        
+        .header-title-section {
+          flex-direction: column;
+          align-items: flex-start;
+          
+          h1 {
+            margin-right: 0;
+          }
+        }
+      }
+      
+      .content-body {
+        width: 100% !important;
+        max-width: none !important;
+        min-width: calc(100vw - 280px) !important;
+        margin: 0 !important;
+        padding: var(--spacing-3xl) !important;
+        box-sizing: border-box !important;
+        background-color: var(--bg-primary); // 바디 배경색 명시적 설정
+        overflow-x: hidden !important; // 가로 스크롤 완전 차단
+        overflow-y: auto !important; // 세로 스크롤 허용
+        
+        // 디자인 시스템 영역 추가 보정
+        .design-system {
+          background-color: var(--bg-primary) !important;
+          min-height: 100% !important;
+          width: 100% !important;
+          overflow-x: hidden !important;
+          
+          .design-container {
+            background-color: var(--bg-primary) !important;
+            width: 100% !important;
+            max-width: none !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 매우 큰 화면 (1600px 이상)
+@media (min-width: 1600px) {
+  .admin-dashboard .admin-main-content {
+    position: absolute !important; // 절대 위치 유지
+    left: 280px !important; // 사이드바 고정
+    right: 0 !important; // 오른쪽 끝까지
+    width: calc(100vw - 280px) !important;
+    height: 100vh !important;
+    background-color: var(--bg-primary); // 배경색 명시적 설정
+    
+    .content-body {
+      width: 100% !important;
+      max-width: none !important;
+      min-width: calc(100vw - 280px) !important;
+      padding: var(--spacing-4xl) !important;
+      background-color: var(--bg-primary); // 배경색 명시적 설정
+      overflow-x: hidden !important; // 가로 스크롤 완전 차단
+      
+      // 디자인 시스템 영역 추가 보정
+      .design-system {
+        background-color: var(--bg-primary) !important;
+        min-height: 100% !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+        
+        .design-container {
+          background-color: var(--bg-primary) !important;
+          width: 100% !important;
+          max-width: none !important;
+        }
+      }
+    }
+    
+    .content-header {
+      width: 100% !important;
+      max-width: none !important;
+      padding: var(--spacing-3xl) var(--spacing-4xl) !important;
+      background-color: var(--bg-surface); // 헤더 배경색 명시적 설정
+    }
+  }
+  
+  .content-card {
+    padding: var(--spacing-3xl);
+  }
+}
+
+// 초대형 화면 (2000px 이상)
+@media (min-width: 2000px) {
+  .admin-dashboard .admin-main-content {
+    position: absolute !important; // 절대 위치 유지
+    left: 280px !important; // 사이드바 고정
+    right: 0 !important; // 오른쪽 끝까지
+    width: calc(100vw - 280px) !important;
+    height: 100vh !important;
+    background-color: var(--bg-primary); // 배경색 명시적 설정
+    
+    .content-body {
+      width: 100% !important;
+      max-width: none !important;
+      min-width: calc(100vw - 280px) !important;
+      background-color: var(--bg-primary); // 배경색 명시적 설정
+      overflow-x: hidden !important; // 가로 스크롤 완전 차단
+      
+      // 디자인 시스템 영역 추가 보정
+      .design-system {
+        background-color: var(--bg-primary) !important;
+        min-height: 100% !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+        
+        .design-container {
+          background-color: var(--bg-primary) !important;
+          width: 100% !important;
+          max-width: none !important;
+        }
+      }
+    }
+    
+    .content-header {
+      background-color: var(--bg-surface); // 헤더 배경색 명시적 설정
+    }
+  }
+  
+  .color-palette {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  // 디자인 시스템 그리드 최적화
+  .admin-design-system {
+    .colors-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .icons-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+    
+    .cards-example {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+  }
+
+  // ===========================================
+  // 관리자 컨텐츠 관리 스타일
+  // ===========================================
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2xl);
+    
+    h2 {
+      margin: 0;
+    }
+    
+    .create-btn {
+      padding: var(--spacing-md) var(--spacing-xl);
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: var(--spacing-sm);
+      
+      .filter-btn {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        background: var(--bg-surface);
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        
+        &:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+        }
+        
+        &.active {
+          background: var(--primary);
+          border-color: var(--primary);
+          color: var(--bg-surface);
+        }
+      }
+    }
+  }
+
+  .content-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    
+    .content-item {
+      background: var(--bg-surface);
+      border-radius: 12px;
+      padding: var(--spacing-xl);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      
+      &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+      }
+      
+      .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-md);
+        
+        .item-badges {
+          display: flex;
+          gap: var(--spacing-sm);
+          flex-wrap: wrap;
+        }
+        
+        .item-date {
+          font-size: 12px;
+          color: var(--text-disabled);
+        }
+      }
+      
+      .badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        
+        &.priority-badge {
+          &.priority-low {
+            background: #E0E7FF;
+            color: #3730A3;
+          }
+          
+          &.priority-normal {
+            background: #E0F2FE;
+            color: #075985;
+          }
+          
+          &.priority-high {
+            background: #FEF3C7;
+            color: #92400E;
+          }
+          
+          &.priority-urgent {
+            background: #FEE2E2;
+            color: #991B1B;
+          }
+        }
+        
+        &.status-badge {
+          &.published {
+            background: #D1FAE5;
+            color: #065F46;
+          }
+          
+          &.draft {
+            background: #F3F4F6;
+            color: #374151;
+          }
+
+          &.status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+          }
+          
+          &.status-in_progress {
+            background: #DBEAFE;
+            color: #1E40AF;
+          }
+          
+          &.status-completed {
+            background: #D1FAE5;
+            color: #065F46;
+          }
+          
+          &.status-rejected {
+            background: #FEE2E2;
+            color: #991B1B;
+          }
+        }
+        
+        &.pinned-badge {
+          background: #FDE68A;
+          color: #92400E;
+        }
+
+        &.type-badge {
+          background: #E0E7FF;
+          color: #3730A3;
+        }
+      }
+      
+      .item-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: var(--spacing-sm) 0;
+        line-height: 1.4;
+      }
+      
+      .item-preview {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin-bottom: var(--spacing-md);
+      }
+
+      .event-reward {
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: #FEF3C7;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-bottom: var(--spacing-md);
+        
+        .reward-label {
+          font-weight: 600;
+          color: #92400E;
+        }
+      }
+      
+      .item-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: var(--spacing-lg);
+        padding-top: var(--spacing-md);
+        border-top: 1px solid var(--border);
+        
+        .item-stats {
+          display: flex;
+          gap: var(--spacing-lg);
+          font-size: 12px;
+          color: var(--text-disabled);
+        }
+        
+        .item-actions {
+          display: flex;
+          gap: var(--spacing-sm);
+          
+          .action-btn {
+            padding: 6px 16px;
+            font-size: 12px;
+            min-height: 32px;
+          }
+        }
+
+        .item-author {
+          font-size: 12px;
+          color: var(--text-disabled);
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    padding: var(--spacing-4xl);
+    text-align: center;
+    color: var(--text-disabled);
+    background: var(--bg-surface);
+    border-radius: 12px;
+    border: 2px dashed var(--border);
+  }
+
+  // ===========================================
+  // 모달 스타일
+  // ===========================================
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: var(--spacing-xl);
+  }
+
+  .admin-modal {
+    background: var(--bg-surface);
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-2xl);
+      border-bottom: 1px solid var(--border);
+      
+      h3 {
+        margin: 0;
+      }
+      
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: var(--text-disabled);
+        line-height: 1;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        &:hover {
+          color: var(--text-primary);
+        }
+      }
+    }
+    
+    .modal-body {
+      flex: 1;
+      padding: var(--spacing-2xl);
+      overflow-y: auto;
+      
+      .form-group {
+        margin-bottom: var(--spacing-xl);
+        
+        .form-label {
+          display: block;
+          margin-bottom: var(--spacing-sm);
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+        
+        .form-input,
+        .form-select {
+          width: 100%;
+          padding: var(--spacing-md) var(--spacing-lg);
+          border: 2px solid var(--border);
+          border-radius: 8px;
+          font-size: 14px;
+          transition: all 0.2s ease;
+          
+          &:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+          }
+        }
+        
+        .form-textarea {
+          width: 100%;
+          padding: var(--spacing-md) var(--spacing-lg);
+          border: 2px solid var(--border);
+          border-radius: 8px;
+          font-size: 14px;
+          resize: vertical;
+          font-family: var(--font-text);
+          
+          &:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+          }
+        }
+        
+        .form-checkbox {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+          cursor: pointer;
+          
+          input[type='checkbox'] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+          }
+          
+          span {
+            font-weight: 500;
+          }
+        }
+      }
+      
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg);
+        
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      // 문의사항 모달 스타일
+      .inquiry-info {
+        background: var(--bg-primary);
+        padding: var(--spacing-lg);
+        border-radius: 8px;
+        margin-bottom: var(--spacing-xl);
+        
+        .info-row {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-md);
+          margin-bottom: var(--spacing-sm);
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+          
+          .info-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 80px;
+          }
+        }
+      }
+
+      .inquiry-content-section,
+      .answer-section {
+        margin-bottom: var(--spacing-2xl);
+        
+        .section-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin-bottom: var(--spacing-md);
+        }
+        
+        .inquiry-title {
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin-bottom: var(--spacing-lg);
+        }
+        
+        .inquiry-content {
+          background: var(--bg-primary);
+          padding: var(--spacing-lg);
+          border-radius: 8px;
+          line-height: 1.6;
+        }
+      }
+
+      .existing-answer {
+        background: #F0FDF4;
+        padding: var(--spacing-lg);
+        border-radius: 8px;
+        margin-top: var(--spacing-xl);
+        
+        .answer-content {
+          background: white;
+          padding: var(--spacing-lg);
+          border-radius: 8px;
+          margin: var(--spacing-md) 0;
+          line-height: 1.6;
+        }
+        
+        .answer-info {
+          font-size: 12px;
+          color: var(--text-secondary);
+        }
+      }
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--spacing-md);
+      padding: var(--spacing-2xl);
+      border-top: 1px solid var(--border);
+      
+      button {
+        padding: var(--spacing-md) var(--spacing-2xl);
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .btn-danger {
+    background: var(--error);
+    color: var(--bg-surface);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: #dc2626;
+    }
+  }
+
+// Admin Design System Styles
+.admin-design-system {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+
+  .design-sidebar {
+    width: 240px;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border);
+    padding: var(--spacing-xl);
+    
+    .sidebar-title {
+      margin-bottom: var(--spacing-xl);
+      color: var(--primary);
+    }
+    
+    .section-btn {
+      display: block;
+      width: 100%;
+      padding: var(--spacing-md) var(--spacing-lg);
+      margin-bottom: var(--spacing-xs);
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: rgba(7, 150, 105, 0.1);
+      }
+      
+      &.active {
+        background: rgba(7, 150, 105, 0.2);
+        color: var(--primary);
+      }
+    }
+  }
+  
+  .design-main {
+    flex: 1;
+    padding: var(--spacing-xl);
+    
+    .design-header {
+      margin-bottom: var(--spacing-2xl);
+      
+      .header-description {
+        color: var(--text-secondary);
+        margin-top: var(--spacing-xs);
+      }
+    }
+    
+    .design-content {
+      .design-section {
+        .section-description {
+          margin-bottom: var(--spacing-xl);
+          color: var(--text-secondary);
+        }
+        
+        .colors-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: var(--spacing-xl);
+          
+          .color-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-xl);
+            background: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            
+            .color-preview {
+              width: 60px;
+              height: 60px;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+            }
+            
+            .color-info {
+              flex: 1;
+              
+              h3 {
+                margin-bottom: var(--spacing-xs);
+              }
+              
+              .color-hex {
+                font-weight: 600;
+                margin-bottom: var(--spacing-xs);
+              }
+              
+              .color-class,
+              .color-usage {
+                opacity: 0.8;
+              }
+            }
+          }
+        }
+        
+        .typography-examples {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-xl);
+          
+          .typography-item {
+            padding: var(--spacing-xl);
+            background: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            
+            .example-text {
+              margin-bottom: var(--spacing-md);
+            }
+            
+            .typography-specs {
+              display: flex;
+              gap: var(--spacing-lg);
+              
+              .spec {
+                padding: 2px 8px;
+                background: var(--bg-primary);
+                border-radius: 4px;
+              }
+            }
+          }
+        }
+        
+        .spacing-guide {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-lg);
+          
+          .spacing-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xl);
+            padding: var(--spacing-xl);
+            background: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+
+
+            
+            .spacing-visual {
+              width: 200px;
+              background: var(--primary);
+              opacity: 0.1;
+              border-radius: 4px;
+            }
+            
+            .spacing-info {
+              h3 {
+                margin-bottom: var(--spacing-xs);
+              }
+              
+              .spacing-value {
+                font-weight: 600;
+                margin-bottom: var(--spacing-xs);
+              }
+            }
+          }
+        }
+        
+        .icons-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          gap: var(--spacing-lg);
+          
+          .icon-item {
+            padding: var(--spacing-xl);
+            background: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+            
+            .icon-preview {
+              width: 48px;
+              height: 48px;
+              object-fit: contain;
+              margin-bottom: var(--spacing-md);
+            }
+            
+            .icon-placeholder {
+              width: 48px;
+              height: 48px;
+              border-radius: 8px;
+              margin: 0 auto var(--spacing-md);
+            }
+            
+            h4 {
+              margin-bottom: var(--spacing-xs);
+            }
+          }
+        }
+        
+        .component-examples {
+          .example-section {
+            margin-bottom: var(--spacing-2xl);
+            
+            h3 {
+              margin-bottom: var(--spacing-lg);
+            }
+            
+            .buttons-example,
+            .inputs-example {
+              display: flex;
+              gap: var(--spacing-lg);
+              margin-bottom: var(--spacing-lg);
+              
+              button, input, textarea {
+                padding: var(--spacing-md) var(--spacing-lg);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                background: var(--bg-surface);
+              }
+              
+              .btn-primary {
+                background: var(--primary);
+                color: white;
+                border-color: var(--primary);
+              }
+              
+              .btn-secondary {
+                background: var(--bg-surface);
+                color: var(--text-primary);
+              }
+              
+              .btn-outline {
+                background: transparent;
+                color: var(--primary);
+                border-color: var(--primary);
+              }
+              
+              .btn-error {
+                background: var(--error);
+                color: white;
+                border-color: var(--error);
+              }
+            }
+            
+            .cards-example {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+              gap: var(--spacing-xl);
+            }
+            
+            .card-example {
+              padding: var(--spacing-xl);
+              background: var(--bg-surface);
+              border-radius: 12px;
+              border: 1px solid var(--border);
+              
+              h4 {
+                margin-bottom: var(--spacing-md);
+              }
+              
+              p {
+                margin-bottom: var(--spacing-lg);
+                color: var(--text-secondary);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    
+    .design-sidebar {
+      width: 100%;
+      padding: var(--spacing-lg);
+      
+      .sidebar-sections {
+        display: flex;
+        overflow-x: auto;
+        gap: var(--spacing-md);
+        
+        .section-btn {
+          white-space: nowrap;
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    .design-main {
+      width: 100%;
+      padding: var(--spacing-lg);
+    }
+  }
+}
+}}

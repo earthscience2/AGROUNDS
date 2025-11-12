@@ -2,23 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LogoBellNav from '../../../components/Logo_bell_Nav';
 import '../css/Anal_Detail.scss';
-import { GetQuarterDataApi } from '../../../function/api/anal/analApi';
+import { GetQuarterDataApi, GetTeamPlayerQuarterDataApi } from '../../../function/api/anal/analApi';
+// DEV NOTE: 모든 모달은 디자인 시스템 공용 DSModal(variants 포함)만 사용합니다. 개별 오버레이/컨테이너 구현 금지.
 import { GetMatchDetailApi } from '../../../function/api/match/matchApi';
 import { GetVideosByQuarterApi } from '../../../function/api/video/videoApi';
 
-// 아이콘 import
-import starIcon from '../../../assets/common/star.png';
-import speedIcon from '../../../assets/common/star.png';
-import distanceIcon from '../../../assets/common/location.png';
-import timeIcon from '../../../assets/common/clock.png';
-import chartIcon from '../../../assets/common/graph-black.png';
+// 아이콘 import (승인된 아이콘 디렉토리 사용)
+import starIcon from '../../../assets/identify_icon/star.png';
+import speedIcon from '../../../assets/identify_icon/star.png';
+import distanceIcon from '../../../assets/main_icons/line_black.png';
+import timeIcon from '../../../assets/main_icons/clock_black.png';
+import chartIcon from '../../../assets/main_icons/graph_black.png';
+import backIcon from '../../../assets/main_icons/back_black.png';
 
 // 더미 프로필 이미지 import
 import defaultProfile from '../../../assets/common/default_profile.png';
 
 // 접기/펼치기 버튼 이미지 import
-import upIcon from '../../../assets/common/up.png';
-import downIcon from '../../../assets/common/down.png';
+import upIcon from '../../../assets/main_icons/up_gray.png';
+import downIcon from '../../../assets/main_icons/down_gray.png';
 
 // 경기장 이미지 import
 import groundLeft from '../../../assets/ground/ground_left.jpg';
@@ -37,6 +39,12 @@ const Anal_Detail = () => {
   const [activeSpeedTab, setActiveSpeedTab] = useState('speed'); // 속력/가속도 탭 상태
   const [videos, setVideos] = useState([]); // 관련 영상 데이터
   const [videosLoading, setVideosLoading] = useState(false); // 영상 로딩 상태
+  const [isRestQuarter, setIsRestQuarter] = useState(false); // 휴식 쿼터 상태
+  const [currentQuarterData, setCurrentQuarterData] = useState(null); // 현재 활성 쿼터 데이터
+  
+  // 쿼터 데이터 캐싱 (성능 최적화)
+  const [quarterDataCache, setQuarterDataCache] = useState({});
+  const [isLoadingQuarter, setIsLoadingQuarter] = useState(false);
   
   // 각 섹션별 접기/펼치기 상태
   const [sectionCollapsed, setSectionCollapsed] = useState({
@@ -47,9 +55,43 @@ const Anal_Detail = () => {
     video: false,
     speed: false
   });
+
+  const resolveFieldImage = (standardDir, homeDir, phase) => {
+    let image;
+
+    if (phase === 'attack') {
+      image = homeDir === 'east' ? groundRight : groundLeft;
+    } else if (phase === 'defense') {
+      image = homeDir === 'west' ? groundRight : groundLeft;
+    } else {
+      image = homeDir === 'east' ? groundRight : groundLeft;
+    }
+
+    if (standardDir === 'north') {
+      image = image === groundRight ? groundLeft : groundRight;
+    }
+
+    return image;
+  };
   
   // state에서 전달받은 데이터
-  const { quarter, matchData } = location.state || {};
+  const { quarter, matchData, fromTeamAnalysis } = location.state || {};
+  
+  
+  // 초기 쿼터 데이터 설정
+  useEffect(() => {
+    if (quarter) {
+      setQuarterData(quarter);
+      setCurrentQuarterData(quarter);
+    }
+  }, [quarter, matchData]);
+
+  // 휴식 쿼터 상태 업데이트
+  useEffect(() => {
+    const restStatus = currentQuarterData?.home === "rest" || apiData?.quarter_info?.home === "rest";
+    setIsRestQuarter(restStatus);
+  }, [currentQuarterData?.home, apiData?.quarter_info?.home]);
+
 
   // 섹션 접기/펼치기 토글 함수
   const toggleSection = (sectionName) => {
@@ -96,37 +138,23 @@ const Anal_Detail = () => {
 
   // T_HMAP 데이터 처리 함수
   const processHeatmapData = (tHmapData) => {
-    console.log('🔍 processHeatmapData 호출:', tHmapData);
-    console.log('🔍 tHmapData 타입:', typeof tHmapData);
-    console.log('🔍 tHmapData 구조:', tHmapData ? Object.keys(tHmapData) : 'null');
-    
     if (!tHmapData) {
-      console.log('❌ tHmapData가 null 또는 undefined');
       return null;
     }
-    
+
     if (!tHmapData.layers) {
-      console.log('❌ tHmapData.layers가 없음');
       return null;
     }
-    
+
     if (tHmapData.layers.length === 0) {
-      console.log('❌ tHmapData.layers가 빈 배열');
       return null;
     }
-    
-    console.log('✅ tHmapData.layers 확인:', tHmapData.layers);
-    console.log('✅ tHmapData.layers 길이:', tHmapData.layers.length);
 
     try {
       const layer = tHmapData.layers[0];
-      console.log('🔍 레이어 상세 정보:', layer);
-      
       const { shape, b64, dtype } = layer;
-      console.log('🔍 shape:', shape, 'dtype:', dtype, 'b64 길이:', b64 ? b64.length : 'null');
       
       if (!shape || !b64) {
-        console.log('❌ 필수 필드 누락 - shape:', shape, 'b64:', !!b64);
         return null;
       }
       
@@ -166,7 +194,6 @@ const Anal_Detail = () => {
         maxValue: Math.max(...dataArray)
       };
     } catch (error) {
-      console.error('T_HMAP 데이터 처리 오류:', error);
       return null;
     }
   };
@@ -283,15 +310,15 @@ const Anal_Detail = () => {
     return points;
   };
 
-  // 라벨 위치 계산
+  // 라벨 위치 계산 (메인페이지와 동일한 순서)
   const getLabelPositions = (centerX, centerY, radius, data) => {
     const radarChartData = [
-      { label: '체력', value: data.체력 || 0 },
-      { label: '순발력', value: data.순발력 || 0 },
+      { label: '참여도', value: calculateParticipation() || 0 },
       { label: '스피드', value: data.스피드 || 0 },
       { label: '가속도', value: data.가속도 || 0 },
       { label: '스프린트', value: data.스프린트 || 0 },
-      { label: '평점', value: data.평점 || 0 }
+      { label: '순발력', value: data.순발력 || 0 },
+      { label: '체력', value: data.체력 || 0 }
     ];
     
     return radarChartData.map((item, i) => {
@@ -303,15 +330,31 @@ const Anal_Detail = () => {
     });
   };
 
-  // 6가지 지표의 평균 계산 함수
+  // 참여도 계산 함수 (공격점수와 수비점수의 평균)
+  const calculateParticipation = () => {
+    // 여러 가능한 필드명 시도
+    const attackScore = apiData?.point_data?.point_attack || 
+                       apiData?.attack_data?.point || 
+                       apiData?.point_data?.attack || 
+                       0;
+    const defenseScore = apiData?.point_data?.point_defense || 
+                        apiData?.defense_data?.point || 
+                        apiData?.point_data?.defense || 
+                        0;
+    
+    if (attackScore === 0 && defenseScore === 0) return 0;
+    return Math.round((attackScore + defenseScore) / 2);
+  };
+
+  // 6가지 지표의 평균 계산 함수 (메인페이지와 동일한 순서)
   const calculateAverageOVR = (data) => {
     const values = [
-      data.체력 || 0,
-      data.순발력 || 0,
+      calculateParticipation() || 0,
       data.스피드 || 0,
       data.가속도 || 0,
       data.스프린트 || 0,
-      data.평점 || 0
+      data.순발력 || 0,
+      data.체력 || 0
     ];
     const validValues = values.filter(value => value > 0); // 0보다 큰 값들만 계산
     if (validValues.length === 0) return 0;
@@ -321,17 +364,14 @@ const Anal_Detail = () => {
 
   // 레이더 차트 SVG 생성 (메인 페이지와 동일한 디자인)
   const generateRadarChart = (data) => {
-    console.log('🔍 레이더 차트 데이터:', data);
     const radarChartData = [
-      { label: '체력', value: data.체력 || 0 },
-      { label: '순발력', value: data.순발력 || 0 },
+      { label: '참여도', value: calculateParticipation() || 0 },
       { label: '스피드', value: data.스피드 || 0 },
       { label: '가속도', value: data.가속도 || 0 },
       { label: '스프린트', value: data.스프린트 || 0 },
-      { label: '평점', value: data.평점 || 0 }
+      { label: '순발력', value: data.순발력 || 0 },
+      { label: '체력', value: data.체력 || 0 }
     ];
-    console.log('🔍 레이더 차트 배열 데이터:', radarChartData);
-    console.log('🔍 계산된 평균 OVR:', calculateAverageOVR(data));
 
     return (
       <div className="radar-chart-container">
@@ -419,7 +459,7 @@ const Anal_Detail = () => {
             </g>
           ))}
           
-          {/* 중앙 OVR 점수 (6가지 지표의 평균, 정수로 표시, 검은색) */}
+          {/* 중앙 OVR 점수 (total 점수 표시, 정수로 표시, 검은색) */}
           <text
             x="200"
             y="200"
@@ -429,7 +469,7 @@ const Anal_Detail = () => {
             fontWeight="800"
             fill="#000000"
           >
-            {calculateAverageOVR(data)}
+            {apiData?.point_data?.total || 0}
           </text>
         </svg>
       </div>
@@ -439,37 +479,20 @@ const Anal_Detail = () => {
 
   // T_SMAP 데이터 처리 함수 (스프린트)
   const processSprintData = (smapData) => {
-    console.log('🔍 processSprintData 호출:', smapData);
-    console.log('🔍 smapData 타입:', typeof smapData);
-    console.log('🔍 smapData 구조:', smapData ? Object.keys(smapData) : 'null');
-    
     if (!smapData || !smapData.layers || smapData.layers.length < 3) {
-      console.log('❌ smapData가 없거나 layers가 부족함');
       return null;
     }
 
     try {
-      console.log('🔍 smapData.layers 상세:', smapData.layers);
-      console.log('🔍 layers 길이:', smapData.layers.length);
-      
       const countLayer = smapData.layers[0];
       const angleLayer = smapData.layers[1];
       const vmaxLayer = smapData.layers[2];
-      
-      console.log('🔍 countLayer:', countLayer);
-      console.log('🔍 angleLayer:', angleLayer);
-      console.log('🔍 vmaxLayer:', vmaxLayer);
 
       const count = processHeatmapData({ layers: [countLayer] });
       const angle = processHeatmapData({ layers: [angleLayer] });
       const vmax = processHeatmapData({ layers: [vmaxLayer] });
-      
-      console.log('🔍 처리 결과 - count:', count);
-      console.log('🔍 처리 결과 - angle:', angle);
-      console.log('🔍 처리 결과 - vmax:', vmax);
 
       if (!count || !angle || !vmax) {
-        console.log('❌ 레이어 처리 실패');
         return null;
       }
 
@@ -482,40 +505,24 @@ const Anal_Detail = () => {
         maxVmax: Math.max(...vmax.data.flat())
       };
     } catch (error) {
-      console.error('T_SMAP 데이터 처리 오류:', error);
       return null;
     }
   };
 
   // T_DMAP 데이터 처리 함수 (방향전환)
   const processDirectionData = (dmapData) => {
-    console.log('🔍 processDirectionData 호출:', dmapData);
-    console.log('🔍 dmapData 타입:', typeof dmapData);
-    console.log('🔍 dmapData 구조:', dmapData ? Object.keys(dmapData) : 'null');
-    
     if (!dmapData || !dmapData.layers || dmapData.layers.length < 2) {
-      console.log('❌ dmapData가 없거나 layers가 부족함');
       return null;
     }
 
     try {
-      console.log('🔍 dmapData.layers 상세:', dmapData.layers);
-      console.log('🔍 layers 길이:', dmapData.layers.length);
-      
       const ldtLayer = dmapData.layers[0]; // 저각 방향전환
       const hdtLayer = dmapData.layers[1]; // 고각 방향전환
-      
-      console.log('🔍 ldtLayer:', ldtLayer);
-      console.log('🔍 hdtLayer:', hdtLayer);
 
       const ldt = processHeatmapData({ layers: [ldtLayer] });
       const hdt = processHeatmapData({ layers: [hdtLayer] });
-      
-      console.log('🔍 처리 결과 - ldt:', ldt);
-      console.log('🔍 처리 결과 - hdt:', hdt);
 
       if (!ldt || !hdt) {
-        console.log('❌ 방향전환 레이어 처리 실패');
         return null;
       }
 
@@ -526,22 +533,16 @@ const Anal_Detail = () => {
         height: ldt.height
       };
     } catch (error) {
-      console.error('T_DMAP 데이터 처리 오류:', error);
       return null;
     }
   };
 
   // 실제 T_HMAP 데이터로 히트맵 생성
   const generateHeatmap = (tHmapData, standard = "north", home = "west", status = "normal") => {
-    console.log('🔍 generateHeatmap 호출 - tHmapData:', tHmapData);
-    console.log('🔍 generateHeatmap 파라미터:', { standard, home, status });
-    
     const processedData = processHeatmapData(tHmapData);
-    console.log('🔍 generateHeatmap - processedData:', processedData);
     
     if (!processedData) {
       // T_HMAP 데이터가 없는 경우 기본 히트맵 표시
-      console.log('❌ generateHeatmap - processedData가 null, 플레이스홀더 표시');
       return (
         <div className="heatmap-container">
           <div className="heatmap-placeholder">
@@ -568,13 +569,9 @@ const Anal_Detail = () => {
       if (vmax <= 0) vmax = 1.0;
     }
     
-    console.log('🔍 히트맵 정규화 정보:', { vmax, dataSize: smoothedData.length });
-    console.log('🔍 경기장 설정:', { standard, home, status });
-    
     // 히트맵 데이터 경계 분석
     const dataHeight = smoothedData.length;
     const dataWidth = smoothedData[0] ? smoothedData[0].length : 0;
-    console.log('🔍 히트맵 데이터 크기:', { width: dataWidth, height: dataHeight });
     
     // 데이터가 있는 영역 찾기 (0이 아닌 값들의 경계)
     let minX = dataWidth, maxX = 0, minY = dataHeight, maxY = 0;
@@ -592,52 +589,20 @@ const Anal_Detail = () => {
       }
     }
     
-    console.log('🔍 히트맵 데이터 경계:', { 
-      hasData, 
-      minX, maxX, minY, maxY,
-      dataRangeX: maxX - minX,
-      dataRangeY: maxY - minY
-    });
     
     // 경기장 이미지 크기 (9:6 비율로 고정)
     const fieldWidth = 360;  // SVG viewBox width
     const fieldHeight = 240; // SVG viewBox height (9:6 비율)
     
     // 경기장 이미지 선택 (status와 home에 따라)
-    let fieldImage;
-    console.log('🔍 경기장 이미지 선택 로직:', { status, home, standard });
-    
-    // status에 따른 경기장 방향 결정
     const isAttackPhase = status === "attack" || status === "offensive" || status === "attacking";
     const isDefensePhase = status === "defense" || status === "defensive" || status === "defending";
-    
-    if (isAttackPhase) {
-      // 공격 상황일 때 - 상대편 골대 방향
-      if (standard === "south") {
-        fieldImage = home === "east" ? groundRight : groundLeft;
-      } else { // north
-        fieldImage = home === "west" ? groundRight : groundLeft;
-      }
-    } else if (isDefensePhase) {
-      // 수비 상황일 때 - 우리편 골대 방향
-      if (standard === "south") {
-        fieldImage = home === "west" ? groundRight : groundLeft;
-      } else { // north
-        fieldImage = home === "east" ? groundRight : groundLeft;
-      }
-    } else {
-      // 일반 상황일 때 (기존 로직)
-      fieldImage = (standard === "south" && home === "east") || 
-                   (standard === "north" && home === "west") ? groundRight : groundLeft;
-    }
-    
-    console.log('🔍 선택된 경기장 이미지:', fieldImage === groundLeft ? 'groundLeft' : 'groundRight');
-    console.log('🔍 경기장 이미지 경로:', fieldImage);
-    console.log('🔍 SVG 크기:', { fieldWidth, fieldHeight });
+    const normalizedHome = home || "west";
+    const phaseType = isAttackPhase ? "attack" : isDefensePhase ? "defense" : "normal";
+    const fieldImage = resolveFieldImage(standard, normalizedHome, phaseType);
     
     // extent 설정 (경기장 좌표) - Python 코드와 동일
-    const extent = standard === "south" ? [90, 0, 60, 0] : [0, 90, 0, 60];
-    console.log('🔍 extent 설정:', extent);
+    const extent = standard === "north" ? [90, 0, 60, 0] : [0, 90, 0, 60];
     
     return (
       <div className="heatmap-container">
@@ -675,12 +640,12 @@ const Anal_Detail = () => {
                         
                         // extent = [0, 90, 0, 60] 또는 [90, 0, 60, 0]
                         let x, y;
-                        if (standard === "south") {
-                          // south: extent = [90, 0, 60, 0]
+                        if (standard === "north") {
+                          // north: extent = [90, 0, 60, 0]
                           x = 90 - (normalizedX * 90); // 90에서 0으로
                           y = 60 - (normalizedY * 60); // 60에서 0으로
                         } else {
-                          // north: extent = [0, 90, 0, 60]
+                          // south: extent = [0, 90, 0, 60]
                           x = normalizedX * 90; // 0에서 90으로
                           y = normalizedY * 60; // 0에서 60으로
                         }
@@ -749,15 +714,13 @@ const Anal_Detail = () => {
             </svg>
           </div>
         </div>
-        <p className="heatmap-legend text-caption">※ 히트맵은 플레이어의 활동 위치와 시간을 색상으로 표시합니다 (파랑색: 낮은 활동량, 빨간색: 높은 활동량)</p>
+        <p className="heatmap-legend text-caption">※ 파랑색: 낮은 체류시간, 빨간색: 높은 체류시간</p>
       </div>
     );
   };
 
   // 스프린트 화살표 생성
   const generateSprintArrows = (sprintData, standard = "north", home = "west") => {
-    console.log('🔍 generateSprintArrows 호출 - sprintData:', sprintData);
-    
     if (!sprintData) {
       return (
         <div className="heatmap-container">
@@ -774,28 +737,16 @@ const Anal_Detail = () => {
     const fieldWidth = 360;
     const fieldHeight = 240;
     
-    // 경기장 이미지 선택
-    let fieldImage;
     const isAttackPhase = false; // 기본값
     const isDefensePhase = false; // 기본값
-    
-    if (isAttackPhase) {
-      fieldImage = standard === "south" ? 
-        (home === "east" ? groundRight : groundLeft) :
-        (home === "west" ? groundRight : groundLeft);
-    } else if (isDefensePhase) {
-      fieldImage = standard === "south" ? 
-        (home === "west" ? groundRight : groundLeft) :
-        (home === "east" ? groundRight : groundLeft);
-    } else {
-      fieldImage = (standard === "south" && home === "east") || 
-                   (standard === "north" && home === "west") ? groundRight : groundLeft;
-    }
+    const normalizedHome = home || "west";
+    const phaseType = isAttackPhase ? "attack" : isDefensePhase ? "defense" : "normal";
+    const fieldImage = resolveFieldImage(standard, normalizedHome, phaseType);
 
-    const extent = standard === "south" ? [90, 0, 60, 0] : [0, 90, 0, 60];
+    const extent = standard === "north" ? [90, 0, 60, 0] : [0, 90, 0, 60];
     const level_3 = 24.0;
     const level_2 = 21.0;
-    const maxLen = 16.0;
+    const maxLen = 32.0; // 화살표 길이 추가 증가
 
     return (
       <div className="heatmap-container">
@@ -820,7 +771,7 @@ const Anal_Detail = () => {
                   const normalizedY = i / (sprintData.height - 1);
                   
                   let x, y;
-                  if (standard === "south") {
+                        if (standard === "north") {
                     x = 90 - (normalizedX * 90);
                     y = 60 - (normalizedY * 60);
                   } else {
@@ -847,6 +798,21 @@ const Anal_Detail = () => {
                     color = "#FFCA03"; // 노랑
                   }
                   
+                  // 화살표 머리 크기 및 방향 계산
+                  const arrowHeadSize = 8; // 화살표 머리 크기 추가 증가
+                  const arrowAngle = angle * Math.PI / 180;
+                  
+                  // 화살표 머리를 막대기 끝쪽으로 이동 (막대기 끝에서 4픽셀 앞으로)
+                  const headOffset = -4; // 막대기 끝에서 앞으로 이동할 거리
+                  const headBaseX = (svgX + dx) - headOffset * Math.cos(arrowAngle);
+                  const headBaseY = (svgY + dy) - headOffset * Math.sin(arrowAngle);
+                  
+                  // 화살표 머리의 두 점 계산 (화살표 방향을 기준으로)
+                  const headX1 = headBaseX - arrowHeadSize * Math.cos(arrowAngle - Math.PI / 6);
+                  const headY1 = headBaseY - arrowHeadSize * Math.sin(arrowAngle - Math.PI / 6);
+                  const headX2 = headBaseX - arrowHeadSize * Math.cos(arrowAngle + Math.PI / 6);
+                  const headY2 = headBaseY - arrowHeadSize * Math.sin(arrowAngle + Math.PI / 6);
+                  
                   return (
                     <g key={`sprint-${i}-${j}`}>
                       <line
@@ -855,11 +821,11 @@ const Anal_Detail = () => {
                         x2={svgX + dx}
                         y2={svgY + dy}
                         stroke={color}
-                        strokeWidth="2"
+                        strokeWidth="4"
                         opacity="0.85"
                       />
                       <polygon
-                        points={`${svgX + dx},${svgY + dy} ${svgX + dx - 3},${svgY + dy - 3} ${svgX + dx - 3},${svgY + dy + 3}`}
+                        points={`${headBaseX},${headBaseY} ${headX1},${headY1} ${headX2},${headY2}`}
                         fill={color}
                         opacity="0.85"
                       />
@@ -870,15 +836,13 @@ const Anal_Detail = () => {
             </svg>
           </div>
         </div>
-        <p className="heatmap-legend text-caption">※ 스프린트 화살표는 방향과 속도를 표시합니다 (빨강: 고속, 노랑: 저속)</p>
+        <p className="heatmap-legend text-caption">※ 방향과 속도를 표시합니다 (빨강: 고속, 주황: 중간, 노랑: 저속)</p>
       </div>
     );
   };
 
   // 방향전환 점 생성
   const generateDirectionPoints = (directionData, standard = "north", home = "west") => {
-    console.log('🔍 generateDirectionPoints 호출 - directionData:', directionData);
-    
     if (!directionData) {
       return (
         <div className="heatmap-container">
@@ -895,25 +859,13 @@ const Anal_Detail = () => {
     const fieldWidth = 360;
     const fieldHeight = 240;
     
-    // 경기장 이미지 선택
-    let fieldImage;
     const isAttackPhase = false;
     const isDefensePhase = false;
-    
-    if (isAttackPhase) {
-      fieldImage = standard === "south" ? 
-        (home === "east" ? groundRight : groundLeft) :
-        (home === "west" ? groundRight : groundLeft);
-    } else if (isDefensePhase) {
-      fieldImage = standard === "south" ? 
-        (home === "west" ? groundRight : groundLeft) :
-        (home === "east" ? groundRight : groundLeft);
-    } else {
-      fieldImage = (standard === "south" && home === "east") || 
-                   (standard === "north" && home === "west") ? groundRight : groundLeft;
-    }
+    const normalizedHome = home || "west";
+    const phaseType = isAttackPhase ? "attack" : isDefensePhase ? "defense" : "normal";
+    const fieldImage = resolveFieldImage(standard, normalizedHome, phaseType);
 
-    const extent = standard === "south" ? [90, 0, 60, 0] : [0, 90, 0, 60];
+    const extent = standard === "north" ? [90, 0, 60, 0] : [0, 90, 0, 60];
 
     return (
       <div className="heatmap-container">
@@ -934,7 +886,7 @@ const Anal_Detail = () => {
                   const normalizedY = i / (directionData.height - 1);
                   
                   let x, y;
-                  if (standard === "south") {
+                        if (standard === "north") {
                     x = 90 - (normalizedX * 90);
                     y = 60 - (normalizedY * 60);
                   } else {
@@ -971,7 +923,7 @@ const Anal_Detail = () => {
                   const normalizedY = i / (directionData.height - 1);
                   
                   let x, y;
-                  if (standard === "south") {
+                  if (standard === "north") {
                     x = 90 - (normalizedX * 90);
                     y = 60 - (normalizedY * 60);
                   } else {
@@ -1001,7 +953,7 @@ const Anal_Detail = () => {
             </svg>
           </div>
         </div>
-        <p className="heatmap-legend text-caption">※ 방향전환 점은 플레이어의 방향 변화를 표시합니다 (주황: 저각, 빨강: 고각)</p>
+        <p className="heatmap-legend text-caption">※ 방향 변화를 표시합니다 (주황: 완만한 방향전환, 빨강: 급격한 방향전환)</p>
       </div>
     );
   };
@@ -1009,9 +961,7 @@ const Anal_Detail = () => {
   // 경기 상세 정보 로드 함수
   const loadMatchInfo = async (matchCode) => {
     try {
-      console.log('🔍 경기 상세 정보 로드 시작:', matchCode);
       const response = await GetMatchDetailApi('', matchCode); // user_code는 선택적 파라미터
-      console.log('🔍 경기 상세 정보 API 응답:', response.data);
       
       if (response.data) {
         setMatchInfo(response.data);
@@ -1019,41 +969,26 @@ const Anal_Detail = () => {
       }
       return null;
     } catch (error) {
-      console.error('❌ 경기 상세 정보 로드 실패:', error);
       return null;
     }
   };
 
   // 쿼터 분석 데이터 로드 함수 (히트맵, 스프린트, 방향전환 포함)
-  const loadQuarterData = async (userCode, quarterCode) => {
+  const loadQuarterData = async (userCode, quarterCode, teamQuarterCode = null) => {
     try {
-      console.log('🔍 쿼터 분석 데이터 로드 시작:', { userCode, quarterCode });
-      const response = await GetQuarterDataApi(userCode, quarterCode);
-      console.log('🔍 쿼터 분석 API 응답:', response.data);
-      
-      // 히트맵 데이터 확인
-      console.log('🔍 히트맵 데이터 존재:', !!response.data?.total_data?.heatmap_data);
-      if (response.data?.total_data?.heatmap_data) {
-        console.log('✅ 히트맵 데이터 구조:', Object.keys(response.data.total_data.heatmap_data));
+      // 팀 분석에서 온 경우 TeamPlayerAnal API 사용
+      if (fromTeamAnalysis && (teamQuarterCode || quarter?.team_quarter_code)) {
+        const actualTeamQuarterCode = teamQuarterCode || quarter.team_quarter_code;
+        const response = await GetTeamPlayerQuarterDataApi(actualTeamQuarterCode, userCode);
+        setApiData(response.data);
+        return response.data;
+      } else {
+        // 일반 개인 분석 데이터 로드
+        const response = await GetQuarterDataApi(userCode, quarterCode);
+        setApiData(response.data);
+        return response.data;
       }
-      
-      // 스프린트 데이터 확인
-      console.log('🔍 스프린트 데이터 존재:', !!response.data?.total_data?.sprint_map_data);
-      if (response.data?.total_data?.sprint_map_data) {
-        console.log('✅ 스프린트 데이터 구조:', Object.keys(response.data.total_data.sprint_map_data));
-      }
-      
-      // 방향전환 데이터 확인
-      console.log('🔍 방향전환 데이터 존재:', !!response.data?.total_data?.direction_map_data);
-      if (response.data?.total_data?.direction_map_data) {
-        console.log('✅ 방향전환 데이터 구조:', Object.keys(response.data.total_data.direction_map_data));
-      }
-      
-      setApiData(response.data);
-      return response.data;
     } catch (error) {
-      console.error('❌ 쿼터 분석 API 실패:', error);
-      console.error('❌ 에러 상세:', { error: error.message });
       return null;
     }
   };
@@ -1151,13 +1086,13 @@ const Anal_Detail = () => {
   // 관련 영상 데이터 로드 함수
   const loadRelatedVideos = async (quarterCode) => {
     try {
-      console.log('🔍 관련 영상 데이터 로드 시작:', quarterCode);
       setVideosLoading(true);
       
       const response = await GetVideosByQuarterApi(quarterCode);
-      console.log('🔍 영상 API 응답:', response.data);
       
-      if (response.data && response.data.success && response.data.data) {
+      // 백엔드 응답 형식: { data: [...], count: number, message: "..." }
+      // 또는 에러 시: { error: "..." }
+      if (response.data && response.data.data && Array.isArray(response.data.data)) {
         // 각 영상에 썸네일 URL 추가
         const videosWithThumbnails = response.data.data.map(video => ({
           ...video,
@@ -1165,13 +1100,16 @@ const Anal_Detail = () => {
         }));
         
         setVideos(videosWithThumbnails);
-        console.log('✅ 영상 데이터 설정 완료:', videosWithThumbnails.length, '개');
+      } else if (response.data && response.data.error) {
+        // 에러 응답인 경우
+        console.error('영상 조회 오류:', response.data.error);
+        setVideos([]);
       } else {
-        console.log('ℹ️ 해당 쿼터에 영상이 없습니다');
+        // 빈 배열 또는 예상치 못한 응답 형식
         setVideos([]);
       }
     } catch (error) {
-      console.error('❌ 영상 데이터 로드 실패:', error);
+      console.error('영상 로드 중 오류:', error);
       setVideos([]);
     } finally {
       setVideosLoading(false);
@@ -1191,26 +1129,30 @@ const Anal_Detail = () => {
       return;
     }
     
-    console.log('🔍 전달받은 quarter 데이터:', quarter);
-    console.log('🔍 quarter의 모든 키:', Object.keys(quarter));
-    console.log('🔍 quarter_code 존재 여부:', 'quarter_code' in quarter);
-    console.log('🔍 quarter.quarter_code 값:', quarter.quarter_code);
-    
     // 경기 상세 정보 및 쿼터 분석 데이터 로드
     const loadData = async () => {
-      const userCode = sessionStorage.getItem('userCode');
-      
-      // 경기 상세 정보 로드 (matchData에서 match_code 사용)
-      if (matchData?.match_code) {
-        await loadMatchInfo(matchData.match_code);
-      }
-      
-      // 쿼터 분석 데이터 로드
-      if (quarter?.quarter_code && userCode) {
-        const apiData = await loadQuarterData(userCode, quarter.quarter_code);
+      try {
+        // 팀 분석에서 전달받은 user_code 우선 사용, 없으면 sessionStorage에서 가져오기
+        const userCode = matchData?.user_code || sessionStorage.getItem('userCode');
         
-        // 관련 영상 데이터 로드
-        await loadRelatedVideos(quarter.quarter_code);
+        if (!userCode) {
+          alert('사용자 정보를 찾을 수 없습니다.');
+          navigate(-1);
+          return;
+        }
+        
+        // 경기 상세 정보 로드 (matchData에서 match_code 사용)
+        if (matchData?.match_code) {
+          await loadMatchInfo(matchData.match_code);
+        }
+        
+        // 쿼터 분석 데이터 로드
+        if (quarter?.quarter_code && userCode) {
+          // API 병렬 호출로 초기 로딩 속도 개선
+          const [apiData, videosData] = await Promise.all([
+            loadQuarterData(userCode, quarter.quarter_code, quarter.team_quarter_code),
+            loadRelatedVideos(quarter.quarter_code)
+          ]);
         
         // API 데이터로 초기화
         const initialData = {
@@ -1223,8 +1165,7 @@ const Anal_Detail = () => {
             순발력: 0,
             스피드: 0,
             가속도: 0,
-            스프린트: 0,
-            평점: 0
+            스프린트: 0
           },
           tHmapData: null,
           detailStats: {
@@ -1262,18 +1203,13 @@ const Anal_Detail = () => {
           };
           
           // 레이더 차트 데이터 업데이트
-          console.log('🔍 API에서 받은 point_data:', apiData.point_data);
           initialData.radarData = {
             체력: apiData.point_data?.stamina || 0,
             순발력: apiData.point_data?.positiveness || 0,
             스피드: apiData.point_data?.speed || 0,
             가속도: apiData.point_data?.acceleration || 0,
-            스프린트: apiData.point_data?.sprint || 0,
-            평점: Math.round((apiData.point_data?.stamina + apiData.point_data?.positiveness + 
-                             apiData.point_data?.speed + apiData.point_data?.acceleration + 
-                             apiData.point_data?.sprint + apiData.point_data?.total) / 6) || 0
+            스프린트: apiData.point_data?.sprint || 0
           };
-          console.log('🔍 업데이트된 레이더 데이터:', initialData.radarData);
           
           // 시간 정보 업데이트
           initialData.timeInfo = {
@@ -1283,14 +1219,24 @@ const Anal_Detail = () => {
           
           // T_HMAP 데이터 설정
           initialData.tHmapData = apiData.total_data?.heatmap_data || null;
-          console.log('🔍 API 성공 - initialData.tHmapData 설정:', initialData.tHmapData);
+          
+          // 초기 데이터도 캐시에 저장 (쿼터 전환 시 재사용)
+          setQuarterDataCache({
+            [quarter.quarter_code]: {
+              quarterData: initialData,
+              apiData: apiData,
+              videos: videosData || []
+            }
+          });
         }
         
-        console.log('🔍 최종 initialData 설정:', initialData);
         setQuarterData(initialData);
       }
-      
-      setLoading(false);
+      } catch (error) {
+        alert('데이터를 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
     };
     
     loadData();
@@ -1302,7 +1248,11 @@ const Anal_Detail = () => {
 
     const handleScroll = () => {
       const stickyContainer = document.querySelector('.sticky-quarter-container');
-      const pageHeader = document.querySelector('.page-header');
+      const pageHeader = document.querySelector('.anal-detail-container .header');
+      
+      if (!stickyContainer || !pageHeader) {
+        return;
+      }
       
       if (stickyContainer && pageHeader) {
         // 초기 offset 계산 (페이지 헤더 바로 아래)
@@ -1320,29 +1270,34 @@ const Anal_Detail = () => {
           stickyContainer.style.left = '50%';
           stickyContainer.style.transform = 'translateX(-50%)';
           stickyContainer.style.width = '100%';
-          stickyContainer.style.maxWidth = '499px';
+          stickyContainer.style.zIndex = '1000';
         } else {
           // sticky 효과 비활성화
           stickyContainer.classList.remove('scrolled');
-          stickyContainer.style.position = 'sticky';
+          stickyContainer.style.position = 'static';
           stickyContainer.style.left = 'auto';
           stickyContainer.style.transform = 'none';
-          stickyContainer.style.maxWidth = 'none';
+          stickyContainer.style.width = '100%';
+          stickyContainer.style.zIndex = 'auto';
         }
       }
     };
 
-    // 초기 실행
-    handleScroll();
+    // 초기 실행 (DOM 준비 대기)
+    const initTimer = setTimeout(() => {
+      handleScroll();
+    }, 100);
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', () => { stickyOffset = null; handleScroll(); });
     
     return () => {
+      clearTimeout(initTimer);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
+
 
   if (loading) {
     return (
@@ -1368,108 +1323,211 @@ const Anal_Detail = () => {
   }
 
   return (
-    <div className='anal-detail-page'>
-      <LogoBellNav showBack={true} onBack={handleBack} />
+    <div className={`anal-detail-page ${isLoadingQuarter ? 'loading-overlay-active' : ''}`}>
+      {/* 쿼터 전환 로딩 오버레이 */}
+      {isLoadingQuarter && (
+        <div className="quarter-loading-overlay">
+          <div className="quarter-loading-content">
+            <div className="quarter-loading-spinner"></div>
+            <p className="quarter-loading-text text-body">쿼터 데이터를 불러오는 중...</p>
+          </div>
+        </div>
+      )}
       
-      {/* 페이지 헤더 */}
-      <div className="page-header">
-        <h1 className="quarter-title text-h1">{quarterData.quarterName}</h1>
-        <p className="quarter-description text-body">분석 결과를 자세히 보여줘요</p>
+      <LogoBellNav logo={true} />
+      
+      {/* 표준 헤더 구조 */}
+      <div className="anal-detail-container">
+        <div className="header">
+          <div className="header-actions">
+            <button className="back-btn" onClick={handleBack}>
+              <img src={backIcon} alt="뒤로가기" />
+            </button>
+            <div className="empty-space"></div>
+          </div>
+          <div className="header-content">
+            <h1 className="text-h2">{quarterData.quarterName}</h1>
+            <p className="subtitle text-body">분석 결과를 자세히 보여줘요</p>
+          </div>
+        </div>
       </div>
 
-      {/* Sticky 쿼터 탭 컨테이너 */}
+      {/* Sticky 쿼터 탭 컨테이너 - 컨테이너 밖으로 이동 */}
       <div className="sticky-quarter-container">
         <div className="quarter-tabs">
-        {matchData?.quarters?.map((quarter) => (
+        {matchData?.quarters?.filter(quarter => quarter.status !== 'rest').map((quarter) => {
+          // 현재 쿼터의 이름과 각 탭의 쿼터 이름 비교
+          const currentQuarterName = quarterData?.name || quarterData?.quarterName;
+          const quarterName = quarter.name || quarter.quarterName || quarter.quarter_name;
+          // 쿼터 이름으로 활성화 여부 결정
+          const isActive = currentQuarterName && quarterName && 
+                          currentQuarterName === quarterName;
+          
+          return (
           <button
-            key={quarter.quarter}
-            className={`quarter-tab ${quarter.quarter === quarterData.quarterNumber ? 'active' : ''}`}
+            key={quarter.quarter_code || quarterName || quarter.quarter}
+            className={`quarter-tab ${isActive ? 'active' : ''} ${isLoadingQuarter ? 'loading' : ''}`}
             onClick={async () => {
-              // 쿼터 분석 데이터 로드
-              const userCode = sessionStorage.getItem('userCode');
-              const apiData = await loadQuarterData(userCode, quarter.quarter_code);
+              // 이미 로딩 중이면 중복 클릭 방지
+              if (isLoadingQuarter) return;
               
-              // 관련 영상 데이터도 로드
-              await loadRelatedVideos(quarter.quarter_code);
+              const quarterCode = quarter.quarter_code;
               
-              // API 데이터로 업데이트
-              const newQuarterData = {
-                playerName: matchData?.playerName || "플레이어",
-                playerPosition: "포지션",
-                quarterName: quarter.name,
-                quarterNumber: quarter.quarter,
-                radarData: {
-                  체력: 0,
-                  순발력: 0,
-                  스피드: 0,
-                  가속도: 0,
-                  스프린트: 0,
-                  평점: 0
-                },
-                tHmapData: null,
-                detailStats: {
-                  경기시간: "0분",
-                  이동거리: "0km",
-                  평균속도: "0km/h",
-                  최고속도: "0km/h",
-                  가속도: "0m/s²",
-                  최고가속도: "0m/s²",
-                  활동량: "0%",
-                  스프린트: "0회",
-                  점수: 0
-                },
-                timeInfo: {
-                  startTime: "--:--",
-                  endTime: "--:--"
-                }
-              };
-              
-              if (apiData) {
-                // API 데이터로 상세 통계 업데이트
-                newQuarterData.detailStats = {
-                  경기시간: `${apiData.total_data?.time || 0}분`,
-                  이동거리: `${apiData.total_data?.distance || 0}km`,
-                  평균속도: `${apiData.total_data?.average_speed || 0}km/h`,
-                  최고속도: `${apiData.total_data?.max_speed || 0}km/h`,
-                  가속도: `${apiData.total_data?.average_acceleration || 0}m/s²`,
-                  최고가속도: `${apiData.total_data?.max_acceleration || 0}m/s²`,
-                  활동량: `${apiData.total_data?.movement_ratio || 0}%`,
-                  스프린트: `${apiData.total_data?.sprint_count || 0}회`,
-                  점수: apiData.point_data?.total || 0
-                };
-                
-                // 레이더 차트 데이터 업데이트
-                console.log('🔍 쿼터 탭 전환 - API에서 받은 point_data:', apiData.point_data);
-                newQuarterData.radarData = {
-                  체력: apiData.point_data?.stamina || 0,
-                  순발력: apiData.point_data?.positiveness || 0,
-                  스피드: apiData.point_data?.speed || 0,
-                  가속도: apiData.point_data?.acceleration || 0,
-                  스프린트: apiData.point_data?.sprint || 0,
-                  평점: Math.round((apiData.point_data?.stamina + apiData.point_data?.positiveness + 
-                                   apiData.point_data?.speed + apiData.point_data?.acceleration + 
-                                   apiData.point_data?.sprint + apiData.point_data?.total) / 6) || 0
-                };
-                console.log('🔍 쿼터 탭 전환 - 업데이트된 레이더 데이터:', newQuarterData.radarData);
-                
-                // 시간 정보 업데이트
-                newQuarterData.timeInfo = {
-                  startTime: formatTime(apiData.quarter_info?.start_time),
-                  endTime: formatTime(apiData.quarter_info?.end_time)
-                };
-                
-                // T_HMAP 데이터 설정
-                newQuarterData.tHmapData = apiData.total_data?.heatmap_data || null;
+              // 캐시된 데이터가 있으면 즉시 사용 (초고속 전환!)
+              if (quarterDataCache[quarterCode]) {
+                const cached = quarterDataCache[quarterCode];
+                setQuarterData(cached.quarterData);
+                setApiData(cached.apiData);
+                setVideos(cached.videos || []);
+                setCurrentQuarterData(quarter);
+                return;
               }
               
-              setQuarterData(newQuarterData);
+              // 캐시가 없으면 데이터 로드 시작
+              setIsLoadingQuarter(true);
+              
+              try {
+                const userCode = matchData?.user_code || sessionStorage.getItem('userCode');
+                
+                // API 병렬 호출로 속도 개선
+                const [apiDataResult, videosResult] = await Promise.all([
+                  loadQuarterData(userCode, quarterCode, quarter.team_quarter_code),
+                  loadRelatedVideos(quarterCode)
+                ]);
+                
+                // API 데이터로 업데이트
+                const newQuarterData = {
+                  playerName: matchData?.playerName || "플레이어",
+                  playerPosition: "포지션",
+                  quarterName: quarter.name,
+                  quarterNumber: quarter.quarter,
+                  radarData: {
+                    체력: 0,
+                    순발력: 0,
+                    스피드: 0,
+                    가속도: 0,
+                    스프린트: 0
+                  },
+                  tHmapData: null,
+                  detailStats: {
+                    경기시간: "0분",
+                    이동거리: "0km",
+                    평균속도: "0km/h",
+                    최고속도: "0km/h",
+                    가속도: "0m/s²",
+                    최고가속도: "0m/s²",
+                    활동량: "0%",
+                    스프린트: "0회",
+                    점수: 0
+                  },
+                  timeInfo: {
+                    startTime: "--:--",
+                    endTime: "--:--"
+                  }
+                };
+                
+                if (apiDataResult) {
+                  // API 데이터로 상세 통계 업데이트
+                  newQuarterData.detailStats = {
+                    경기시간: `${apiDataResult.total_data?.time || 0}분`,
+                    이동거리: `${apiDataResult.total_data?.distance || 0}km`,
+                    평균속도: `${apiDataResult.total_data?.average_speed || 0}km/h`,
+                    최고속도: `${apiDataResult.total_data?.max_speed || 0}km/h`,
+                    가속도: `${apiDataResult.total_data?.average_acceleration || 0}m/s²`,
+                    최고가속도: `${apiDataResult.total_data?.max_acceleration || 0}m/s²`,
+                    활동량: `${apiDataResult.total_data?.movement_ratio || 0}%`,
+                    스프린트: `${apiDataResult.total_data?.sprint_count || 0}회`,
+                    점수: apiDataResult.point_data?.total || 0
+                  };
+                  
+                  // 레이더 차트 데이터 업데이트
+                  newQuarterData.radarData = {
+                    체력: apiDataResult.point_data?.stamina || 0,
+                    순발력: apiDataResult.point_data?.positiveness || 0,
+                    스피드: apiDataResult.point_data?.speed || 0,
+                    가속도: apiDataResult.point_data?.acceleration || 0,
+                    스프린트: apiDataResult.point_data?.sprint || 0
+                  };
+                  
+                  // 시간 정보 업데이트
+                  newQuarterData.timeInfo = {
+                    startTime: formatTime(apiDataResult.quarter_info?.start_time),
+                    endTime: formatTime(apiDataResult.quarter_info?.end_time)
+                  };
+                  
+                  // T_HMAP 데이터 설정
+                  newQuarterData.tHmapData = apiDataResult.total_data?.heatmap_data || null;
+                }
+                
+                // 캐시에 저장 (다음 전환 시 초고속!)
+                setQuarterDataCache(prev => ({
+                  ...prev,
+                  [quarterCode]: {
+                    quarterData: newQuarterData,
+                    apiData: apiDataResult,
+                    videos: videosResult || []
+                  }
+                }));
+                
+                // 상태 업데이트
+                setQuarterData(newQuarterData);
+                setApiData(apiDataResult);
+                setVideos(videosResult || []);
+                setCurrentQuarterData(quarter);
+                
+              } catch (error) {
+                // 에러 처리
+              } finally {
+                setIsLoadingQuarter(false);
+              }
             }}
           >
             {quarter.name}
-          </button>
-        ))}
+            </button>
+          );
+        })}
         </div>
       </div>
+
+      {/* 팀 분석에서 진입 시 선수 프로필 정보 */}
+      {fromTeamAnalysis && (
+        <div className="player-profile-card">
+          <div className="profile-avatar">
+            <img 
+              src={matchData?.playerProfileImage || defaultProfile} 
+              alt={matchData?.playerName || "선수"}
+              onError={(e) => { e.target.src = defaultProfile; }}
+            />
+          </div>
+          <div className="profile-info">
+            <div className="profile-header">
+              <h4 className="player-name text-h4">{matchData?.playerName || "선수"}</h4>
+              <span className={`player-role ${matchData?.playerRole || 'member'}`}>
+                {matchData?.playerRole === 'owner' ? '팀장' : 
+                 matchData?.playerRole === 'manager' ? '매니저' : '멤버'}
+              </span>
+            </div>
+            <div className="profile-details">
+              <span className="player-age text-body-sm">
+                {matchData?.playerAge ? `${matchData.playerAge}세` : '나이 미상'}
+              </span>
+              <span className="player-divider">•</span>
+              <span className="player-number text-body-sm">
+                {matchData?.playerNumber !== null && matchData?.playerNumber !== undefined ? `${matchData.playerNumber}번` : '등번호 미설정'}
+              </span>
+              <span className="player-divider">•</span>
+              <span className={`player-position ${getPositionClass(matchData?.playerPosition)}`}>
+                {matchData?.playerPosition || "포지션 미상"}
+              </span>
+            </div>
+            <div className="profile-meta">
+              <span className="player-location text-caption">
+                {matchData?.playerActivityArea || '지역 미상'}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 쿼터 정보 카드 */}
       <div className="quarter-info-card">
@@ -1477,41 +1535,44 @@ const Anal_Detail = () => {
           <div className="quarter-info-left">
             <div className="quarter-details">
               <div className="quarter-score">
-                <span className="score-type text-caption">평점</span>
-                <span className="score-number">{quarterData.radarData.평점 || 0}</span>
-                <span className="score-label text-caption">점</span>
+                {!isRestQuarter && <span className="score-type text-caption">평점</span>}
+                <span className="score-number">{isRestQuarter ? "휴식" : (apiData?.point_data?.total || 0)}</span>
+                <span className="score-label text-caption">{isRestQuarter ? "" : "점"}</span>
               </div>
-              <div className="quarter-time-info">
-                <p className="time-text text-body">
-                  <span className="time-label">경기시간</span> 
-                  <span className="time-value">{quarterData.timeInfo.startTime} ~ {quarterData.timeInfo.endTime}</span>
-                </p>
-              </div>
+              {!isRestQuarter && (
+                <div className="quarter-time-info">
+                  <p className="time-text text-body">
+                    <span className="time-label">경기시간</span> 
+                    <span className="time-value">{quarterData.timeInfo.startTime} ~ {quarterData.timeInfo.endTime}</span>
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           <div className="quarter-info-divider"></div>
           <div className="quarter-info-right">
             <div className="quarter-stat">
               <span className="stat-label text-caption">경기 시간</span>
-              <span className="stat-value text-body">{quarterData.detailStats.경기시간}</span>
+              <span className="stat-value text-body">{isRestQuarter ? "-" : quarterData.detailStats.경기시간}</span>
             </div>
             <div className="quarter-stat">
               <span className="stat-label text-caption">최고속력</span>
-              <span className="stat-value text-body">{quarterData.detailStats.최고속도}</span>
+              <span className="stat-value text-body">{isRestQuarter ? "-" : quarterData.detailStats.최고속도}</span>
             </div>
             <div className="quarter-stat">
               <span className="stat-label text-caption">이동거리</span>
-              <span className="stat-value text-body">{quarterData.detailStats.이동거리}</span>
+              <span className="stat-value text-body">{isRestQuarter ? "-" : quarterData.detailStats.이동거리}</span>
             </div>
             <div className="quarter-stat">
               <span className="stat-label text-caption">스프린트</span>
-              <span className="stat-value text-body">{quarterData.detailStats.스프린트}</span>
+              <span className="stat-value text-body">{isRestQuarter ? "-" : quarterData.detailStats.스프린트}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 레이더 차트 섹션 */}
+      {/* 레이더 차트 섹션 - 휴식 쿼터가 아닐 때만 표시 */}
+      {!isRestQuarter && (
       <div className="analysis-section">
         <div className="section-header">
           <div className="section-icon">
@@ -1536,8 +1597,10 @@ const Anal_Detail = () => {
           </div>
         )}
       </div>
+      )}
 
-      {/* 히트맵 섹션 */}
+      {/* 히트맵 섹션 - 휴식 쿼터가 아닐 때만 표시 */}
+      {!isRestQuarter && (
       <div className="analysis-section">
         <div className="section-header">
           <div className="section-icon">
@@ -1589,21 +1652,11 @@ const Anal_Detail = () => {
           const home = apiData?.quarter_info?.home || matchData?.home || "west";
           const status = apiData?.quarter_info?.status || quarter?.status || "normal";
           
-          console.log('🔍 히트맵 렌더링 - quarterData 존재:', !!quarterData);
-          console.log('🔍 히트맵 렌더링 - apiData 존재:', !!apiData);
-          console.log('🔍 히트맵 렌더링 - quarterData.tHmapData:', quarterData?.tHmapData);
-          console.log('🔍 히트맵 렌더링 - 최종 heatmapData:', heatmapData);
-          console.log('🔍 히트맵 렌더링 - standard:', standard);
-          console.log('🔍 히트맵 렌더링 - home:', home);
-          console.log('🔍 히트맵 렌더링 - status:', status);
-          
           return generateHeatmap(heatmapData, standard, home, status);
         })()}
         
         {activeMapTab === 'sprint' && (() => {
           const sprintData = apiData?.total_data?.sprint_map_data || quarterData?.tSmapData;
-          console.log('🔍 스프린트 탭 렌더링 - sprintData:', sprintData);
-          console.log('🔍 apiData 전체:', apiData);
           return generateSprintArrows(
             processSprintData(sprintData),
             apiData?.match_info?.standard || matchData?.standard || "north", 
@@ -1613,7 +1666,6 @@ const Anal_Detail = () => {
         
         {activeMapTab === 'direction' && (() => {
           const directionData = apiData?.total_data?.direction_map_data || quarterData?.tDmapData;
-          console.log('🔍 방향전환 탭 렌더링 - directionData:', directionData);
           return generateDirectionPoints(
             processDirectionData(directionData),
             apiData?.match_info?.standard || matchData?.standard || "north", 
@@ -1623,6 +1675,7 @@ const Anal_Detail = () => {
           </>
         )}
       </div>
+      )}
 
       {/* 경기 영상 섹션 - 영상이 있거나 로딩 중일 때만 표시 */}
       {(videosLoading || videos.length > 0) && (
@@ -1707,7 +1760,8 @@ const Anal_Detail = () => {
         </div>
       )}
 
-      {/* 활동량 섹션 */}
+      {/* 활동량 섹션 - 휴식 쿼터가 아닐 때만 표시 */}
+      {!isRestQuarter && (
       <div className="analysis-section">
         <div className="section-header">
           <div className="section-icon">
@@ -1807,7 +1861,7 @@ const Anal_Detail = () => {
           {activeActivityTab === 'total' && (
             <div className="activity-stats-grid">
               <div className="activity-stat">
-                <span className="stat-label text-caption">경기시간</span>
+                <span className="stat-label text-caption">활동시간</span>
                 <span className="stat-value text-body">{formatValue(apiData?.total_data?.time, '분')}</span>
               </div>
               <div className="activity-stat">
@@ -1836,28 +1890,28 @@ const Anal_Detail = () => {
           {activeActivityTab === 'attack' && (
             <div className="activity-stats-grid">
               <div className="activity-stat">
-                <span className="stat-label text-caption">공격 시간</span>
+                <span className="stat-label text-caption">공격지역 활동시간</span>
                 <span className="stat-value text-body">{formatValue(apiData?.attack_data?.time, '분')}</span>
               </div>
               <div className="activity-stat">
-                <span className="stat-label text-caption">공격 이동거리</span>
+                <span className="stat-label text-caption">공격지역 이동거리</span>
                 <span className="stat-value text-body">{formatValue(apiData?.attack_data?.distance, 'km')}</span>
               </div>
               <div className="activity-stat">
-                <span className="stat-label text-caption">공격 분당 이동거리</span>
+                <span className="stat-label text-caption">공격지역 분당 이동거리</span>
                 <span className="stat-value text-body">{formatValue(apiData?.attack_data?.distance_per_minute, 'm')}</span>
               </div>
               <div className="activity-stat">
-                <span className="stat-label text-caption">공격 방향전환</span>
+                <span className="stat-label text-caption">공격지역 내 활동 범위</span>
+                <span className="stat-value text-body">{formatValue(apiData?.attack_data?.movement_ratio ? parseFloat(apiData.attack_data.movement_ratio).toFixed(1) : 0, '%')}</span>
+              </div>
+              <div className="activity-stat">
+                <span className="stat-label text-caption">공격지역 내 완만한 방향전환</span>
                 <span className="stat-value text-body">{formatValue(apiData?.attack_data?.direction_change_90_150, '회')}</span>
               </div>
               <div className="activity-stat">
-                <span className="stat-label text-caption">공격 큰 방향전환</span>
+                <span className="stat-label text-caption">공격지역 내 급격한 방향전환</span>
                 <span className="stat-value text-body">{formatValue(apiData?.attack_data?.direction_change_150_180, '회')}</span>
-              </div>
-              <div className="activity-stat">
-                <span className="stat-label text-caption">공격 활동 범위</span>
-                <span className="stat-value text-body">{formatValue(apiData?.attack_data?.movement_ratio ? parseFloat(apiData.attack_data.movement_ratio).toFixed(1) : 0, '%')}</span>
               </div>
             </div>
           )}
@@ -1865,28 +1919,28 @@ const Anal_Detail = () => {
           {activeActivityTab === 'defense' && (
             <div className="activity-stats-grid">
               <div className="activity-stat">
-                <span className="stat-label text-caption">수비 시간</span>
+                <span className="stat-label text-caption">수비지역 활동시간</span>
                 <span className="stat-value text-body">{formatValue(apiData?.defense_data?.time, '분')}</span>
               </div>
               <div className="activity-stat">
-                <span className="stat-label text-caption">수비 이동거리</span>
+                <span className="stat-label text-caption">수비지역 이동거리</span>
                 <span className="stat-value text-body">{formatValue(apiData?.defense_data?.distance ? parseFloat(apiData.defense_data.distance).toFixed(2) : 0, 'km')}</span>
               </div>
               <div className="activity-stat">
-                <span className="stat-label text-caption">수비 분당 이동거리</span>
+                <span className="stat-label text-caption">수비지역 내 분당 이동거리</span>
                 <span className="stat-value text-body">{formatValue(apiData?.defense_data?.distance_per_minute ? parseFloat(apiData.defense_data.distance_per_minute).toFixed(1) : 0, 'm')}</span>
               </div>
               <div className="activity-stat">
-                <span className="stat-label text-caption">수비 방향전환</span>
+                <span className="stat-label text-caption">수비지역 내 활동 범위</span>
+                <span className="stat-value text-body">{formatValue(apiData?.defense_data?.movement_ratio ? parseFloat(apiData.defense_data.movement_ratio).toFixed(1) : 0, '%')}</span>
+              </div>
+              <div className="activity-stat">
+                <span className="stat-label text-caption">수비지역 내 완만한 방향전환</span>
                 <span className="stat-value text-body">{formatValue(apiData?.defense_data?.direction_change_90_150, '회')}</span>
               </div>
               <div className="activity-stat">
-                <span className="stat-label text-caption">수비 큰 방향전환</span>
+                <span className="stat-label text-caption">수비지역 내 급격한 방향전환</span>
                 <span className="stat-value text-body">{formatValue(apiData?.defense_data?.direction_change_150_180, '회')}</span>
-              </div>
-              <div className="activity-stat">
-                <span className="stat-label text-caption">수비 활동 범위</span>
-                <span className="stat-value text-body">{formatValue(apiData?.defense_data?.movement_ratio ? parseFloat(apiData.defense_data.movement_ratio).toFixed(1) : 0, '%')}</span>
               </div>
             </div>
           )}
@@ -1894,8 +1948,10 @@ const Anal_Detail = () => {
           </>
         )}
       </div>
+      )}
 
-      {/* 속력 및 가속도 섹션 */}
+      {/* 속력 및 가속도 섹션 - 휴식 쿼터가 아닐 때만 표시 */}
+      {!isRestQuarter && (
       <div className="analysis-section">
         <div className="section-header">
           <div className="section-icon">
@@ -1945,25 +2001,33 @@ const Anal_Detail = () => {
                     <div className="speed-chart-container">
                       <svg className="speed-chart" viewBox="0 0 400 180" preserveAspectRatio="xMidYMid meet">
                         {(() => {
-                          // average_speed_list는 텍스트 형태로 저장되어 있으므로 JSON 파싱 필요
+                          // average_speed_list는 JSONField로 이미 파싱된 배열이거나 문자열일 수 있음
                           let speedData = null;
                           try {
                             const rawData = apiData?.total_data?.average_speed_list;
-                            console.log('🔍 속력 리스트 원본 데이터:', rawData);
-                            console.log('🔍 속력 리스트 데이터 타입:', typeof rawData);
                             if (rawData) {
-                              speedData = JSON.parse(rawData);
-                              console.log('🔍 파싱된 속력 리스트 데이터:', speedData);
+                              // 이미 배열인 경우 그대로 사용
+                              if (Array.isArray(rawData)) {
+                                speedData = rawData;
+                              } 
+                              // 문자열인 경우 JSON 파싱
+                              else if (typeof rawData === 'string') {
+                                speedData = JSON.parse(rawData);
+                              }
+                              // 그 외의 경우 그대로 사용 시도
+                              else {
+                                speedData = rawData;
+                              }
                             }
                           } catch (error) {
-                            console.error('속력 리스트 데이터 파싱 오류:', error);
+                            // 파싱 오류 처리
                           }
                           
                           if (!speedData || !Array.isArray(speedData) || speedData.length === 0) {
                             return (
                               <g>
                                 <text x="200" y="90" textAnchor="middle" fill="#8A8F98" fontSize="14" fontWeight="500">
-                                  속력 데이터가 없습니다
+                                  충분한 속력 데이터가 없습니다
                                 </text>
                               </g>
                             );
@@ -2164,25 +2228,33 @@ const Anal_Detail = () => {
                     <div className="acceleration-chart-container">
                       <svg className="acceleration-chart" viewBox="0 0 400 180" preserveAspectRatio="xMidYMid meet">
                         {(() => {
-                          // average_acceleration_list는 텍스트 형태로 저장되어 있으므로 JSON 파싱 필요
+                          // average_acceleration_list는 JSONField로 이미 파싱된 배열이거나 문자열일 수 있음
                           let accelerationData = null;
                           try {
                             const rawData = apiData?.total_data?.average_acceleration_list;
-                            console.log('🔍 가속도 리스트 원본 데이터:', rawData);
-                            console.log('🔍 가속도 리스트 데이터 타입:', typeof rawData);
                             if (rawData) {
-                              accelerationData = JSON.parse(rawData);
-                              console.log('🔍 파싱된 가속도 리스트 데이터:', accelerationData);
+                              // 이미 배열인 경우 그대로 사용
+                              if (Array.isArray(rawData)) {
+                                accelerationData = rawData;
+                              } 
+                              // 문자열인 경우 JSON 파싱
+                              else if (typeof rawData === 'string') {
+                                accelerationData = JSON.parse(rawData);
+                              }
+                              // 그 외의 경우 그대로 사용 시도
+                              else {
+                                accelerationData = rawData;
+                              }
                             }
                           } catch (error) {
-                            console.error('가속도 리스트 데이터 파싱 오류:', error);
+                            // 파싱 오류 처리
                           }
                           
                           if (!accelerationData || !Array.isArray(accelerationData) || accelerationData.length === 0) {
                             return (
                               <g>
                                 <text x="200" y="90" textAnchor="middle" fill="#8A8F98" fontSize="14" fontWeight="500">
-                                  가속도 데이터가 없습니다
+                                  충분한 가속도 데이터가 없습니다
                                 </text>
                               </g>
                             );
@@ -2376,8 +2448,10 @@ const Anal_Detail = () => {
           </>
         )}
       </div>
+      )}
 
-      {/* 스프린트 섹션 */}
+      {/* 스프린트 섹션 - 휴식 쿼터가 아닐 때만 표시 */}
+      {!isRestQuarter && (
       <div className="analysis-section">
         <div className="section-header">
           <div className="section-icon">
@@ -2454,6 +2528,7 @@ const Anal_Detail = () => {
           </>
         )}
       </div>
+      )}
     </div>
   );
 };

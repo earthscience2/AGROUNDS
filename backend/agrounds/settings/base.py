@@ -4,6 +4,7 @@ import pymysql
 import environ
 import logging
 from logging.handlers import RotatingFileHandler
+import json
 
 
 
@@ -62,7 +63,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'EXCEPTION_HANDLER': 'agrounds.urls.custom_exception_handler'
 }
 
 MIDDLEWARE = [
@@ -70,6 +72,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "agrounds.urls.ApiLoggingMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -81,8 +84,9 @@ AUTHENTICATION_BACKENDS = [
     # "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -194,7 +198,14 @@ AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'aground-gps'
 AWS_S3_REGION_NAME = 'ap-northeast-2'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+# CloudFront 도메인 사용 (OAC 정책 우회)
+AWS_S3_CUSTOM_DOMAIN = 'dnt5c7vilse71.cloudfront.net'
+
+# 카카오맵 API 키
+KAKAO_MAP_KEY = env('KAKAO_MAP_KEY', default='664cc150367cf3800a5a3c0bb7f300a8')
+
+# 프로필 이미지용 S3 버킷 설정 (통일된 버킷 사용)
+AWS_PROFILE_BUCKET_NAME = 'aground-gps'
 
 # 로컬 미디어 파일 설정 (프로필 이미지 등)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -207,9 +218,41 @@ else:
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
     DEFAULT_FILE_STORAGE = 'agrounds.storage_backends.MediaStorage'
 
+class JsonFormatter(logging.Formatter):
+    def format(self, record):
+        try:
+            from django.conf import settings as dj_settings
+            env_name = 'dev' if getattr(dj_settings, 'DEBUG', False) else 'prod'
+        except Exception:
+            env_name = 'unknown'
+
+        payload = {
+            "timestamp": self.formatTime(record, datefmt="%Y-%m-%dT%H:%M:%S%z"),
+            "level": record.levelname,
+            "logger": record.name,
+            "env": env_name,
+        }
+
+        msg = record.msg
+        if isinstance(msg, dict):
+            payload.update(msg)
+        else:
+            payload["message"] = record.getMessage()
+
+        if record.exc_info:
+            payload["stack"] = self.formatException(record.exc_info)
+
+        return json.dumps(payload, ensure_ascii=False)
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'json': {
+            '()': 'agrounds.settings.base.JsonFormatter',
+        },
+    },
     'handlers': {
         'file': {
             'level': 'ERROR',
@@ -222,12 +265,22 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'logging.StreamHandler',
         },
+        'api_console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'json',
+        },
     },
     'loggers': {
         'django': {
             'handlers': ['file', 'console'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'api': {
+            'handlers': ['api_console'],
+            'level': 'INFO',
+            'propagate': False,
         },
     },
 }

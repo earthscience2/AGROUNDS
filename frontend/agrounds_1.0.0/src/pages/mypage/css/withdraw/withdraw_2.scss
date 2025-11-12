@@ -1,0 +1,380 @@
+// 디자인 시스템 변수 사용
+:root {
+  --primary: #079669;
+  --primary-hover: #068A5B;
+  --text-primary: #262626;
+  --text-secondary: #6B7078;
+  --text-disabled: #8A8F98;
+  --bg-primary: #F2F4F6;
+  --bg-surface: #FFFFFF;
+  --border: #E2E8F0;
+  --error: #ef4444;
+  --font-brand: 'Paperlogy-8ExtraBold', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-text: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  --spacing-3xl: 32px;
+  --spacing-4xl: 40px;
+}
+
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.secessionlast{
+  width: 100%;
+  max-width: 100vw;
+  @include display(flex, column, center, start);
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  font-family: var(--font-text);
+  padding: var(--spacing-lg);
+  box-sizing: border-box;
+  overflow-x: hidden;
+  
+  .secession-title {
+    width: calc(100% - 2rem);
+    max-width: 90%;
+    margin: var(--spacing-xl) 1rem var(--spacing-lg) 1rem;
+    box-sizing: border-box;
+    
+    h1 {
+      font-family: var(--font-brand);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0 0 var(--spacing-sm) 0;
+      line-height: 1.3;
+    }
+    
+    p {
+      font-family: var(--font-text);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+  
+  .quidebox{
+    @include display(flex, column, start, center);
+    width: calc(100% - 2rem);
+    max-width: 90%;
+    background: var(--bg-surface);
+    border-radius: 16px;
+    padding: var(--spacing-2xl);
+    margin: var(--spacing-lg) 1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+    
+    .guide-title {
+      font-family: var(--font-text);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 var(--spacing-lg) 0;
+      line-height: 1.4;
+    }
+    
+    .explain{
+      @include display(flex, row, start, start);
+      margin-bottom: var(--spacing-md);
+      font-family: var(--font-text);
+      line-height: 1.5;
+      width: 100%;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .dot{
+        background-color: var(--error);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin: 8px var(--spacing-md) 0 0;
+        flex-shrink: 0;
+      }
+      
+      .explain-text {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--text-primary);
+        margin: 0;
+        line-height: 1.5;
+        flex: 1;
+      }
+    }
+  }
+  
+  .warning-notice {
+    width: calc(100% - 2rem);
+    max-width: 90%;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg) 1rem;
+    box-sizing: border-box;
+    
+    .notice-icon {
+      font-size: 20px;
+      color: var(--error);
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .notice-text {
+      font-family: var(--font-text);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--error);
+      margin: 0;
+      line-height: 1.4;
+      text-align: center;
+    }
+  }
+  
+  .button-container {
+    width: calc(100% - 2rem);
+    max-width: 90%;
+    margin: var(--spacing-2xl) 1rem var(--spacing-4xl) 1rem;
+    box-sizing: border-box;
+    
+    // Circle_common_btn 컴포넌트 스타일 오버라이드
+    .circle-btn {
+      width: 100% !important;
+      
+      > div {
+        width: 100% !important;
+        height: 48px !important;
+        font-size: 16px !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+  
+  .buttonbox{
+    @include display(flex, row, center, center);
+    width: calc(100% - 2rem);
+    max-width: 90%;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-2xl) 1rem 0 1rem;
+    box-sizing: border-box;
+    
+    .btn-cancel {
+      flex: 1;
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: var(--spacing-md) var(--spacing-lg);
+      font-size: 16px;
+      font-weight: 600;
+      font-family: var(--font-text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-height: 48px;
+      
+      &:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: rgba(7, 150, 105, 0.05);
+      }
+      
+      &:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+      }
+    }
+    
+    .btn-confirm {
+      flex: 1;
+      background: var(--error);
+      color: white;
+      border: 2px solid var(--error);
+      border-radius: 12px;
+      padding: var(--spacing-md) var(--spacing-lg);
+      font-size: 16px;
+      font-weight: 600;
+      font-family: var(--font-text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-height: 48px;
+      
+      &:hover {
+        background: #dc2626;
+        border-color: #dc2626;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      }
+      
+      &:focus {
+        outline: 2px solid var(--error);
+        outline-offset: 2px;
+      }
+      
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+      }
+    }
+  }
+}
+
+// 반응형 대응
+@media (max-width: 768px) {
+  .secessionlast {
+    padding: var(--spacing-md);
+    
+    .secession-title {
+      width: 95%;
+      margin: var(--spacing-md) 0;
+      
+      h1 {
+        font-size: 20px;
+      }
+      
+      p {
+        font-size: 15px;
+      }
+    }
+    
+    .quidebox {
+      width: 95%;
+      padding: var(--spacing-lg);
+      margin: var(--spacing-md) 0;
+      
+      .guide-title {
+        font-size: 16px;
+      }
+      
+      .explain {
+        .explain-text {
+          font-size: 13px;
+        }
+      }
+    }
+    
+    .warning-notice {
+      width: 95%;
+      padding: var(--spacing-md);
+      margin: var(--spacing-md) 0;
+      
+      .notice-text {
+        font-size: 13px;
+      }
+    }
+    
+    .button-container {
+      width: 95%;
+      margin: var(--spacing-lg) 0 var(--spacing-2xl) 0;
+      
+      .circle-btn {
+        > div {
+          height: 44px !important;
+          font-size: 14px !important;
+          border-radius: 10px !important;
+        }
+      }
+    }
+    
+    .buttonbox {
+      width: 95%;
+      gap: var(--spacing-md);
+      flex-direction: column;
+      
+      .btn-cancel,
+      .btn-confirm {
+        width: 100%;
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 15px;
+        min-height: 44px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .secessionlast {
+    padding: var(--spacing-sm);
+    
+    .secession-title {
+      width: 100%;
+      
+      h1 {
+        font-size: 18px;
+      }
+      
+      p {
+        font-size: 14px;
+      }
+    }
+    
+    .quidebox {
+      width: 100%;
+      padding: var(--spacing-md);
+      
+      .guide-title {
+        font-size: 15px;
+      }
+      
+      .explain {
+        .dot {
+          margin: 6px var(--spacing-sm) 0 0;
+        }
+        
+        .explain-text {
+          font-size: 12px;
+        }
+      }
+    }
+    
+    .warning-notice {
+      width: 100%;
+      padding: var(--spacing-sm);
+      
+      .notice-text {
+        font-size: 12px;
+      }
+    }
+    
+    .button-container {
+      width: 100%;
+      margin: var(--spacing-md) 0 var(--spacing-lg) 0;
+      
+      .circle-btn {
+        > div {
+          height: 42px !important;
+          font-size: 14px !important;
+          border-radius: 8px !important;
+        }
+      }
+    }
+    
+    .buttonbox {
+      width: 100%;
+      
+      .btn-cancel,
+      .btn-confirm {
+        font-size: 14px;
+        min-height: 40px;
+      }
+    }
+  }
+}

@@ -82,7 +82,7 @@ const SelectRestStyle = styled.div`
     background-color: #F2F4F8;
     border-radius: 1.5vh;
     line-height: 2.7;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
     font-weight: 500;
     font-size: 1.8vh;
     color: #343A3F;

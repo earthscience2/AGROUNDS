@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../onboard/css/GetStarted.scss';
+import '../css/GetStarted.scss';
 import Circle_common_btn from '../../../components/Circle_common_btn';
-import startLogo from '../../../assets/logo/start_logo.png';
-import bottomLogo from '../../../assets/logo/buttom_logo.png';
+import startLogo from '../../../assets/big_icons/logo_green.png';
+import bottomLogo from '../../../assets/text_icon/logo_text_gray.png';
 
 const Sign_in_end = () => {
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     // 이전 페이지에서 저장된 사용자 정보 가져오기
@@ -45,10 +53,10 @@ const Sign_in_end = () => {
   };
 
   return (
-    <div className='background'>
+    <div className={`background ${isVisible ? 'visible' : ''}`}>
       <div className='content'>
         <div className='symbol-badge'>
-          <img className='symbol-img' src={startLogo} />
+          <img className='symbol-img' src={startLogo} alt='AGROUNDS 로고' />
         </div>
         
         <p className='subtitle'>회원가입이 완료되었어요</p>
@@ -73,7 +81,7 @@ const Sign_in_end = () => {
             fontWeight='600'
           />
         </div>
-        <img className='brand-image' src={bottomLogo} />
+        <img className='brand-image' src={bottomLogo} alt='AGROUNDS' />
       </div>
     </div>
   );

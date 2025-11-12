@@ -1,3 +1,250 @@
+// 로그인 페이지 스타일
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 100svh;
+  height: 100vh;
+  width: 100%;
+  max-width: 499px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-primary) 100%);
+  
+  // 글꼴 렌더링 최적화
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  // 페이드인 애니메이션
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  
+  &.visible {
+    opacity: 1;
+  }
+
+  .login-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+  }
+
+  .back-button {
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
+    
+    .back-icon {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+  }
+
+  .login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25vh var(--spacing-lg) 0;
+    gap: var(--spacing-2xl);
+    
+    @media (max-width: 768px) {
+      padding-top: 20vh;
+      gap: var(--spacing-xl);
+    }
+  }
+
+  .symbol-badge {
+    width: clamp(96px, 26vw, 120px);
+    height: clamp(96px, 26vw, 120px);
+    background: var(--bg-surface);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(7, 150, 105, 0.12);
+    border: 3px solid rgba(7, 150, 105, 0.1);
+    transition: all 0.3s ease;
+    animation: floatBadge 3s ease-in-out infinite;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(7, 150, 105, 0.2);
+    }
+    
+    .symbol-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  
+  @keyframes floatBadge {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .login-title {
+    color: var(--text-primary);
+    font-family: var(--font-brand);
+    margin: 0;
+    line-height: 1.4;
+    
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
+  }
+
+  .login-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl) 0 calc(var(--spacing-2xl) + env(safe-area-inset-bottom));
+    margin-top: auto;
+  }
+
+  .login-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 355px;
+    padding: 0 var(--spacing-lg);
+  }
+
+  .social-login-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - var(--spacing-lg) * 2);
+    max-width: 355px;
+    height: 54px;
+    border-radius: 28px;
+    padding: 0 var(--spacing-lg);
+    font-family: var(--font-text);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+    
+    .social-icon {
+      position: absolute;
+      left: 18px;
+      width: 20px;
+      height: 20px;
+    }
+    
+    .btn-text {
+      font-family: var(--font-text);
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+  }
+
+  .apple-btn {
+    background: #EFEFEF;
+    color: var(--text-primary);
+    
+    &:hover {
+      background: #E5E5E5;
+    }
+  }
+
+  .kakao-btn {
+    background: #F7DE0C;
+    color: var(--text-primary);
+    
+    &:hover {
+      background: #F5D800;
+    }
+  }
+
+  .naver-btn {
+    background: #00C05A;
+    color: var(--bg-surface);
+    
+    &:hover {
+      background: #00B050;
+    }
+  }
+
+  .agrounds-btn {
+    background: var(--primary);
+    color: var(--bg-surface);
+    
+    &:hover {
+      background: var(--primary-hover);
+    }
+  }
+
+  .brand-image {
+    width: 88px;
+    height: auto;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    margin: 0 auto;
+    display: block;
+    
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+// 기존 모달 스타일
 .modal-overlayl {
   position: fixed;
   top: 0;

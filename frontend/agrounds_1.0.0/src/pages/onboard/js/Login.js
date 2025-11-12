@@ -1,34 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../onboard/css/GetStarted.scss';
-import appleLogo from '../../../assets/logo/apple_logo.png';
-import kakaoLogo from '../../../assets/logo/kakao_logo.png';
-import naverLogo from '../../../assets/logo/naver_logo.png';
-import startLogo from '../../../assets/logo/start_logo.png';
-import bottomLogo from '../../../assets/logo/buttom_logo.png';
-import blackLogo from '../../../assets/logo/black_logo.png';
-import leftArrow from '../../../assets/common/left.png';
+import '../css/LoginModal.scss';
+import appleLogo from '../../../assets/identify_icon/apple.png';
+import kakaoLogo from '../../../assets/identify_icon/kakao.png';
+import naverLogo from '../../../assets/identify_icon/naver.png';
+import startLogo from '../../../assets/big_icons/logo_green.png';
+import bottomLogo from '../../../assets/text_icon/logo_text_gray.png';
+import blackLogo from '../../../assets/big_icons/logo_black.png';
 import { GetUserInfoForTokenApi } from '../../../function/login/loginApi';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   // 콜백에서 미가입자일 경우 알림 후 회원가입 페이지로 이동
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('signupPrompt') === '1') {
       const encryptedId = params.get('id');
+      const signupFromType = params.get('signupFromType');
+      
       if (encryptedId) {
-        // 서버가 전달한 암호화된 이메일을 저장 (서버에서 복호화됨)
         localStorage.setItem('social_email', encryptedId);
       }
-      const confirmed = window.confirm('등록되지 않은 계정입니다. 회원가입을 진행하시겠습니까?');
-      if (confirmed) {
-        navigate('/app/sign-in-type');
+      
+      if (signupFromType === '1') {
+        navigate('/app/sign-in-1');
+      } else {
+        const confirmed = window.confirm('등록되지 않은 계정입니다. 회원가입을 진행하시겠습니까?');
+        if (confirmed) {
+          navigate('/app/sign-in-type');
+        }
       }
     }
   }, [navigate]);
@@ -104,57 +113,67 @@ const Login = () => {
   };
 
   return (
-    <div className='background'>
-      <button 
-        onClick={handleGoBack}
-        style={{
-          position: 'absolute',
-          top: '40px',
-          left: '20px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          zIndex: 10,
-          padding: '8px'
-        }}
-      >
-        <img src={leftArrow} alt="뒤로가기" style={{width: '24px', height: '24px'}} />
-      </button>
-
-      <div className='content'>
-        <div className='symbol-badge'>
-          <img className='symbol-img' src={startLogo} />
-        </div>
-        <p className='subtitle'>오늘의 시작이 내일의 나를 키워요</p>
-      </div>
-
-      <div className='footer'>
-        <div className='cta-area'>
-          <div style={{display:'flex', flexDirection:'column', gap:'14px', width:'100%'}}>
-            <div style={{position:'relative', display:'flex', alignItems:'center', background:'#EFEFEF', height:'54px', borderRadius:'28px', padding:'0 18px', justifyContent:'center', fontWeight:600, cursor:'pointer'}} onClick={handleAppleLogin}>
-              <img src={appleLogo} style={{width:'20px', position:'absolute', left:'18px'}} />
-              <span className="btn-text">애플로 로그인</span>
-            </div>
-            <div style={{position:'relative', display:'flex', alignItems:'center', background:'#F7DE0C', height:'54px', borderRadius:'28px', padding:'0 18px', justifyContent:'center', fontWeight:600, cursor:'pointer'}} onClick={kakaoLogin}>
-              <img src={kakaoLogo} style={{width:'20px', position:'absolute', left:'18px'}} />
-              <span className="btn-text">카카오톡으로 로그인</span>
-            </div>
-            <div style={{position:'relative', display:'flex', alignItems:'center', background:'#00C05A', height:'54px', borderRadius:'28px', padding:'0 18px', justifyContent:'center', fontWeight:600, color:'#fff', cursor:'pointer'}} onClick={handleNaverLogin}>
-              <img src={naverLogo} style={{width:'20px', position:'absolute', left:'18px'}} />
-              <span className="btn-text">네이버로 로그인</span>
-            </div>
-            <div style={{position:'relative', display:'flex', alignItems:'center', background:'#0B8B69', height:'54px', borderRadius:'28px', padding:'0 18px', justifyContent:'center', fontWeight:600, color:'#fff', cursor:'pointer'}} onClick={() => navigate('/app/sign-in-type')}>
-              <img src={blackLogo} style={{width:'20px', position:'absolute', left:'18px'}} />
-              <span className="btn-text">AGROUNDS 회원가입</span>
-            </div>
+    <div className={`login-page ${isVisible ? 'visible' : ''}`}>
+      <div className='login-content'>
+        <div className='login-header'>
+          <div className='symbol-badge'>
+            <img 
+              className='symbol-img' 
+              src={startLogo} 
+              alt='AGROUNDS 로고'
+            />
           </div>
+          <h1 className='login-title text-h2'>오늘의 시작이<br />내일의 나를 키워요</h1>
         </div>
-        <img className='brand-image' src={bottomLogo} />
+
+        <div className='login-footer'>
+          <div className='login-buttons'>
+            <button 
+              className='social-login-btn apple-btn'
+              onClick={handleAppleLogin}
+              aria-label='애플로 로그인'
+            >
+              <img src={appleLogo} alt='Apple' className='social-icon' />
+              <span className='btn-text'>애플로 로그인</span>
+            </button>
+            
+            <button 
+              className='social-login-btn kakao-btn'
+              onClick={kakaoLogin}
+              aria-label='카카오톡으로 로그인'
+            >
+              <img src={kakaoLogo} alt='Kakao' className='social-icon' />
+              <span className='btn-text'>카카오톡으로 로그인</span>
+            </button>
+            
+            <button 
+              className='social-login-btn naver-btn'
+              onClick={handleNaverLogin}
+              aria-label='네이버로 로그인'
+            >
+              <img src={naverLogo} alt='Naver' className='social-icon' />
+              <span className='btn-text'>네이버로 로그인</span>
+            </button>
+            
+            <button 
+              className='social-login-btn agrounds-btn'
+              onClick={() => navigate('/app/sign-in-type')}
+              aria-label='AGROUNDS 회원가입'
+            >
+              <img src={blackLogo} alt='AGROUNDS' className='social-icon' />
+              <span className='btn-text'>AGROUNDS 회원가입</span>
+            </button>
+          </div>
+          
+          <img 
+            className='brand-image' 
+            src={bottomLogo} 
+            alt='AGROUNDS'
+          />
+        </div>
       </div>
     </div>
   );
 };
 
 export default Login;
-
-

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import BackTitle_Btn from './BackTitle_Btn';
 import Circle_common_btn from './Circle_common_btn';
@@ -9,11 +9,31 @@ const SecessionOtherReason = () => {
 
   const navigate = useNavigate();
 
+  // 테스트 유저 체크 함수
+  const isTestUser = () => {
+    const userCode = sessionStorage.getItem('userCode');
+    return userCode === 'test_player' || userCode === 'test_team';
+  };
+
+  // 컴포넌트 마운트 시 테스트 유저 체크
+  useEffect(() => {
+    if (isTestUser()) {
+      alert('테스트 유저는 사용할 수 없는 기능입니다');
+      navigate(-1); // 이전 페이지로 돌아가기
+    }
+  }, [navigate]);
+
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
   const handleSubmit = () => {
+    // 테스트 유저 체크
+    if (isTestUser()) {
+      alert('테스트 유저는 사용할 수 없는 기능입니다');
+      return;
+    }
+
     if (inputValue.trim()) {
       navigate('/app/secessionlast', {state: { reason: inputValue}})
     }

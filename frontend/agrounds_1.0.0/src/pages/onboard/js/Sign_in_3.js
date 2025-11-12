@@ -1,21 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../onboard/css/GetStarted.scss';
-import bottomLogo from '../../../assets/logo/buttom_logo.png';
-import leftArrow from '../../../assets/common/left.png';
-import manIcon from '../../../assets/common/man.png';
-import womanIcon from '../../../assets/common/woman.png';
-import checkIcon from '../../../assets/common/check.png';
-import checkGreenIcon from '../../../assets/common/check_green.png';
+import '../css/LoginModal.scss';
+import bottomLogo from '../../../assets/text_icon/logo_text_gray.png';
+import leftArrow from '../../../assets/main_icons/back_black.png';
+import manIcon from '../../../assets/identify_icon/man.png';
+import womanIcon from '../../../assets/identify_icon/woman.png';
+import checkIcon from '../../../assets/color_icons/check_gray.png';
+import checkGreenIcon from '../../../assets/color_icons/check_green.png';
 
-const Sign_in_2 = () => {
+const Sign_in_3 = () => {
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
   const [userNickname, setUserNickname] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [gender, setGender] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [heightError, setHeightError] = useState('');
+  const [weightError, setWeightError] = useState('');
+  const [birthDateError, setBirthDateError] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     // 이전 단계 저장값 불러오기 (뒤로 가기 시에도 유지)
@@ -25,17 +36,53 @@ const Sign_in_2 = () => {
     const b = localStorage.getItem('userBirthDate');
     const g = localStorage.getItem('userGender');
     if (nickname) setUserNickname(nickname); else navigate('/app/sign-in-1');
-    if (h) setHeight(h);
-    if (w) setWeight(w);
-    if (b) setBirthDate(b);
+    if (h) {
+      setHeight(h);
+      // 키 범위 검사
+      if (parseInt(h) < 50 || parseInt(h) > 250) {
+        setHeightError('수치가 기준 범위를 벗어났습니다.');
+      }
+    }
+    if (w) {
+      setWeight(w);
+      // 몸무게 범위 검사
+      if (parseInt(w) < 30 || parseInt(w) > 300) {
+        setWeightError('수치가 기준 범위를 벗어났습니다.');
+      }
+    }
+    if (b) {
+      // YYYY-MM-DD 형식을 8자리로 변환
+      const birthDate8Digit = b.replace(/-/g, '');
+      setBirthDate(birthDate8Digit);
+      
+      // 생년월일 유효성 검사
+      if (birthDate8Digit.length === 8) {
+        const year = parseInt(birthDate8Digit.substring(0, 4));
+        const month = parseInt(birthDate8Digit.substring(4, 6));
+        const day = parseInt(birthDate8Digit.substring(6, 8));
+        
+        if (year < 1900 || year > new Date().getFullYear()) {
+          setBirthDateError('올바른 연도를 입력해주세요.');
+        } else if (month < 1 || month > 12) {
+          setBirthDateError('올바른 월을 입력해주세요.');
+        } else if (day < 1 || day > 31) {
+          setBirthDateError('올바른 일을 입력해주세요.');
+        } else {
+          const date = new Date(year, month - 1, day);
+          if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+            setBirthDateError('올바른 날짜를 입력해주세요.');
+          }
+        }
+      }
+    }
     if (g) setGender(g);
   }, [navigate]);
 
   // 폼 유효성 검사
   useEffect(() => {
-    const valid = height && weight && birthDate && gender;
+    const valid = height && weight && birthDate && gender && !heightError && !weightError && !birthDateError;
     setIsValid(valid);
-  }, [height, weight, birthDate, gender]);
+  }, [height, weight, birthDate, gender, heightError, weightError, birthDateError]);
 
   const handleGoBack = () => {
     navigate(-1);
@@ -47,6 +94,13 @@ const Sign_in_2 = () => {
     if (/^\d*$/.test(value)) {
       setHeight(value);
       localStorage.setItem('userHeight', value);
+      
+      // 키 범위 검사 (50~250)
+      if (value && (parseInt(value) < 50 || parseInt(value) > 250)) {
+        setHeightError('수치가 기준 범위를 벗어났습니다.');
+      } else {
+        setHeightError('');
+      }
     }
   };
 
@@ -56,12 +110,51 @@ const Sign_in_2 = () => {
     if (/^\d*$/.test(value)) {
       setWeight(value);
       localStorage.setItem('userWeight', value);
+      
+      // 몸무게 범위 검사 (30~300)
+      if (value && (parseInt(value) < 30 || parseInt(value) > 300)) {
+        setWeightError('수치가 기준 범위를 벗어났습니다.');
+      } else {
+        setWeightError('');
+      }
     }
   };
 
   const handleBirthDateChange = (e) => {
-    setBirthDate(e.target.value);
-    localStorage.setItem('userBirthDate', e.target.value);
+    const value = e.target.value;
+    // 숫자만 입력 가능하고 8자리로 제한
+    if (/^\d*$/.test(value) && value.length <= 8) {
+      setBirthDate(value);
+      localStorage.setItem('userBirthDate', value);
+      
+      // 8자리 완성 시 유효성 검사
+      if (value.length === 8) {
+        const year = parseInt(value.substring(0, 4));
+        const month = parseInt(value.substring(4, 6));
+        const day = parseInt(value.substring(6, 8));
+        
+        // 기본 유효성 검사
+        if (year < 1900 || year > new Date().getFullYear()) {
+          setBirthDateError('올바른 연도를 입력해주세요.');
+        } else if (month < 1 || month > 12) {
+          setBirthDateError('올바른 월을 입력해주세요.');
+        } else if (day < 1 || day > 31) {
+          setBirthDateError('올바른 일을 입력해주세요.');
+        } else {
+          // 실제 날짜 유효성 검사
+          const date = new Date(year, month - 1, day);
+          if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+            setBirthDateError('올바른 날짜를 입력해주세요.');
+          } else {
+            setBirthDateError('');
+          }
+        }
+      } else if (value.length > 0) {
+        setBirthDateError('생년월일을 8자리로 입력해주세요.');
+      } else {
+        setBirthDateError('');
+      }
+    }
   };
 
   const handleGenderSelect = (selectedGender) => {
@@ -71,10 +164,15 @@ const Sign_in_2 = () => {
 
   const handleContinue = () => {
     if (isValid) {
+      // 8자리 생년월일을 YYYY-MM-DD 형식으로 변환
+      const formattedBirthDate = birthDate.length === 8 
+        ? `${birthDate.substring(0, 4)}-${birthDate.substring(4, 6)}-${birthDate.substring(6, 8)}`
+        : birthDate;
+      
       // 사용자 정보를 localStorage에 저장
       localStorage.setItem('userHeight', height);
       localStorage.setItem('userWeight', weight);
-      localStorage.setItem('userBirthDate', birthDate);
+      localStorage.setItem('userBirthDate', formattedBirthDate);
       localStorage.setItem('userGender', gender);
       
       // 다음 단계로 이동
@@ -83,229 +181,173 @@ const Sign_in_2 = () => {
   };
 
   return (
-    <div className='background'>
-      <button 
-        onClick={handleGoBack}
-        style={{
-          position: 'absolute',
-          top: '40px',
-          left: '20px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          zIndex: 10,
-          padding: '8px'
-        }}
-      >
-        <img src={leftArrow} alt="뒤로가기" style={{width: '24px', height: '24px'}} />
-      </button>
+    <div className={`login-page ${isVisible ? 'visible' : ''}`}>
+      <div className='login-content'>
+        <button 
+          className='back-button'
+          onClick={handleGoBack}
+          aria-label='뒤로가기'
+        >
+          <img src={leftArrow} alt='뒤로가기' className='back-icon' />
+        </button>
 
-      <div 
-        className='content'
-        style={{
-          alignItems: 'flex-start',
-          textAlign: 'left',
-          width: '100%',
-          height: 'auto',
-          paddingTop: '96px',
-          paddingLeft: 'calc(72px + env(safe-area-inset-left))',
-          paddingRight: '72px',
-          gap: '12px'
-        }}
-      >
-        <h1 style={{
-          fontSize: '34px',
-          fontWeight: '800',
-          color: '#000000',
-          margin: '0',
-          lineHeight: '1.2',
-          paddingLeft: '40px',
-          paddingRight: '40px'
-        }}>
-          개인정보
-        </h1>
-        <p style={{
-          fontSize: '16px',
-          color: '#6F6F6F',
-          margin: '8px 0 20px 0',
-          lineHeight: '1.4',
-          paddingLeft: '40px',
-          paddingRight: '40px'
-        }}>
-          본인 정보를 입력해주세요
-        </p>
+        <div className='login-header' style={{ alignItems: 'flex-start', paddingTop: '96px', gap: '8px' }}>
+          <h1 className='text-h1' style={{ margin: 0, color: 'var(--text-primary)' }}>개인정보</h1>
+          <p className='text-body' style={{ color: 'var(--text-secondary)', margin: '8px 0 24px 0' }}>본인 정보를 입력해주세요</p>
 
-        {/* 입력 필드들 */}
-        <div style={{
-          width: '70%',
-          backgroundColor: '#E9EEF1',
-          borderRadius: '20px',
-          padding: '24px',
-          marginBottom: '4px',
-          margin: '0 auto'
-        }}>
-          {/* 키 입력 */}
+          {/* 입력 필드들 */}
           <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '16px 0',
-            borderBottom: '1px solid #D1D5DB'
+            width: '100%',
+            backgroundColor: 'var(--bg-primary)',
+            borderRadius: '20px',
+            padding: '24px',
+            marginBottom: '16px',
+            boxSizing: 'border-box'
           }}>
-            <span style={{
-              fontSize: '16px',
-              color: '#000000',
-              fontWeight: '500'
-            }}>
-              키
-            </span>
+            {/* 키 입력 */}
             <div style={{
               display: 'flex',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              gap: '8px'
+              padding: '16px 0',
+              borderBottom: '1px solid var(--border)'
             }}>
+              <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>키</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={height}
+                  onChange={handleHeightChange}
+                  placeholder="0"
+                  style={{
+                    width: '120px',
+                    border: 'none',
+                    background: 'none',
+                    fontSize: '16px',
+                    textAlign: 'right',
+                    outline: 'none',
+                    color: 'var(--text-primary)',
+                    fontFamily: 'var(--font-text)'
+                  }}
+                  maxLength={3}
+                />
+                <span className='text-body' style={{ color: 'var(--text-secondary)' }}>cm</span>
+              </div>
+            </div>
+            {heightError && (
+              <p className='text-body-sm' style={{ color: 'var(--error)', margin: '8px 0 0 0', textAlign: 'right' }}>
+                {heightError}
+              </p>
+            )}
+
+            {/* 몸무게 입력 */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '16px 0',
+              borderBottom: '1px solid var(--border)'
+            }}>
+              <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>몸무게</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={weight}
+                  onChange={handleWeightChange}
+                  placeholder="0"
+                  style={{
+                    width: '120px',
+                    border: 'none',
+                    background: 'none',
+                    fontSize: '16px',
+                    textAlign: 'right',
+                    outline: 'none',
+                    color: 'var(--text-primary)',
+                    fontFamily: 'var(--font-text)'
+                  }}
+                  maxLength={3}
+                />
+                <span className='text-body' style={{ color: 'var(--text-secondary)' }}>kg</span>
+              </div>
+            </div>
+            {weightError && (
+              <p className='text-body-sm' style={{ color: 'var(--error)', margin: '8px 0 0 0', textAlign: 'right' }}>
+                {weightError}
+              </p>
+            )}
+
+            {/* 생년월일 입력 */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '16px 0'
+            }}>
+              <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>생년월일</span>
               <input
                 type="text"
-                value={height}
-                onChange={handleHeightChange}
-                placeholder="0"
-                style={{
-                  width: '120px',
-                  border: 'none',
-                  background: 'none',
-                  fontSize: '16px',
-                  textAlign: 'right',
-                  outline: 'none',
-                  color: '#000000'
-                }}
-                maxLength={3}
-              />
-              <span style={{
-                fontSize: '16px',
-                color: '#6F6F6F'
-              }}>
-                cm
-              </span>
-            </div>
-          </div>
-
-          {/* 몸무게 입력 */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '16px 0',
-            borderBottom: '1px solid #D1D5DB'
-          }}>
-            <span style={{
-              fontSize: '16px',
-              color: '#000000',
-              fontWeight: '500'
-            }}>
-              몸무게
-            </span>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <input
-                type="text"
-                value={weight}
-                onChange={handleWeightChange}
-                placeholder="0"
-                style={{
-                  width: '120px',
-                  border: 'none',
-                  background: 'none',
-                  fontSize: '16px',
-                  textAlign: 'right',
-                  outline: 'none',
-                  color: '#000000'
-                }}
-                maxLength={3}
-              />
-              <span style={{
-                fontSize: '16px',
-                color: '#6F6F6F'
-              }}>
-                kg
-              </span>
-            </div>
-          </div>
-
-          {/* 생년월일 입력 */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '16px 0'
-          }}>
-            <span style={{
-              fontSize: '16px',
-              color: '#000000',
-              fontWeight: '500'
-            }}>
-              생년월일
-            </span>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <input
-                type="date"
+                inputMode="numeric"
                 value={birthDate}
                 onChange={handleBirthDateChange}
+                placeholder="YYYYMMDD"
                 style={{
-                  width: '86%',
+                  width: '120px',
                   border: 'none',
                   background: 'none',
                   fontSize: '16px',
                   textAlign: 'right',
                   outline: 'none',
-                  color: '#000000'
+                  color: 'var(--text-primary)',
+                  fontFamily: 'var(--font-text)'
                 }}
+                maxLength={8}
               />
             </div>
+            {birthDateError && (
+              <p className='text-body-sm' style={{ color: 'var(--error)', margin: '8px 0 0 0', textAlign: 'right' }}>
+                {birthDateError}
+              </p>
+            )}
           </div>
-        </div>
 
-        {/* 성별 선택 */}
-        <div style={{
-          width: '86%',
-          display: 'flex',
-          gap: '15px',
-          marginBottom: '20px',
-          margin: '0 auto'
-        }}>
-          {/* 남성 선택 카드 */}
-          <div 
-            onClick={() => handleGenderSelect('male')}
-            style={{
-              flex: 1,
-              backgroundColor: '#E9EEF1',
-              borderRadius: '20px',
-              padding: '24px',
-              textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              border: '2px solid transparent'
-            }}
-          >
+          {/* 성별 선택 */}
+          <div style={{
+            width: '100%',
+            maxWidth: '100%',
+            display: 'flex',
+            gap: '15px',
+            marginBottom: '20px',
+            boxSizing: 'border-box'
+          }}>
+            {/* 남성 선택 카드 */}
+            <div 
+              onClick={() => handleGenderSelect('male')}
+              style={{
+                flex: 1,
+                backgroundColor: 'var(--bg-primary)',
+                borderRadius: '20px',
+                padding: '24px',
+                textAlign: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                border: gender === 'male' ? '2px solid var(--primary)' : '2px solid transparent'
+              }}
+            >
             <img 
               src={manIcon} 
               alt="남성" 
               style={{
-                width: '32px',
-                height: '50px',
-                marginBottom: '12px'
+                width: '40px',
+                height: '40px',
+                marginBottom: '12px',
+                objectFit: 'contain'
               }}
             />
-            <div style={{
-              fontSize: '16px',
+            <div className='text-body' style={{
               fontWeight: '600',
-              color: '#000000',
+              color: 'var(--text-primary)',
               marginBottom: '8px'
             }}>
               남성
@@ -341,33 +383,33 @@ const Sign_in_2 = () => {
             </div>
           </div>
 
-          {/* 여성 선택 카드 */}
-          <div 
-            onClick={() => handleGenderSelect('female')}
-            style={{
-              flex: 1,
-              backgroundColor: '#E9EEF1',
-              borderRadius: '20px',
-              padding: '24px',
-              textAlign: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              border: '2px solid transparent'
-            }}
-          >
+            {/* 여성 선택 카드 */}
+            <div 
+              onClick={() => handleGenderSelect('female')}
+              style={{
+                flex: 1,
+                backgroundColor: 'var(--bg-primary)',
+                borderRadius: '20px',
+                padding: '24px',
+                textAlign: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                border: gender === 'female' ? '2px solid var(--primary)' : '2px solid transparent'
+              }}
+            >
             <img 
               src={womanIcon} 
               alt="여성" 
               style={{
-                width: '32px',
-                height: '50px',
-                marginBottom: '12px'
+                width: '40px',
+                height: '40px',
+                marginBottom: '12px',
+                objectFit: 'contain'
               }}
             />
-            <div style={{
-              fontSize: '16px',
+            <div className='text-body' style={{
               fontWeight: '600',
-              color: '#000000',
+              color: 'var(--text-primary)',
               marginBottom: '8px'
             }}>
               여성
@@ -403,33 +445,31 @@ const Sign_in_2 = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className='footer'>
-        <div className='cta-area'>
-          <button
-            onClick={handleContinue}
-            disabled={!isValid}
-            style={{
-              width: '100%',
-              height: '60px',
-              border: 'none',
-              borderRadius: '20px',
-              backgroundColor: isValid ? '#079669' : '#E5E5E5',
-              color: isValid ? '#FFFFFF' : '#9E9E9E',
-              fontSize: '18px',
-              fontWeight: '600',
-              cursor: isValid ? 'pointer' : 'not-allowed',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            계속
-          </button>
         </div>
-        <img className='brand-image' src={bottomLogo} />
+
+        <div className='login-footer'>
+          <div className='login-buttons' style={{ maxWidth: '100%' }}>
+            <button
+              onClick={handleContinue}
+              disabled={!isValid}
+              className='social-login-btn'
+              style={{
+                backgroundColor: isValid ? 'var(--primary)' : 'var(--border)',
+                color: isValid ? 'var(--bg-surface)' : 'var(--text-disabled)',
+                cursor: isValid ? 'pointer' : 'not-allowed',
+                height: '54px',
+                fontSize: '16px',
+                fontWeight: 600
+              }}
+            >
+              계속
+            </button>
+          </div>
+          <img className='brand-image' src={bottomLogo} alt='AGROUNDS' />
+        </div>
       </div>
     </div>
   );
 };
 
-export default Sign_in_2;
+export default Sign_in_3;

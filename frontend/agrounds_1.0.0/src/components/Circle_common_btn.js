@@ -1,4 +1,5 @@
 import React from 'react';
+import './Circle_common_btn.css';
 
 const Circle_common_btn = ({
   title,
@@ -11,16 +12,15 @@ const Circle_common_btn = ({
   width = '90%',
   fontSize = '1rem',
   fontWeight = '600',
+  ariaLabel,
+  disabled = false,
 }) => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', width: '100%', ...style }}>
-      <div
+      <button
+        className="circle-common-btn"
         style={{
-          fontFamily: 'Pretendard',
           backgroundColor: backgroundColor,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           width: width,
           height: height,
           color: color,
@@ -29,9 +29,12 @@ const Circle_common_btn = ({
           fontSize: fontSize,
         }}
         onClick={onClick}
+        aria-label={ariaLabel || title}
+        disabled={disabled}
+        type="button"
       >
         {title}
-      </div>
+      </button>
     </div>
   );
 };

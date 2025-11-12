@@ -48,19 +48,19 @@ const TeamAnalTotalStyle = styled.div`
   align-items: center;
   margin-top: 2vh;
   width: 100%;
-  font-family: 'Pretendard';
+  font-family: var(--font-text);
   .title{
     width: 90%;
     font-size: 2vh;
     font-weight: 700;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
     color: #262626;
   }
   .title2{
     width: 90%;
     font-size: 2vh;
     font-weight: 700;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
     color: #262626;
     margin-top: 5vh;
   }

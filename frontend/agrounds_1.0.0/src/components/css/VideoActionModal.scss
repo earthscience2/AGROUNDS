@@ -1,0 +1,199 @@
+// VideoActionModal - 디자인 시스템 준수 (FolderActionModal과 동일한 디자인)
+.video-action-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--spacing-lg);
+}
+
+.video-action-modal {
+  background: var(--bg-surface);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: var(--spacing-xl);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  .modal-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-family: var(--font-text);
+    font-size: 20px;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+  }
+
+  .back-btn {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    min-width: 44px;
+    min-height: 44px;
+
+    &:hover {
+      background-color: var(--bg-primary);
+      opacity: 0.7;
+    }
+
+    &:active {
+      opacity: 0.5;
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    img {
+      width: 24px;
+      height: 24px;
+      opacity: 0.6;
+    }
+  }
+
+  .close-btn {
+    position: absolute;
+    right: 8px; // 왼쪽으로 이동
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px; // 1.5배 크게 (32px → 48px)
+    height: 48px; // 1.5배 크게 (32px → 48px)
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    min-width: 44px;
+    min-height: 44px;
+
+    &:hover {
+      background-color: var(--bg-primary);
+      opacity: 0.7;
+    }
+
+    &:active {
+      opacity: 0.5;
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    img {
+      width: 24px; // 1.5배 크게 (16px → 24px)
+      height: 24px; // 1.5배 크게 (16px → 24px)
+      opacity: 0.6;
+    }
+  }
+}
+
+.modal-content {
+  padding: var(--spacing-xl);
+}
+
+// 액션 리스트 - FolderActionModal과 동일한 스타일
+.action-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 16px;
+    border: none;
+    background: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    min-height: 44px;
+    font-family: var(--font-text);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+
+    &:hover {
+      background-color: var(--bg-primary);
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    // 아이콘 컨테이너
+    .action-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 30px;
+        height: 30px;
+        opacity: 0.7;
+      }
+    }
+
+    // 위험한 액션 (삭제)
+    &.danger {
+      color: var(--error);
+
+      .action-icon img {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+// 반응형 디자인
+@media (max-width: 768px) {
+  .video-action-modal-overlay {
+    padding: var(--spacing-md);
+  }
+  
+  .video-action-modal {
+    max-width: 100%;
+  }
+  
+  .modal-header,
+  .modal-content {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}

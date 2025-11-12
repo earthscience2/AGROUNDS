@@ -1,0 +1,1150 @@
+// 경기 구역 설정 페이지 스타일 - 디자인 시스템 기반
+
+// 전역 스크롤 설정
+html, body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+// 지도 상호작용을 위한 전역 설정 - 제거됨
+
+:root {
+  --primary: #079669;
+  --primary-hover: #068A5B;
+  --primary-light: #E6F7F1;
+  --success: #079669;
+  --success-light: #E6F7F1;
+  --success-dark: #068A5B;
+  --text-primary: #262626;
+  --text-secondary: #6B7078;
+  --text-disabled: #8A8F98;
+  --bg-primary: #F2F4F6;
+  --bg-surface: #FFFFFF;
+  --border: #E2E8F0;
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  --spacing-3xl: 32px;
+  --font-brand: 'Paperlogy-8ExtraBold', sans-serif;
+  --font-text: 'Pretendard', sans-serif;
+  --font-size-h1: 28px;
+  --font-size-h3: 20px;
+  --font-size-h4: 18px;
+  --font-size-body: 16px;
+  --font-size-small: 14px;
+  --warning: #f59e0b;
+  --warning-dark: #d97706;
+  --error: #ef4444;
+  --error-dark: #dc2626;
+}
+
+.player-ground-selection-self-2-1 {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  font-family: var(--font-text);
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  // 표준 헤더 구조 - player_data_select_1과 동일한 스타일
+  .ground-zone-setup-container {
+    padding: 0 var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    
+    @media (max-width: 768px) {
+      padding: 0 var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    @media (max-width: 480px) {
+      padding: 0 var(--spacing-md);
+    }
+    
+    .header {
+      padding: 6px 0 var(--spacing-sm) 0;
+      
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-2xl);
+        
+        .back-btn {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: var(--bg-surface);
+          border: none;
+          min-height: 44px;
+          min-width: 44px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+
+          img {
+            width: 20px;
+            height: 20px;
+          }
+
+          &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          }
+
+          &:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+          }
+        }
+      }
+      
+      .header-content {
+        text-align: center;
+        margin-bottom: var(--spacing-sm);
+        
+        h1 {
+          margin: 0 0 var(--spacing-sm) 0;
+          color: var(--text-primary);
+          font-family: var(--font-brand);
+          font-size: 24px;
+          font-weight: 800;
+        }
+        
+        .subtitle {
+          margin: 0;
+          color: var(--text-secondary);
+          line-height: 1.5;
+          font-size: var(--font-size-body);
+        }
+      }
+    }
+  }
+
+  // 페이지 헤더 (기존 스타일)
+  .page-header {
+    padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-xl);
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    
+    .page-title {
+      font-family: var(--font-brand);
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--text-primary);
+    }
+    
+    .page-subtitle {
+      margin: 0;
+      
+      p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: var(--font-size-body);
+        line-height: 1.5;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      padding: var(--spacing-lg);
+      
+      .page-title {
+        font-size: 24px;
+      }
+    }
+  }
+
+  // 지도 섹션
+  .map-section {
+    margin-bottom: var(--spacing-2xl);
+    
+    .map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-md) var(--spacing-xl) var(--spacing-sm) var(--spacing-xl);
+      position: relative;
+      z-index: 100001; // 경기 구역 오버레이보다 높게 설정
+      pointer-events: auto; // 클릭 가능하도록 명시
+      
+      @media (max-width: 768px) {
+        padding: var(--spacing-md) var(--spacing-lg) var(--spacing-sm) var(--spacing-lg);
+      }
+      
+      @media (max-width: 480px) {
+        padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-md);
+      }
+      
+      .map-title {
+        margin: 0;
+        margin-left: var(--spacing-xl);
+        color: var(--primary);
+        
+        @media (max-width: 768px) {
+          margin-left: var(--spacing-lg);
+        }
+        
+        @media (max-width: 480px) {
+          margin-left: var(--spacing-md);
+        }
+      }
+
+      .map-controls {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: var(--spacing-sm);
+        pointer-events: auto; // 컨트롤 버튼들 클릭 가능
+
+        .map-lock-btn {
+          min-height: 32px;
+          min-width: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          }
+          
+          &:active {
+            transform: translateY(0);
+          }
+        }
+      }
+      
+      // 구역 설정 / 지도 조작 모드 토글 탭
+      .map-mode-toggle {
+        display: flex;
+        background: var(--bg-primary);
+        border-radius: 8px;
+        padding: 2px;
+        gap: 2px;
+        flex-shrink: 0;
+        pointer-events: auto;
+        
+        .map-mode-btn {
+          background: transparent;
+          border: none;
+          padding: 6px 10px;
+          border-radius: 6px;
+          font-size: 13px;
+          font-weight: 500;
+          font-family: var(--font-text);
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          min-width: 55px;
+          white-space: nowrap;
+          pointer-events: auto;
+          
+          &:hover {
+            color: var(--text-primary);
+          }
+          
+          &.active {
+            background: var(--bg-surface);
+            color: var(--primary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+      
+      // 지도 / 위성 타입 토글 탭
+      .map-type-toggle {
+        display: flex;
+        background: var(--bg-primary);
+        border-radius: 8px;
+        padding: 2px;
+        gap: 2px;
+        margin-left: var(--spacing-sm);
+        margin-right: var(--spacing-xl);
+        flex-shrink: 0;
+        pointer-events: auto;
+        
+        @media (max-width: 768px) {
+          margin-right: var(--spacing-lg);
+        }
+        
+        @media (max-width: 480px) {
+          margin-right: var(--spacing-md);
+        }
+        
+        .map-type-btn {
+          background: transparent;
+          border: none;
+          padding: 6px 10px;
+          border-radius: 6px;
+          font-size: 13px;
+          font-weight: 500;
+          font-family: var(--font-text);
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          min-width: 45px;
+          white-space: nowrap;
+          pointer-events: auto;
+          
+          &:hover {
+            color: var(--text-primary);
+          }
+          
+          &.active {
+            background: var(--bg-surface);
+            color: var(--primary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+    }
+    
+    .map-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      margin: 0 var(--spacing-xl);
+      
+      @media (max-width: 768px) {
+        margin: 0 var(--spacing-lg);
+      }
+      
+      @media (max-width: 480px) {
+        margin: 0 var(--spacing-md);
+      }
+      
+      .kakao-map {
+        width: 100% !important;
+        height: 300px !important;
+        position: relative; // 오버레이 위치 기준점
+        border-radius: 12px;
+      }
+      
+      // 줌 컨트롤 - 제거됨
+      .map-zoom-controls {
+        display: none !important;
+        position: absolute;
+        right: var(--spacing-lg);
+        top: var(--spacing-lg);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        z-index: 10;
+        
+        .zoom-btn {
+          width: 40px;
+          height: 40px;
+          background: var(--bg-surface);
+          border: 2px solid var(--border);
+          border-radius: var(--border-radius-md);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            background: var(--bg-primary);
+            border-color: var(--primary);
+            color: var(--primary);
+          }
+          
+          &:active {
+            background: var(--primary-light);
+          }
+        }
+      }
+      
+      // 지도 타입 컨트롤 - 제거됨
+      .map-type-controls {
+        display: none !important;
+        position: absolute;
+        right: var(--spacing-lg);
+        bottom: var(--spacing-lg);
+        display: flex;
+        gap: 2px;
+        z-index: 10;
+        background: var(--bg-surface);
+        border-radius: var(--border-radius-md);
+        overflow: hidden;
+        border: 2px solid var(--border);
+        
+        .map-type-btn {
+          padding: var(--spacing-sm) var(--spacing-lg);
+          background: transparent;
+          border: none;
+          font-size: var(--font-size-small);
+          font-weight: 600;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            background: var(--bg-primary);
+            color: var(--primary);
+          }
+          
+          &.active {
+            background: var(--primary);
+            color: white;
+          }
+          
+          &:not(:last-child) {
+            border-right: 1px solid var(--border);
+          }
+        }
+      }
+      
+      // 경기 구역 설정 버튼
+      .zone-control {
+        position: absolute;
+        left: var(--spacing-lg);
+        top: var(--spacing-lg);
+        z-index: 10;
+        
+        .zone-setup-btn {
+          padding: var(--spacing-md) var(--spacing-xl);
+          background: var(--primary);
+          border: none;
+          border-radius: var(--border-radius-lg);
+          font-size: var(--font-size-body);
+          font-weight: 600;
+          color: white;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 16px rgba(7, 150, 105, 0.2);
+          
+          &:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(7, 150, 105, 0.3);
+          }
+          
+          &:active {
+            transform: translateY(0);
+          }
+        }
+      }
+      
+      .map-placeholder {
+        width: 100%;
+        height: 300px;
+        background: var(--bg-surface);
+        border-radius: 0 0 12px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed var(--border);
+        
+        .loading-spinner {
+          width: 40px;
+          height: 40px;
+          border: 4px solid var(--border);
+          border-top: 4px solid var(--primary);
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: var(--spacing-md);
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        p {
+          margin: 0;
+          font-size: var(--font-size-body);
+        }
+        
+        .loading-progress {
+          width: 120px;
+          height: 4px;
+          background: var(--border);
+          border-radius: 2px;
+          overflow: hidden;
+          margin-top: var(--spacing-md);
+          
+          .progress-bar {
+            height: 100%;
+            width: 30%;
+            background: var(--primary);
+            border-radius: 2px;
+            animation: loading-progress 1.5s ease-in-out infinite;
+          }
+        }
+        
+        @keyframes loading-progress {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(400%);
+          }
+        }
+      }
+      
+      // 지도 오버레이 컨트롤
+      .map-overlay-controls {
+        position: absolute;
+        top: var(--spacing-lg);
+        left: var(--spacing-lg);
+        z-index: 1000;
+        pointer-events: auto;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        
+        .zoom-controls {
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-xs);
+          
+          .zoom-btn {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: var(--border-radius-sm);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            
+            &:hover {
+              border-color: var(--primary);
+              color: var(--primary);
+              background: var(--primary-light);
+            }
+          }
+        }
+        
+        
+        .control-btn {
+          background: var(--bg-surface);
+          border: 1px solid var(--border);
+          color: var(--text-primary);
+          padding: var(--spacing-md) var(--spacing-lg);
+          border-radius: var(--border-radius-md);
+          font-size: var(--font-size-body);
+          font-family: var(--font-text);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+          pointer-events: auto;
+          z-index: 1001;
+          position: relative;
+          
+          &:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          }
+          
+          &.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(7, 150, 105, 0.3);
+          }
+        }
+      }
+      
+      @media (max-width: 768px) {
+        height: auto;
+        
+        .map-overlay-controls {
+          top: var(--spacing-md);
+          left: var(--spacing-md);
+          
+          .zoom-controls {
+            .zoom-btn {
+              width: 32px;
+              height: 32px;
+              font-size: 16px;
+            }
+          }
+          
+          .control-btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-size: var(--font-size-small);
+          }
+        }
+      }
+      
+      @media (max-width: 480px) {
+        height: auto;
+        
+        .map-overlay-controls {
+          top: var(--spacing-sm);
+          left: var(--spacing-sm);
+          
+          .zoom-controls {
+            .zoom-btn {
+              width: 28px;
+              height: 28px;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 경기장 이름 입력 섹션
+  .ground-name-section {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-xl);
+    
+    @media (max-width: 768px) {
+      padding: 0 var(--spacing-lg);
+    }
+    
+    @media (max-width: 480px) {
+      padding: 0 var(--spacing-md);
+    }
+    
+    .section-title {
+      font-family: var(--font-brand);
+      font-size: var(--font-size-h3);
+      font-weight: 600;
+      margin: 0 0 var(--spacing-md) 0;
+      color: var(--text-primary);
+      text-align: left;
+    }
+    
+    .ground-name-input-container {
+      width: 100%;
+      box-sizing: border-box;
+      
+      .input-label {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+        color: var(--text-secondary);
+        font-size: var(--font-size-small);
+        font-weight: 500;
+      }
+      
+      .text-input {
+        width: 100%;
+        max-width: 400px;
+        min-width: 0;
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: 2px solid var(--border);
+        border-radius: var(--border-radius-md);
+        font-size: var(--font-size-body);
+        font-family: var(--font-text);
+        outline: none;
+        transition: all 0.2s ease;
+        background: var(--bg-surface);
+        color: var(--text-primary);
+        box-sizing: border-box;
+        
+        &:focus {
+          border-color: var(--primary);
+          box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+        }
+        
+        &::placeholder {
+          color: var(--text-disabled);
+        }
+      }
+    }
+    
+    @media (max-width: 768px) {
+      margin-bottom: var(--spacing-lg);
+      
+      .ground-name-input-container {
+        width: 100%;
+        
+        .text-input {
+          max-width: 100%;
+          min-width: 0;
+        }
+      }
+    }
+    
+    @media (max-width: 480px) {
+      margin-bottom: var(--spacing-md);
+    }
+  }
+
+  // 설정 정보 섹션
+  .setup-info-section {
+    margin-bottom: var(--spacing-2xl);
+    
+    .section-title {
+      font-family: var(--font-brand);
+      font-size: var(--font-size-h3);
+      font-weight: 600;
+      margin: 0 0 var(--spacing-lg) 0;
+      color: var(--text-primary);
+    }
+    
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-lg);
+      
+      .info-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--border-radius-lg);
+        padding: var(--spacing-xl);
+        display: flex;
+        align-items: flex-start;
+        gap: var(--spacing-lg);
+        transition: all 0.2s ease;
+        
+        &:hover {
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          border-color: var(--primary);
+        }
+        
+        .info-icon {
+          width: 48px;
+          height: 48px;
+          background: var(--primary-light);
+          border-radius: var(--border-radius-md);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 20px;
+          flex-shrink: 0;
+        }
+        
+        .info-content {
+          flex: 1;
+          
+          h4 {
+            font-family: var(--font-text);
+            font-size: var(--font-size-h4);
+            font-weight: 600;
+            margin: 0 0 var(--spacing-sm) 0;
+            color: var(--text-primary);
+          }
+          
+          p {
+            margin: 0 0 var(--spacing-xs) 0;
+            color: var(--text-secondary);
+            font-size: var(--font-size-small);
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        
+        .info-card {
+          padding: var(--spacing-lg);
+          
+          .info-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+
+  // 완료 섹션
+  .complete-section {
+    display: flex;
+    justify-content: center;
+    padding: var(--spacing-xl) var(--spacing-xl) 100px var(--spacing-xl);
+    
+    @media (max-width: 768px) {
+      padding: var(--spacing-xl) var(--spacing-lg) 100px var(--spacing-lg);
+    }
+    
+    @media (max-width: 480px) {
+      padding: var(--spacing-xl) var(--spacing-md) 100px var(--spacing-md);
+    }
+    
+    .btn-complete {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: var(--spacing-lg) var(--spacing-3xl);
+      border-radius: var(--border-radius-lg);
+      font-size: var(--font-size-body);
+      font-family: var(--font-text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 200px;
+      
+      &:hover:not(:disabled) {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(7, 150, 105, 0.3);
+      }
+      
+      &:disabled {
+        background: var(--text-disabled);
+        cursor: not-allowed;
+        opacity: 0.6;
+        transform: none;
+        box-shadow: none;
+      }
+      
+      @media (max-width: 768px) {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+  }
+
+  // 로딩 컨테이너
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    color: var(--text-secondary);
+    font-size: var(--font-size-body);
+  }
+}
+
+// 전역 애니메이션
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 카드 호버 효과
+.player-ground-selection-self-2-1 .info-card,
+.player-ground-selection-self-2-1 .map-overlay-controls .control-btn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+// 경기 구역 커스텀 오버레이 스타일
+.game-zone-overlay {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  
+  .zone-rectangle {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: move;
+    transition: transform 0.1s ease;
+    
+    .zone-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 3px solid var(--primary);
+      background: rgba(7, 150, 105, 0.2);
+      border-radius: 4px;
+      pointer-events: auto;
+    }
+    
+    // 크기 조절 핸들
+    .zone-handle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--bg-surface);
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+      
+      &:hover {
+        background: var(--primary);
+        transform: scale(1.2);
+      }
+      
+      &.handle-tl {
+        top: -6px;
+        left: -6px;
+        cursor: nw-resize;
+      }
+      
+      &.handle-tr {
+        top: -6px;
+        right: -6px;
+        cursor: ne-resize;
+      }
+      
+      &.handle-br {
+        bottom: -6px;
+        right: -6px;
+        cursor: se-resize;
+      }
+      
+      &.handle-bl {
+        bottom: -6px;
+        left: -6px;
+        cursor: sw-resize;
+      }
+      
+      // 회전 핸들
+      &.handle-rotate {
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 24px;
+        height: 24px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: grab;
+        background: var(--primary);
+        color: var(--bg-surface);
+        border-color: var(--primary);
+        
+        &:hover {
+          background: var(--primary-hover);
+          border-color: var(--primary-hover);
+        }
+        
+        &:active {
+          cursor: grabbing;
+        }
+      }
+    }
+  }
+  
+  &.editing {
+    .zone-border {
+      border-width: 2px;
+      border-style: dashed;
+      animation: dash-animation 0.5s linear infinite;
+    }
+  }
+}
+
+@keyframes dash-animation {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 10;
+  }
+}
+
+// 반응형 디자인 개선
+@media (max-width: 480px) {
+  .player-ground-selection-self-2-1 {
+    .main-content {
+      padding: 0 var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .header-section {
+      margin-bottom: var(--spacing-2xl);
+      
+      .page-title {
+        font-size: 24px;
+      }
+    }
+    
+    .map-section {
+      margin-bottom: var(--spacing-xl);
+      
+      .map-header {
+        padding: var(--spacing-sm) 0;
+        
+        .map-title {
+          font-size: 18px;
+        }
+        
+        .map-controls {
+          flex-wrap: wrap;
+          gap: var(--spacing-sm);
+          
+          .map-mode-toggle {
+            flex: 1 1 auto;
+            min-width: 140px;
+            
+            .map-mode-btn {
+              flex: 1;
+            }
+          }
+          
+          .map-type-toggle {
+            flex: 1 1 auto;
+            min-width: 120px;
+            margin-left: 0;
+            
+            .map-type-btn {
+              flex: 1;
+            }
+          }
+        }
+      }
+      
+    }
+    
+    .setup-info-section {
+      margin-bottom: var(--spacing-2xl);
+      
+      .section-title {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+// DOM 오버레이 스타일 - 완전히 비활성화
+.zone-dom-overlay-root,
+.zone-direct-overlay {
+  display: none !important;
+  pointer-events: none !important;
+  
+  .zone-box {
+    display: none !important;
+    pointer-events: none !important;
+  }
+  
+  .zone-handle,
+  .zone-handle-direct {
+    display: none !important;
+    pointer-events: none !important;
+  }
+  
+  .rotate-handle,
+  .rotate-handle-direct {
+    display: none !important;
+    pointer-events: none !important;
+  }
+}
+
+// 카카오맵 기본 컨트롤 z-index 낮추기
+.kakao-map {
+  div[class*="control_"] {
+    z-index: 1 !important;
+  }
+  
+  div[class*="copyright"] {
+    z-index: 1 !important;
+  }
+}
+
+// 구역 설정 오버레이 스타일
+.zone-direct-overlay {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99999 !important;
+  pointer-events: none !important; // 오버레이 자체는 이벤트 무시
+  visibility: visible !important;
+  
+  // JavaScript에서 토글 가능하도록 display는 !important 제거
+  &.show {
+    display: block !important;
+  }
+  
+  &.hide {
+    display: none !important;
+  }
+  
+  .zone-box-direct {
+    position: absolute !important;
+    border: 3px solid var(--primary) !important; // 브랜드 그린
+    background: rgba(7, 150, 105, 0.2) !important; // 투명한 초록색 (불투명도 20%)
+    border-radius: var(--border-radius-md) !important;
+    cursor: move !important;
+    pointer-events: auto !important; // 박스만 이벤트 활성화
+    z-index: 100000 !important;
+    box-shadow: 0 4px 12px rgba(7, 150, 105, 0.25) !important;
+    visibility: visible !important;
+    min-width: 30px !important; // 최소 크기 30px로 조정 (JS와 일치)
+    min-height: 30px !important;
+    display: block; // JavaScript 토글 가능하도록 !important 제거
+    
+    &:hover {
+      background: rgba(7, 150, 105, 0.25) !important; // 호버 시 약간 더 진하게
+      box-shadow: 0 6px 16px rgba(7, 150, 105, 0.35) !important;
+    }
+  }
+  
+  .zone-handle-direct {
+    position: absolute !important;
+    width: 24px !important;
+    height: 24px !important;
+    background: var(--bg-surface) !important;
+    border: 3px solid var(--primary) !important;
+    border-radius: 50% !important;
+    pointer-events: auto !important;
+    z-index: 100001 !important;
+    box-shadow: 0 4px 12px rgba(7, 150, 105, 0.35) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    
+    &:hover {
+      transform: scale(1.15) !important;
+      box-shadow: 0 6px 16px rgba(7, 150, 105, 0.45) !important;
+    }
+  }
+  
+  .rotate-handle-direct {
+    position: absolute !important;
+    width: 34px !important;
+    height: 34px !important;
+    background: var(--bg-surface) !important;
+    border: 2px solid var(--primary) !important;
+    border-radius: 50% !important;
+    pointer-events: auto !important;
+    z-index: 100002 !important;
+    box-shadow: 0 4px 12px rgba(7, 150, 105, 0.35) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 18px 18px !important;
+    
+    // 디자인 시스템 아이콘: 새로고침 아이콘 (회전 핸들 의미)
+    background-image: url('../../../assets/main_icons/refresh_black.png') !important;
+    
+    &:hover {
+      transform: scale(1.1) !important;
+      box-shadow: 0 6px 16px rgba(7, 150, 105, 0.5) !important;
+    }
+  }
+}

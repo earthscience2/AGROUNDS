@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../onboard/css/GetStarted.scss';
-import bottomLogo from '../../../assets/logo/buttom_logo.png';
-import leftArrow from '../../../assets/common/left.png';
-import rightArrow from '../../../assets/common/right.png';
-import checkGreenIcon from '../../../assets/common/check_green.png';
+import '../css/LoginModal.scss';
+import bottomLogo from '../../../assets/text_icon/logo_text_gray.png';
+import leftArrow from '../../../assets/main_icons/back_black.png';
+import rightArrow from '../../../assets/main_icons/front_black.png';
+import checkGreenIcon from '../../../assets/color_icons/check_green.png';
 
 const Sign_in_4 = () => {
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
   const [userInfo, setUserInfo] = useState({
     userType: '',
     userLevel: '',
@@ -46,6 +47,13 @@ const Sign_in_4 = () => {
   const [showRegionModal, setShowRegionModal] = useState(false);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     // 이전 페이지에서 저장된 정보 가져오기
     const nickname = localStorage.getItem('userNickname');
     const height = localStorage.getItem('userHeight');
@@ -81,7 +89,8 @@ const Sign_in_4 = () => {
       ...prev,
       [fieldName]: value
     }));
-    // 모달창은 닫지 않고 유지
+    // 선택 후 모달창 자동으로 닫기
+    setShowModal(false);
   };
 
   const closeModal = () => {
@@ -120,9 +129,13 @@ const Sign_in_4 = () => {
       { value: 'GK', label: 'GK', color: '#F59E0B' }
     ],
     aiPersonality: [
-      { value: 'professional', label: '전문적으로' },
-      { value: 'friendly', label: '친근하게' },
-      { value: 'strict', label: '엄격하게' }
+      { value: 'strict_leader', label: '엄격한 리더' },
+      { value: 'emotional_support_girl', label: '감성적 서포트 (여성)' },
+      { value: 'emotional_support_boy', label: '감성적 서포트 (남성)' },
+      { value: 'mentor', label: '멘토' },
+      { value: 'data_analyst', label: '데이터 분석가' },
+      { value: 'cheerleader', label: '응원단장' },
+      { value: 'casual_friend', label: '편한 친구' }
     ]
   };
 
@@ -142,6 +155,7 @@ const Sign_in_4 = () => {
         navigate('/app/login');
         return;
       }
+      
       const payload = {
         user_id: encodeURIComponent(encryptedEmail),
         password: '0',
@@ -161,7 +175,7 @@ const Sign_in_4 = () => {
         user_type: userInfo.userType || '',
         level: userInfo.userLevel || '',
         activity_area: userInfo.activityArea || '',
-        ai_type: userInfo.aiPersonality || ''
+        ai_type: userInfo.aiPersonality || 'casual_friend'
       };
 
       const serverBase = window.location.hostname === 'localhost' ? 'https://agrounds.com' : 'https://agrounds.com';
@@ -200,85 +214,42 @@ const Sign_in_4 = () => {
   };
 
   return (
-    <div className='background'>
-      <button 
-        onClick={handleGoBack}
-        style={{
-          position: 'absolute',
-          top: '40px',
-          left: '20px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          zIndex: 10,
-          padding: '8px'
-        }}
-      >
-        <img src={leftArrow} alt="뒤로가기" style={{width: '24px', height: '24px'}} />
-      </button>
+    <div className={`login-page ${isVisible ? 'visible' : ''}`}>
+      <div className='login-content'>
+        <button 
+          className='back-button'
+          onClick={handleGoBack}
+          aria-label='뒤로가기'
+        >
+          <img src={leftArrow} alt='뒤로가기' className='back-icon' />
+        </button>
 
-      <div 
-        className='content'
-        style={{
-          alignItems: 'flex-start',
-          textAlign: 'left',
-          width: '100%',
-          height: 'auto',
-          paddingTop: '96px',
-          paddingLeft: 'calc(72px + env(safe-area-inset-left))',
-          paddingRight: '72px',
-          gap: '12px'
-        }}
-      >
-        <h1 style={{
-          fontSize: '34px',
-          fontWeight: '800',
-          color: '#000000',
-          margin: '0',
-          lineHeight: '1.2',
-          paddingLeft: '40px',
-          paddingRight: '40px'
-        }}>
-          추가정보
-        </h1>
-        <p style={{
-          fontSize: '16px',
-          color: '#6F6F6F',
-          margin: '8px 0 20px 0',
-          lineHeight: '1.4',
-          paddingLeft: '40px',
-          paddingRight: '40px'
-        }}>
-          추가 정보를 입력해주세요
-        </p>
+        <div className='login-header' style={{ alignItems: 'flex-start', paddingTop: '96px', gap: '8px' }}>
+          <h1 className='text-h1' style={{ margin: 0, color: 'var(--text-primary)' }}>추가정보</h1>
+          <p className='text-body' style={{ color: 'var(--text-secondary)', margin: '8px 0 24px 0' }}>추가 정보를 입력해주세요</p>
 
-        {/* 정보 입력 필드들 */}
-        <div style={{
-          width: '86%',
-          margin: '0 auto'
-        }}>
-          {/* 사용자 유형 */}
-          <div 
-            onClick={() => openModal('userType', '사용자 유형', fieldOptions.userType)}
-            style={{
-              backgroundColor: '#E9EEF1',
-              borderRadius: '20px',
-              padding: '20px 24px',
-              marginBottom: '12px',
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              border: userInfo.userType ? '2px solid #079669' : '2px solid transparent'
-            }}
-          >
-            <span style={{
-              fontSize: '16px',
-              color: '#000000',
-              fontWeight: '500'
-            }}>
-              {userInfo.userType ? fieldOptions.userType.find(opt => opt.value === userInfo.userType)?.label : '사용자 유형'}
-            </span>
+          {/* 정보 입력 필드들 */}
+          <div style={{ width: '100%' }}>
+            {/* 사용자 유형 */}
+            <div 
+              onClick={() => openModal('userType', '사용자 유형', fieldOptions.userType)}
+              style={{
+                backgroundColor: 'var(--bg-primary)',
+                borderRadius: '20px',
+                padding: '20px 24px',
+                marginBottom: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                border: userInfo.userType ? '2px solid var(--primary)' : '2px solid transparent',
+                transition: 'all 0.2s ease',
+                boxSizing: 'border-box'
+              }}
+            >
+              <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>
+                {userInfo.userType ? fieldOptions.userType.find(opt => opt.value === userInfo.userType)?.label : '사용자 유형'}
+              </span>
             <img 
               src={rightArrow} 
               alt="선택" 
@@ -290,28 +261,26 @@ const Sign_in_4 = () => {
             />
           </div>
 
-          {/* 사용자 수준 */}
-          <div 
-            onClick={() => openModal('userLevel', '사용자 수준', fieldOptions.userLevel)}
-            style={{
-              backgroundColor: '#E9EEF1',
-              borderRadius: '20px',
-              padding: '20px 24px',
-              marginBottom: '12px',
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              border: userInfo.userLevel ? '2px solid #079669' : '2px solid transparent'
-            }}
-          >
-            <span style={{
-              fontSize: '16px',
-              color: '#000000',
-              fontWeight: '500'
-            }}>
-              {userInfo.userLevel ? fieldOptions.userLevel.find(opt => opt.value === userInfo.userLevel)?.label : '사용자 수준'}
-            </span>
+            {/* 사용자 수준 */}
+            <div 
+              onClick={() => openModal('userLevel', '사용자 수준', fieldOptions.userLevel)}
+              style={{
+                backgroundColor: 'var(--bg-primary)',
+                borderRadius: '20px',
+                padding: '20px 24px',
+                marginBottom: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                border: userInfo.userLevel ? '2px solid var(--primary)' : '2px solid transparent',
+                transition: 'all 0.2s ease',
+                boxSizing: 'border-box'
+              }}
+            >
+              <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>
+                {userInfo.userLevel ? fieldOptions.userLevel.find(opt => opt.value === userInfo.userLevel)?.label : '사용자 수준'}
+              </span>
             <img 
               src={rightArrow} 
               alt="선택" 
@@ -323,28 +292,26 @@ const Sign_in_4 = () => {
             />
           </div>
 
-          {/* 선호 포지션 */}
-          <div 
-            onClick={() => openModal('preferredPosition', '선호 포지션', fieldOptions.preferredPosition)}
-            style={{
-              backgroundColor: '#E9EEF1',
-              borderRadius: '20px',
-              padding: '20px 24px',
-              marginBottom: '12px',
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              border: userInfo.preferredPosition ? '2px solid #079669' : '2px solid transparent'
-            }}
-          >
-            <span style={{
-              fontSize: '16px',
-              color: '#000000',
-              fontWeight: '500'
-            }}>
-              {userInfo.preferredPosition ? fieldOptions.preferredPosition.find(opt => opt.value === userInfo.preferredPosition)?.label : '선호 포지션'}
-            </span>
+            {/* 선호 포지션 */}
+            <div 
+              onClick={() => openModal('preferredPosition', '선호 포지션', fieldOptions.preferredPosition)}
+              style={{
+                backgroundColor: 'var(--bg-primary)',
+                borderRadius: '20px',
+                padding: '20px 24px',
+                marginBottom: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                border: userInfo.preferredPosition ? '2px solid var(--primary)' : '2px solid transparent',
+                transition: 'all 0.2s ease',
+                boxSizing: 'border-box'
+              }}
+            >
+              <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>
+                {userInfo.preferredPosition ? fieldOptions.preferredPosition.find(opt => opt.value === userInfo.preferredPosition)?.label : '선호 포지션'}
+              </span>
             <img 
               src={rightArrow} 
               alt="선택" 
@@ -356,24 +323,26 @@ const Sign_in_4 = () => {
             />
           </div>
 
-          {/* 활동지역 - 모달 트리거 */}
-          <div 
-            onClick={() => setShowRegionModal(true)}
-            style={{
-              backgroundColor: '#E9EEF1',
-              borderRadius: '20px',
-              padding: '20px 24px',
-              marginBottom: '12px',
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              border: userInfo.activityArea ? '2px solid #079669' : '2px solid transparent'
-            }}
-          >
-            <span style={{ fontSize:'16px', color:'#000000', fontWeight: '500' }}>
-              {userInfo.activityArea ? userInfo.activityArea : '활동지역'}
-            </span>
+            {/* 활동지역 - 모달 트리거 */}
+            <div 
+              onClick={() => setShowRegionModal(true)}
+              style={{
+                backgroundColor: 'var(--bg-primary)',
+                borderRadius: '20px',
+                padding: '20px 24px',
+                marginBottom: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                border: userInfo.activityArea ? '2px solid var(--primary)' : '2px solid transparent',
+                transition: 'all 0.2s ease',
+                boxSizing: 'border-box'
+              }}
+            >
+              <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>
+                {userInfo.activityArea ? userInfo.activityArea : '활동지역'}
+              </span>
             <img 
               src={rightArrow} 
               alt="선택" 
@@ -381,28 +350,26 @@ const Sign_in_4 = () => {
             />
           </div>
 
-          {/* AI 성격 */}
-          <div 
-            onClick={() => openModal('aiPersonality', 'AI 성격', fieldOptions.aiPersonality)}
-            style={{
-              backgroundColor: '#E9EEF1',
-              borderRadius: '20px',
-              padding: '20px 24px',
-              marginBottom: '12px',
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              border: userInfo.aiPersonality ? '2px solid #079669' : '2px solid transparent'
-            }}
-          >
-            <span style={{
-              fontSize: '16px',
-              color: '#000000',
-              fontWeight: '500'
-            }}>
-              {userInfo.aiPersonality ? fieldOptions.aiPersonality.find(opt => opt.value === userInfo.aiPersonality)?.label : 'AI 성격'}
-            </span>
+            {/* AI 성격 */}
+            <div 
+              onClick={() => openModal('aiPersonality', 'AI 성격', fieldOptions.aiPersonality)}
+              style={{
+                backgroundColor: 'var(--bg-primary)',
+                borderRadius: '20px',
+                padding: '20px 24px',
+                marginBottom: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                border: userInfo.aiPersonality ? '2px solid var(--primary)' : '2px solid transparent',
+                transition: 'all 0.2s ease',
+                boxSizing: 'border-box'
+              }}
+            >
+              <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>
+                {userInfo.aiPersonality ? fieldOptions.aiPersonality.find(opt => opt.value === userInfo.aiPersonality)?.label : 'AI 성격'}
+              </span>
             <img 
               src={rightArrow} 
               alt="선택" 
@@ -413,10 +380,10 @@ const Sign_in_4 = () => {
               }}
             />
           </div>
+          </div>
         </div>
-      </div>
 
-      {/* 모달창 */}
+        {/* 모달창 */}
       {showModal && (
         <div style={{
           position: 'fixed',
@@ -431,13 +398,14 @@ const Sign_in_4 = () => {
           justifyContent: 'center'
         }}>
           <div style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--bg-surface)',
             borderRadius: '20px',
             padding: '24px',
             width: '90%',
             maxWidth: '400px',
             maxHeight: '80vh',
-            overflow: 'auto'
+            overflow: 'auto',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
           }}>
             <div style={{
               display: 'flex',
@@ -445,12 +413,7 @@ const Sign_in_4 = () => {
               alignItems: 'center',
               marginBottom: '20px'
             }}>
-              <h3 style={{
-                fontSize: '20px',
-                fontWeight: '600',
-                color: '#000000',
-                margin: 0
-              }}>
+              <h3 className='text-h3' style={{ color: 'var(--text-primary)', margin: 0 }}>
                 {modalTitle}
               </h3>
               <button
@@ -460,7 +423,7 @@ const Sign_in_4 = () => {
                   border: 'none',
                   fontSize: '24px',
                   cursor: 'pointer',
-                  color: '#9E9E9E'
+                  color: 'var(--text-disabled)'
                 }}
               >
                 ×
@@ -479,19 +442,13 @@ const Sign_in_4 = () => {
                   style={{
                     padding: '16px',
                     borderRadius: '12px',
-                    backgroundColor: '#F8F9FA',
+                    backgroundColor: 'var(--bg-primary)',
                     cursor: 'pointer',
-                    border: '2px solid transparent',
+                    border: userInfo[currentField] === option.value ? '2px solid var(--primary)' : '2px solid transparent',
                     transition: 'all 0.2s ease',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = '#E9EEF1';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = '#F8F9FA';
                   }}
                 >
                   <div style={{
@@ -507,11 +464,7 @@ const Sign_in_4 = () => {
                         backgroundColor: option.color
                       }} />
                     )}
-                    <span style={{
-                      fontSize: '16px',
-                      color: '#000000',
-                      fontWeight: '500'
-                    }}>
+                    <span className='text-body' style={{ color: 'var(--text-primary)', fontWeight: '500' }}>
                       {option.label}
                     </span>
                   </div>
@@ -541,19 +494,41 @@ const Sign_in_4 = () => {
           display:'flex', alignItems:'center', justifyContent:'center'
         }}>
           <div style={{
-            background:'#FFFFFF', borderRadius:'20px', width:'90%', maxWidth:'420px',
-            maxHeight:'80vh', overflow:'hidden', boxShadow:'0 10px 24px rgba(0,0,0,0.2)'
+            background: 'var(--bg-surface)', 
+            borderRadius: '20px', 
+            width: '90%', 
+            maxWidth: '420px',
+            maxHeight: '80vh', 
+            overflow: 'hidden', 
+            boxShadow: '0 10px 24px rgba(0,0,0,0.2)'
           }}>
             {/* 헤더 */}
-            <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'16px 18px', borderBottom:'1px solid #EFEFEF'}}>
-              <strong style={{fontSize:'18px'}}>활동지역 선택</strong>
-              <button onClick={()=>setShowRegionModal(false)} style={{background:'none',border:'none',fontSize:'22px',cursor:'pointer',color:'#9E9E9E'}}>×</button>
+            <div style={{
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between', 
+              padding: '16px 18px', 
+              borderBottom: '1px solid var(--border)'
+            }}>
+              <strong className='text-h4' style={{ color: 'var(--text-primary)' }}>활동지역 선택</strong>
+              <button 
+                onClick={() => setShowRegionModal(false)} 
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '22px',
+                  cursor: 'pointer',
+                  color: 'var(--text-disabled)'
+                }}
+              >
+                ×
+              </button>
             </div>
 
             {/* 바디: 시도 / 시군구 2열 */}
-            <div style={{display:'flex', gap:'0', height:'360px'}}>
+            <div style={{ display: 'flex', gap: '0', height: '360px' }}>
               {/* 시도 컬럼 */}
-              <div style={{flex:'1 1 50%', borderRight:'1px solid #F0F0F0', overflowY:'auto'}}>
+              <div style={{ flex: '1 1 50%', borderRight: '1px solid var(--border)', overflowY: 'auto' }}>
                 {sidoList.map(s => (
                   <div
                     key={s}
@@ -567,9 +542,12 @@ const Sign_in_4 = () => {
                       }
                     }}
                     style={{
-                      padding:'14px 16px', cursor:'pointer',
-                      background: selectedSido===s ? '#F2FBF7' : '#FFFFFF',
-                      color:'#111', borderLeft: selectedSido===s ? '3px solid #079669' : '3px solid transparent'
+                      padding: '14px 16px', 
+                      cursor: 'pointer',
+                      background: selectedSido === s ? '#F2FBF7' : 'var(--bg-surface)',
+                      color: 'var(--text-primary)', 
+                      borderLeft: selectedSido === s ? '3px solid var(--primary)' : '3px solid transparent',
+                      fontFamily: 'var(--font-text)'
                     }}
                   >
                     {s}
@@ -578,7 +556,7 @@ const Sign_in_4 = () => {
               </div>
 
               {/* 시군구 컬럼 */}
-              <div style={{flex:'1 1 50%', overflowY:'auto'}}>
+              <div style={{ flex: '1 1 50%', overflowY: 'auto' }}>
                 {(sigunguMap[selectedSido] || []).map(g => (
                   <div
                     key={g}
@@ -592,9 +570,12 @@ const Sign_in_4 = () => {
                       }
                     }}
                     style={{
-                      padding:'14px 16px', cursor:'pointer',
-                      background: selectedSigungu===g ? '#F2FBF7' : '#FFFFFF',
-                      color:'#111', borderLeft: selectedSigungu===g ? '3px solid #079669' : '3px solid transparent'
+                      padding: '14px 16px', 
+                      cursor: 'pointer',
+                      background: selectedSigungu === g ? '#F2FBF7' : 'var(--bg-surface)',
+                      color: 'var(--text-primary)', 
+                      borderLeft: selectedSigungu === g ? '3px solid var(--primary)' : '3px solid transparent',
+                      fontFamily: 'var(--font-text)'
                     }}
                   >
                     {g}
@@ -604,13 +585,30 @@ const Sign_in_4 = () => {
             </div>
 
             {/* 푸터 */}
-            <div style={{padding:'12px 16px', borderTop:'1px solid #EFEFEF', display:'flex', gap:'10px'}}>
+            <div style={{
+              padding: '12px 16px', 
+              borderTop: '1px solid var(--border)', 
+              display: 'flex', 
+              gap: '10px'
+            }}>
               <button
-                onClick={()=>{ setSelectedSido(''); setSelectedSigungu(''); }}
-                style={{flex:1, height:'44px', border:'1px solid #E5E5E5', borderRadius:'12px', background:'#FFFFFF', color:'#6F6F6F', fontWeight:600, cursor:'pointer'}}
-              >초기화</button>
+                onClick={() => { setSelectedSido(''); setSelectedSigungu(''); }}
+                style={{
+                  flex: 1, 
+                  height: '44px', 
+                  border: '1px solid var(--border)', 
+                  borderRadius: '12px', 
+                  background: 'var(--bg-surface)', 
+                  color: 'var(--text-secondary)', 
+                  fontWeight: 600, 
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-text)'
+                }}
+              >
+                초기화
+              </button>
               <button
-                onClick={()=>{
+                onClick={() => {
                   // 전국, 세종특별자치시는 시군구가 없으므로 시도만 선택해도 완료
                   if(selectedSido && (selectedSigungu || selectedSido === '전국' || selectedSido === '세종특별자치시')){
                     let areaText;
@@ -621,40 +619,50 @@ const Sign_in_4 = () => {
                     } else {
                       areaText = `${selectedSido} ${selectedSigungu}`;
                     }
-                    setUserInfo(prev=>({...prev, activityArea: areaText}));
+                    setUserInfo(prev => ({...prev, activityArea: areaText}));
                     setShowRegionModal(false);
                   }
                 }}
                 disabled={!(selectedSido && (selectedSigungu || selectedSido === '전국' || selectedSido === '세종특별자치시'))}
-                style={{flex:2, height:'44px', border:'none', borderRadius:'12px', background: (selectedSido && (selectedSigungu || selectedSido === '전국' || selectedSido === '세종특별자치시')) ? '#079669' : '#E5E5E5', color:(selectedSido && (selectedSigungu || selectedSido === '전국' || selectedSido === '세종특별자치시'))?'#FFFFFF':'#9E9E9E', fontWeight:700, cursor:(selectedSido && (selectedSigungu || selectedSido === '전국' || selectedSido === '세종특별자치시'))?'pointer':'not-allowed'}}
-              >선택 완료</button>
+                style={{
+                  flex: 2, 
+                  height: '44px', 
+                  border: 'none', 
+                  borderRadius: '12px', 
+                  background: (selectedSido && (selectedSigungu || selectedSido === '전국' || selectedSido === '세종특별자치시')) ? 'var(--primary)' : 'var(--border)', 
+                  color: (selectedSido && (selectedSigungu || selectedSido === '전국' || selectedSido === '세종특별자치시')) ? 'var(--bg-surface)' : 'var(--text-disabled)', 
+                  fontWeight: 700, 
+                  cursor: (selectedSido && (selectedSigungu || selectedSido === '전국' || selectedSido === '세종특별자치시')) ? 'pointer' : 'not-allowed',
+                  fontFamily: 'var(--font-text)'
+                }}
+              >
+                선택 완료
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      <div className='footer'>
-        <div className='cta-area'>
-          <button
-            onClick={handleContinue}
-            disabled={!isValid}
-            style={{
-              width: '100%',
-              height: '60px',
-              border: 'none',
-              borderRadius: '20px',
-              backgroundColor: isValid ? '#079669' : '#E5E5E5',
-              color: isValid ? '#FFFFFF' : '#9E9E9E',
-              fontSize: '18px',
-              fontWeight: '600',
-              cursor: isValid ? 'pointer' : 'not-allowed',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            계속
-          </button>
+        <div className='login-footer'>
+          <div className='login-buttons' style={{ maxWidth: '100%' }}>
+            <button
+              onClick={handleContinue}
+              disabled={!isValid}
+              className='social-login-btn'
+              style={{
+                backgroundColor: isValid ? 'var(--primary)' : 'var(--border)',
+                color: isValid ? 'var(--bg-surface)' : 'var(--text-disabled)',
+                cursor: isValid ? 'pointer' : 'not-allowed',
+                height: '54px',
+                fontSize: '16px',
+                fontWeight: 600
+              }}
+            >
+              계속
+            </button>
+          </div>
+          <img className='brand-image' src={bottomLogo} alt='AGROUNDS' />
         </div>
-        <img className='brand-image' src={bottomLogo} />
       </div>
     </div>
   );

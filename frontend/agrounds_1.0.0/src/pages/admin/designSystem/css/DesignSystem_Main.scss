@@ -1,0 +1,195 @@
+// 디자인 시스템 메인 (네비게이션 허브)
+.design-system-main {
+  width: 100%;
+  max-width: 499px;
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  font-family: var(--font-text);
+  padding: var(--spacing-xl);
+  
+  .ds-header {
+    padding-bottom: var(--spacing-2xl);
+    border-bottom: 2px solid var(--border);
+    margin-bottom: var(--spacing-2xl);
+    
+    .header-actions {
+      margin-bottom: var(--spacing-lg);
+      
+      .back-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--bg-surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        
+        img {
+          width: 20px;
+          height: 20px;
+        }
+        
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+    
+    .header-content {
+      text-align: center;
+      
+      h1 {
+        margin: 0 0 var(--spacing-sm) 0;
+        color: var(--text-primary);
+      }
+      
+      p {
+        margin: 0;
+        color: var(--text-secondary);
+      }
+    }
+  }
+  
+  .ds-sections-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+    
+    .ds-section-card {
+      background: var(--bg-surface);
+      border-radius: 16px;
+      padding: var(--spacing-xl);
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--section-color);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+      }
+      
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        border-color: var(--section-color);
+        
+        &::before {
+          transform: scaleY(1);
+        }
+        
+        .section-arrow {
+          transform: translateX(4px);
+          opacity: 1;
+        }
+      }
+      
+      .section-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: var(--bg-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        
+        img {
+          width: 24px;
+          height: 24px;
+          object-fit: contain;
+        }
+      }
+      
+      .section-content {
+        flex: 1;
+        min-width: 0;
+        
+        .section-title {
+          margin: 0 0 var(--spacing-xs) 0;
+          color: var(--text-primary);
+        }
+        
+        .section-description {
+          margin: 0;
+          color: var(--text-secondary);
+          font-size: 13px;
+          line-height: 1.4;
+        }
+      }
+      
+      .section-arrow {
+        font-size: 24px;
+        color: var(--text-secondary);
+        transition: all 0.3s ease;
+        opacity: 0.5;
+        flex-shrink: 0;
+      }
+    }
+  }
+  
+  .ds-info {
+    .info-card {
+      background: var(--bg-surface);
+      border-radius: 16px;
+      padding: var(--spacing-xl);
+      border: 1px solid var(--border);
+      
+      h3 {
+        margin: 0 0 var(--spacing-lg) 0;
+        color: var(--text-primary);
+      }
+      
+      ul {
+        margin: 0;
+        padding-left: var(--spacing-xl);
+        
+        li {
+          margin-bottom: var(--spacing-sm);
+          color: var(--text-secondary);
+          line-height: 1.6;
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .design-system-main {
+    .ds-sections-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .design-system-main {
+    max-width: 1200px;
+    
+    .ds-sections-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+

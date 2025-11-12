@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LogoBellNav from '../../../components/Logo_bell_Nav';
-import MatchActionModal from '../../../components/MatchActionModal';
+// DSModal variants (디자인 시스템 공용 모달 사용)
+import { MatchActionDSModal } from '../../../components/Modal/variants';
+// DEV NOTE: 모든 모달은 디자인 시스템 공용 DSModal(variants 포함)만 사용합니다. 개별 오버레이/컨테이너 구현 금지.
 import '../css/Anal.scss';
 
 // API
 import { GetUserAnalysisDataApi, GetUserOvrDataApi, GetUserStatsDataApi, GetUserPointDataApi } from '../../../function/api/anal/analApi';
 import { GetMatchDetailApi, UpdateMatchNameApi, DeleteMatchApi, UpdateQuarterNameApi, DeleteQuarterApi } from '../../../function/api/match/matchApi';
+import { GetProfileImageApi } from '../../../function/api/user/userApi';
 
-// 아이콘 import
-import folderIcon from '../../../assets/common/folder.png';
-import rightIcon from '../../../assets/common/right.png';
-import chartIcon from '../../../assets/common/graph-black.png';
-import speedIcon from '../../../assets/common/star.png';
-import distanceIcon from '../../../assets/common/location.png';
-import timeIcon from '../../../assets/common/clock.png';
-import starIcon from '../../../assets/common/star.png';
-import dot3Icon from '../../../assets/common/dot3.png';
+// 아이콘 import (승인된 아이콘 디렉토리 사용)
+import folderIcon from '../../../assets/main_icons/folder_black.png';
+import backIcon from '../../../assets/main_icons/back_black.png';
+import chartIcon from '../../../assets/main_icons/graph_black.png';
+import starIcon from '../../../assets/identify_icon/star.png';
+import optionIcon from '../../../assets/main_icons/option_black.png';
+import sortIcon from '../../../assets/main_icons/sort_black.png';
+import arrowDownIcon from '../../../assets/main_icons/down_gray.png';
+import arrowUpIcon from '../../../assets/main_icons/up_gray.png';
 
 // 더미 프로필 이미지 import
 import defaultProfile from '../../../assets/common/default_profile.png';
@@ -34,13 +37,27 @@ const Anal = () => {
   const [activeQuarter, setActiveQuarter] = useState(1);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [expandedKeyPoint, setExpandedKeyPoint] = useState(null);
+  const [profileImage, setProfileImage] = useState(defaultProfile);
   
   // state에서 matchData와 matchId 가져오기
   const { matchData: passedMatchData, matchId } = location.state || {};
 
   // 프로필 이미지 가져오기 함수
-  const getProfileImage = (userCode) => {
-    return defaultProfile;
+  const getProfileImage = async (userCode) => {
+    if (!userCode) return defaultProfile;
+    
+    try {
+      const response = await GetProfileImageApi(userCode);
+      
+      if (response.data.exists && response.data.image_url) {
+        return response.data.image_url;
+      } else {
+        return defaultProfile;
+      }
+    } catch (error) {
+      return defaultProfile;
+    }
   };
 
   // 포지션별 색상 클래스 반환 함수
@@ -79,6 +96,26 @@ const Anal = () => {
     }
   };
 
+  // 이름 길이에 따른 폰트 크기 클래스 반환 함수 (더 엄격하게)
+  const getNameSizeClass = (name) => {
+    if (!name) return '';
+    
+    const nameLength = name.length;
+    
+    // 한글 20글자 기준으로 더 엄격한 클래스 적용
+    if (nameLength >= 18) {
+      return 'name-extremely-long'; // 18글자 이상시 극도로 작은 폰트 (9px)
+    } else if (nameLength >= 16) {
+      return 'name-very-long'; // 16글자 이상시 매우 작은 폰트 (10px)
+    } else if (nameLength >= 12) {
+      return 'name-long'; // 12글자 이상시 작은 폰트 (12px)
+    } else if (nameLength >= 8) {
+      return 'name-medium'; // 8글자 이상시 중간 폰트 (14px)
+    }
+    
+    return ''; // 7글자 이하는 기본 폰트 (16px)
+  };
+
   // 뒤로가기 함수
   const handleBack = () => {
     navigate('/app/player/folder');
@@ -91,18 +128,12 @@ const Anal = () => {
       const userCode = sessionStorage.getItem('userCode') || localStorage.getItem('user_code') || 'u_1sb8j865530lmh';
       
       if (!userCode) {
-        console.warn('사용자 코드가 없습니다.');
         navigate('/app/player/folder');
         return;
       }
 
-      console.log(`분석 데이터 로드 시작: ${userCode}, matchId: ${matchId}`);
-
       // 매치 상세 정보 먼저 가져오기 (userCode도 함께 전달하여 사용자 정보 포함)
       const matchDetailResponse = await GetMatchDetailApi(userCode, matchId);
-      
-      console.log('API 응답 전체:', matchDetailResponse);
-      console.log('API 응답 데이터:', matchDetailResponse.data);
       
       if (!matchDetailResponse.data) {
         const errorMsg = matchDetailResponse.data?.error || matchDetailResponse.data?.message || '경기 데이터를 불러올 수 없습니다.';
@@ -110,9 +141,6 @@ const Anal = () => {
       }
       
       const matchDetail = matchDetailResponse.data;
-      console.log('매치 상세 정보:', matchDetail);
-      console.log('AI 요약 데이터:', matchDetail.ai_summary);
-      console.log('디버깅 정보:', matchDetail.debug_info);
 
       // API 데이터를 화면 표시용 형태로 변환
       const userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || '사용자';
@@ -128,7 +156,7 @@ const Anal = () => {
         maxSpeed: `${matchDetail.match_stats?.max_speed || 0}km/h`,
         totalDistance: `${(matchDetail.match_stats?.total_distance || 0).toFixed(2)}km`,
 
-        aiAnalysis: matchDetail.ai_summary?.feedback_list || ['AI 분석이 완료되었습니다.'],
+        aiAnalysis: matchDetail.ai_summary?.key_points || [],
         
         // 경기 날짜/시간 정보 처리
         matchDate: matchDetail.match_info?.start_time ? 
@@ -162,6 +190,7 @@ const Anal = () => {
               duration: duration,
               actual_move_time: duration,  // 실제 이동시간
               status: quarter.status || '완료',
+              home: quarter.home,  // home 필드 추가
               points: Math.round(quarter.points || 0),  // 백엔드에서 직접 제공
               distance: quarter.distance ? `${quarter.distance.toFixed(2)}km` : '0km',  // 백엔드에서 직접 제공
               max_speed: quarter.max_speed ? `${quarter.max_speed.toFixed(1)}km/h` : '0km/h',  // 백엔드에서 직접 제공
@@ -176,64 +205,17 @@ const Anal = () => {
         matchInfo: matchDetail.match_info || {}
       };
       
-      console.log('🔧 변환된 데이터:', formattedData);
-      console.log('🔧 사용자 정보:', {
-        playerName: formattedData.playerName,
-        playerPosition: formattedData.playerPosition,
-        userName: userName,
-        userPosition: userPosition
-      });
-      console.log('🔧 AI 분석 데이터:', formattedData.aiAnalysis);
-      console.log('🔧 백엔드 원시 쿼터 데이터:');
-      (matchDetail.quarters || []).forEach((quarter, index) => {
-        console.log(`  백엔드 쿼터 ${index + 1}:`, {
-          quarter_code: quarter.quarter_code,
-          name: quarter.name,
-          duration_minutes: quarter.duration_minutes,
-          points: quarter.points,
-          distance: quarter.distance,
-          max_speed: quarter.max_speed,
-          avg_speed: quarter.avg_speed
-        });
-      });
-      
-      console.log('🔧 변환된 쿼터 데이터:', formattedData.quarters);
-      console.log('🔧 변환된 쿼터별 상세 정보:');
-      formattedData.quarters.forEach((quarter, index) => {
-        console.log(`  변환된 쿼터 ${index + 1}:`, {
-          name: quarter.name,
-          duration: quarter.duration,
-          points: quarter.points,
-          distance: quarter.distance,
-          max_speed: quarter.max_speed
-        });
-      });
-      console.log('🔧 경기 통계:', {
-        matchTime: formattedData.matchTime,
-        quarterCount: formattedData.quarterCount,
-        maxSpeed: formattedData.maxSpeed,
-        totalDistance: formattedData.totalDistance
-      });
-      console.log('🔧 경기 날짜/시간:', {
-        matchDate: formattedData.matchDate,
-        matchStartTime: formattedData.matchStartTime,
-        originalStartTime: matchDetail.match_info?.start_time
-      });
-      
       setMatchData(formattedData);
       
-    } catch (error) {
-      console.error('분석 데이터 로드 실패:', error);
-      
-      // 상세한 에러 정보 로깅
-      if (error.response) {
-        console.error('서버 응답 에러:', error.response.status, error.response.data);
-      } else if (error.request) {
-        console.error('네트워크 에러:', error.request);
-      } else {
-        console.error('요청 에러:', error.message);
+      // 프로필 이미지 가져오기
+      try {
+        const profileImg = await getProfileImage(userCode);
+        setProfileImage(profileImg);
+      } catch (error) {
+        setProfileImage(defaultProfile);
       }
       
+    } catch (error) {
       // API 실패 시 폴더에서 전달받은 기본 정보라도 표시
       if (passedMatchData) {
         const fallbackData = {
@@ -248,7 +230,7 @@ const Anal = () => {
           totalPoints: 0,
           matchDate: passedMatchData.match_date || '날짜 미정',
           matchStartTime: passedMatchData.match_time || '',
-          aiAnalysis: ['경기 데이터를 분석 중입니다. 잠시 후 다시 확인해주세요.'],
+          aiAnalysis: [],
           quarters: []
         };
         setMatchData(fallbackData);
@@ -273,11 +255,15 @@ const Anal = () => {
 
   // 쿼터별 경기 분석 클릭
   const handleQuarterClick = (quarter) => {
-    setActiveQuarter(quarter);
-    console.log(`${quarter}쿼터 분석 상세보기`);
-    
     // 해당 쿼터 데이터 찾기
     const quarterData = matchData.quarters.find(q => q.quarter === quarter);
+    
+    // 비출전 쿼터인 경우 클릭 무시 (status가 'rest'인 경우)
+    if (quarterData && quarterData.status === 'rest') {
+      return;
+    }
+    
+    setActiveQuarter(quarter);
     
     if (quarterData) {
       // 상세 페이지로 네비게이션
@@ -302,12 +288,11 @@ const Anal = () => {
     
     try {
       const userCode = sessionStorage.getItem('userCode') || localStorage.getItem('user_code') || 'u_1sb8j865530lmh';
-      console.log(`쿼터 ${selectedQuarter.quarter} 이름을 "${newName}"으로 변경`);
       
       // API 호출하여 DB 업데이트
       const response = await UpdateQuarterNameApi(userCode, matchId, selectedQuarter.quarter, newName);
       
-      if (response.data.success) {
+      if (response.data && response.data.success) {
         // 성공 시 로컬 상태도 업데이트
         setMatchData(prevData => {
           if (!prevData || !prevData.quarters) return prevData;
@@ -323,13 +308,10 @@ const Anal = () => {
             quarters: updatedQuarters
           };
         });
-        
-        console.log('쿼터 이름이 변경되었습니다.');
       } else {
-        throw new Error(response.data.error || '이름 변경에 실패했습니다.');
+        throw new Error(response.data?.error || '이름 변경에 실패했습니다.');
       }
     } catch (error) {
-      console.error('이름 변경 실패:', error);
       alert('이름 변경에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -340,7 +322,6 @@ const Anal = () => {
     
     try {
       const userCode = sessionStorage.getItem('userCode') || localStorage.getItem('user_code') || 'u_1sb8j865530lmh';
-      console.log(`쿼터 ${selectedQuarter.quarter} 삭제`);
       
       // API 호출하여 DB에서 삭제
       const response = await DeleteQuarterApi(userCode, matchId, selectedQuarter.quarter);
@@ -359,21 +340,23 @@ const Anal = () => {
             quarters: updatedQuarters
           };
         });
-        
-        console.log('쿼터가 삭제되었습니다.');
       } else {
         throw new Error(response.data.error || '삭제에 실패했습니다.');
       }
     } catch (error) {
-      console.error('삭제 실패:', error);
       alert('삭제에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
+  // 키포인트 아코디언 토글
+  const toggleKeyPoint = (index) => {
+    setExpandedKeyPoint(expandedKeyPoint === index ? null : index);
+  };
+
   if (loading) {
     return (
-      <div className='anal-page'>
-        <LogoBellNav showBack={true} onBack={handleBack} />
+      <div className='player-anal-page'>
+        <LogoBellNav logo={true} />
         <div className="loading-container">
           <div className="loading-spinner"></div>
           <p className="text-body">분석 데이터를 불러오는 중...</p>
@@ -384,8 +367,8 @@ const Anal = () => {
 
   if (!matchData) {
     return (
-      <div className='anal-page'>
-        <LogoBellNav showBack={true} onBack={handleBack} />
+      <div className='player-anal-page'>
+        <LogoBellNav logo={true} />
         <div className="error-container">
           <p className="text-body">분석 데이터를 찾을 수 없습니다.</p>
         </div>
@@ -394,31 +377,40 @@ const Anal = () => {
   }
 
   return (
-    <div className='anal-page'>
-      <LogoBellNav showBack={true} onBack={handleBack} />
+    <div className='player-anal-page'>
+      <LogoBellNav logo={true} />
       
-      {/* 페이지 헤더 */}
-      <div className="page-header">
-        <h1 className="match-title-large text-h1">{matchData.matchInfo?.name || '개인 경기분석'}</h1>
-        <p className="match-description text-body">경기 데이터를 요약해 보여줘요</p>
-      </div>
+      <div className="anal-container">
+        {/* 헤더 섹션 */}
+        <div className="header">
+          <div className="header-actions">
+            <button className="back-btn" onClick={handleBack}>
+              <img src={backIcon} alt="뒤로가기" />
+            </button>
+            <div className="empty-space"></div>
+          </div>
+          <div className="header-content">
+            <h1 className="text-h2">{matchData.matchInfo?.match_name}</h1>
+            <p className="subtitle text-body">경기 데이터를 요약해 보여줘요</p>
+          </div>
+        </div>
 
-      {/* 통합 정보 카드 */}
-      <div className="player-info-card">
+        {/* 통합 정보 카드 */}
+        <div className="player-info-card">
         <div className="match-info-section">
           <div className="match-info-left">
             <div className="player-profile">
               <div className="player-avatar">
-                <img src={getProfileImage(matchData.userCode)} alt="프로필" />
+                <img src={profileImage} alt="프로필" />
               </div>
-              <div className="player-details">
+              <div className="player-info">
                 <p className={`player-position ${getPositionClass(matchData.playerPosition)} text-h3`} >{matchData.playerPosition}</p>
-                <h2 className="player-name text-h2">{matchData.playerName}</h2>
+                <h2 className={`player-name text-h2 ${getNameSizeClass(matchData.playerName)}`}>{matchData.playerName}</h2>
               </div>
             </div>
             <div className="match-location text-body">{matchData.playerRole}</div>
             <div className="match-datetime text-body">
-              {matchData.matchDate} {matchData.matchStartTime}
+              {matchData.matchDate}
             </div>
           </div>
           <div className="match-info-divider"></div>
@@ -443,86 +435,116 @@ const Anal = () => {
         </div>
       </div>
 
-      {/* AI 요약 */}
-      <div className="analysis-section">
+        {/* AI 요약 */}
+        <div className="analysis-section">
         <div className="section-header">
-          <div className="section-icon">
-            <img src={starIcon} alt="AI 요약" />
-          </div>
-          <h3 className="section-title text-h3">AI 요약</h3>
+          <h3 className="section-title text-h3">AI가 발견한 핵심 포인트</h3>
         </div>
         <div className="ai-analysis">
-          <ul className="analysis-list">
-            {matchData.aiAnalysis && matchData.aiAnalysis.length > 0 ? (
-              matchData.aiAnalysis.map((analysis, index) => (
-                <li key={index} className="analysis-item text-body">
-                  {analysis}
-                </li>
-              ))
-            ) : (
-              <li className="analysis-item text-body">
-                AI 분석 데이터를 불러오는 중입니다...
-              </li>
-            )}
-          </ul>
+          {matchData.aiAnalysis && matchData.aiAnalysis.length > 0 ? (
+            <div className="key-points-list">
+              {matchData.aiAnalysis.map((keyPoint, index) => (
+                <div key={index} className={`key-point-card ${expandedKeyPoint === index ? 'expanded' : ''}`}>
+                  <div 
+                    className="key-point-header" 
+                    onClick={() => toggleKeyPoint(index)}
+                  >
+                    <div className="key-point-quarter text-caption">{keyPoint.quarter}</div>
+                    <h4 className="key-point-label text-h4">{keyPoint.label}</h4>
+                    <div className="expand-icon">
+                      <img 
+                        src={expandedKeyPoint === index ? arrowUpIcon : arrowDownIcon} 
+                        alt={expandedKeyPoint === index ? '접기' : '펼치기'} 
+                      />
+                    </div>
+                  </div>
+                  
+                  {expandedKeyPoint === index && (
+                    <div className="key-point-content">
+                      <div className="key-point-insight text-body">
+                        {keyPoint.insight}
+                      </div>
+                      <div className="key-point-value text-body">
+                        {keyPoint.value}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="no-analysis text-body">
+              AI 분석 데이터를 불러오는 중입니다...
+            </div>
+          )}
         </div>
       </div>
 
-      {/* 쿼터별 경기 분석 */}
-      {matchData.quarters.length > 0 && (
-        <div className="analysis-section">
+        {/* 쿼터별 경기 분석 */}
+        {matchData.quarters.length > 0 && (
+          <div className="analysis-section">
           <div className="section-header">
             <h3 className="section-title text-h3">쿼터별 경기 분석</h3>
             <span className="section-subtitle text-caption">{matchData.quarters.length}개 쿼터</span>
           </div>
           <div className="quarters-list">
-            {matchData.quarters.map((quarter) => (
-              <div 
-                key={quarter.quarter} 
-                className="quarter-card"
-                onClick={() => handleQuarterClick(quarter.quarter)}
-              >
-                <div className="quarter-info">
-                  <div className="quarter-icon">
-                    <img src={folderIcon} alt="쿼터" />
+            {matchData.quarters.map((quarter) => {
+              // status가 'rest'이면 비출전, 'play'면 출전
+              const isNonPlay = quarter.status === 'rest';
+              
+              return (
+                <div 
+                  key={quarter.quarter} 
+                  className={`quarter-card ${isNonPlay ? 'disabled' : ''}`}
+                  onClick={() => handleQuarterClick(quarter.quarter)}
+                >
+                  <div className="quarter-info">
+                    <div className="quarter-icon">
+                      <img src={folderIcon} alt="쿼터" />
+                    </div>
+                    <div className="quarter-details">
+                      <h4 className="quarter-title text-h4">{quarter.name}</h4>
+                      <p className="quarter-meta text-caption">
+                        {isNonPlay 
+                          ? "비출전" 
+                          : `${quarter.duration}분 • ${quarter.points}점 • ${quarter.distance}`
+                        }
+                      </p>
+                    </div>
                   </div>
-                  <div className="quarter-details">
-                    <h4 className="quarter-title text-h4">{quarter.name}</h4>
-                    <p className="quarter-meta text-caption">
-                      {quarter.duration}분 • {quarter.points}점 • {quarter.distance}
-                    </p>
+                  <div className="quarter-actions">
+                    <button 
+                      className="more-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMoreClick(quarter);
+                      }}
+                    >
+                      <img src={optionIcon} alt="더보기" />
+                    </button>
                   </div>
                 </div>
-                <div className="quarter-actions">
-                  <button 
-                    className="more-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleMoreClick(quarter);
-                    }}
-                  >
-                    <img src={dot3Icon} alt="더보기" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           
 
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* 쿼터 액션 모달 */}
-      {isModalOpen && selectedQuarter && (
-        <MatchActionModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          matchData={selectedQuarter}
-          matchTitle={selectedQuarter.name}
-          onRename={handleRename}
-          onDelete={handleDelete}
-        />
-      )}
+        {/* 쿼터 액션 모달 - DSModal */}
+        {isModalOpen && selectedQuarter && (
+          <MatchActionDSModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            matchData={selectedQuarter}
+            matchTitle={selectedQuarter.name}
+            onRename={handleRename}
+            onDelete={handleDelete}
+            hideDelete={true}
+          />
+        )}
+      </div>
     </div>
   );
 };

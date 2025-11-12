@@ -1,0 +1,919 @@
+// 디자인 시스템 색상 및 간격 변수 사용
+.team-make {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  width: 100%;
+  max-width: 499px;
+  margin: 0 auto;
+  
+  * {
+    box-sizing: border-box; // 전체 박스 사이징 적용
+  }
+  
+  .team-make-container {
+    padding: 0 var(--spacing-xl);
+    padding-bottom: calc(var(--spacing-4xl) * 2); // 하단 여백 더 크게 (80px)
+    
+    // 모바일 대응
+    @media (max-width: 768px) {
+      padding: 0 var(--spacing-lg);
+      padding-bottom: calc(var(--spacing-4xl) * 2); // 모바일에서도 하단 여백 더 크게
+    }
+    
+    // 헤더 섹션
+    .header {
+      padding: 6px 0 var(--spacing-xl) 0;
+
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-2xl);
+
+        .back-btn {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: var(--bg-surface);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          transition: all var(--transition-normal, 0.2s ease);
+          min-height: 44px;
+          min-width: 44px;
+          
+          img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+          }
+          
+          &:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+          }
+
+          &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          }
+        }
+
+        .empty-space {
+          width: 40px;
+        }
+      }
+
+      .header-content {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+
+        h1 {
+          margin: 0 0 var(--spacing-sm) 0;
+          font-family: var(--font-brand);
+          font-size: 24px;
+          font-weight: 800;
+          color: var(--text-primary);
+        }
+
+        .subtitle {
+          margin: 0;
+          font-family: var(--font-text);
+          font-size: 14px;
+          color: var(--text-secondary);
+          line-height: 1.4;
+        }
+      }
+    }
+    
+    // 폼 섹션 공통 스타일
+    .form-section {
+      background: var(--bg-surface);
+      border-radius: 16px;
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-lg);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      
+      .section-title {
+        color: var(--text-primary);
+        margin: 0 0 var(--spacing-lg) 0;
+        font-family: var(--font-brand);
+      }
+      
+      // 로고 업로드 섹션
+      .logo-upload-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        .logo-preview {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          overflow: hidden;
+          position: relative;
+          cursor: pointer;
+          background: var(--bg-primary);
+          border: 3px solid var(--border);
+          transition: all var(--transition-normal, 0.2s ease);
+          
+          &:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            
+            .camera-overlay {
+              opacity: 1;
+            }
+          }
+          
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            
+            &.default-logo {
+              padding: 20px;
+              opacity: 0.5;
+            }
+          }
+          
+          .camera-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+            transition: opacity var(--transition-normal, 0.2s ease);
+            
+            img {
+              width: 20px;
+              height: 20px;
+            }
+          }
+        }
+        
+        .help-text {
+          color: var(--text-secondary);
+          margin-top: var(--spacing-sm);
+          text-align: center;
+        }
+      }
+      
+      // 입력 필드 래퍼
+      .input-wrapper {
+        position: relative;
+        
+        .char-count {
+          position: absolute;
+          right: var(--spacing-md);
+          bottom: var(--spacing-md);
+          color: var(--text-disabled);
+          font-size: 11px;
+          pointer-events: none;
+        }
+        
+        // 텍스트 입력 필드
+        .text-input {
+          width: 100%;
+          box-sizing: border-box; // 박스 사이징 추가
+          padding: var(--spacing-md) var(--spacing-lg);
+          padding-right: 60px;
+          border: 2px solid var(--border);
+          border-radius: 12px;
+          font-size: 14px;
+          font-family: var(--font-text);
+          outline: none;
+          transition: all var(--transition-normal, 0.2s ease);
+          background: var(--bg-surface);
+          color: var(--text-primary);
+          
+          &:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+          }
+          
+          &.error {
+            border-color: var(--error);
+            
+            &:focus {
+              box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            }
+          }
+          
+          &::placeholder {
+            color: var(--text-disabled);
+          }
+        }
+        
+        // 텍스트 영역
+        .text-area {
+          width: 100%;
+          box-sizing: border-box; // 박스 사이징 추가
+          padding: var(--spacing-md) var(--spacing-lg);
+          padding-right: 60px;
+          padding-bottom: 30px;
+          border: 2px solid var(--border);
+          border-radius: 12px;
+          font-size: 14px;
+          font-family: var(--font-text);
+          outline: none;
+          transition: all var(--transition-normal, 0.2s ease);
+          background: var(--bg-surface);
+          color: var(--text-primary);
+          resize: vertical;
+          min-height: 120px;
+          line-height: 1.5;
+          
+          &:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+          }
+          
+          &.error {
+            border-color: var(--error);
+            
+            &:focus {
+              box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            }
+          }
+          
+          &::placeholder {
+            color: var(--text-disabled);
+          }
+        }
+      }
+      
+      // 지역 선택기
+      .region-selector {
+        width: 100%;
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        background: var(--bg-surface);
+        cursor: pointer;
+        transition: all var(--transition-normal, 0.2s ease);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 44px;
+        
+        &:hover {
+          border-color: var(--primary);
+        }
+        
+        &.selected {
+          border-color: var(--primary);
+          
+          .region-text {
+            color: var(--text-primary);
+          }
+        }
+        
+        &.error {
+          border-color: var(--error);
+        }
+        
+        .region-text {
+          color: var(--text-disabled);
+          font-size: 14px;
+          
+          &:not(:empty) {
+            color: var(--text-primary);
+          }
+        }
+        
+        .arrow-icon {
+          width: 16px;
+          height: 16px;
+          opacity: 0.5;
+          transition: transform var(--transition-normal, 0.2s ease);
+        }
+      }
+      
+      // 에러 메시지
+      .error-message {
+        color: var(--error);
+        margin-top: var(--spacing-xs);
+        margin-bottom: 0;
+      }
+    }
+    
+    // 버튼 섹션
+    .button-section {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-2xl);
+      margin-bottom: var(--spacing-4xl); // 하단 마진 추가
+      padding-bottom: var(--spacing-4xl); // 추가 패딩으로 더 많은 여백
+      
+      button {
+        flex: 1;
+        padding: var(--spacing-md) var(--spacing-xl);
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: var(--font-text);
+        cursor: pointer;
+        transition: all var(--transition-normal, 0.2s ease);
+        min-height: 44px;
+        border: none;
+        
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+      
+      .cancel-btn {
+        background: var(--bg-surface);
+        color: var(--text-secondary);
+        border: 2px solid var(--border);
+        
+        &:hover:not(:disabled) {
+          border-color: var(--primary);
+          color: var(--primary);
+        }
+      }
+      
+      .submit-btn {
+        background: var(--primary);
+        color: var(--bg-surface);
+        
+        &:hover:not(:disabled) {
+          background: var(--primary-hover);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(7, 150, 105, 0.3);
+        }
+      }
+    }
+  }
+}
+
+// 모달 스타일 (team-make 외부로 이동하여 position: fixed가 정상 동작하도록)
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--spacing-lg);
+  overflow: hidden;
+
+  .modal-content {
+    background: var(--bg-surface);
+    border-radius: 16px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    
+    &.region-modal {
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--spacing-lg) var(--spacing-xl);
+        border-bottom: 1px solid var(--border);
+        
+        h3 {
+          margin: 0;
+          color: var(--text-primary);
+        }
+        
+        .close-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          transition: all var(--transition-normal, 0.2s ease);
+          
+          img {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+          }
+          
+          &:hover {
+            background: var(--bg-primary);
+            
+            img {
+              opacity: 1;
+            }
+          }
+        }
+      }
+      
+      .modal-body {
+        padding: var(--spacing-xl);
+        max-height: 60vh;
+        overflow-y: auto;
+        
+        .region-selection {
+          display: flex;
+          gap: 0; // Sign_in_4와 동일하게 gap 제거
+          height: 360px; // 고정 높이 설정
+          
+          // 모바일에서도 좌우 배치 유지 (Sign_in_4와 동일)
+          @media (max-width: 768px) {
+            flex-direction: row; // 좌우 배치 유지
+            height: 300px; // 모바일에서는 높이 조금 줄임
+          }
+          
+          .sido-section {
+            flex: 1 1 50%; // Sign_in_4와 동일한 flex 설정
+            border-right: 1px solid var(--border); // 구분선 추가
+            overflow-y: auto;
+            
+            h4 {
+              padding: var(--spacing-md) var(--spacing-lg);
+              margin: 0;
+              color: var(--text-primary);
+              font-size: 16px;
+              font-weight: 600;
+              background: var(--bg-primary);
+              border-bottom: 1px solid var(--border);
+            }
+            
+            .option-list {
+              display: flex;
+              flex-direction: column;
+              gap: 0; // gap 제거
+              height: calc(100% - 50px); // 헤더 높이 제외
+              overflow-y: auto;
+              
+              .option-item {
+                padding: 14px 16px; // Sign_in_4와 동일한 패딩
+                cursor: pointer;
+                transition: all var(--transition-normal, 0.2s ease);
+                color: var(--text-primary);
+                font-size: 14px;
+                border: none;
+                border-left: 3px solid transparent; // Sign_in_4와 동일한 좌측 보더
+                background: var(--bg-surface);
+                
+                &:hover {
+                  background: rgba(7, 150, 105, 0.05);
+                }
+                
+                &.selected {
+                  background: rgba(7, 150, 105, 0.05);
+                  border-left-color: var(--primary);
+                }
+              }
+            }
+          }
+          
+          .sigungu-section {
+            flex: 1 1 50%; // Sign_in_4와 동일한 flex 설정
+            overflow-y: auto;
+            
+            h4 {
+              padding: var(--spacing-md) var(--spacing-lg);
+              margin: 0;
+              color: var(--text-primary);
+              font-size: 16px;
+              font-weight: 600;
+              background: var(--bg-primary);
+              border-bottom: 1px solid var(--border);
+            }
+            
+            .option-list {
+              display: flex;
+              flex-direction: column;
+              gap: 0; // gap 제거
+              height: calc(100% - 50px); // 헤더 높이 제외
+              overflow-y: auto;
+              
+              .option-item {
+                padding: 14px 16px; // Sign_in_4와 동일한 패딩
+                cursor: pointer;
+                transition: all var(--transition-normal, 0.2s ease);
+                color: var(--text-primary);
+                font-size: 14px;
+                border: none;
+                border-left: 3px solid transparent; // Sign_in_4와 동일한 좌측 보더
+                background: var(--bg-surface);
+                
+                &:hover {
+                  background: rgba(7, 150, 105, 0.05);
+                }
+                
+                &.selected {
+                  background: rgba(7, 150, 105, 0.05);
+                  border-left-color: var(--primary);
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      .modal-footer {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        border-top: 1px solid var(--border);
+        
+        .confirm-btn {
+          width: 100%;
+          padding: var(--spacing-md) var(--spacing-xl);
+          background: var(--primary);
+          color: var(--bg-surface);
+          border: none;
+          border-radius: 12px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all var(--transition-normal, 0.2s ease);
+          min-height: 44px;
+          
+          &:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+          }
+        }
+      }
+    }
+    
+    // 이미지 크롭 모달
+    &.crop-modal {
+      max-width: 600px;
+      
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--spacing-lg) var(--spacing-xl);
+        border-bottom: 1px solid var(--border);
+        
+        h3 {
+          margin: 0;
+          color: var(--text-primary);
+        }
+        
+        .close-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          transition: all var(--transition-normal, 0.2s ease);
+          
+          img {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+          }
+          
+          &:hover {
+            background: var(--bg-primary);
+            
+            img {
+              opacity: 1;
+            }
+          }
+        }
+      }
+      
+      .crop-container {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        background: var(--bg-primary);
+        
+        @media (max-width: 768px) {
+          height: 300px;
+        }
+      }
+      
+      .crop-controls {
+        padding: var(--spacing-xl);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        
+        label {
+          color: var(--text-secondary);
+          font-weight: 500;
+        }
+        
+        .zoom-slider {
+          width: 100%;
+          height: 4px;
+          border-radius: 2px;
+          background: var(--border);
+          outline: none;
+          cursor: pointer;
+          -webkit-appearance: none;
+          appearance: none;
+          
+          &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: all var(--transition-normal, 0.2s ease);
+            
+            &:hover {
+              background: var(--primary-hover);
+              transform: scale(1.1);
+            }
+          }
+          
+          &::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition-normal, 0.2s ease);
+            
+            &:hover {
+              background: var(--primary-hover);
+              transform: scale(1.1);
+            }
+          }
+        }
+      }
+      
+      .modal-footer {
+        display: flex;
+        gap: var(--spacing-md);
+        padding: var(--spacing-lg) var(--spacing-xl);
+        border-top: 1px solid var(--border);
+        
+        button {
+          flex: 1;
+          padding: var(--spacing-md) var(--spacing-xl);
+          border-radius: 12px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all var(--transition-normal, 0.2s ease);
+          min-height: 44px;
+        }
+        
+        .cancel-btn {
+          background: var(--bg-surface);
+          color: var(--text-secondary);
+          border: 2px solid var(--border);
+          
+          &:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+          }
+        }
+        
+        .confirm-btn {
+          background: var(--primary);
+          color: var(--bg-surface);
+          border: none;
+          
+          &:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+          }
+        }
+      }
+    }
+    
+    // 테스트 계정 제한 모달
+    &.test-account-modal {
+      background: var(--bg-surface);
+      border-radius: 16px;
+      width: calc(100% - 32px);
+      max-width: 400px;
+      max-height: 80vh;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      margin: auto;
+      position: relative;
+      box-sizing: border-box;
+      
+      .modal-header {
+        padding: var(--spacing-xl);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        background: var(--bg-surface);
+        
+        .modal-title {
+          margin: 0;
+          color: var(--text-primary);
+          font-family: var(--font-text);
+          font-size: 20px;
+          font-weight: 600;
+          flex: 1;
+          text-align: center;
+        }
+        
+        .modal-close {
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 48px;
+          height: 48px;
+          border: none;
+          background: transparent;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          min-width: 44px;
+          min-height: 44px;
+          font-size: 28px;
+          color: var(--text-disabled);
+          
+          &:hover {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+          }
+          
+          &:active {
+            opacity: 0.5;
+          }
+          
+          &:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+          }
+        }
+      }
+      
+      .modal-body {
+        padding: var(--spacing-3xl) var(--spacing-xl);
+        max-height: 60vh;
+        overflow-y: auto;
+        background: var(--bg-surface);
+        text-align: center;
+        
+        p {
+          margin: 0;
+          color: var(--text-primary);
+          font-family: var(--font-text);
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 1.5;
+        }
+      }
+      
+      .modal-footer {
+        padding: var(--spacing-xl);
+        border-top: 1px solid var(--border);
+        display: flex;
+        gap: var(--spacing-sm);
+        background: var(--bg-surface);
+        
+        .confirm-btn {
+          flex: 1;
+          padding: 12px 16px;
+          border-radius: 12px;
+          min-height: 44px;
+          background: var(--primary);
+          color: var(--bg-surface);
+          border: none;
+          font-size: 14px;
+          font-weight: 600;
+          font-family: var(--font-text);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+          }
+          
+          &:active {
+            background: #068556;
+            transform: translateY(0);
+          }
+          
+          &:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+          }
+        }
+      }
+    }
+    
+    // 반응형 대응 (태블릿)
+    @media (max-width: 768px) {
+      &.test-account-modal {
+        width: calc(100% - 24px);
+        max-width: 100%;
+        
+        .modal-header {
+          padding: var(--spacing-lg);
+          
+          .modal-title {
+            font-size: 18px;
+          }
+          
+          .modal-close {
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
+          }
+        }
+        
+        .modal-body {
+          padding: var(--spacing-2xl) var(--spacing-lg);
+          
+          p {
+            font-size: 15px;
+          }
+        }
+        
+        .modal-footer {
+          padding: var(--spacing-lg);
+          gap: var(--spacing-sm);
+        }
+      }
+    }
+    
+    // 반응형 대응 (모바일)
+    @media (max-width: 480px) {
+      &.test-account-modal {
+        width: calc(100% - 16px);
+        
+        .modal-header {
+          padding: var(--spacing-md) var(--spacing-lg);
+          
+          .modal-title {
+            font-size: 17px;
+          }
+        }
+        
+        .modal-body {
+          padding: var(--spacing-xl) var(--spacing-md);
+          
+          p {
+            font-size: 14px;
+          }
+        }
+        
+        .modal-footer {
+          padding: var(--spacing-md) var(--spacing-lg);
+        }
+      }
+    }
+    
+    // 반응형 대응 (매우 작은 화면)
+    @media (max-width: 320px) {
+      &.test-account-modal {
+        width: calc(100% - 12px);
+        
+        .modal-header {
+          padding: var(--spacing-md);
+          
+          .modal-title {
+            font-size: 16px;
+          }
+        }
+        
+        .modal-body {
+          padding: var(--spacing-lg) var(--spacing-md);
+          
+          p {
+            font-size: 14px;
+          }
+        }
+        
+        .modal-footer {
+          padding: var(--spacing-sm) var(--spacing-md);
+          gap: var(--spacing-xs);
+        }
+      }
+    }
+  }
+}

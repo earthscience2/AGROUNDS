@@ -50,7 +50,7 @@ const AnalPostionNavStyle = styled.div`
   .analtitle{
     font-size: 1.8vh;
     font-weight: 700;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
   }
   .rightside{
     height: 2.5vh;

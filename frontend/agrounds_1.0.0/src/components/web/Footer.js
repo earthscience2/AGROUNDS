@@ -28,7 +28,7 @@ const FooterStyle = styled.div`
   justify-content: center;
   align-items: center;
   background-color: white;
-  font-family: 'Pretendard';
+  font-family: var(--font-text);
 
   .text-box {
     width: 60%;

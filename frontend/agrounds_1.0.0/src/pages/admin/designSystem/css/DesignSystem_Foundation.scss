@@ -1,0 +1,518 @@
+// Foundation 페이지 스타일
+.design-system-foundation {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  font-family: 'Pretendard', sans-serif;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+
+  .design-header {
+    background: linear-gradient(135deg, #079669 0%, #079669 100%);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+    
+    .header-actions {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-xl);
+      text-align: left;
+      margin-bottom: var(--spacing-lg);
+      
+      .back-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        
+        img {
+          width: 20px;
+          height: 20px;
+          filter: brightness(0) invert(1);
+        }
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: scale(1.05);
+        }
+      }
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-xl);
+      
+      h1 {
+        margin: 0 0 var(--spacing-sm) 0;
+        font-family: 'Paperlogy-8ExtraBold', sans-serif;
+        font-size: 32px;
+        font-weight: 800;
+        color: white;
+      }
+      
+      p {
+        margin: 0;
+        font-size: 16px;
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .design-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-4xl) var(--spacing-xl);
+    
+    .design-nav {
+      margin-bottom: var(--spacing-2xl);
+      border-bottom: 2px solid var(--border);
+      
+      ul {
+        display: flex;
+        gap: var(--spacing-lg);
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        
+        li {
+          padding: var(--spacing-md) var(--spacing-lg);
+          cursor: pointer;
+          border-bottom: 3px solid transparent;
+          transition: all 0.2s ease;
+          color: var(--text-secondary);
+          font-weight: 500;
+          
+          &:hover {
+            color: var(--text-primary);
+          }
+          
+          &.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+          }
+        }
+      }
+    }
+    
+    .design-content {
+      .design-section {
+        h2 {
+          font-family: 'Paperlogy-8ExtraBold', sans-serif;
+          font-size: 32px;
+          font-weight: 800;
+          margin: 0 0 var(--spacing-lg) 0;
+          color: var(--text-primary);
+        }
+        
+        .section-description {
+          font-size: 16px;
+          color: var(--text-secondary);
+          margin-bottom: var(--spacing-2xl);
+          line-height: 1.6;
+        }
+      }
+    }
+  }
+
+  // 색상 시스템
+  .color-category {
+    margin-bottom: var(--spacing-3xl);
+    
+    h3 {
+      font-family: 'Paperlogy-8ExtraBold', sans-serif;
+      font-size: 24px;
+      margin: 0 0 var(--spacing-xl) 0;
+      color: var(--text-primary);
+    }
+    
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-xl);
+      
+      .color-item {
+        background: var(--bg-surface);
+        border-radius: 12px;
+        padding: var(--spacing-lg);
+        border: 1px solid var(--border);
+        transition: all 0.2s ease;
+        
+        &:hover {
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          transform: translateY(-2px);
+        }
+        
+        .color-swatch {
+          width: 100%;
+          height: 80px;
+          border-radius: 8px;
+          margin-bottom: var(--spacing-md);
+          cursor: pointer;
+          border: 2px solid var(--border);
+          
+          &.white-swatch {
+            border: 2px solid var(--border);
+          }
+        }
+        
+        .color-info {
+          h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 var(--spacing-sm) 0;
+            color: var(--text-primary);
+          }
+          
+          .color-codes {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            flex-wrap: wrap;
+            
+            .color-code {
+              padding: var(--spacing-xs) var(--spacing-sm);
+              background: var(--bg-primary);
+              border-radius: 4px;
+              font-size: 12px;
+              cursor: pointer;
+              transition: all 0.2s ease;
+              
+              &:hover {
+                background: var(--border);
+              }
+            }
+          }
+          
+          .color-usage {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0;
+          }
+          
+          .copy-feedback {
+            display: inline-block;
+            margin-left: var(--spacing-sm);
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  // 타이포그래피
+  .typography-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    
+    .typography-item {
+      background: var(--bg-surface);
+      border-radius: 12px;
+      padding: var(--spacing-xl);
+      border: 1px solid var(--border);
+      
+      .typography-samples {
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-lg);
+        background: var(--bg-primary);
+        border-radius: 8px;
+        
+        .typography-sample {
+          margin-bottom: var(--spacing-md);
+          
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+      
+      .typography-info {
+        h4 {
+          font-size: 18px;
+          font-weight: 600;
+          margin: 0 0 var(--spacing-sm) 0;
+          color: var(--text-primary);
+        }
+        
+        .typography-specs {
+          display: flex;
+          flex-wrap: wrap;
+          gap: var(--spacing-sm);
+          margin-bottom: var(--spacing-sm);
+          
+          span {
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--bg-primary);
+            border-radius: 4px;
+          }
+        }
+        
+        .css-class {
+          display: inline-block;
+          padding: var(--spacing-xs) var(--spacing-sm);
+          background: var(--bg-primary);
+          border-radius: 4px;
+          font-size: 12px;
+          cursor: pointer;
+          margin-bottom: var(--spacing-sm);
+          
+          &:hover {
+            background: var(--border);
+          }
+        }
+        
+        .usage {
+          font-size: 14px;
+          color: var(--text-secondary);
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  // 간격 시스템
+  .spacing-category {
+    margin-bottom: var(--spacing-3xl);
+    
+    h3 {
+      font-family: 'Paperlogy-8ExtraBold', sans-serif;
+      font-size: 24px;
+      margin: 0 0 var(--spacing-xl) 0;
+      color: var(--text-primary);
+    }
+    
+    .spacing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-xl);
+      
+      .spacing-item {
+        background: var(--bg-surface);
+        border-radius: 12px;
+        padding: var(--spacing-lg);
+        border: 1px solid var(--border);
+        
+        .spacing-visual {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-md);
+          margin-bottom: var(--spacing-md);
+          
+          .spacing-sample {
+            background: var(--primary);
+            border-radius: 4px;
+          }
+          
+          .spacing-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+          }
+        }
+        
+        .spacing-info {
+          h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 var(--spacing-xs) 0;
+            color: var(--text-primary);
+          }
+          
+          .spacing-usage {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0 0 var(--spacing-sm) 0;
+          }
+          
+          .spacing-var {
+            display: inline-block;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--bg-primary);
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-bottom: var(--spacing-sm);
+            
+            &:hover {
+              background: var(--border);
+            }
+          }
+          
+          .spacing-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+            
+            .example-tag {
+              font-size: 11px;
+              padding: var(--spacing-xs) var(--spacing-sm);
+              background: var(--bg-primary);
+              border-radius: 4px;
+              color: var(--text-secondary);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 레이아웃 시스템
+  .layout-category {
+    margin-bottom: var(--spacing-3xl);
+    
+    h3 {
+      font-family: 'Paperlogy-8ExtraBold', sans-serif;
+      font-size: 24px;
+      margin: 0 0 var(--spacing-xl) 0;
+      color: var(--text-primary);
+    }
+    
+    .container-showcase,
+    .grid-showcase,
+    .breakpoint-showcase {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-xl);
+      
+      .container-item,
+      .grid-item,
+      .breakpoint-item {
+        background: var(--bg-surface);
+        border-radius: 12px;
+        padding: var(--spacing-lg);
+        border: 1px solid var(--border);
+        
+        .container-visual,
+        .grid-visual,
+        .breakpoint-visual {
+          margin-bottom: var(--spacing-md);
+          
+          .container-content,
+          .grid-demo-container,
+          .device-demo {
+            padding: var(--spacing-lg);
+            background: var(--bg-primary);
+            border-radius: 8px;
+          }
+          
+          .grid-pattern {
+            .grid-cell {
+              background: var(--primary);
+              color: white;
+              padding: var(--spacing-md);
+              border-radius: 4px;
+              text-align: center;
+              font-weight: 600;
+            }
+          }
+        }
+        
+        .container-info,
+        .grid-info,
+        .breakpoint-info {
+          h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 var(--spacing-sm) 0;
+            color: var(--text-primary);
+          }
+          
+          p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0 0 var(--spacing-sm) 0;
+          }
+          
+          .css-class,
+          .grid-columns,
+          .grid-gap,
+          .breakpoint-code {
+            display: inline-block;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--bg-primary);
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-bottom: var(--spacing-sm);
+            
+            &:hover {
+              background: var(--border);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 사용 예제
+  .usage-example {
+    margin-top: var(--spacing-3xl);
+    padding: var(--spacing-xl);
+    background: var(--bg-surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    
+    h3 {
+      font-family: 'Paperlogy-8ExtraBold', sans-serif;
+      font-size: 20px;
+      margin: 0 0 var(--spacing-lg) 0;
+      color: var(--text-primary);
+    }
+    
+    .code-example {
+      pre {
+        background: var(--bg-primary);
+        padding: var(--spacing-lg);
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 0;
+        
+        code {
+          font-family: 'Courier New', monospace;
+          font-size: 13px;
+          line-height: 1.6;
+          color: var(--text-primary);
+        }
+      }
+    }
+  }
+}
+
+// 반응형
+@media (max-width: 768px) {
+  .design-system-foundation {
+    .design-container {
+      padding: var(--spacing-xl) var(--spacing-lg);
+      
+      .design-nav ul {
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        
+        li {
+          padding: var(--spacing-sm) var(--spacing-md);
+          font-size: 14px;
+        }
+      }
+    }
+    
+    .color-grid,
+    .typography-grid,
+    .spacing-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+

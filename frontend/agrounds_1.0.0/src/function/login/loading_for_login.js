@@ -121,7 +121,7 @@ const LoadingPage = () => {
     return(
         <div style={{width: '100%', height:'100vh', display:'flex', flexDirection:'column', 
         alignItems:'center', justifyContent:'center'}}>
-            <div style={{fontWeight: '700', fontSize: '5vh', position:'absolute'}}>AGROUNDS</div>
+            <div style={{fontWeight: '700', fontSize: '5vh', position:'absolute', fontFamily: "'Paperlogy-8ExtraBold', -apple-system, BlinkMacSystemFont, sans-serif"}}>AGROUNDS</div>
             <span style={{position:'absolute', bottom:'20vh'}} className="loader"></span>
         </div>
     )

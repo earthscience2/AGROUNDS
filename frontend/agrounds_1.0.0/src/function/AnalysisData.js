@@ -271,14 +271,14 @@ const ActivityLevelStyle = styled.div`
       color: #6F6F6F;
       font-size: 1.6vh;
       font-weight: 500;
-      font-family: 'Pretendard';
+      font-family: var(--font-text);
       margin: 1vh 0;
     }
     .datadetail{
       color: #393939;
       font-size: 1.6vh;
       font-weight: 600;
-      font-family: 'Pretendard';
+      font-family: var(--font-text);
       margin: 1vh 0;
     }
   }
@@ -305,7 +305,7 @@ const SpeedStyle = styled.div`
       & > p {
         font-size: 1.6vh;
         font-weight: 600;
-        font-family: 'Pretendard';
+        font-family: var(--font-text);
         width: 80%;
         
       }
@@ -331,14 +331,14 @@ const SpeedStyle = styled.div`
       color: #6F6F6F;
       font-size: 1.6vh;
       font-weight: 500;
-      font-family: 'Pretendard';
+      font-family: var(--font-text);
       margin: 1vh 0;
     }
     .datadetail{
       color: #393939;
       font-size: 1.6vh;
       font-weight: 600;
-      font-family: 'Pretendard';
+      font-family: var(--font-text);
       margin: 1vh 0;
     }
   }
@@ -360,14 +360,14 @@ const SprintStyle = styled.div`
       color: #6F6F6F;
       font-size: 1.6vh;
       font-weight: 500;
-      font-family: 'Pretendard';
+      font-family: var(--font-text);
       margin: 1vh 0;
     }
     .datadetail{
       color: #393939;
       font-size: 1.6vh;
       font-weight: 600;
-      font-family: 'Pretendard';
+      font-family: var(--font-text);
       margin: 1vh 0;
     }
   }

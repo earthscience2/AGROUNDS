@@ -11,13 +11,33 @@ import userGrey from '../assets/common/user-grey.png';
 import connectGrey from '../assets/common/connect-grey.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { triggerUpload } from '../function/TriggerUpload';
 
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
+  
+  // 경기분석 관련 페이지들 체크
+  const isAnalysisActive = () => {
+    const analysisPages = [
+      '/app/player/folder',
+      '/app/player/analysis', 
+      '/app/player/anal-detail'
+    ];
+    // /app/anal/ 로 시작하는 모든 페이지도 경기분석으로 간주
+    // (데이터 선택, 경기장 선택, 휴식 구역, 쿼터 정보, 분석 진행 등)
+    return analysisPages.includes(location.pathname) || location.pathname.startsWith('/app/anal/');
+  };
+  
+  // 경기영상 관련 페이지들 체크
+  const isVideoActive = () => {
+    const videoPages = [
+      '/app/player/video-folder',
+      '/app/player/video-list'
+    ];
+    return videoPages.includes(location.pathname);
+  };
 
   return (
     <FooterStyle>
@@ -32,12 +52,12 @@ const Footer = () => {
       <div className='box' onClick={() => navigate('/app/player/folder')}>
         <img
           className='icon'
-          src={isActive('/app/player/folder') ? graphBlack : graphGrey}
+          src={isAnalysisActive() ? graphBlack : graphGrey}
           alt='경기분석'
         />
-        <p className={`title ${isActive('/app/player/folder') ? 'active' : ''}`}>경기분석</p>
+        <p className={`title ${isAnalysisActive() ? 'active' : ''}`}>경기분석</p>
       </div>
-      <div className='box' onClick={triggerUpload}>
+      <div className='box' onClick={() => alert('현재 지원하지 않는 기능입니다.')}>
         <img
           className='icon'
           src={isActive('/app/findstadium') ? connectBlack : connectGrey}
@@ -45,13 +65,13 @@ const Footer = () => {
         />
         <p className={`title ${isActive('/app/findstadium') ? 'active' : ''}`}>업로드</p>
       </div>
-      <div className='box' onClick={() => navigate('/app/video')}>
+      <div className='box' onClick={() => navigate('/app/player/video-folder')}>
         <img
           className='icon'
-          src={isActive('/app/video') ? videoBlack : videoGrey}
+          src={isVideoActive() ? videoBlack : videoGrey}
           alt='경기영상'
         />
-        <p className={`title ${isActive('/app/video') ? 'active' : ''}`}>경기영상</p>
+        <p className={`title ${isVideoActive() ? 'active' : ''}`}>경기영상</p>
       </div>
       <div className='box' onClick={() => navigate('/app/mypage')}>
         <img
@@ -103,7 +123,7 @@ const FooterStyle = styled.div`
     .title{
       font-size: 13px;
       font-weight: 500;
-      font-family: 'Pretendard';
+      font-family: var(--font-text);
       margin: 8px 0;
       color: #A2A9B0;
       &.active {

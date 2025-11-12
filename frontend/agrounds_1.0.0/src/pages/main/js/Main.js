@@ -1,25 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LogoBellNav from '../../../components/Logo_bell_Nav';
-// import MainSummary from '../../../components/Main_Summary';
 import '../css/Main.scss';
-// import Main_Subject from '../../../components/Main_Subject';
-// import { Device, MatchPlan, MatchVideo, MyOvr, MyTeam, NoTeam } from '../../../function/SubjectContents';
-// import RecentMatch from '../../../components/RecentMatch';
 import { useNavigate } from 'react-router-dom';
 import ovrBgImage from '../../../assets/ovr/ovr_bgr.png';
 import ovrNoneImage from '../../../assets/ovr/ovr_none.png';
-import ovrSmallImage from '../../../assets/ovr/ovr_small.png';
+import radarChartIcon from '../../../assets/big_icons/rader.png';
 import positionBlue from '../../../assets/position/blue.png';
 import positionGreen from '../../../assets/position/green.png';
 import positionOrange from '../../../assets/position/orange.png';
 import positionYellow from '../../../assets/position/yellow.png';
 
 import { AnalPositionColor } from '../../../function/PositionColor';
-import { GetUserOvrLast5MatchesApi, GetUserPointLast5MatchesApi, GetQuarterDataApi } from '../../../function/api/anal/analApi';
-import { GetUserInfoApi, EditUserInfoApi } from '../../../function/api/user/userApi';
+import { GetUserOvrLast5MatchesApi, GetUserPointLast5MatchesApi } from '../../../function/api/anal/analApi';
+import { GetUserInfoApi, GetMyTeamInfoApi, GetTeamLogoApi } from '../../../function/api/user/userApi';
+import defaultTeamLogo from '../../../assets/main_icons/team_gray.png';
+import teamBlackIcon from '../../../assets/main_icons/team_black.png';
+import arrowIcon from '../../../assets/main_icons/front_gray.png';
 
 const Main = () => {
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
+
+  // 레벨 한글 변환 함수
+  const getLevelText = (level) => {
+    const levelMap = {
+      'youth': '유소년',
+      'adult': '아마추어',
+      'pro': '프로'
+    };
+    return levelMap[level] || '아마추어';
+  };
+
+  // 이름 길이에 따른 폰트 크기 클래스 반환
+  const getNameSizeClass = (name) => {
+    if (!name) return '';
+    const length = name.length;
+    
+    if (length <= 6) return 'name-size-xl';      // 48px
+    if (length <= 10) return 'name-size-lg';     // 42px
+    if (length <= 15) return 'name-size-md';     // 36px
+    return 'name-size-sm';                       // 30px (16-20글자)
+  };
 
   // 카드 페이지로 이동하는 함수
   const handleCardNavigation = () => {
@@ -35,6 +56,72 @@ const Main = () => {
   const handleFindTeamNavigation = () => {
     navigate('/app/jointeam');
   };
+
+  // 팀 정보 페이지로 이동하는 함수
+  const handleTeamNavigation = () => {
+    if (myTeamInfo.hasTeam && myTeamInfo.teamData) {
+      // 팀 상세 페이지로 이동 (팀 코드는 URL에 노출하지 않음)
+      navigate('/app/team/info');
+    }
+  };
+
+  // 팀 로고 이미지 가져오기 함수
+  const getTeamLogoUrl = async (teamCode) => {
+    if (!teamCode) return defaultTeamLogo;
+    
+    try {
+      const response = await GetTeamLogoApi(teamCode);
+      
+      if (response.data.exists && response.data.image_url) {
+        return response.data.image_url;
+      } else {
+        return defaultTeamLogo;
+      }
+    } catch (error) {
+      return defaultTeamLogo;
+    }
+  };
+
+  // 내 팀 정보 가져오기 함수
+  const fetchMyTeamInfo = async () => {
+    if (!userCode) return;
+
+    try {
+      setMyTeamInfo(prev => ({ ...prev, loading: true, error: null }));
+      
+      const response = await GetMyTeamInfoApi(userCode);
+      
+      if (response.data && response.data.has_team && response.data.team_info) {
+        const teamData = response.data.team_info;
+        
+        // 팀 로고 URL을 API로 가져오기
+        const logoUrl = await getTeamLogoUrl(teamData.team_code);
+        
+        setMyTeamInfo({
+          hasTeam: true,
+          teamData: {
+            ...teamData,
+            logo_url: logoUrl // API에서 가져온 로고 URL로 교체
+          },
+          loading: false,
+          error: null
+        });
+      } else {
+        setMyTeamInfo({
+          hasTeam: false,
+          teamData: null,
+          loading: false,
+          error: null
+        });
+      }
+    } catch (error) {
+      setMyTeamInfo(prev => ({
+        ...prev,
+        loading: false,
+        error: '팀 정보를 불러오는데 실패했습니다.'
+      }));
+    }
+  };
   const [userType, setUserType] = useState(sessionStorage.getItem('userType'));
   const [userCode, setUserCode] = useState(sessionStorage.getItem('userCode'));
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +131,7 @@ const Main = () => {
   const [userData, setUserData] = useState({
     name: "",
     age: 0,
+    level: "",
     position: "",
     ovr: 0,
     maxSpeed: 0,
@@ -52,6 +140,7 @@ const Main = () => {
     defenseIndex: 0
   });
   const [loading, setLoading] = useState(true);
+  const [dataReady, setDataReady] = useState(false);
   const [ovrData, setOvrData] = useState({
     ovr: 0,
     matches_count: 0,
@@ -59,8 +148,20 @@ const Main = () => {
     message: ""
   });
 
+  // 모든 데이터 로딩이 완료되면 페이지 표시
+  useEffect(() => {
+    if (dataReady) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [dataReady]);
+
   const [radarData, setRadarData] = useState({
     point_total: 0,
+    point_attack: 0,
+    point_defense: 0,
     point_stamina: 0,
     point_positiveness: 0,
     point_speed: 0,
@@ -70,13 +171,21 @@ const Main = () => {
 
   const [miniChartData, setMiniChartData] = useState({
     point_total: [0, 0, 0, 0, 0],
+    point_attack: [0, 0, 0, 0, 0],
+    point_defense: [0, 0, 0, 0, 0],
     distance: [0, 0, 0, 0, 0],
     max_speed: [0, 0, 0, 0, 0],
     sprint: [0, 0, 0, 0, 0]
   });
 
+  // 팀 정보 상태
+  const [myTeamInfo, setMyTeamInfo] = useState({
+    hasTeam: false,
+    teamData: null,
+    loading: false,
+    error: null
+  });
 
-  
   // 로그인 상태 감지 및 상태 초기화
   useEffect(() => {
     const currentUserCode = sessionStorage.getItem('userCode');
@@ -84,29 +193,9 @@ const Main = () => {
     const currentLoginTimestamp = sessionStorage.getItem('loginTimestamp');
     const loginCompleted = sessionStorage.getItem('loginCompleted');
     
-    console.log('🔍 로그인 상태 체크:', {
-      currentUserCode,
-      userCode,
-      currentLoginTimestamp,
-      lastLoginTimestamp,
-      loginCompleted
-    });
-    
     // URL 파라미터 확인
     const urlParams = new URLSearchParams(window.location.search);
     const forceRefresh = urlParams.get('refresh');
-    const forceLogout = urlParams.get('logout');
-    
-    // 강제 로그아웃 처리
-    if (forceLogout === 'true') {
-      console.log('🚪 강제 로그아웃 실행');
-      sessionStorage.clear();
-      localStorage.clear();
-      const newUrl = window.location.pathname;
-      window.history.replaceState({}, document.title, newUrl);
-      window.location.href = '/app';
-      return;
-    }
     
     // 강제 초기화 조건들
     const shouldForceReset = 
@@ -116,8 +205,6 @@ const Main = () => {
       (currentLoginTimestamp && currentLoginTimestamp !== lastLoginTimestamp);
     
     if (shouldForceReset) {
-      console.log('🔄 강제 초기화 실행 - 모든 데이터 리셋');
-      
       // URL 정리
       if (forceRefresh === 'true') {
         const newUrl = window.location.pathname;
@@ -129,7 +216,7 @@ const Main = () => {
         sessionStorage.removeItem('loginCompleted');
       }
       
-      // 🔥 모든 상태 강제 초기화
+      // 모든 상태 강제 초기화
       setUserData({
         name: "",
         age: 0,
@@ -159,6 +246,8 @@ const Main = () => {
       
       setMiniChartData({
         point_total: [0, 0, 0, 0, 0],
+        point_attack: [0, 0, 0, 0, 0],
+        point_defense: [0, 0, 0, 0, 0],
         distance: [0, 0, 0, 0, 0],
         max_speed: [0, 0, 0, 0, 0],
         sprint: [0, 0, 0, 0, 0]
@@ -169,13 +258,15 @@ const Main = () => {
       setUserType(sessionStorage.getItem('userType'));
       setLastLoginTimestamp(currentLoginTimestamp);
       setIsLoggedIn(true);
-      setLoading(true); // 로딩 상태로 설정
+      setLoading(true);
       
-      return; // 상태 초기화 후 useEffect 재실행
+      return;
     }
     
     // 일반적인 로그인 상태 확인
-    if (currentUserCode && currentToken) {
+    const isTestMode = sessionStorage.getItem('testMode') === 'true';
+    
+    if (currentUserCode && (currentToken || isTestMode)) {
       if (!isLoggedIn) {
         setUserCode(currentUserCode);
         setUserType(sessionStorage.getItem('userType'));
@@ -183,22 +274,56 @@ const Main = () => {
         setIsLoggedIn(true);
       }
     } else {
-      // 로그아웃 상태
       setIsLoggedIn(false);
     }
   }, []);
 
-  // API에서 사용자 데이터 가져오기 (새로운 DB 구조 반영)
+  // API에서 사용자 데이터 가져오기
   useEffect(() => {
     if (userCode && isLoggedIn) {
+      const loginType = sessionStorage.getItem('loginType');
+      const isTestMode = sessionStorage.getItem('testMode') === 'true';
+      
+      if (loginType === 'test') {
+        const testUserInfo = JSON.parse(sessionStorage.getItem('testUserInfo') || '{}');
+        
+        if (testUserInfo.name) {
+          const calculateAge = (birthDate) => {
+            if (!birthDate) return 25;
+            const birth = new Date(birthDate);
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+              age--;
+            }
+            return age;
+          };
+          
+          const userDataToSet = {
+            name: testUserInfo.name,
+            age: calculateAge(testUserInfo.birth),
+            level: testUserInfo.level || "adult",
+            position: testUserInfo.preferred_position || "FW",
+            ovr: 75, // 테스트용 OVR 값
+            maxSpeed: 85,
+            sprint: 80,
+            attackIndex: 70,
+            defenseIndex: 75
+          };
+          
+          setUserData(userDataToSet);
+          setLoading(false);
+        } else {
+          setLoading(false);
+        }
+      }
+      
       // 실제 API 사용하여 최신 사용자 정보 조회
-      console.log('🔄 사용자 정보 API 호출 시작:', userCode);
       GetUserInfoApi(userCode)
         .then((response) => {
-          console.log('✅ 사용자 정보 API 성공:', response.data);
           const data = response.data;
           
-          // 나이 계산 (birth가 'YYYY-MM-DD' 형식이라고 가정)
           const calculateAge = (birthDate) => {
             if (!birthDate) return 25;
             const birth = new Date(birthDate);
@@ -214,18 +339,19 @@ const Main = () => {
           setUserData({
             name: data.name || "사용자",
             age: calculateAge(data.birth),
+            level: data.level || "adult",
             position: data.preferred_position || "CB",
-            ovr: 0, // OVR은 별도 API에서 가져올 예정
-            maxSpeed: 0, // TODO: 실제 스탯 데이터 연결
+            ovr: 0,
+            maxSpeed: 0,
             sprint: 0,
             attackIndex: 0,
             defenseIndex: 0
           });
           setLoading(false);
           
-          // OVR 데이터 - 실제 데이터 파싱된 API 사용
+          fetchMyTeamInfo();
+          
           const loadOvrData = async () => {
-            // 1차: 새로 구현된 OVR API 시도 (실제 데이터 파싱)
             try {
               const response = await GetUserOvrLast5MatchesApi(userCode);
               const data = response.data;
@@ -235,8 +361,6 @@ const Main = () => {
                 matches_count: data.matches_count || 0,
                 quarter_count: data.quarter_count || 0,
                 message: data.message || "분석 후 지표 확인가능해요",
-                debug_info: data.debug_info || null,
-                // 백엔드에서 계산된 6가지 지표 그대로 사용
                 point: data.point || {
                   total: data.ovr || 0,
                   sprint: 0,
@@ -247,13 +371,14 @@ const Main = () => {
                 },
                 radar_data: data.radar_data || {
                   point_total: data.ovr || 0,
+                  point_attack: data.point_attack || 0,
+                  point_defense: data.point_defense || 0,
                   point_sprint: 0,
                   point_acceleration: 0,
                   point_speed: 0,
                   point_positiveness: 0,
                   point_stamina: 0
                 },
-                // OVR 단독 API에는 미니차트가 없을 수 있어 기본값 유지
                 mini_chart_data: data.mini_chart_data || {
                   point_total: [0, 0, 0, 0, 0],
                   distance: [0, 0, 0, 0, 0],
@@ -262,8 +387,6 @@ const Main = () => {
                 }
               };
             } catch (ovrError) {
-              
-              // 2차: 대체 분석 데이터 API 시도
               const fallbackEndpoints = [
                 { name: 'OVR 데이터', api: () => GetUserOvrLast5MatchesApi(userCode) },
                 { name: '포인트 데이터', api: () => GetUserPointLast5MatchesApi(userCode) }
@@ -271,11 +394,8 @@ const Main = () => {
 
               for (const endpoint of fallbackEndpoints) {
                 try {
-                  console.log(`${endpoint.name} API 시도 중...`);
                   const response = await endpoint.api();
                   const data = response.data;
-                  
-                  console.log(`${endpoint.name} API 성공:`, data);
                   
                   return {
                     ovr: data.ovr || data.total || 0,
@@ -291,6 +411,8 @@ const Main = () => {
                     },
                     radar_data: data.radar_data || {
                       point_total: data.total || 25,
+                      point_attack: data.attack || 25,
+                      point_defense: data.defense || 25,
                       point_sprint: data.sprint || 25,
                       point_acceleration: data.acceleration || 25,
                       point_speed: data.speed || 25,
@@ -305,13 +427,10 @@ const Main = () => {
                     }
                   };
                 } catch (error) {
-                  console.log(`${endpoint.name} API 실패:`, error.response?.status);
-                  continue; // 다음 API 시도
+                  continue;
                 }
               }
               
-              // 모든 API 실패 시 기본값 반환
-              console.log('⚠️ 모든 OVR API 엔드포인트가 실패했습니다. 기본값을 사용합니다.');
               return {
                 ovr: 0,
                 matches_count: 0,
@@ -326,6 +445,8 @@ const Main = () => {
                 },
                 radar_data: {
                   point_total: 0,
+                  point_attack: 0,
+                  point_defense: 0,
                   point_sprint: 0,
                   point_acceleration: 0,
                   point_speed: 0,
@@ -348,15 +469,12 @@ const Main = () => {
                 .then((ovrResponse) => {
                   const data = ovrResponse.data;
                   
-                  
-                  // 데이터 유효성 검사 함수
                   const validateData = (data) => {
                     if (!data) return false;
                     const requiredFields = ['ovr', 'matches_count', 'quarter_count'];
                     return requiredFields.every(field => typeof data[field] !== 'undefined');
                   };
 
-                  // 데이터 정규화 함수
                   const normalizeValue = (value, min = 0, max = 100) => {
                     const num = Number(value);
                     if (!Number.isFinite(num)) return 0;
@@ -381,6 +499,8 @@ const Main = () => {
                     if (data.radar_data) {
                       const normalizedRadarData = {
                         point_total: normalizeValue(data.radar_data.point_total),
+                        point_attack: normalizeValue(data.radar_data.point_attack),
+                        point_defense: normalizeValue(data.radar_data.point_defense),
                         point_sprint: normalizeValue(data.radar_data.point_sprint),
                         point_acceleration: normalizeValue(data.radar_data.point_acceleration),
                         point_speed: normalizeValue(data.radar_data.point_speed),
@@ -390,7 +510,6 @@ const Main = () => {
                       setRadarData(normalizedRadarData);
                     }
                     
-                    // 미니 차트 데이터 설정 (숫자 안전 변환)
                     if (data.mini_chart_data) {
                       const mc = data.mini_chart_data;
                       const toNumArr = (arr, toFloat = false) =>
@@ -404,14 +523,14 @@ const Main = () => {
                           : [0, 0, 0, 0, 0];
                       setMiniChartData({
                         point_total: toNumArr(mc.point_total, false),
+                        point_attack: toNumArr(mc.point_attack, false),
+                        point_defense: toNumArr(mc.point_defense, false),
                         distance: toNumArr(mc.distance, true),
                         max_speed: toNumArr(mc.max_speed, true),
                         sprint: toNumArr(mc.sprint, false),
                       });
                     }
                   } else {
-                    console.warn('유효하지 않은 OVR 데이터:', data);
-                    // 기본값 설정
                     setOvrData({
                       ovr: 0,
                       matches_count: 0,
@@ -419,76 +538,27 @@ const Main = () => {
                       message: "데이터를 불러올 수 없습니다"
                     });
                   }
+                  
+                  setDataReady(true);
                 })
                 .catch((ovrError) => {
-                  console.error('OVR 데이터 로드 실패:', ovrError);
-                  
-                  // 에러 상세 정보 분석
-                  let errorMessage = "알 수 없는 오류가 발생했습니다.";
-                  let detailMessage = "";
-                  
-                  if (ovrError.response) {
-                    // 서버에서 응답이 온 경우
-                    const status = ovrError.response.status;
-                    const data = ovrError.response.data;
-                    
-                    if (status === 500) {
-                      errorMessage = "서버 내부 오류가 발생했습니다.";
-                      if (data && data.error) {
-                        detailMessage = `상세: ${data.error}`;
-                      } else {
-                        detailMessage = "데이터베이스 연결 또는 쿼리 오류일 가능성이 있습니다.";
-                      }
-                    } else if (status === 404) {
-                      errorMessage = "해당 사용자의 경기 데이터를 찾을 수 없습니다.";
-                      detailMessage = "참여한 경기가 없거나 데이터가 아직 처리되지 않았을 수 있습니다.";
-                    } else if (status === 400) {
-                      if (data && data.error && data.error.includes("시간 파싱 실패")) {
-                        errorMessage = "경기 시간 데이터 파싱 실패";
-                        detailMessage = data.error;
-                      } else {
-                        errorMessage = "잘못된 요청입니다.";
-                        detailMessage = data && data.error ? data.error : "사용자 코드가 올바르지 않습니다.";
-                      }
-                    } else {
-                      errorMessage = `서버 오류 (${status})`;
-                      detailMessage = data && data.error ? data.error : "서버에서 예상치 못한 오류가 발생했습니다.";
-                    }
-                  } else if (ovrError.request) {
-                    // 요청은 보냈지만 응답이 없는 경우
-                    errorMessage = "서버 연결 실패";
-                    detailMessage = "서버가 응답하지 않습니다. 네트워크 연결을 확인해주세요.";
-                  } else {
-                    // 요청 설정 중 오류
-                    errorMessage = "요청 설정 오류";
-                    detailMessage = ovrError.message || "요청을 보내는 중 오류가 발생했습니다.";
-                  }
-                  
-                  // 사용자에게 알림 표시
-                  alert(`❌ OVR 데이터 로드 실패\n\n${errorMessage}\n${detailMessage}\n\n개발자 도구의 콘솔을 확인하거나 관리자에게 문의해주세요.`);
-                  
                   setOvrData({
                     ovr: 0,
                     matches_count: 0,
                     quarter_count: 0,
                     message: "데이터를 불러올 수 없습니다"
                   });
+                  
+                  setDataReady(true);
                 });
         })
         .catch((error) => {
-          console.error('사용자 정보 API 로드 실패:', error);
-          console.log('🔄 sessionStorage fallback 사용');
-          
-          // API 실패 시 sessionStorage fallback 사용
           const fallbackData = {
             name: sessionStorage.getItem('userName') || '사용자',
             birth: sessionStorage.getItem('userBirth') || '1999-01-01',
             preferred_position: sessionStorage.getItem('userPosition') || 'CB'
           };
           
-          console.log('📦 fallback 데이터:', fallbackData);
-          
-          // 나이 계산
           const calculateAge = (birthDate) => {
             if (!birthDate) return 25;
             const birth = new Date(birthDate);
@@ -504,6 +574,7 @@ const Main = () => {
           setUserData({
             name: fallbackData.name,
             age: calculateAge(fallbackData.birth),
+            level: "adult",
             position: fallbackData.preferred_position,
             ovr: 0,
             maxSpeed: 0,
@@ -512,38 +583,10 @@ const Main = () => {
             defenseIndex: 0
           });
           
-          // 사용자 정보 로드 실패 알림
-          let errorMessage = "사용자 정보를 불러올 수 없습니다.";
-          let detailMessage = "";
-          
-          if (error.response) {
-            const status = error.response.status;
-            const data = error.response.data;
-            
-            if (status === 404) {
-              errorMessage = "사용자를 찾을 수 없습니다.";
-              detailMessage = "등록되지 않은 사용자이거나 사용자 코드가 올바르지 않습니다.";
-            } else if (status === 500) {
-              errorMessage = "서버 오류가 발생했습니다.";
-              detailMessage = data && data.error ? data.error : "데이터베이스 연결 오류일 가능성이 있습니다.";
-            } else {
-              errorMessage = `서버 오류 (${status})`;
-              detailMessage = data && data.error ? data.error : "예상치 못한 오류가 발생했습니다.";
-            }
-          } else if (error.request) {
-            errorMessage = "서버 연결 실패";
-            detailMessage = "네트워크 연결을 확인해주세요.";
-          } else {
-            errorMessage = "요청 오류";
-            detailMessage = error.message || "요청 처리 중 오류가 발생했습니다.";
-          }
-          
-          alert(`⚠️ 사용자 정보 로드 실패\n\n${errorMessage}\n${detailMessage}\n\n다시 로그인하시거나 관리자에게 문의해주세요.`);
-          
-          // 에러 시 기본값 유지
           setUserData({
             name: "사용자",
             age: 0,
+            level: "adult",
             position: "CB",
             ovr: 0,
             maxSpeed: 0,
@@ -552,34 +595,31 @@ const Main = () => {
             defenseIndex: 0
           });
           setLoading(false);
+          setDataReady(true);
         });
     } else {
       setLoading(false);
+      setDataReady(true);
     }
   }, [userCode, isLoggedIn]);
 
-  // 페이지 포커스 시 로그인 상태 재확인 (재로그인 감지)
+  // 페이지 포커스 시 로그인 상태 재확인
   useEffect(() => {
     const handleFocus = () => {
       const currentUserCode = sessionStorage.getItem('userCode');
       const currentLoginTimestamp = sessionStorage.getItem('loginTimestamp');
       const loginCompleted = sessionStorage.getItem('loginCompleted');
       
-      console.log('👁️ 페이지 포커스 - 로그인 상태 확인');
-      
-      // 새로운 로그인이나 사용자 변경 감지
       if (
         loginCompleted === 'true' ||
         (currentUserCode && currentUserCode !== userCode) ||
         (currentLoginTimestamp && currentLoginTimestamp !== lastLoginTimestamp)
       ) {
-        console.log('🔄 포커스 시 새로운 로그인 감지 - 페이지 새로고침');
         window.location.reload();
       }
     };
 
     window.addEventListener('focus', handleFocus);
-    // 가시성 변경 이벤트도 추가
     document.addEventListener('visibilitychange', handleFocus);
     
     return () => {
@@ -588,45 +628,38 @@ const Main = () => {
     };
   }, [userCode, lastLoginTimestamp]);
 
-  // 부드러운 곡선을 만들기 위한 Cubic Bezier 계산
   const createSmoothPath = (data, width, height) => {
     if (data.length < 2) return '';
     
-    const max = Math.max(...data, 1); // 최소값 1로 설정하여 0으로만 이루어진 경우 처리
+    const max = Math.max(...data, 1);
     const min = Math.min(...data);
     const range = max - min || 1;
     
-    // 그래프가 가장자리에서 잘리지 않도록 내부 패딩 추가 (우측 여백 확대)
     const paddingLeft = 10;
-    const paddingRight = 20; // 끝점 원이 확실히 보이도록 여유 공간 추가
+    const paddingRight = 20;
     const paddingTop = 6;
     const paddingBottom = 6;
     const innerWidth = Math.max(1, width - paddingLeft - paddingRight);
     const innerHeight = Math.max(1, height - paddingTop - paddingBottom);
 
-    // 좌표 계산
     const points = data.map((value, index) => ({
       x: paddingLeft + (index / (data.length - 1)) * innerWidth,
       y: paddingTop + innerHeight - ((value - min) / range) * innerHeight
     }));
     
-    // 첫 번째 점으로 시작
     let path = `M ${points[0].x} ${points[0].y}`;
     
-    // 부드러운 곡선을 위한 cubic bezier curve 생성
     for (let i = 1; i < points.length; i++) {
       const prev = points[i - 1];
       const curr = points[i];
       
       if (i === 1) {
-        // 첫 번째 곡선
         const cp1x = prev.x + (curr.x - prev.x) * 0.3;
         const cp1y = prev.y;
         const cp2x = curr.x - (curr.x - prev.x) * 0.3;
         const cp2y = curr.y;
         path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
       } else {
-        // 중간 점들은 smooth curve로 연결
         const prevPrev = points[i - 2];
         const cp1x = prev.x + (curr.x - prevPrev.x) * 0.15;
         const cp1y = prev.y + (curr.y - prevPrev.y) * 0.15;
@@ -639,7 +672,6 @@ const Main = () => {
     return { path, points };
   };
 
-  // 작은 차트 SVG 생성 함수 (부드러운 곡선)
   const createMiniChart = (data, color = '#22c55e', width = 160, height = 36) => {
     const { path, points } = createSmoothPath(data, width, height);
     const lastPoint = points[points.length - 1];
@@ -655,7 +687,6 @@ const Main = () => {
         preserveAspectRatio="xMidYMid meet"
         className="mini-chart"
       >
-        {/* 부드러운 곡선 */}
         <path
           d={path}
           fill="none"
@@ -663,7 +694,6 @@ const Main = () => {
           strokeWidth="2"
           strokeLinecap="round"
         />
-        {/* 시작/마지막 점 원 표시 (시작: 속 빈 원, 끝: 채운 원) */}
         <circle
           cx={firstPoint.x}
           cy={firstPoint.y}
@@ -682,35 +712,54 @@ const Main = () => {
     );
   };
 
-  // 레이더 차트용 데이터 구성
-  // 6가지 지표: 평점, 스프린트, 가속도, 스피드, 적극성, 체력
-  // 적극성(point_positiveness)과 체력(point_stamina) 순서가 잘못 매핑되어 있어 수정합니다.
+  const calculateParticipation = () => {
+    const attack = radarData.point_attack || 0;
+    const defense = radarData.point_defense || 0;
+    return Math.round((attack + defense) / 2);
+  };
+
   const radarChartData = [
-    { label: '평점', value: radarData.point_total || 0 },
-    { label: '스프린트', value: radarData.point_sprint || 0 },
+    { label: '참여도', value: calculateParticipation() },
+    { label: '속력', value: radarData.point_speed || 0 },
     { label: '가속도', value: radarData.point_acceleration || 0 },
-    { label: '스피드', value: radarData.point_speed || 0 },
+    { label: '스프린트', value: radarData.point_sprint || 0 },
     { label: '적극성', value: radarData.point_positiveness || 0 },
     { label: '체력', value: radarData.point_stamina || 0 }
   ];
 
-
-  // 6가지 지표의 평균 계산
-  const calculateAverageOVR = () => {
-    const values = radarChartData.map(item => item.value);
-    const validValues = values.filter(value => value > 0); // 0보다 큰 값들만 계산
+  const calculateTotalOVR = () => {
+    const pointTotalArray = miniChartData.point_total || [0, 0, 0, 0, 0];
+    const validValues = pointTotalArray.filter(value => value > 0);
     if (validValues.length === 0) return 0;
     const sum = validValues.reduce((acc, value) => acc + value, 0);
-    return Math.round(sum / validValues.length);
+    const average = sum / validValues.length;
+    return Math.round(average);
   };
 
-  // 육각형 좌표 계산 함수 (범위: -25 ~ 100)
+  const calculateAttackDefenseAvg = () => {
+    const attackArray = miniChartData.point_attack || [0, 0, 0, 0, 0];
+    const defenseArray = miniChartData.point_defense || [0, 0, 0, 0, 0];
+    
+    const attackValidValues = attackArray.filter(value => value > 0);
+    const defenseValidValues = defenseArray.filter(value => value > 0);
+    
+    const attackAvg = attackValidValues.length > 0 
+      ? Math.round(attackValidValues.reduce((acc, value) => acc + value, 0) / attackValidValues.length)
+      : 0;
+      
+    const defenseAvg = defenseValidValues.length > 0
+      ? Math.round(defenseValidValues.reduce((acc, value) => acc + value, 0) / defenseValidValues.length)
+      : 0;
+    
+    return { attack: attackAvg, defense: defenseAvg };
+  };
+
   const calculateHexagonPoints = (centerX, centerY, radius, values, minValue = -25, maxValue = 100) => {
     const points = [];
-    for (let i = 0; i < 6; i++) {
-      const angle = (Math.PI / 180) * (i * 60 - 90); // -90도에서 시작 (상단부터)
+    const angleStep = 360 / values.length;
+    for (let i = 0; i < values.length; i++) {
+      const angle = (Math.PI / 180) * (i * angleStep - 90);
       const value = values[i] || 0;
-      // -25 ~ 100 범위를 0 ~ 1로 정규화
       const normalizedValue = Math.max(0, Math.min(1, (value - minValue) / (maxValue - minValue)));
       const scaledRadius = normalizedValue * radius;
       const x = centerX + scaledRadius * Math.cos(angle);
@@ -720,11 +769,11 @@ const Main = () => {
     return points;
   };
 
-  // 육각형 배경 그리드 좌표
   const getGridHexagonPoints = (centerX, centerY, radius) => {
     const points = [];
-    for (let i = 0; i < 6; i++) {
-      const angle = (Math.PI / 180) * (i * 60 - 90);
+    const angleStep = 360 / radarChartData.length;
+    for (let i = 0; i < radarChartData.length; i++) {
+      const angle = (Math.PI / 180) * (i * angleStep - 90);
       const x = centerX + radius * Math.cos(angle);
       const y = centerY + radius * Math.sin(angle);
       points.push({ x, y });
@@ -732,10 +781,10 @@ const Main = () => {
     return points;
   };
 
-  // 라벨 위치 계산
   const getLabelPositions = (centerX, centerY, radius) => {
     return radarChartData.map((item, i) => {
-      const angle = (Math.PI / 180) * (i * 60 - 90);
+      const angleStep = 360 / radarChartData.length;
+      const angle = (Math.PI / 180) * (i * angleStep - 90);
       const labelRadius = radius + 25;
       const x = centerX + labelRadius * Math.cos(angle);
       const y = centerY + labelRadius * Math.sin(angle);
@@ -743,27 +792,21 @@ const Main = () => {
     });
   };
 
-  // 포지션별 이미지 반환 함수
   const getPositionImage = (position) => {
     const pos = position || 'CB';
     
-    // 공격수 (빨간색/주황색)
     if (['LWF', 'ST', 'RWF', 'CF'].includes(pos)) {
       return positionOrange;
     }
-    // 미드필더 (녹색)
     else if (['LWM', 'CAM', 'RWM', 'LM', 'CM', 'RM', 'CDM', 'AMF', 'CMF', 'DMF'].includes(pos)) {
       return positionGreen;
     }
-    // 수비수 (파란색)
     else if (['LWB', 'RWB', 'LB', 'CB', 'RB', 'SW'].includes(pos)) {
       return positionBlue;
     }
-    // 골키퍼 (노란색)
     else if (['GK'].includes(pos)) {
       return positionYellow;
     }
-    // 기본값
     else {
       return positionBlue;
     }
@@ -771,51 +814,27 @@ const Main = () => {
 
   if (loading) {
     return (
-      <div className='main'>
+      <div className='main visible'>
         <LogoBellNav logo={true}/>
         <div style={{ padding: '50px 20px', textAlign: 'center' }}>
-          <p>사용자 정보를 불러오는 중...</p>
+          <p style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-text)' }}>사용자 정보를 불러오는 중...</p>
         </div>
-        
       </div>
     );
   }
 
-  // 강제 로그아웃 함수
-  const handleForceLogout = () => {
-    console.log('🚪 강제 로그아웃 실행');
-    sessionStorage.clear();
-    localStorage.clear();
-    window.location.href = '/app';
-  };
 
   return (
-    <div className='main'>
+    <div className={`main ${isVisible ? 'visible' : ''}`}>
       <LogoBellNav logo={true}/>
       
-      {/* 임시 로그아웃 버튼 - 테스트용 */}
-      <div style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 9999 }}>
-        <button 
-          onClick={handleForceLogout}
-          style={{
-            background: '#ff4444',
-            color: 'white',
-            border: 'none',
-            padding: '8px 12px',
-            borderRadius: '4px',
-            fontSize: '12px',
-            cursor: 'pointer'
-          }}
-        >
-          강제 로그아웃
-        </button>
-      </div>
-      
-      {/* 사용자 정보 섹션 - 디자인 시스템 적용 */}
       <div className="user-info-section">
         <div className="user-details" onClick={handleCardNavigation}>
-          <span className="user-age">만 {userData.age}세</span>
-          <h1 className="user-name text-display">{userData.name}</h1>
+          <div className="user-info-row">
+            <span className="user-level">{getLevelText(userData.level)}</span>
+            <span className="user-age">만 {userData.age}세</span>
+          </div>
+          <h1 className={`user-name text-display ${getNameSizeClass(userData.name)}`}>{userData.name}</h1>
         </div>
         <div 
           className="position-badge" 
@@ -831,39 +850,77 @@ const Main = () => {
         </div>
       </div>
 
-      {/* 메인 카드 2개 - 디자인 시스템 적용 */}
       <div className="main-cards">
-        <div className="team-card">
+        <div className="team-card" onClick={myTeamInfo.hasTeam ? handleTeamNavigation : handleFindTeamNavigation} role="button" tabIndex={0}>
           <div className="card-header">
             <h3 className="text-h4">나의 팀</h3>
-            <span className="arrow" aria-hidden="true">→</span>
+            <img src={arrowIcon} alt="" className="arrow-icon" aria-hidden="true" />
           </div>
-          <p className="team-description text-body-sm">함께할 팀을 찾고 합류해보세요</p>
-          <button 
-            className="find-team-btn btn-primary" 
-            onClick={handleFindTeamNavigation}
-            aria-label="팀 찾기 페이지로 이동"
-          >
-            팀 찾기
-          </button>
+          
+          {myTeamInfo.loading ? (
+            <div className="team-loading">
+              <p className="text-body-sm">팀 정보를 불러오는 중...</p>
+            </div>
+          ) : myTeamInfo.hasTeam && myTeamInfo.teamData ? (
+            <div className="team-info">
+              <div className="team-logo-section">
+                <img 
+                  src={myTeamInfo.teamData.logo_url || defaultTeamLogo} 
+                  alt={`${myTeamInfo.teamData.name} 로고`}
+                  className="team-logo"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.src = defaultTeamLogo;
+                  }}
+                />
+              </div>
+              <div className="team-details">
+                <h4 className="team-name text-h4">{myTeamInfo.teamData.name}</h4>
+              </div>
+            </div>
+          ) : (
+            <div className="no-team">
+              <div className="no-team-content">
+                <img 
+                  src={teamBlackIcon} 
+                  alt="팀 아이콘" 
+                  className="no-team-icon"
+                />
+                <p className="no-team-message">아직 소속된 팀이 없어요</p>
+              </div>
+              <button 
+                className="find-team-btn btn-primary" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFindTeamNavigation();
+                }}
+                aria-label="팀 찾기 페이지로 이동"
+              >
+                팀 찾기
+              </button>
+            </div>
+          )}
+          
+          {myTeamInfo.error && (
+            <p className="error-message text-body-sm">{myTeamInfo.error}</p>
+          )}
         </div>
 
         <div className="analysis-card" onClick={handleAnalysisNavigation} role="button" tabIndex={0}>
           <div className="card-header">
-            <h3 className="text-h4">개인분석</h3>
-            <span className="arrow" aria-hidden="true">→</span>
+            <h3 className="text-h4">경기 분석</h3>
+            <img src={arrowIcon} alt="" className="arrow-icon" aria-hidden="true" />
           </div>
           <div className="radar-chart">
             <img 
-              src={ovrSmallImage} 
-              alt="개인분석 차트" 
+              src={radarChartIcon} 
+              alt="경기 분석 차트" 
               className="analysis-chart-image"
             />
           </div>
         </div>
       </div>
 
-      {/* 나의 OVR 섹션 - 디자인 시스템 적용 */}
       <div className="ovr-title">
         <h3 className="text-h2">나의 OVR</h3>
         <span className="ovr-subtitle text-caption">
@@ -877,7 +934,6 @@ const Main = () => {
       <div className="ovr-section">
           <div className="radar-chart-container">
             <svg width="400" height="400" viewBox="0 0 400 400">
-              {/* 그라데이션 정의 */}
               <defs>
                 <radialGradient id="radarGradient" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stopColor="rgba(34, 197, 94, 0.6)" />
@@ -886,9 +942,7 @@ const Main = () => {
                 </radialGradient>
               </defs>
               
-              {/* 배경 그리드 (-25, 0, 25, 50, 75, 100에 해당하는 그리드) */}
               {[0, 25, 50, 75, 100].map((value, index) => {
-                // -25 ~ 100 범위에서 0 ~ 1로 정규화
                 const normalizedValue = (value - (-25)) / (100 - (-25));
                 const radius = normalizedValue * 140;
                 const gridPoints = getGridHexagonPoints(200, 200, radius);
@@ -903,7 +957,6 @@ const Main = () => {
                 );
               })}
               
-              {/* 축선 */}
               {getGridHexagonPoints(200, 200, 140).map((point, index) => (
                 <line
                   key={`axis-${index}`}
@@ -916,7 +969,6 @@ const Main = () => {
                 />
               ))}
               
-              {/* 데이터 영역 (그라데이션 적용) */}
               {(() => {
                 const values = radarChartData.map(item => item.value);
                 const dataPoints = calculateHexagonPoints(200, 200, 140, values);
@@ -930,37 +982,35 @@ const Main = () => {
                 );
               })()}
               
-              {/* 라벨과 점수 */}
-              {getLabelPositions(200, 200, 140).map((pos, index) => (
-                <g key={`label-group-${index}`}>
-                  {/* 지표 라벨 */}
-                  <text
-                    x={pos.x}
-                    y={pos.y - 8}
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fontSize="14"
-                    fontWeight="600"
-                    fill="#374151"
-                  >
-                    {pos.label}
-                  </text>
-                  {/* 점수 */}
-                  <text
-                    x={pos.x}
-                    y={pos.y + 8}
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fontSize="12"
-                    fontWeight="500"
-                    fill="#6B7280"
-                  >
-                    {radarChartData[index].value || 0}
-                  </text>
-                </g>
-              ))}
+              {getLabelPositions(200, 200, 140).map((pos, index) => {
+                return (
+                  <g key={`label-group-${index}`}>
+                    <text
+                      x={pos.x}
+                      y={pos.y - 8}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontSize="14"
+                      fontWeight="600"
+                      fill="#374151"
+                    >
+                      {pos.label}
+                    </text>
+                    <text
+                      x={pos.x}
+                      y={pos.y + 8}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontSize="12"
+                      fontWeight="500"
+                      fill="#6B7280"
+                    >
+                      {radarChartData[index].value || 0}
+                    </text>
+                  </g>
+                );
+              })}
               
-              {/* 중앙 OVR 점수 (6가지 지표의 평균, 정수로 표시, 검은색) */}
               <text
                 x="200"
                 y="200"
@@ -970,20 +1020,16 @@ const Main = () => {
                 fontWeight="800"
                 fill="#000000"
               >
-{calculateAverageOVR()}
+{calculateTotalOVR()}
               </text>
             </svg>
           </div>
         </div>
-        
 
-
-      {/* 최근 추세 섹션 */}
       <div className="trend-section">
         <h3 className="trend-title text-h3">지표 추이 <span className="text-caption"> 최근 {miniChartData.point_total.filter(val => val > 0).length}경기 수치 그래프</span></h3>
       </div>
 
-      {/* 하단 4개 카드 - 디자인 시스템 적용 */}
       <div className="stats-cards">
         <div className="stat-card">
           <h4 className="text-body">평점</h4>
@@ -1016,7 +1062,7 @@ const Main = () => {
               {createMiniChart(miniChartData.max_speed, 'var(--chart-blue)')}
             </div>
             <div className="stat-number">
-              {Math.round(miniChartData.max_speed[4]) || 0}<span className="unit unit-speed text-caption">km/h</span>
+              {(miniChartData.max_speed[4] || 0).toFixed(1)}<span className="unit unit-speed text-caption">km/h</span>
             </div>
           </div>
         </div>
@@ -1028,14 +1074,11 @@ const Main = () => {
               {createMiniChart(miniChartData.sprint, 'var(--chart-purple)')}
             </div>
             <div className="stat-number">
-              {Math.round(miniChartData.sprint[4]) || 0}<span className="unit text-body-sm">번</span>
+              {Math.round(miniChartData.sprint[4]) || 0}<span className="unit text-body-sm">회</span>
             </div>
           </div>
         </div>
       </div>
-
-
-      
     </div>
   );
 };

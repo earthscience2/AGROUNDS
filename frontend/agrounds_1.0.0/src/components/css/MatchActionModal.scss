@@ -1,0 +1,285 @@
+// MatchActionModal - 디자인 시스템 준수 (FolderActionModal과 동일한 디자인)
+.match-action-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--spacing-lg);
+}
+
+.match-action-modal {
+  background: var(--bg-surface);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: var(--spacing-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  .modal-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-family: var(--font-text);
+    font-size: 20px;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+  }
+
+  .close-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    min-width: 44px;
+    min-height: 44px;
+
+    &:hover {
+      background-color: var(--bg-primary);
+      opacity: 0.7;
+    }
+
+    &:active {
+      opacity: 0.5;
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    img {
+      width: 24px;
+      height: 24px;
+      opacity: 0.6;
+    }
+  }
+}
+
+.modal-content {
+  padding: var(--spacing-xl);
+}
+
+// 액션 리스트 (메뉴 단계)
+.action-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 16px;
+    border: none;
+    background: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    min-height: 44px;
+    font-family: var(--font-text);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+
+    &:hover {
+      background-color: var(--bg-primary);
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    // 아이콘 컨테이너
+    .action-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 30px;
+        height: 30px;
+        opacity: 0.7;
+      }
+    }
+
+    // 위험한 액션 (삭제)
+    &.danger {
+      color: var(--error);
+
+      .action-icon img {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+// 이름 변경 폼
+.rename-form {
+  .text-input {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    font-family: var(--font-text);
+
+    &:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+    }
+
+    &::placeholder {
+      color: var(--text-disabled);
+    }
+
+    &:disabled {
+      background: #F8FAFC;
+      color: var(--text-disabled);
+      cursor: not-allowed;
+    }
+  }
+}
+
+// 삭제 확인
+.delete-confirm {
+  text-align: center;
+
+  .delete-message {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .delete-warning {
+    margin: 0 0 var(--spacing-lg) 0;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+}
+
+// 버튼 그룹
+.button-group {
+  display: flex;
+  gap: var(--spacing-sm);
+
+  .btn-primary, .btn-secondary, .btn-danger {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 44px;
+    font-family: var(--font-text);
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--bg-surface);
+    border: none;
+
+    &:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+  }
+
+  .btn-secondary {
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 2px solid var(--border);
+
+    &:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #F0FDF4;
+    }
+
+    &:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+  }
+
+  .btn-danger {
+    background: var(--error);
+    color: var(--bg-surface);
+    border: none;
+
+    &:hover:not(:disabled) {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    &:focus {
+      outline: 2px solid var(--error);
+      outline-offset: 2px;
+    }
+  }
+
+  button:active {
+    transform: translateY(0);
+  }
+}
+
+// 반응형 디자인
+@media (max-width: 768px) {
+  .match-action-modal-overlay {
+    padding: var(--spacing-md);
+  }
+  
+  .match-action-modal {
+    max-width: 100%;
+  }
+  
+  .modal-header,
+  .modal-content {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+

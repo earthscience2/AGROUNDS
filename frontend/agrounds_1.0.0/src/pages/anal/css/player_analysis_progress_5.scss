@@ -1,0 +1,326 @@
+// 디자인 시스템 CSS 변수
+:root {
+  --primary: #079669;
+  --primary-hover: #068A5B;
+  --success: #079669;
+  --text-primary: #262626;
+  --text-secondary: #6B7078;
+  --text-disabled: #8A8F98;
+  --bg-primary: #F2F4F6;
+  --bg-surface: #FFFFFF;
+  --border: #E2E8F0;
+  --info: #3b82f6;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  --spacing-3xl: 32px;
+  --spacing-4xl: 40px;
+  
+  --font-brand: 'Paperlogy-8ExtraBold', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-text: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.player-analysis-progress-5-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding-bottom: var(--spacing-4xl);
+}
+
+.progress-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+// 헤더
+.header {
+  padding: var(--spacing-2xl) 0;
+  text-align: center;
+  
+  .header-content {
+    h1 {
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--text-primary);
+    }
+    
+    .subtitle {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// 메인 콘텐츠
+.main-content {
+  background: var(--bg-surface);
+  border-radius: 24px;
+  padding: var(--spacing-4xl) var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+// 성공 일러스트레이션
+.success-illustration {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto var(--spacing-3xl) auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .success-icon {
+    position: relative;
+    z-index: 2;
+    animation: bounce 1s ease;
+    
+    svg {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  
+  .success-animation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    
+    .circle-ripple {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      opacity: 0;
+      animation: ripple 2s infinite;
+      
+      &.delay-1 {
+        animation-delay: 0.5s;
+      }
+      
+      &.delay-2 {
+        animation-delay: 1s;
+      }
+    }
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+// 메시지 섹션
+.message-section {
+  h3 {
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--text-primary);
+  }
+  
+  .match-name-display {
+    margin: var(--spacing-md) 0;
+    color: var(--primary);
+    font-weight: 700;
+  }
+  
+  p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+}
+
+// 정보 섹션 제거 (분석 완료 알림 박스 삭제)
+
+// 경기 정보 카드 제거 (민감한 정보 숨김)
+
+// 예상 소요 시간 카드
+.time-info-card {
+  background: #FFF7ED;
+  border-radius: 12px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  border: 1px solid #FED7AA;
+  margin-bottom: var(--spacing-2xl);
+  
+  .time-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  
+  .time-text {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+}
+
+// 액션 버튼
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-2xl);
+  
+  .btn-primary {
+    background: var(--primary);
+    color: var(--bg-surface);
+    border: none;
+    border-radius: 12px;
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font-text);
+    cursor: pointer;
+    width: 100%;
+    min-height: 56px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    
+    &:active {
+      background: #068556;
+      transform: translateY(0);
+    }
+  }
+  
+  .btn-secondary {
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: calc(var(--spacing-lg) - 2px) calc(var(--spacing-2xl) - 2px);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font-text);
+    cursor: pointer;
+    width: 100%;
+    min-height: 56px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #F0FDF4;
+    }
+    
+    &:active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: var(--bg-surface);
+    }
+  }
+}
+
+// 하단 안내 제거
+
+// 반응형 디자인
+@media (max-width: 768px) {
+  .progress-container {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .header {
+    padding: var(--spacing-lg) 0;
+    
+    .header-content {
+      h1 {
+        font-size: 20px;
+      }
+      
+      .subtitle {
+        font-size: 13px;
+      }
+    }
+  }
+  
+  .main-content {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+  
+  .success-illustration {
+    width: 100px;
+    height: 100px;
+    
+    .success-icon {
+      svg {
+        width: 64px;
+        height: 64px;
+      }
+    }
+  }
+  
+  .message-section {
+    h3 {
+      font-size: 18px;
+    }
+    
+    p {
+      font-size: 13px;
+    }
+  }
+  
+  .time-info-card {
+    padding: var(--spacing-sm) var(--spacing-md);
+    
+    .time-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .time-text {
+      font-size: 13px;
+    }
+  }
+  
+  .action-buttons {
+    .btn-primary,
+    .btn-secondary {
+      min-height: 48px;
+      font-size: 15px;
+    }
+  }
+}
+
+// 다크 모드 지원 (선택사항)
+@media (prefers-color-scheme: dark) {
+  // 필요시 다크 모드 스타일 추가
+}

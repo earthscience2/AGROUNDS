@@ -1,0 +1,985 @@
+@mixin display($dis, $dir, $ali, $jus) {
+  display: $dis;
+  flex-direction: $dir;
+  align-items: $ali;
+  justify-content: $jus;
+}
+
+@mixin font($size, $weight, $color){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+.event {
+  @include display(flex, column, center, flex-start);
+  width: 100%;
+  max-width: 499px;
+  margin: 0 auto;
+  background: var(--bg-primary);
+  min-height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+  overflow-x: hidden;
+  font-family: var(--font-text);
+  padding-bottom: 100px;
+  
+  // iOS 스크롤 최적화
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  
+  // MyPage와 동일한 헤더 구조
+  .event-header-container {
+    width: 100%;
+    max-width: 499px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-xl);
+    box-sizing: border-box;
+    
+    @media (max-width: 768px) {
+      padding: 0 var(--spacing-lg);
+    }
+    
+    .header {
+      padding: 6px 0 var(--spacing-xl) 0;
+      
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-2xl);
+        
+        .back-btn {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: var(--bg-surface);
+          border: none;
+          min-height: 44px;
+          min-width: 44px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          
+          img {
+            width: 20px;
+            height: 20px;
+          }
+          
+          &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+          }
+          
+          &:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+          }
+        }
+        
+        .empty-space {
+          width: 44px;
+          height: 44px;
+        }
+      }
+      
+      .header-content {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+        
+        h1 {
+          margin: 0 0 var(--spacing-sm) 0;
+          color: var(--text-primary);
+          font-family: var(--font-brand);
+        }
+        
+        .subtitle {
+          margin: 0;
+          color: var(--text-secondary);
+        }
+      }
+    }
+  }
+  
+  .loading-container {
+    @include display(flex, column, center, center);
+    padding: var(--spacing-4xl);
+    gap: var(--spacing-lg);
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    p {
+      @include font(16px, 500, var(--text-secondary));
+      margin: 0;
+    }
+  }
+  
+  .content-container {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-xl);
+    @include display(flex, column, center, center);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-3xl);
+    
+    @media (max-width: 768px) {
+      padding: 0 var(--spacing-lg);
+    }
+  }
+  
+  // 필터 탭 디자인
+  .filter-tabs {
+    @include display(flex, row, center, center);
+    width: 100%;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--bg-surface);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    margin-bottom: var(--spacing-xl);
+    box-sizing: border-box;
+    
+    .tab-btn {
+      flex: 1;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      @include font(14px, 600, var(--text-secondary));
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-height: 40px;
+      
+      &:hover {
+        background: rgba(7, 150, 105, 0.05);
+        color: var(--primary);
+      }
+      
+      &.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        box-shadow: 0 2px 8px rgba(7, 150, 105, 0.2);
+        
+        &:hover {
+          background: var(--primary-hover);
+        }
+      }
+      
+      &:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+      }
+    }
+  }
+  
+  .empty-state {
+    @include display(flex, column, center, center);
+    padding: var(--spacing-4xl) var(--spacing-xl);
+    text-align: center;
+    background: var(--bg-surface);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border);
+    
+    .empty-icon {
+      width: 48px;
+      height: 48px;
+      opacity: 0.6;
+      margin-bottom: var(--spacing-lg);
+      filter: grayscale(1);
+    }
+    
+    h3 {
+      @include font(18px, 600, var(--text-primary));
+      margin: 0 0 var(--spacing-sm) 0;
+      font-family: var(--font-brand);
+    }
+    
+    p {
+      @include font(14px, 400, var(--text-secondary));
+      margin: 0;
+    }
+  }
+  
+  .event-list {
+    @include display(flex, column, center, center);
+    gap: var(--spacing-lg);
+    width: 100%;
+  }
+  
+  .event-item {
+    background: var(--bg-surface);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-color: var(--primary);
+    }
+    
+    &.ended {
+      opacity: 0.7;
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    }
+    
+    &.upcoming {
+      border-color: var(--info);
+      background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+    }
+    
+    .event-header {
+      @include display(flex, row, center, space-between);
+      margin-bottom: var(--spacing-sm);
+      
+      .event-meta {
+        @include display(flex, row, center, flex-start);
+        gap: var(--spacing-xs);
+        
+        .category-badge {
+          @include font(10px, 600, white);
+          padding: 2px var(--spacing-xs);
+          border-radius: 8px;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+        }
+        
+        .status-badge {
+          @include font(10px, 600, var(--text-secondary));
+          padding: 2px var(--spacing-xs);
+          border-radius: 8px;
+          background: rgba(107, 112, 120, 0.1);
+          border: 1px solid currentColor;
+        }
+      }
+      
+      .event-period {
+        @include font(11px, 400, var(--text-disabled));
+      }
+    }
+    
+    .event-title {
+      @include font(15px, 600, var(--text-primary));
+      margin: 0 0 var(--spacing-sm) 0;
+      line-height: 1.3;
+      font-family: var(--font-brand);
+    }
+    
+    .event-description {
+      margin-bottom: var(--spacing-sm);
+      
+      p {
+        @include font(13px, 400, var(--text-secondary));
+        margin: 0;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+    
+    .event-reward {
+      @include display(flex, row, center, flex-start);
+      gap: var(--spacing-xs);
+      margin-bottom: var(--spacing-sm);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      background: rgba(7, 150, 105, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(7, 150, 105, 0.2);
+      @include font(12px, 500, var(--primary));
+      
+      .reward-icon {
+        width: 14px;
+        height: 14px;
+        opacity: 0.8;
+      }
+    }
+    
+    .event-footer {
+      @include display(flex, row, center, space-between);
+      
+      .event-stats {
+        @include display(flex, row, center, flex-start);
+        gap: var(--spacing-md);
+        
+        .stat-item {
+          @include display(flex, row, center, flex-start);
+          gap: var(--spacing-xs);
+          @include font(12px, 500, var(--text-secondary));
+          
+          .stat-icon {
+            width: 14px;
+            height: 14px;
+            opacity: 0.7;
+          }
+        }
+      }
+      
+      .arrow-icon {
+        width: 12px;
+        height: 12px;
+        opacity: 0.6;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+      }
+    }
+    
+    &:hover .arrow-icon {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+    
+    &.ended {
+      opacity: 0.6;
+      
+      .event-stats .stat-item,
+      .arrow-icon {
+        opacity: 0.4;
+      }
+    }
+  }
+  
+  // 모달 스타일
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  .detail-modal {
+    background: var(--bg-surface);
+    border-radius: 20px;
+    width: calc(100% - 32px);
+    max-width: 500px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    position: relative;
+    box-sizing: border-box;
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-bottom: 1px solid var(--border);
+      
+      .modal-title {
+        @include font(18px, 600, var(--text-primary));
+        font-family: var(--font-brand);
+        margin: 0;
+        flex: 1;
+      }
+      
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--text-disabled);
+        padding: var(--spacing-xs);
+        transition: color 0.2s ease;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        &:hover {
+          color: var(--text-primary);
+        }
+      }
+    }
+    
+    .modal-body {
+      padding: var(--spacing-xl);
+      max-height: 60vh;
+      overflow-y: auto;
+      
+      .event-detail-header {
+        @include display(flex, column, flex-start, flex-start);
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-lg);
+        
+        .event-detail-meta {
+          @include display(flex, row, center, flex-start);
+          gap: var(--spacing-sm);
+          
+          .category-badge {
+            @include font(11px, 600, white);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          
+          .status-badge {
+            @include font(11px, 600, var(--text-secondary));
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 12px;
+            background: rgba(107, 112, 120, 0.1);
+            border: 1px solid currentColor;
+          }
+        }
+        
+        .event-detail-period {
+          @include font(12px, 400, var(--text-disabled));
+        }
+      }
+      
+      .event-detail-title {
+        @include font(20px, 600, var(--text-primary));
+        margin: 0 0 var(--spacing-lg) 0;
+        line-height: 1.4;
+        font-family: var(--font-brand);
+      }
+      
+      .event-detail-content {
+        p {
+          @include font(16px, 400, var(--text-primary));
+          margin: 0;
+          line-height: 1.6;
+        }
+      }
+      
+      // 이벤트 보상
+      .event-detail-reward {
+        margin-top: var(--spacing-xl);
+        padding: var(--spacing-lg);
+        background: rgba(7, 150, 105, 0.05);
+        border-radius: 12px;
+        border: 1px solid rgba(7, 150, 105, 0.2);
+        
+        h4 {
+          @include display(flex, row, center, flex-start);
+          gap: var(--spacing-xs);
+          @include font(14px, 600, var(--primary));
+          margin: 0 0 var(--spacing-sm) 0;
+          
+          .reward-header-icon {
+            width: 16px;
+            height: 16px;
+          }
+        }
+        
+        p {
+          @include font(14px, 400, var(--text-primary));
+          margin: 0;
+        }
+      }
+      
+      // 이벤트 링크
+      .event-detail-link {
+        margin-top: var(--spacing-lg);
+        
+        a {
+          @include display(flex, row, center, center);
+          gap: var(--spacing-xs);
+          padding: var(--spacing-md) var(--spacing-xl);
+          background: var(--primary);
+          color: white;
+          text-decoration: none;
+          border-radius: 12px;
+          @include font(14px, 600, white);
+          transition: all 0.2s ease;
+          
+          .link-arrow-icon {
+            width: 14px;
+            height: 14px;
+          }
+          
+          &:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+          }
+        }
+      }
+      
+      // 좋아요 및 조회수 스타일
+      .content-stats {
+        @include display(flex, row, center, flex-start);
+        gap: var(--spacing-lg);
+        padding: var(--spacing-lg) 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        margin: var(--spacing-xl) 0;
+        
+        .like-btn {
+          @include display(flex, row, center, center);
+          gap: var(--spacing-xs);
+          background: transparent;
+          border: 1px solid var(--border);
+          border-radius: 20px;
+          padding: var(--spacing-sm) var(--spacing-md);
+          @include font(14px, 500, var(--text-secondary));
+          cursor: pointer;
+          transition: all 0.2s ease;
+          
+          .like-icon {
+            width: 16px;
+            height: 16px;
+          }
+          
+          &:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(7, 150, 105, 0.05);
+          }
+          
+          &.liked {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(7, 150, 105, 0.1);
+          }
+        }
+        
+        .view-count {
+          @include display(flex, row, center, center);
+          gap: var(--spacing-xs);
+          @include font(14px, 500, var(--text-secondary));
+          
+          .view-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+          }
+        }
+      }
+      
+      // 댓글 섹션 스타일
+      .comments-section {
+        margin-top: var(--spacing-lg);
+        
+        h3 {
+          @include font(16px, 600, var(--text-primary));
+          margin: 0 0 var(--spacing-lg) 0;
+        }
+        
+        .comments-list {
+          @include display(flex, column, stretch, flex-start);
+          gap: var(--spacing-md);
+          margin-bottom: var(--spacing-lg);
+        }
+        
+        .comment-item {
+          padding: var(--spacing-md);
+          background: var(--bg-primary);
+          border-radius: 8px;
+          
+          .comment-header {
+            @include display(flex, row, center, space-between);
+            margin-bottom: var(--spacing-sm);
+            
+            .comment-author {
+              @include font(13px, 600, var(--text-primary));
+            }
+            
+            .comment-date {
+              @include font(11px, 400, var(--text-disabled));
+            }
+          }
+          
+          .comment-content {
+            p {
+              @include font(14px, 400, var(--text-primary));
+              margin: 0;
+              line-height: 1.5;
+            }
+          }
+          
+          .comment-footer {
+            @include display(flex, row, center, flex-start);
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-sm);
+            
+            .comment-like-btn {
+              @include display(flex, row, center, center);
+              gap: var(--spacing-xs);
+              background: transparent;
+              border: none;
+              padding: var(--spacing-xs) var(--spacing-sm);
+              @include font(12px, 500, var(--text-secondary));
+              cursor: pointer;
+              transition: all 0.2s ease;
+              border-radius: 12px;
+              
+              .comment-like-icon {
+                width: 14px;
+                height: 14px;
+              }
+              
+              &:hover {
+                color: var(--primary);
+                background: rgba(7, 150, 105, 0.05);
+              }
+            }
+            
+            .comment-delete-btn {
+              background: transparent;
+              border: none;
+              padding: var(--spacing-xs) var(--spacing-sm);
+              @include font(12px, 500, var(--error));
+              cursor: pointer;
+              transition: all 0.2s ease;
+              border-radius: 12px;
+              
+              &:hover {
+                background: rgba(239, 68, 68, 0.05);
+              }
+            }
+          }
+        }
+        
+        .no-comments {
+          @include font(14px, 400, var(--text-secondary));
+          text-align: center;
+          padding: var(--spacing-xl);
+        }
+        
+        .comment-input-section {
+          margin-top: var(--spacing-lg);
+          
+          .comment-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: var(--font-text);
+            resize: vertical;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            
+            &:focus {
+              border-color: var(--primary);
+              box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+            }
+          }
+          
+          .comment-submit-btn {
+            width: 100%;
+            margin-top: var(--spacing-md);
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: var(--spacing-md);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            
+            &:hover {
+              background: var(--primary-hover);
+            }
+            
+            &:disabled {
+              background: var(--text-disabled);
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+    }
+    
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-top: 1px solid var(--border);
+      
+      .close-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: var(--spacing-md) var(--spacing-xl);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 120px;
+        
+        &:hover {
+          background: var(--primary-hover);
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// 반응형 대응 (태블릿)
+@media (max-width: 768px) {
+  .event {
+    max-width: 100vw;
+    
+    .content-container {
+      max-width: 440px;
+      padding: 0 var(--spacing-md);
+      gap: var(--spacing-md);
+      @include display(flex, column, center, center);
+    }
+    
+    .event-item {
+      padding: var(--spacing-lg);
+      
+      .event-title {
+        font-size: 15px;
+      }
+      
+      .event-description p {
+        font-size: 13px;
+      }
+    }
+    
+    .modal-overlay {
+      padding: var(--spacing-md);
+    }
+    
+    .detail-modal {
+      width: calc(100% - 24px);
+      
+      .modal-header {
+        padding: var(--spacing-md) var(--spacing-lg);
+        
+        .modal-title {
+          font-size: 16px;
+        }
+        
+        .modal-close {
+          width: 28px;
+          height: 28px;
+        }
+      }
+      
+      .modal-body {
+        padding: var(--spacing-lg);
+      }
+      
+      .modal-footer {
+        padding: var(--spacing-md) var(--spacing-lg);
+      }
+    }
+  }
+}
+
+// 반응형 대응 (모바일)
+@media (max-width: 480px) {
+  .event {
+    .content-container {
+      max-width: 420px;
+      padding: 0 var(--spacing-sm);
+      gap: var(--spacing-sm);
+      @include display(flex, column, center, center);
+    }
+    
+    .page-info {
+      padding: var(--spacing-md) 0;
+      
+      h2 {
+        font-size: 18px;
+      }
+      
+      p {
+        font-size: 13px;
+      }
+    }
+    
+    .event-item {
+      padding: var(--spacing-md);
+      
+      .event-header {
+        gap: var(--spacing-xs);
+        margin-bottom: var(--spacing-sm);
+        
+        .event-meta {
+          gap: var(--spacing-xs);
+          
+          .category-badge,
+          .status-badge {
+            font-size: 10px;
+            padding: 2px var(--spacing-xs);
+          }
+        }
+        
+        .event-period {
+          font-size: 11px;
+        }
+      }
+      
+      .event-title {
+        font-size: 14px;
+        margin-bottom: var(--spacing-sm);
+      }
+      
+      .event-description {
+        margin-bottom: var(--spacing-sm);
+        
+        p {
+          font-size: 12px;
+        }
+      }
+      
+      .event-footer {
+        .read-more {
+          font-size: 11px;
+        }
+        
+        .arrow {
+          font-size: 12px;
+        }
+      }
+    }
+    
+    .modal-overlay {
+      padding: var(--spacing-sm);
+    }
+    
+    .detail-modal {
+      width: calc(100% - 16px);
+      
+      .modal-header {
+        padding: var(--spacing-sm) var(--spacing-md);
+        
+        .modal-title {
+          font-size: 14px;
+        }
+        
+        .modal-close {
+          width: 24px;
+          height: 24px;
+          font-size: 20px;
+        }
+      }
+      
+      .modal-body {
+        padding: var(--spacing-md);
+        
+        .event-detail-title {
+          font-size: 18px;
+          margin-bottom: var(--spacing-md);
+        }
+        
+        .event-detail-content p {
+          font-size: 14px;
+        }
+      }
+      
+      .modal-footer {
+        padding: var(--spacing-sm) var(--spacing-md);
+        
+        .close-btn {
+          padding: var(--spacing-sm) var(--spacing-lg);
+          font-size: 13px;
+          min-width: 100px;
+        }
+      }
+    }
+  }
+}
+
+// 반응형 대응 (매우 작은 화면)
+@media (max-width: 320px) {
+  .event {
+    .content-container {
+      max-width: 320px;
+      padding: 0 var(--spacing-xs);
+      @include display(flex, column, center, center);
+    }
+    
+    .event-item {
+      padding: var(--spacing-sm);
+      
+      .event-title {
+        font-size: 13px;
+      }
+      
+      .event-description p {
+        font-size: 11px;
+      }
+    }
+    
+    .modal-overlay {
+      padding: var(--spacing-xs);
+    }
+    
+    .detail-modal {
+      width: calc(100% - 12px);
+      
+      .modal-header {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        
+        .modal-title {
+          font-size: 13px;
+        }
+        
+        .modal-close {
+          width: 20px;
+          height: 20px;
+          font-size: 18px;
+        }
+      }
+      
+      .modal-body {
+        padding: var(--spacing-sm);
+        
+        .event-detail-title {
+          font-size: 16px;
+        }
+        
+        .event-detail-content p {
+          font-size: 13px;
+        }
+      }
+      
+      .modal-footer {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        
+        .close-btn {
+          padding: var(--spacing-xs) var(--spacing-md);
+          font-size: 12px;
+          min-width: 80px;
+        }
+      }
+    }
+  }
+}

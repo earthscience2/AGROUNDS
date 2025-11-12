@@ -11,9 +11,25 @@
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <!-- 로컬 글꼴 preload - 우선순위 높임 -->
+    <link rel="preload" href="/font/Paperlogy-8ExtraBold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="/font/Pretendard-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    
+    <!-- 글꼴 즉시 로딩을 위한 스타일 -->
+    <style>
+      /* 글꼴 로딩 중 텍스트 숨김 */
+      .font-loading {
+        visibility: hidden;
+      }
+      
+      /* 글꼴 로드 완료 후 표시 */
+      .fonts-loaded {
+        visibility: visible;
+      }
+    </style>
+    
+    <!-- Anton 글꼴 제거 - Paperlogy와 Pretendard만 사용 -->
+    <!-- 카카오맵 API는 동적으로 로드됩니다 -->
     <title>AGROUNDS</title>
   </head>
   <body>

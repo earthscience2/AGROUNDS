@@ -1,0 +1,417 @@
+// 관리자 로그인 페이지 - PC 화면 전체 활용
+.admin-login-page {
+  position: fixed; // 고정 위치로 전체 화면 보장
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0; // 패딩 제거로 전체 화면 활용
+  background: var(--bg-primary); // 단색 배경으로 변경
+  box-sizing: border-box;
+  overflow: hidden; // 모든 오버플로우 방지
+  
+  // 전역 box-sizing 설정 (이 페이지에만 적용)
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  // 페이드인 애니메이션
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  
+  &.visible {
+    opacity: 1;
+  }
+
+  .admin-login-content {
+    width: 100%;
+    max-width: 450px; // 전체적으로 더 작게
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl); // 간격도 줄임
+    box-sizing: border-box;
+    padding: var(--spacing-2xl); // 콘텐츠에만 패딩 적용
+    position: relative;
+    z-index: 1;
+  }
+
+  .admin-login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    text-align: center;
+  }
+
+  .admin-logo-badge {
+    width: 80px; // 기본 크기 축소
+    height: 80px;
+    background: var(--bg-surface);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(7, 150, 105, 0.15);
+    border: 3px solid var(--primary);
+    transition: all 0.3s ease;
+    animation: logoFloat 3s ease-in-out infinite;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(7, 150, 105, 0.25);
+    }
+    
+    .admin-logo-img {
+      width: 70%;
+      height: 70%;
+      object-fit: contain;
+    }
+  }
+  
+  @keyframes logoFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  .admin-login-title {
+    color: var(--primary);
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+
+  .admin-login-subtitle {
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 600;
+  }
+
+  // 로그인 폼
+  .admin-login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg); // 간격 줄임
+    background: var(--bg-surface);
+    padding: var(--spacing-2xl); // 패딩 줄임
+    border-radius: 16px; // 모서리 둥글기 줄임
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); // 더 강한 그림자로 구분감 증가
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+    position: relative;
+    
+    // 폼 배경 완전 덮기 보장
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-surface);
+      border-radius: 16px; // 모서리 둥글기 줄임
+      z-index: -1;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .form-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-left: var(--spacing-xs);
+  }
+
+  .text-input {
+    width: 100%;
+    padding: 12px 16px; // 기본 크기 축소
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px; // 기본 폰트 크기 축소
+    outline: none;
+    transition: all 0.2s ease;
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    font-family: var(--font-text);
+    box-sizing: border-box; // 패딩과 테두리를 총 너비에 포함
+    max-width: 100%; // 최대 너비 제한
+    
+    &:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(7, 150, 105, 0.1);
+    }
+    
+    &.error {
+      border-color: var(--error);
+      
+      &:focus {
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+      }
+    }
+    
+    &::placeholder {
+      color: var(--text-disabled);
+    }
+    
+    &:disabled {
+      background: var(--bg-primary);
+      color: var(--text-disabled);
+      cursor: not-allowed;
+    }
+  }
+
+  .error-text {
+    color: var(--error);
+    margin-left: var(--spacing-xs);
+    margin-top: calc(-1 * var(--spacing-xs));
+  }
+
+  .login-error-message {
+    padding: var(--spacing-md);
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    text-align: center;
+    
+    span {
+      color: var(--error);
+      font-weight: 500;
+    }
+    
+    .error-debug-info {
+      margin-top: var(--spacing-md);
+      padding: var(--spacing-sm);
+      background: rgba(239, 68, 68, 0.05);
+      border-radius: 8px;
+      border-left: 3px solid var(--error);
+      
+      p {
+        margin: var(--spacing-xs) 0;
+        color: var(--text-secondary);
+        line-height: 1.4;
+        
+        &:first-child {
+          color: var(--primary);
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .admin-login-btn {
+    width: 100%;
+    height: 44px; // 기본 크기 축소
+    font-size: 14px; // 기본 폰트 크기 축소
+    font-weight: 700;
+    border-radius: 12px;
+    margin-top: var(--spacing-md);
+    letter-spacing: -0.3px;
+    transition: all 0.3s ease;
+    box-sizing: border-box; // 버튼도 테두리와 패딩 포함
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(7, 150, 105, 0.3);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    &:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+  }
+
+  .admin-login-footer {
+    text-align: center;
+    padding-top: var(--spacing-lg);
+    
+    p {
+      color: var(--text-disabled);
+      margin: 0;
+    }
+  }
+
+  // PC 전용 스타일 - 적절한 크기로 조정
+  @media (min-width: 769px) {
+    // 페이지 전체에 패딩 없음 (완전 전체 화면 사용)
+    padding: 0;
+    
+    .admin-login-content {
+      max-width: 500px; // PC에서 적절한 크기
+      gap: var(--spacing-3xl);
+      padding: var(--spacing-3xl); // 콘텐츠에만 패딩
+    }
+    
+    .admin-logo-badge {
+      width: 100px; // PC에서 적절한 크기
+      height: 100px;
+    }
+    
+    .admin-login-title {
+      font-size: 32px; // PC에서 적절한 제목 크기
+    }
+    
+    .admin-login-subtitle {
+      font-size: 18px; // PC에서 적절한 부제목 크기
+    }
+    
+    .admin-login-form {
+      padding: var(--spacing-3xl); // 적절한 패딩
+      border-radius: 20px; // 적절한 모서리 둥글기
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); // 적절한 그림자
+    }
+    
+    .text-input {
+      padding: 14px 18px; // 적절한 패딩
+      font-size: 15px; // 적절한 폰트
+      min-height: 48px; // 적절한 최소 높이
+    }
+    
+    .admin-login-btn {
+      height: 48px; // 적절한 버튼 크기
+      font-size: 15px; // 적절한 폰트
+      margin-top: var(--spacing-lg);
+    }
+    
+    .form-group {
+      gap: var(--spacing-md); // 적절한 간격
+    }
+    
+    .form-label {
+      font-size: 14px; // 적절한 라벨 폰트
+    }
+  }
+
+  // 대형 화면 (1200px 이상)에서 적절한 크기
+  @media (min-width: 1200px) {
+    .admin-login-content {
+      max-width: 600px; // 대형 화면에서 적절한 크기
+      padding: var(--spacing-4xl); // 적절한 패딩
+    }
+    
+    .admin-login-form {
+      padding: var(--spacing-4xl); // 적절한 패딩
+      max-width: 500px; // 폼 자체의 적절한 너비
+      margin: 0 auto; // 중앙 정렬
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15); // 적절한 그림자
+    }
+    
+    .admin-logo-badge {
+      width: 110px; // 대형 화면에서 약간 큰 로고
+      height: 110px;
+    }
+    
+    .admin-login-title {
+      font-size: 36px; // 대형 화면에서 약간 큰 제목
+    }
+  }
+
+  // 반응형 디자인
+  @media (max-width: 768px) {
+    padding: var(--spacing-lg);
+    min-width: 320px; // 최소 너비 보장
+    
+    .admin-login-content {
+      max-width: 100%;
+      width: 100%;
+      padding: 0; // 추가 패딩 제거
+    }
+    
+    .admin-logo-badge {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .admin-login-title {
+      font-size: 28px;
+    }
+    
+    .admin-login-form {
+      padding: var(--spacing-lg); // 모바일에서 더 작은 패딩
+      margin: 0;
+    }
+    
+    .text-input {
+      padding: 12px 14px; // 모바일에서 더 작은 패딩
+      font-size: 14px; // 모바일에서 더 작은 폰트 사이즈
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: var(--spacing-md); // 더 작은 패딩
+    min-width: 280px; // 최소 너비 감소
+    
+    .admin-login-content {
+      gap: var(--spacing-lg); // 요소간 간격 줄이기
+    }
+    
+    .admin-login-form {
+      padding: var(--spacing-md); // 매우 작은 패딩
+    }
+    
+    .admin-logo-badge {
+      width: 80px;
+      height: 80px;
+    }
+    
+    .text-input {
+      padding: 10px 12px; // 더 작은 패딩
+      font-size: 14px;
+    }
+    
+    .admin-login-btn {
+      height: 48px; // 모바일에서 더 작은 버튼 높이
+      font-size: 15px;
+    }
+  }
+  
+  // 매우 작은 화면 대응
+  @media (max-width: 320px) {
+    padding: var(--spacing-sm);
+    
+    .admin-login-form {
+      padding: var(--spacing-sm);
+    }
+    
+    .text-input {
+      padding: 8px 10px;
+    }
+  }
+}
+
+// 추가 안전장치: 매우 작은 화면과 가로 스크롤 방지
+@media (max-width: 480px) {
+  .admin-login-page {
+    position: relative;
+    
+    // 강제로 컨테이너가 화면을 넘지 않도록
+    .admin-login-content,
+    .admin-login-form {
+      overflow: visible;
+      word-wrap: break-word;
+    }
+    
+    // 입력 필드가 확실히 콘텐츠 내부에 위치하도록
+    .form-group {
+      width: 100%;
+      overflow: hidden;
+    }
+  }
+}

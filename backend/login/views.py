@@ -24,6 +24,9 @@ from DB.models import User, UserInfo, TeamInfo, PlayerTeamCross
 from .serializers import User_Info_Serializer
 from staticfiles import cryptographysss
 from staticfiles.make_code import make_code
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+import django.db.models as dj_models
 
 logger = logging.getLogger('django')
 
@@ -60,7 +63,10 @@ try:
 except Exception:
     NAVER_CLIENT_SECRET = None
 
-# 공통 헬퍼 함수들
+# ===============================================
+# 헬퍼 함수
+# ===============================================
+
 def extract_token_from_header(auth_header):
     """Authorization 헤더에서 토큰을 추출하는 헬퍼 함수"""
     if not auth_header:
@@ -151,10 +157,40 @@ def generate_unique_user_code(prefix: str = 'u', max_attempts: int = 20) -> str:
     fallback = make_code(prefix) + random_suffix
     return fallback
 
-# =============================== 카카오  ===============================
-# 카카오 회원가입
+# ===============================================
+# 카카오 로그인/회원가입 API
+# ===============================================
+
 class kakaoSignup(APIView):
+    """
+    카카오 회원가입 API
+    카카오 OAuth를 통한 회원가입을 처리합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="카카오 OAuth를 통한 회원가입을 처리합니다.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_id': openapi.Schema(type=openapi.TYPE_STRING, description='암호화된 사용자 이메일'),
+                'birth': openapi.Schema(type=openapi.TYPE_STRING, description='생년월일'),
+                'name': openapi.Schema(type=openapi.TYPE_STRING, description='이름'),
+                'gender': openapi.Schema(type=openapi.TYPE_STRING, description='성별'),
+                'height': openapi.Schema(type=openapi.TYPE_NUMBER, description='키'),
+                'weight': openapi.Schema(type=openapi.TYPE_NUMBER, description='몸무게'),
+                'preferred_position': openapi.Schema(type=openapi.TYPE_STRING, description='선호 포지션')
+            },
+            required=['user_id']
+        ),
+        responses={
+            200: openapi.Response(description="회원가입 성공"),
+            400: openapi.Response(description="잘못된 요청"),
+            409: openapi.Response(description="이미 가입된 이메일"),
+            500: openapi.Response(description="서버 오류")
+        }
+    )
     def post(self, request, *args, **kwargs):
+        """카카오 회원가입"""
         try:
             logger.info(f"[카카오 회원가입] 수신된 데이터: {request.data}")
             
@@ -271,34 +307,106 @@ class kakaoSignup(APIView):
             return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
 
-# 카카오 로그인
 class kakao(APIView):
+    """
+    카카오 로그인 시작 API
+    카카오 OAuth 인증 플로우를 시작합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="카카오 OAuth 인증 플로우를 시작합니다.",
+        manual_parameters=[
+            openapi.Parameter(
+                'hostname',
+                openapi.IN_QUERY,
+                description='호스트 이름',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'client',
+                openapi.IN_QUERY,
+                description='클라이언트 구분',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'intent',
+                openapi.IN_QUERY,
+                description='의도 (signup 등)',
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            302: openapi.Response(description="카카오 로그인 페이지로 리다이렉트")
+        }
+    )
     def get(self, request):
+        """카카오 로그인 시작"""
         hostname = request.query_params.get('hostname')
         client = request.query_params.get('client')
+        intent = request.query_params.get('intent')  # signup 의도 확인
         # 실제 카카오가 호출할 콜백 주소 (동작 가능한 서버)
         if hostname == "localhost":
             callback_uri = "http://localhost:8000/api/login/kakao/callback/"
         else:
             callback_uri = "https://agrounds.com/api/login/kakao/callback/"
 
-        # 최종 리다이렉트 타겟(client_url)을 state로 전달 (콜백 서버와 분리 가능)
+        # 최종 리다이렉트 타겟(client_url)을 state로 전달 (intent 포함)
         if client in ["localhost", "agrounds.com"]:
-            state = client
+            state = f"{client}_{intent}" if intent else client
         else:
-            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+            base_state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+            state = f"{base_state}_{intent}" if intent else base_state
 
         return redirect(
             f"https://kauth.kakao.com/oauth/authorize?client_id={KAKAO_CLIENT_ID}&redirect_uri={callback_uri}&response_type=code&state={state}&theme=light"
         )
 
 
-# 카카오 로그인 - callback view
 class kakaoCallback(APIView):
+    """
+    카카오 로그인 콜백 API
+    카카오 OAuth 콜백을 처리하고 로그인/회원가입을 분기합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="카카오 OAuth 콜백을 처리합니다.",
+        manual_parameters=[
+            openapi.Parameter(
+                'code',
+                openapi.IN_QUERY,
+                description='카카오 인증 코드',
+                type=openapi.TYPE_STRING,
+                required=True
+            ),
+            openapi.Parameter(
+                'state',
+                openapi.IN_QUERY,
+                description='상태 값',
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            302: openapi.Response(description="로그인 페이지 또는 로딩 페이지로 리다이렉트"),
+            400: openapi.Response(description="잘못된 요청"),
+            500: openapi.Response(description="서버 오류"),
+            502: openapi.Response(description="외부 API 오류")
+        }
+    )
     def get(self, request, format=None):
+        """카카오 로그인 콜백"""
         client_url = CLIENT_URL or "https://agrounds.com"
-        # state는 최종 리다이렉트 대상(클라이언트) 구분 용도만 사용
+        # state는 최종 리다이렉트 대상(클라이언트) 구분 용도와 intent 포함
         state = request.query_params.get('state')
+        intent = None
+        if state and '_' in state:
+            state_parts = state.split('_')
+            state = state_parts[0]
+            intent = state_parts[1] if len(state_parts) > 1 else None
+        
         if state == "localhost":
             client_url = "http://localhost:3000"
         else:
@@ -374,7 +482,9 @@ class kakaoCallback(APIView):
                     id_param = ''
                 # 로컬에서 시작한 경우에는 로컬 절대주소로, 그 외에는 상대경로로 반환
                 target_base = "http://localhost:3000" if state == "localhost" else ""
-                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
+                # intent가 signup인 경우 signupFromType=1 추가
+                signup_param = "&signupFromType=1" if intent == "signup" else ""
+                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}{signup_param}")
 
             # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
             user = User.objects.get(user_id=kakao_email, login_type="kakao")
@@ -393,10 +503,34 @@ class kakaoCallback(APIView):
             logger.error(f"[Kakao] 가입자 분기 처리 중 오류: {str(e)}\n{traceback.format_exc()}")
             return JsonResponse({'error': '가입자 처리 중 서버 오류', 'detail': str(e)}, status=500)
 
-# =============================== 네이버  ===============================
-# 네이버 회원가입
+# ===============================================
+# 네이버 로그인/회원가입 API
+# ===============================================
+
 class naverSignup(APIView):
+    """
+    네이버 회원가입 API
+    네이버 OAuth를 통한 회원가입을 처리합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="네이버 OAuth를 통한 회원가입을 처리합니다.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_id': openapi.Schema(type=openapi.TYPE_STRING, description='암호화된 사용자 이메일')
+            },
+            required=['user_id']
+        ),
+        responses={
+            200: openapi.Response(description="회원가입 성공"),
+            400: openapi.Response(description="잘못된 요청"),
+            409: openapi.Response(description="이미 가입된 이메일"),
+            500: openapi.Response(description="서버 오류")
+        }
+    )
     def post(self, request, *args, **kwargs):
+        """네이버 회원가입"""
         try:
             logger.info(f"[네이버 회원가입] 수신된 데이터: {request.data}")
 
@@ -504,22 +638,59 @@ class naverSignup(APIView):
             return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
 
-# 네이버 로그인
 class naver(APIView):
+    """
+    네이버 로그인 시작 API
+    네이버 OAuth 인증 플로우를 시작합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="네이버 OAuth 인증 플로우를 시작합니다.",
+        manual_parameters=[
+            openapi.Parameter(
+                'hostname',
+                openapi.IN_QUERY,
+                description='호스트 이름',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'client',
+                openapi.IN_QUERY,
+                description='클라이언트 구분',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'intent',
+                openapi.IN_QUERY,
+                description='의도 (signup 등)',
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            302: openapi.Response(description="네이버 로그인 페이지로 리다이렉트"),
+            500: openapi.Response(description="서버 오류")
+        }
+    )
     def get(self, request):
+        """네이버 로그인 시작"""
         hostname = request.query_params.get('hostname')
         client = request.query_params.get('client')
+        intent = request.query_params.get('intent')  # signup 의도 확인
         # 실제 네이버가 호출할 콜백 주소 (동작 가능한 서버)
         if hostname == "localhost":
             callback_uri = "http://localhost:8000/api/login/naver/callback/"
         else:
             callback_uri = "https://agrounds.com/api/login/naver/callback/"
 
-        # 최종 리다이렉트 타겟(client_url)을 state로 전달 (카카오와 동일 패턴)
+        # 최종 리다이렉트 타겟(client_url)을 state로 전달 (intent 포함)
         if client in ["localhost", "agrounds.com"]:
-            state = client
+            state = f"{client}_{intent}" if intent else client
         else:
-            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+            base_state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+            state = f"{base_state}_{intent}" if intent else base_state
 
         if not NAVER_CLIENT_ID:
             return JsonResponse({'error': 'NAVER_CLIENT_ID 미설정'}, status=500)
@@ -529,12 +700,48 @@ class naver(APIView):
         )
 
 
-# 네이버 로그인 - callback view
 class naverCallback(APIView):
+    """
+    네이버 로그인 콜백 API
+    네이버 OAuth 콜백을 처리하고 로그인/회원가입을 분기합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="네이버 OAuth 콜백을 처리합니다.",
+        manual_parameters=[
+            openapi.Parameter(
+                'code',
+                openapi.IN_QUERY,
+                description='네이버 인증 코드',
+                type=openapi.TYPE_STRING,
+                required=True
+            ),
+            openapi.Parameter(
+                'state',
+                openapi.IN_QUERY,
+                description='상태 값',
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            302: openapi.Response(description="로그인 페이지 또는 로딩 페이지로 리다이렉트"),
+            400: openapi.Response(description="잘못된 요청"),
+            500: openapi.Response(description="서버 오류"),
+            502: openapi.Response(description="외부 API 오류")
+        }
+    )
     def get(self, request, format=None):
+        """네이버 로그인 콜백"""
         client_url = CLIENT_URL or "https://agrounds.com"
-        # state는 최종 리다이렉트 대상(클라이언트) 구분 용도만 사용
+        # state는 최종 리다이렉트 대상(클라이언트) 구분 용도와 intent 포함
         state = request.query_params.get('state')
+        intent = None
+        if state and '_' in state:
+            state_parts = state.split('_')
+            state = state_parts[0]
+            intent = state_parts[1] if len(state_parts) > 1 else None
+        
         if state == "localhost":
             client_url = "http://localhost:3000"
         else:
@@ -605,7 +812,9 @@ class naverCallback(APIView):
                 except Exception:
                     id_param = ''
                 target_base = "http://localhost:3000" if state == "localhost" else ""
-                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
+                # intent가 signup인 경우 signupFromType=1 추가
+                signup_param = "&signupFromType=1" if intent == "signup" else ""
+                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}{signup_param}")
 
             # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
             user = User.objects.get(user_id=naver_email, login_type="naver")
@@ -624,11 +833,34 @@ class naverCallback(APIView):
             logger.error(f"[Naver] 가입자 분기 처리 중 오류: {str(e)}\n{traceback.format_exc()}")
             return JsonResponse({'error': '가입자 처리 중 서버 오류', 'detail': str(e)}, status=500)
 
-# =============================== 애플  ===============================
-# 애플 로그인 시작 (카카오/네이버와 동일 패턴)
-# 애플 로그인 - 회원가입
+# ===============================================
+# 애플 로그인/회원가입 API
+# ===============================================
+
 class AppleSignup(APIView):
+    """
+    애플 회원가입 API
+    애플 OAuth를 통한 회원가입을 처리합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="애플 OAuth를 통한 회원가입을 처리합니다.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_id': openapi.Schema(type=openapi.TYPE_STRING, description='암호화된 사용자 이메일')
+            },
+            required=['user_id']
+        ),
+        responses={
+            200: openapi.Response(description="회원가입 성공"),
+            400: openapi.Response(description="잘못된 요청"),
+            409: openapi.Response(description="이미 가입된 이메일"),
+            500: openapi.Response(description="서버 오류")
+        }
+    )
     def post(self, request, *args, **kwargs):
+        """애플 회원가입"""
         try:
             logger.info(f"[애플 회원가입] 수신된 데이터: {request.data}")
 
@@ -736,18 +968,55 @@ class AppleSignup(APIView):
 
 
 class apple(APIView):
+    """
+    애플 로그인 시작 API
+    애플 OAuth 인증 플로우를 시작합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="애플 OAuth 인증 플로우를 시작합니다.",
+        manual_parameters=[
+            openapi.Parameter(
+                'hostname',
+                openapi.IN_QUERY,
+                description='호스트 이름',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'client',
+                openapi.IN_QUERY,
+                description='클라이언트 구분',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'intent',
+                openapi.IN_QUERY,
+                description='의도 (signup 등)',
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            302: openapi.Response(description="애플 로그인 페이지로 리다이렉트")
+        }
+    )
     def get(self, request):
+        """애플 로그인 시작"""
         hostname = request.query_params.get('hostname')
         client = request.query_params.get('client')
+        intent = request.query_params.get('intent')  # signup 의도 확인
         if hostname == "localhost":
             callback_uri = "http://localhost:8000/api/login/apple/callback/"
         else:
             callback_uri = "https://agrounds.com/api/login/apple/callback/"
 
         if client in ["localhost", "agrounds.com"]:
-            state = client
+            state = f"{client}_{intent}" if intent else client
         else:
-            state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+            base_state = hostname if hostname in ["localhost", "agrounds.com"] else "agrounds.com"
+            state = f"{base_state}_{intent}" if intent else base_state
 
         # Apple 권고: response_mode=form_post 로 POST로 전달받도록 설정
         authorize_url = (
@@ -762,9 +1031,44 @@ class apple(APIView):
         return redirect(authorize_url)
 
 
-# 애플 로그인 - callback view
 class AppleLoginCallback(APIView):
+    """
+    애플 로그인 콜백 API
+    애플 OAuth 콜백을 처리하고 로그인/회원가입을 분기합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="애플 OAuth 콜백을 처리합니다 (GET).",
+        manual_parameters=[
+            openapi.Parameter(
+                'id_token',
+                openapi.IN_QUERY,
+                description='애플 ID 토큰',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'code',
+                openapi.IN_QUERY,
+                description='애플 인증 코드',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'state',
+                openapi.IN_QUERY,
+                description='상태 값',
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            302: openapi.Response(description="로그인 페이지 또는 로딩 페이지로 리다이렉트"),
+            400: openapi.Response(description="잘못된 요청")
+        }
+    )
     def get(self, request):
+        """애플 로그인 콜백 (GET)"""
         client_url = CLIENT_URL or "https://agrounds.com"
         if request.query_params.get('hostname') == 'localhost' :
             client_url = "http://localhost:3000"
@@ -772,6 +1076,12 @@ class AppleLoginCallback(APIView):
         id_token = request.query_params.get("id_token")
         code = request.query_params.get("code")
         state = request.query_params.get('state')
+        intent = None
+        if state and '_' in state:
+            state_parts = state.split('_')
+            state = state_parts[0]
+            intent = state_parts[1] if len(state_parts) > 1 else None
+        
         if not id_token and not code:
             return Response({"error":"토큰이 없습니다."},status=400)
 
@@ -799,7 +1109,9 @@ class AppleLoginCallback(APIView):
                 except Exception:
                     id_param = ''
                 target_base = "http://localhost:3000" if state == "localhost" else ""
-                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
+                # intent가 signup인 경우 signupFromType=1 추가 (GET 메서드)
+                signup_param = "&signupFromType=1" if intent == "signup" else ""
+                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}{signup_param}")
 
             # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
             user = User.objects.get(user_id=email, login_type="apple")
@@ -815,10 +1127,28 @@ class AppleLoginCallback(APIView):
             html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
             return HttpResponse(html)
         except Exception as e:
-            return Response({"error": str(e)}, status=400)
-
+            return Response(
+                {"error": f"애플 로그인 중 오류가 발생했습니다: {str(e)}"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    
+    @swagger_auto_schema(
+        operation_description="애플 OAuth 콜백을 처리합니다 (POST).",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'id_token': openapi.Schema(type=openapi.TYPE_STRING, description='애플 ID 토큰'),
+                'code': openapi.Schema(type=openapi.TYPE_STRING, description='애플 인증 코드'),
+                'state': openapi.Schema(type=openapi.TYPE_STRING, description='상태 값')
+            }
+        ),
+        responses={
+            302: openapi.Response(description="로그인 페이지 또는 로딩 페이지로 리다이렉트"),
+            400: openapi.Response(description="잘못된 요청")
+        }
+    )
     def post(self, request):
-        # Apple은 response_mode=form_post로 전달하는 경우 POST로 콜백 호출
+        """애플 로그인 콜백 (POST)"""
         client_url = CLIENT_URL or "https://agrounds.com"
         if request.data.get('hostname') == 'localhost' :
             client_url = "http://localhost:3000"
@@ -826,6 +1156,12 @@ class AppleLoginCallback(APIView):
         id_token = request.data.get("id_token")
         code = request.data.get("code")
         state = request.data.get('state')
+        intent = None
+        if state and '_' in state:
+            state_parts = state.split('_')
+            state = state_parts[0]
+            intent = state_parts[1] if len(state_parts) > 1 else None
+        
         if not id_token and not code:
             return Response({"error":"토큰이 없습니다."},status=400)
 
@@ -851,7 +1187,9 @@ class AppleLoginCallback(APIView):
                 except Exception:
                     id_param = ''
                 target_base = "http://localhost:3000" if state == "localhost" else ""
-                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}")
+                # intent가 signup인 경우 signupFromType=1 추가
+                signup_param = "&signupFromType=1" if intent == "signup" else ""
+                return redirect(f"{target_base}/app/login?signupPrompt=1&id={id_param}{signup_param}")
 
             # 가입되어있는 경우 토큰 생성하여 로딩 페이지로 리다이렉트
             user = User.objects.get(user_id=email, login_type="apple")
@@ -867,12 +1205,54 @@ class AppleLoginCallback(APIView):
             html = f"""<!doctype html><html><head><meta http-equiv='refresh' content='0;url={target}'/></head><body><script>window.location.replace('{target}');</script></body></html>"""
             return HttpResponse(html)
         except Exception as e:
-            return Response({"error": str(e)}, status=400)
+            return Response(
+                {"error": f"애플 로그인 중 오류가 발생했습니다: {str(e)}"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
-# 이메일 존재 여부 확인 (user 기준)
+# ===============================================
+# 사용자 확인 API
+# ===============================================
+
 class check_user_exists(APIView):
+    """
+    이메일 존재 여부 확인 API
+    이메일 주소로 사용자 존재 여부를 확인합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="이메일 주소로 사용자 존재 여부를 확인합니다.",
+        manual_parameters=[
+            openapi.Parameter(
+                'email',
+                openapi.IN_QUERY,
+                description='이메일 주소',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'id',
+                openapi.IN_QUERY,
+                description='암호화된 이메일',
+                type=openapi.TYPE_STRING,
+                required=False
+            ),
+            openapi.Parameter(
+                'login_type',
+                openapi.IN_QUERY,
+                description='로그인 타입',
+                type=openapi.TYPE_STRING,
+                required=False
+            )
+        ],
+        responses={
+            200: openapi.Response(description="조회 성공"),
+            400: openapi.Response(description="잘못된 요청")
+        }
+    )
     def get(self, request):
+        """이메일 존재 여부 확인"""
         email = request.query_params.get('email')
         enc_id = request.query_params.get('id')
         login_type_param = request.query_params.get('login_type')
@@ -891,52 +1271,70 @@ class check_user_exists(APIView):
         return JsonResponse({"exists": exists}, status=200)
 
 
-# 로그인
 class Login(APIView):
     """
-    {
-        'user_id' : {String},
-        'password' : {String}
-    }
-
-    user_type
-    -1 : 가입 후 첫 로그인
-    coach : 감  독
-    player : 선수
-    individual : 개인 회원 
-
-    login_type
-    0 : 일반 로그인
-    1 : 카카오 로그인
+    일반 로그인 API
+    user_id와 password로 로그인을 처리합니다.
     """
+    
+    @swagger_auto_schema(
+        operation_description="일반 로그인을 처리합니다.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_id': openapi.Schema(type=openapi.TYPE_STRING, description='사용자 아이디'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='비밀번호')
+            },
+            required=['user_id', 'password']
+        ),
+        responses={
+            200: openapi.Response(description="로그인 성공"),
+            400: openapi.Response(description="잘못된 요청"),
+            401: openapi.Response(description="인증 실패"),
+            500: openapi.Response(description="서버 오류")
+        }
+    )
     def post(self, request, *args, **kwargs):
+        """일반 로그인"""
         try:
             data = json.loads(request.body)
             user_id = data.get('user_id')
             password = data.get('password')
 
-            # 간단한 유효성 검사
             if not user_id or not password:
-                return JsonResponse({'error': '모든 필드는 필수입니다.'}, status=400)
+                return JsonResponse(
+                    {"error": "user_id와 password는 필수입니다."}, 
+                    status=400
+                )
 
-            # 사용자 찾기
             try:
-                user = UserInfo.objects.get(user_id = user_id)
+                user = UserInfo.objects.get(user_id=user_id)
             except UserInfo.DoesNotExist:
-                return JsonResponse({'error': '해당 사용자가 존재하지 않습니다.'}, status=401)
+                return JsonResponse(
+                    {"error": "해당 사용자가 존재하지 않습니다."}, 
+                    status=401
+                )
 
-            # 비밀번호 확인
             if not check_password(password, user.password):
-                return JsonResponse({'error': '비밀번호가 일치하지 않습니다.'}, status=401)
+                return JsonResponse(
+                    {"error": "비밀번호가 일치하지 않습니다."}, 
+                    status=401
+                )
 
             # 로그인 성공
             # 로그인 response return
             return self.getLogin(user)
 
         except json.JSONDecodeError:
-            return JsonResponse({"error": "유효한 JSON 형식이 아닙니다."}, status=400)
+            return JsonResponse(
+                {"error": "유효한 JSON 형식이 아닙니다."}, 
+                status=400
+            )
         except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+            return JsonResponse(
+                {"error": f"로그인 중 오류가 발생했습니다: {str(e)}"}, 
+                status=500
+            )
 
     def getTokensForUser(self, user):
         """
@@ -972,10 +1370,31 @@ class Login(APIView):
                                 }, status=200)
 
 
-# 토큰으로 사용자 정보 받아오기
 class Get_UserInfo_For_Token(APIView):
+    """
+    토큰 기반 사용자 정보 조회 API
+    JWT 토큰으로 사용자 정보를 조회합니다.
+    """
+    
+    @swagger_auto_schema(
+        operation_description="JWT 토큰으로 사용자 정보를 조회합니다.",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description='JWT 토큰 (Bearer {token})',
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={
+            200: openapi.Response(description="조회 성공"),
+            401: openapi.Response(description="인증 실패"),
+            404: openapi.Response(description="사용자를 찾을 수 없음")
+        }
+    )
     def get(self, request):
-        # 헬퍼 함수를 사용하여 사용자 정보 가져오기
+        """토큰으로 사용자 정보 조회"""
         user, error_response = get_user_from_token(request)
         if error_response:
             return error_response

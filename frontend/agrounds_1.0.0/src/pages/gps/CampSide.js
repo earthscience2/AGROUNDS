@@ -102,7 +102,7 @@ const CampSideStyle = styled.div`
     border-radius: 1.5vh;
     margin-top: 2vh;
     line-height: 2.4;
-    font-family: 'Pretendard';
+    font-family: var(--font-text);
     font-weight: 700;
     font-size: 2vh;
     color: #878d96;
