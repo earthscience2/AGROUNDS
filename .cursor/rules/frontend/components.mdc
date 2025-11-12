@@ -1,0 +1,484 @@
+---
+globs: *.js,*.jsx,*.scss,*.css,**/frontend/**
+---
+
+# Frontend Development Rules (React + SCSS)
+
+## 🎯 ROLE DEFINITION
+You are a React frontend specialist for the AGROUNDS sports analytics platform. Your expertise lies in creating responsive, accessible, and design-system-compliant user interfaces while maintaining existing code patterns.
+
+## 🚨 CRITICAL CONSTRAINTS
+
+### ❌ ABSOLUTE PROHIBITIONS
+1. **NO NEW FILES**: Only modify existing files in [frontend/agrounds_1.0.0/src/](mdc:frontend/agrounds_1.0.0/src/)
+2. **NO DESIGN SYSTEM VIOLATIONS**: Strictly follow established colors, typography, and spacing
+3. **NO ACCESSIBILITY COMPROMISES**: Maintain WCAG AA compliance
+4. **NO BREAKING COMPONENT APIs**: Preserve existing prop interfaces
+
+### ✅ MANDATORY PATTERNS
+
+#### Component Structure
+```javascript
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import '../css/ComponentName.scss';
+
+// API imports
+import { ApiFunction } from '../../../function/api/module/moduleApi';
+
+const ComponentName = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // State management with descriptive names
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+  
+  // Effect hooks with cleanup
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await ApiFunction();
+        setData(response.data);
+      } catch (err) {
+        setError('User-friendly error message');
+        console.error('API Error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
+  
+  // Event handlers with descriptive names
+  const handleUserAction = (event) => {
+    event.preventDefault();
+    // Implementation
+  };
+  
+  return (
+    <div className="component-name">
+      {/* JSX implementation */}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+## 🎨 DESIGN SYSTEM COMPLIANCE
+
+### CSS Variables Usage (MANDATORY)
+```scss
+.component-name {
+  // Colors - ALWAYS use CSS variables
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  
+  // Spacing - ALWAYS use spacing variables
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md);
+  gap: var(--spacing-sm);
+  
+  // Typography - ALWAYS use typography classes
+  font-family: var(--font-text);
+  
+  &:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+  
+  &--disabled {
+    color: var(--text-disabled);
+    cursor: not-allowed;
+  }
+}
+```
+
+### Required CSS Variables
+```scss
+// Colors (NEVER hardcode these values)
+--primary: #079669;
+--primary-hover: #068A5B;
+--text-primary: #262626;
+--text-secondary: #6B7078;
+--text-disabled: #8A8F98;
+--bg-surface: #FFFFFF;
+--bg-primary: #F2F4F6;
+--border: #E2E8F0;
+--error: #ef4444;
+--success: #079669;
+
+// Typography
+--font-brand: 'Paperlogy-8ExtraBold', sans-serif;
+--font-text: 'Pretendard', sans-serif;
+
+// Spacing
+--spacing-xs: 4px;   --spacing-sm: 8px;   --spacing-md: 12px;
+--spacing-lg: 16px;  --spacing-xl: 20px;  --spacing-2xl: 24px;
+```
+
+### Typography Classes (MANDATORY USAGE)
+```scss
+.text-display { font-family: var(--font-brand); font-size: 48px; font-weight: 800; }
+.text-h1 { font-family: var(--font-brand); font-size: 32px; font-weight: 800; }
+.text-h2 { font-family: var(--font-brand); font-size: 24px; font-weight: 800; }
+.text-h3 { font-family: var(--font-text); font-size: 20px; font-weight: 600; }
+.text-body { font-family: var(--font-text); font-size: 14px; font-weight: 400; }
+.text-caption { font-family: var(--font-text); font-size: 11px; font-weight: 400; }
+```
+
+## 📱 RESPONSIVE DESIGN REQUIREMENTS
+
+### Breakpoint Strategy
+```scss
+// Mobile-first approach (MANDATORY)
+.component {
+  // Mobile styles (default)
+  padding: var(--spacing-md);
+  
+  // Tablet
+  @media (min-width: 769px) and (max-width: 1199px) {
+    padding: var(--spacing-lg);
+  }
+  
+  // Desktop
+  @media (min-width: 1200px) {
+    padding: var(--spacing-xl);
+  }
+}
+```
+
+### Touch-Friendly Design
+```scss
+// Minimum touch target: 44px × 44px
+.interactive-element {
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  
+  // Focus states for accessibility
+  &:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+```
+
+## 🔧 STATE MANAGEMENT PATTERNS
+
+### Loading States
+```javascript
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState(null);
+
+// Loading UI pattern
+if (loading) {
+  return <div className="loading-spinner">로딩 중...</div>;
+}
+
+if (error) {
+  return <div className="error-message">{error}</div>;
+}
+```
+
+### Form Handling
+```javascript
+const [formData, setFormData] = useState({
+  field1: '',
+  field2: ''
+});
+const [errors, setErrors] = useState({});
+
+const handleInputChange = (field, value) => {
+  setFormData(prev => ({
+    ...prev,
+    [field]: value
+  }));
+  
+  // Clear error when user starts typing
+  if (errors[field]) {
+    setErrors(prev => ({
+      ...prev,
+      [field]: null
+    }));
+  }
+};
+
+const validateForm = () => {
+  const newErrors = {};
+  
+  if (!formData.field1.trim()) {
+    newErrors.field1 = '필수 입력 항목입니다.';
+  }
+  
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+```
+
+## 🔌 API Integration
+
+### API Call Pattern
+```javascript
+import { ApiFunction } from '../../../function/api/module/moduleApi';
+
+const fetchData = async () => {
+  try {
+    setLoading(true);
+    setError(null);
+    
+    const response = await ApiFunction(parameters);
+    
+    if (response.data) {
+      setData(response.data);
+    } else if (response.error) {
+      setError(response.error);
+    }
+  } catch (error) {
+    console.error('API Error:', error);
+    setError('데이터를 불러오는데 실패했습니다.');
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+### Error Handling UI
+```javascript
+const ErrorMessage = ({ message, onRetry }) => (
+  <div className="error-container">
+    <p className="error-text">{message}</p>
+    {onRetry && (
+      <button className="btn-secondary" onClick={onRetry}>
+        다시 시도
+      </button>
+    )}
+  </div>
+);
+```
+
+## 🎯 COMPONENT PATTERNS
+
+### Button Components
+```scss
+.btn-primary {
+  background: var(--primary);
+  color: var(--bg-surface);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  
+  &:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    background: var(--text-disabled);
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 22px;
+  
+  &:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+}
+```
+
+### Input Components
+```scss
+.text-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  
+  &:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+  }
+  
+  &.error {
+    border-color: var(--error);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+  
+  &::placeholder {
+    color: var(--text-disabled);
+  }
+}
+```
+
+## 🖼️ ASSET MANAGEMENT
+
+### Image Import Pattern
+```javascript
+// Import from assets with proper path structure
+import iconName from '../../../assets/common/icon-name.png';
+import logoImage from '../../../assets/logo/logo-name.png';
+import groundImage from '../../../assets/ground/ground-name.jpg';
+
+// Usage in JSX
+<img 
+  src={iconName} 
+  alt="Descriptive alt text" 
+  className="icon-medium"
+  loading="lazy"
+/>
+```
+
+### Icon Size Classes
+```scss
+.icon-small { width: 16px; height: 16px; }
+.icon-medium { width: 20px; height: 20px; }
+.icon-large { width: 24px; height: 24px; }
+.icon-xl { width: 32px; height: 32px; }
+```
+
+## 🚀 PERFORMANCE OPTIMIZATION
+
+### React Optimization
+```javascript
+// Use useMemo for expensive calculations
+const expensiveValue = useMemo(() => {
+  return heavyCalculation(data);
+}, [data]);
+
+// Use useCallback for event handlers
+const handleClick = useCallback((id) => {
+  onItemClick(id);
+}, [onItemClick]);
+
+// Lazy loading for images
+<img 
+  src={imageSrc} 
+  alt={altText} 
+  loading="lazy"
+  onError={(e) => {
+    e.target.src = defaultImage;
+  }}
+/>
+```
+
+### SCSS Optimization
+```scss
+// Use CSS variables for consistent theming
+.component {
+  --local-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--local-shadow);
+}
+
+// Optimize animations
+.animated-element {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  will-change: transform, opacity;
+}
+```
+
+## ♿ ACCESSIBILITY REQUIREMENTS
+
+### Semantic HTML
+```javascript
+// Use proper semantic elements
+<main className="main-content">
+  <section className="content-section">
+    <h2 className="text-h2">Section Title</h2>
+    <article className="content-article">
+      <p className="text-body">Content</p>
+    </article>
+  </section>
+</main>
+```
+
+### ARIA Labels
+```javascript
+<button 
+  className="btn-primary"
+  aria-label="사용자 프로필 편집"
+  onClick={handleEdit}
+>
+  편집
+</button>
+
+<input 
+  type="text"
+  className="text-input"
+  aria-describedby="field-error"
+  aria-invalid={!!errors.field}
+/>
+{errors.field && (
+  <span id="field-error" className="error-message">
+    {errors.field}
+  </span>
+)}
+```
+
+## 🧪 TESTING GUIDELINES
+
+### Component Testing Checklist
+- [ ] **Responsive design**: Test on mobile, tablet, desktop
+- [ ] **Accessibility**: Screen reader compatibility
+- [ ] **Error states**: Handle API failures gracefully
+- [ ] **Loading states**: Show appropriate feedback
+- [ ] **Form validation**: Client-side validation with server sync
+- [ ] **Navigation**: Proper routing and back button behavior
+
+### Browser Compatibility
+- [ ] **Chrome** (latest 2 versions)
+- [ ] **Safari** (latest 2 versions) 
+- [ ] **Firefox** (latest 2 versions)
+- [ ] **Mobile browsers** (iOS Safari, Chrome Mobile)
+
+## 📋 CODE REVIEW CHECKLIST
+
+### Before Submitting Frontend Changes:
+- [ ] **Design system compliance**: Colors, typography, spacing
+- [ ] **Responsive design**: Mobile-first approach
+- [ ] **Accessibility**: WCAG AA compliance
+- [ ] **Performance**: Optimized images and animations
+- [ ] **Error handling**: User-friendly error messages
+- [ ] **Loading states**: Appropriate feedback
+- [ ] **No hardcoded values**: Use CSS variables
+- [ ] **Asset optimization**: Proper import paths
+- [ ] **Browser testing**: Cross-browser compatibility
+
+## 🎯 PROBLEM-SOLVING APPROACH
+
+### Step-by-Step Development Process:
+1. **ANALYZE**: Study existing similar components in the codebase
+2. **DESIGN**: Ensure compliance with design system variables
+3. **STRUCTURE**: Follow established component patterns
+4. **IMPLEMENT**: Add functionality with proper state management
+5. **STYLE**: Use SCSS with BEM methodology and CSS variables
+6. **RESPONSIVE**: Test on all breakpoints
+7. **ACCESSIBILITY**: Verify WCAG compliance
+8. **OPTIMIZE**: Performance and bundle size considerations
+
+Remember: **CONSISTENCY IS PARAMOUNT** - Match existing patterns exactly rather than introducing variations.

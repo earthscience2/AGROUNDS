@@ -1,0 +1,440 @@
+# 🔍 Code Review Guidelines
+
+## Role Definition
+You are responsible for ensuring high-quality code through systematic code review. All code changes must be reviewed before merging to main branches.
+
+---
+
+## 🚨 Mandatory Code Review
+
+### ❌ Prohibited Actions
+1. **NO DIRECT COMMITS TO MAIN** - Always use Pull Requests
+2. **NO SELF-MERGING** - Minimum 1 reviewer approval required
+3. **NO SKIPPING CI/CD** - All checks must pass
+4. **NO FORCE PUSH TO MAIN** - Protect main branch integrity
+
+### ✅ Required Actions
+1. **CREATE PULL REQUEST** - For all code changes
+2. **COMPLETE CHECKLIST** - Before requesting review
+3. **RESPOND TO FEEDBACK** - Address all review comments
+4. **UPDATE TESTS** - Keep tests in sync with code
+
+---
+
+## 📋 Pull Request Template
+
+### PR Title Format
+```
+<type>(<scope>): <short description>
+
+Examples:
+feat(auth): add JWT token refresh mechanism
+fix(database): resolve N+1 query in user list
+refactor(frontend): optimize React component rendering
+```
+
+### PR Description Template
+```markdown
+## Description
+Brief description of what this PR does
+
+## Type of Change
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Refactoring (no functional changes)
+- [ ] Documentation update
+
+## Related Issue
+Closes #123
+Fixes #456
+
+## Changes Made
+- Added JWT token refresh endpoint
+- Updated authentication middleware
+- Modified user model to include refresh_token field
+
+## Testing
+- [ ] Unit tests added/updated
+- [ ] Integration tests added/updated
+- [ ] Manual testing completed
+- [ ] Tested on production-like environment
+
+## Screenshots (if applicable)
+[Before] / [After] screenshots
+
+## Checklist Before Review
+- [ ] Code follows project style guidelines
+- [ ] Self-review completed
+- [ ] Comments added for complex logic
+- [ ] Documentation updated
+- [ ] No console.log/print debugging statements
+- [ ] Tests added and passing
+- [ ] No linter errors
+- [ ] Soft delete pattern used (if applicable)
+- [ ] Design system compliant (if frontend)
+```
+
+---
+
+## 🔍 Reviewer Checklist
+
+### Code Quality
+- [ ] **Code is readable and maintainable**
+  - Clear variable/function names
+  - Logical code organization
+  - Appropriate comments for complex logic
+
+- [ ] **Follows existing patterns**
+  - Consistent with codebase style
+  - Uses established architectural patterns
+  - No unnecessary duplication
+
+- [ ] **No code smells**
+  - No overly complex functions (> 50 lines)
+  - No deep nesting (> 3 levels)
+  - No magic numbers/strings
+
+### Functionality
+- [ ] **Code does what it's supposed to do**
+  - Matches PR description
+  - Solves the stated problem
+  - No unintended side effects
+
+- [ ] **Edge cases handled**
+  - Null/undefined checks
+  - Empty array/object handling
+  - Boundary conditions
+
+- [ ] **Error handling proper**
+  - Try-catch blocks where needed
+  - User-friendly error messages
+  - Errors logged appropriately
+
+### AGROUNDS Specific Rules
+- [ ] **Soft delete implemented**
+  - Uses `deleted_at` field
+  - No hard deletes (.delete() calls)
+  - Filters out soft-deleted records
+
+- [ ] **No new files created** (unless absolutely necessary)
+  - Modifies existing files only
+  - Justified if new file needed
+
+- [ ] **Design system compliance** (Frontend)
+  - Uses CSS variables (no hardcoded colors)
+  - Follows typography system
+  - Proper spacing
+
+- [ ] **Database patterns followed** (Backend)
+  - Models have `managed = False`
+  - Enum types mapped to choices
+  - Timestamps included (created_at, updated_at, deleted_at)
+
+### Security
+- [ ] **No security vulnerabilities**
+  - Input validation present
+  - No SQL injection risks
+  - No XSS vulnerabilities
+  - No hardcoded secrets/credentials
+
+- [ ] **Authentication/Authorization proper**
+  - Protected endpoints secured
+  - JWT tokens handled correctly
+  - Permissions checked
+
+### Performance
+- [ ] **No obvious performance issues**
+  - Database queries optimized
+  - No N+1 queries
+  - Appropriate use of caching
+  - Efficient algorithms
+
+- [ ] **Frontend optimization** (if applicable)
+  - No unnecessary re-renders
+  - Lazy loading where appropriate
+  - Images optimized
+
+### Testing
+- [ ] **Tests are adequate**
+  - All new code covered by tests
+  - Tests are meaningful (not just for coverage)
+  - Edge cases tested
+  - Tests pass consistently
+
+- [ ] **Tests are well-written**
+  - Clear test names
+  - Arrange-Act-Assert pattern
+  - No flaky tests
+
+### Documentation
+- [ ] **Code is documented**
+  - Docstrings for functions/classes
+  - Comments for complex logic
+  - JSDoc for JavaScript functions
+
+- [ ] **External documentation updated**
+  - README if needed
+  - API documentation (Swagger)
+  - Architecture diagrams if changed
+
+---
+
+## 💬 Providing Effective Feedback
+
+### Feedback Categories
+Use these prefixes in review comments:
+
+**[BLOCKING]** - Must be fixed before merge
+```
+[BLOCKING] This creates a SQL injection vulnerability. 
+Use parameterized queries instead.
+```
+
+**[SUGGESTION]** - Recommended but not required
+```
+[SUGGESTION] Consider using `useMemo` here for better performance.
+```
+
+**[QUESTION]** - Clarification needed
+```
+[QUESTION] Why did we choose this approach over the previous one?
+```
+
+**[NITPICK]** - Minor style/formatting issue
+```
+[NITPICK] Extra blank line here.
+```
+
+**[PRAISE]** - Positive feedback (important!)
+```
+[PRAISE] Great use of design patterns here!
+```
+
+### Effective Feedback Guidelines
+1. **Be specific and actionable**
+   - ❌ Bad: "This code is messy"
+   - ✅ Good: "Consider extracting lines 45-60 into a separate function"
+
+2. **Explain the 'why'**
+   - ❌ Bad: "Don't use var"
+   - ✅ Good: "Use const/let instead of var to avoid hoisting issues"
+
+3. **Suggest alternatives**
+   - ❌ Bad: "This is wrong"
+   - ✅ Good: "Instead of X, consider Y because Z"
+
+4. **Be respectful and constructive**
+   - Focus on code, not the person
+   - Ask questions instead of making demands
+   - Acknowledge good work
+
+---
+
+## ✅ Approval Process
+
+### When to Approve
+- [ ] All blocking issues resolved
+- [ ] All checkboxes above checked
+- [ ] CI/CD passes
+- [ ] No merge conflicts
+- [ ] Code meets quality standards
+
+### When to Request Changes
+- Security vulnerabilities present
+- Breaking changes not documented
+- Tests missing or failing
+- AGROUNDS core principles violated
+- Performance issues
+
+### When to Comment (No Approval)
+- Need more information
+- Have suggestions but code is acceptable
+- Want to discuss approach
+
+---
+
+## 🔄 Review Response Guidelines
+
+### For PR Author
+1. **Respond to all comments**
+   - Address or explain each comment
+   - Mark resolved when fixed
+   - Push commits with descriptive messages
+
+2. **Don't take feedback personally**
+   - Review is about code quality, not personal ability
+   - Ask for clarification if needed
+   - Learn from feedback
+
+3. **Keep PR scope focused**
+   - Don't add unrelated changes
+   - Consider splitting large PRs
+   - One feature/fix per PR
+
+4. **Update PR description**
+   - If approach changes significantly
+   - If new issues discovered
+   - If scope expands
+
+---
+
+## 📊 Code Review Metrics
+
+### Healthy Code Review Indicators
+- **Review turnaround time**: < 24 hours
+- **PR size**: < 400 lines changed
+- **Comments per PR**: 3-10 (good discussion)
+- **Approval rate**: 80%+ (quality submissions)
+- **Revision rounds**: 1-2 (efficient communication)
+
+### Red Flags
+- ⚠️ PR open > 1 week
+- ⚠️ > 1000 lines changed
+- ⚠️ No comments from reviewer
+- ⚠️ Multiple force pushes
+- ⚠️ > 5 revision rounds
+
+---
+
+## 🎯 Common Review Scenarios
+
+### Scenario 1: Large PR
+```
+Comment: "This PR is quite large. Consider splitting into:
+1. Database model changes (PR #1)
+2. API endpoints (PR #2)
+3. Frontend components (PR #3)
+
+This makes review easier and reduces risk."
+```
+
+### Scenario 2: Missing Tests
+```
+Comment: "[BLOCKING] Please add tests for:
+- Happy path (user creation successful)
+- Error case (duplicate email)
+- Edge case (invalid email format)"
+```
+
+### Scenario 3: Performance Concern
+```
+Comment: "[BLOCKING] This query will cause N+1 problem.
+Current: User.objects.all() then loop through user.team
+Better: User.objects.select_related('team')
+
+See database/patterns.mdc for query optimization guidelines."
+```
+
+### Scenario 4: Design System Violation
+```
+Comment: "[BLOCKING] Hardcoded color #079669 found.
+Use CSS variable instead: var(--primary)
+
+See frontend/design-system.mdc for approved colors."
+```
+
+### Scenario 5: Security Issue
+```
+Comment: "[BLOCKING] This endpoint lacks authentication.
+Add @jwt_required decorator or IsAuthenticated permission.
+
+See general/security.mdc for auth guidelines."
+```
+
+---
+
+## 🚀 Quick Review Workflow
+
+### For Reviewer
+```
+1. Read PR description
+2. Check CI/CD status (must be green)
+3. Review changed files
+4. Run locally if needed
+5. Provide feedback using categories
+6. Approve or Request Changes
+```
+
+### For Author
+```
+1. Create PR with complete template
+2. Self-review (use checklist)
+3. Request reviewers
+4. Address feedback promptly
+5. Re-request review after changes
+6. Merge after approval
+```
+
+---
+
+## 📝 Examples of Good PRs
+
+### Example 1: Feature Addition
+```markdown
+## feat(analytics): add team coordination metrics
+
+### Description
+Adds new team coordination metrics (T_CO, A_CO, D_CO) to TeamAnal model
+and corresponding API endpoints.
+
+### Changes Made
+- Updated TeamAnal model with coordination fields
+- Added API endpoint GET /api/team/coordination/
+- Added unit tests for coordination calculation
+- Updated Swagger documentation
+
+### Testing
+- ✅ Unit tests: 15 new tests added, all passing
+- ✅ Integration tests: API endpoint tested
+- ✅ Manual testing: Verified on staging environment
+
+### Performance Impact
+- Query time: < 50ms (tested with 1000 teams)
+- No N+1 queries (used select_related)
+
+Closes #234
+```
+
+### Example 2: Bug Fix
+```markdown
+## fix(auth): resolve JWT token refresh race condition
+
+### Description
+Fixes race condition where multiple simultaneous requests could
+invalidate refresh tokens incorrectly.
+
+### Root Cause
+Token refresh endpoint didn't use database transaction,
+allowing concurrent requests to create multiple refresh tokens.
+
+### Solution
+- Added transaction.atomic() around token refresh
+- Added unique constraint on user_code in refresh_token table
+- Added retry logic for concurrent update conflicts
+
+### Testing
+- ✅ Added concurrency test (10 simultaneous requests)
+- ✅ Verified single token created
+- ✅ Load tested with 100 concurrent users
+
+Fixes #567
+```
+
+---
+
+## 🔗 Related Guidelines
+
+**Next Steps:**
+- After approval → See `general/version-control.mdc` (Merge guidelines)
+- For testing → See `general/testing-strategy.mdc`
+- For security → See `general/security.mdc`
+- For errors → See `general/error-handling.mdc`
+
+**Always Reference:**
+- `guidelines.mdc` - Core constraints
+- `00-navigation-hub.mdc` - Rule navigation
+
+---
+
+**Remember: Code review is a collaboration, not a criticism. The goal is to ship high-quality code together!**

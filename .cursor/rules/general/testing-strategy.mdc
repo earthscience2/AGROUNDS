@@ -1,0 +1,641 @@
+# 🧪 Testing Strategy
+
+## Role Definition
+You are responsible for ensuring code reliability through comprehensive testing. All code must have appropriate test coverage before merging.
+
+---
+
+## 🚨 Testing Requirements
+
+### ❌ Prohibited Actions
+1. **NO CODE WITHOUT TESTS** - All new code must have tests
+2. **NO SKIPPING TESTS** - Never commit with --no-verify
+3. **NO FLAKY TESTS** - Tests must pass consistently
+4. **NO COMMENTED-OUT TESTS** - Fix or remove, don't comment
+
+### ✅ Mandatory Requirements
+1. **WRITE TESTS FIRST** - TDD when possible
+2. **TEST EDGE CASES** - Not just happy path
+3. **KEEP TESTS FAST** - Unit tests < 100ms each
+4. **MAINTAIN COVERAGE** - Minimum thresholds must be met
+
+---
+
+## 📊 Test Pyramid
+
+```
+        /\
+       /E2E\      10% - End-to-End Tests
+      /------\
+     /  INT   \   20% - Integration Tests
+    /----------\
+   /    UNIT    \ 70% - Unit Tests
+  /--------------\
+```
+
+### Test Distribution
+- **70% Unit Tests** - Fast, isolated, test individual functions
+- **20% Integration Tests** - Test component interactions
+- **10% E2E Tests** - Test complete user flows
+
+---
+
+## 🎯 Coverage Goals
+
+### Minimum Coverage Requirements
+| Component | Minimum | Target |
+|-----------|---------|--------|
+| **Backend** | 80% | 90% |
+| **Frontend** | 75% | 85% |
+| **Critical Paths** | 100% | 100% |
+| **Utility Functions** | 90% | 95% |
+
+### Critical Paths (100% Coverage Required)
+- Authentication & Authorization
+- Payment processing (if applicable)
+- Data persistence (models.py)
+- Security-related code
+- Analytics calculations
+
+---
+
+## 🔬 Unit Tests
+
+### When to Write Unit Tests
+- For every function/method
+- For every class
+- For edge cases and error handling
+- For business logic
+- For utility functions
+
+### Unit Test Structure (AAA Pattern)
+```python
+# Arrange-Act-Assert
+
+def test_calculate_player_score_normal_case():
+    # Arrange - Set up test data
+    quarter_code = "q_123"
+    metrics = {
+        'T_D': 8.5,
+        'T_AS': 12.3,
+        'T_HS': 25.0
+    }
+    
+    # Act - Execute the function
+    result = calculate_player_score(quarter_code, metrics)
+    
+    # Assert - Verify the result
+    assert result == 85
+    assert isinstance(result, int)
+    assert 0 <= result <= 100
+```
+
+### Python (Django) Unit Test Example
+```python
+import pytest
+from django.test import TestCase
+from DB.models import User, UserInfo
+from datetime import datetime
+
+class UserModelTest(TestCase):
+    """Test User model functionality"""
+    
+    def setUp(self):
+        """Set up test data"""
+        self.user = User.objects.create(
+            user_code='u_test123',
+            user_id='test@example.com',
+            password='hashed_password',
+            login_type='email'
+        )
+    
+    def test_user_creation(self):
+        """Test user is created correctly"""
+        self.assertEqual(self.user.user_code, 'u_test123')
+        self.assertEqual(self.user.login_type, 'email')
+        self.assertIsNone(self.user.deleted_at)
+    
+    def test_soft_delete(self):
+        """Test soft delete works correctly"""
+        # Act
+        self.user.deleted_at = datetime.now()
+        self.user.save()
+        
+        # Assert
+        self.assertIsNotNone(self.user.deleted_at)
+        # Verify user still in database
+        user = User.objects.get(user_code='u_test123')
+        self.assertIsNotNone(user)
+    
+    def test_user_with_invalid_login_type(self):
+        """Test validation for invalid login type"""
+        with pytest.raises(ValidationError):
+            User.objects.create(
+                user_code='u_test456',
+                user_id='test2@example.com',
+                password='password',
+                login_type='invalid_type'
+            )
+    
+    def tearDown(self):
+        """Clean up after tests"""
+        User.objects.all().delete()
+```
+
+### JavaScript (React) Unit Test Example
+```javascript
+import { render, screen, fireEvent } from '@testing-library/react';
+import { TeamCard } from './TeamCard';
+
+describe('TeamCard Component', () => {
+  const mockTeam = {
+    team_code: 't_123',
+    name: 'FC Seoul',
+    members: 15,
+    local: 'Seoul'
+  };
+  
+  it('renders team name correctly', () => {
+    // Arrange & Act
+    render(<TeamCard team={mockTeam} />);
+    
+    // Assert
+    expect(screen.getByText('FC Seoul')).toBeInTheDocument();
+  });
+  
+  it('calls onSelect when clicked', () => {
+    // Arrange
+    const mockOnSelect = jest.fn();
+    render(<TeamCard team={mockTeam} onSelect={mockOnSelect} />);
+    
+    // Act
+    fireEvent.click(screen.getByRole('button'));
+    
+    // Assert
+    expect(mockOnSelect).toHaveBeenCalledWith('t_123');
+    expect(mockOnSelect).toHaveBeenCalledTimes(1);
+  });
+  
+  it('displays member count', () => {
+    // Arrange & Act
+    render(<TeamCard team={mockTeam} />);
+    
+    // Assert
+    expect(screen.getByText('15명')).toBeInTheDocument();
+  });
+  
+  it('handles missing team data gracefully', () => {
+    // Arrange & Act
+    render(<TeamCard team={null} />);
+    
+    // Assert
+    expect(screen.getByText('팀 정보 없음')).toBeInTheDocument();
+  });
+});
+```
+
+---
+
+## 🔗 Integration Tests
+
+### When to Write Integration Tests
+- API endpoint testing
+- Database interactions
+- External service integrations
+- Component interactions
+- Authentication flows
+
+### Django API Integration Test Example
+```python
+from rest_framework.test import APITestCase
+from rest_framework import status
+from DB.models import User, Team
+
+class TeamAPITest(APITestCase):
+    """Test Team API endpoints"""
+    
+    def setUp(self):
+        """Set up test data"""
+        self.user = User.objects.create(
+            user_code='u_test123',
+            user_id='test@example.com',
+            login_type='email'
+        )
+        # Get JWT token
+        response = self.client.post('/api/login/', {
+            'user_id': 'test@example.com',
+            'password': 'password123'
+        })
+        self.token = response.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+    
+    def test_create_team_success(self):
+        """Test team creation with valid data"""
+        # Arrange
+        team_data = {
+            'name': 'Test Team',
+            'local': 'Seoul',
+            'introduce': 'Test team description'
+        }
+        
+        # Act
+        response = self.client.post('/api/team/create/', team_data)
+        
+        # Assert
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn('team_code', response.data)
+        self.assertEqual(response.data['name'], 'Test Team')
+        
+        # Verify in database
+        team = Team.objects.get(team_code=response.data['team_code'])
+        self.assertEqual(team.name, 'Test Team')
+        self.assertIsNone(team.deleted_at)
+    
+    def test_create_team_without_auth(self):
+        """Test team creation requires authentication"""
+        # Arrange
+        self.client.credentials()  # Remove auth
+        team_data = {'name': 'Test Team', 'local': 'Seoul'}
+        
+        # Act
+        response = self.client.post('/api/team/create/', team_data)
+        
+        # Assert
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+    
+    def test_get_team_list_filtered_by_deleted(self):
+        """Test soft-deleted teams not returned"""
+        # Arrange
+        Team.objects.create(team_code='t_1', name='Active Team')
+        Team.objects.create(
+            team_code='t_2', 
+            name='Deleted Team',
+            deleted_at=datetime.now()
+        )
+        
+        # Act
+        response = self.client.get('/api/team/list/')
+        
+        # Assert
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['name'], 'Active Team')
+```
+
+### React Integration Test Example
+```javascript
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { TeamSelection } from './TeamSelection';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+
+// Mock API server
+const server = setupServer(
+  rest.get('/api/team/list/', (req, res, ctx) => {
+    return res(ctx.json([
+      { team_code: 't_1', name: 'FC Seoul', members: 15 },
+      { team_code: 't_2', name: 'Suwon FC', members: 12 }
+    ]));
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+describe('TeamSelection Integration', () => {
+  it('loads and displays teams from API', async () => {
+    // Act
+    render(<TeamSelection />);
+    
+    // Assert
+    await waitFor(() => {
+      expect(screen.getByText('FC Seoul')).toBeInTheDocument();
+      expect(screen.getByText('Suwon FC')).toBeInTheDocument();
+    });
+  });
+  
+  it('handles API error gracefully', async () => {
+    // Arrange
+    server.use(
+      rest.get('/api/team/list/', (req, res, ctx) => {
+        return res(ctx.status(500));
+      })
+    );
+    
+    // Act
+    render(<TeamSelection />);
+    
+    // Assert
+    await waitFor(() => {
+      expect(screen.getByText('팀 목록을 불러올 수 없습니다')).toBeInTheDocument();
+    });
+  });
+});
+```
+
+---
+
+## 🌐 E2E Tests
+
+### When to Write E2E Tests
+- Critical user journeys
+- Multi-page workflows
+- Payment flows
+- Authentication flows
+- Key business features
+
+### Cypress E2E Test Example
+```javascript
+describe('User Authentication Flow', () => {
+  beforeEach(() => {
+    cy.visit('https://agrounds.com/login');
+  });
+  
+  it('allows user to login with valid credentials', () => {
+    // Arrange
+    const email = 'test@example.com';
+    const password = 'password123';
+    
+    // Act
+    cy.get('input[name="email"]').type(email);
+    cy.get('input[name="password"]').type(password);
+    cy.get('button[type="submit"]').click();
+    
+    // Assert
+    cy.url().should('include', '/dashboard');
+    cy.get('[data-testid="user-name"]').should('contain', 'Test User');
+    cy.get('[data-testid="logout-button"]').should('be.visible');
+  });
+  
+  it('shows error for invalid credentials', () => {
+    // Act
+    cy.get('input[name="email"]').type('invalid@example.com');
+    cy.get('input[name="password"]').type('wrongpassword');
+    cy.get('button[type="submit"]').click();
+    
+    // Assert
+    cy.get('[data-testid="error-message"]')
+      .should('contain', '이메일 또는 비밀번호가 올바르지 않습니다');
+    cy.url().should('include', '/login');
+  });
+  
+  it('redirects to login when accessing protected page', () => {
+    // Act
+    cy.visit('https://agrounds.com/dashboard');
+    
+    // Assert
+    cy.url().should('include', '/login');
+  });
+});
+
+describe('Team Analytics Flow', () => {
+  beforeEach(() => {
+    // Login first
+    cy.login('test@example.com', 'password123');
+  });
+  
+  it('displays team analytics after match upload', () => {
+    // Navigate to upload
+    cy.visit('/app/upload');
+    
+    // Upload GPS file
+    cy.get('input[type="file"]').attachFile('test_gps_data.csv');
+    cy.get('button[data-testid="upload-submit"]').click();
+    
+    // Wait for processing
+    cy.get('[data-testid="processing-complete"]', { timeout: 30000 })
+      .should('be.visible');
+    
+    // Navigate to analytics
+    cy.visit('/app/anal/team');
+    
+    // Verify analytics displayed
+    cy.get('[data-testid="team-score"]').should('exist');
+    cy.get('[data-testid="coordination-metric"]').should('contain', 'T_CO');
+  });
+});
+```
+
+---
+
+## 📝 Test Writing Best Practices
+
+### Good Test Characteristics (F.I.R.S.T.)
+- **Fast** - Tests run quickly (< 100ms per unit test)
+- **Independent** - Tests don't depend on each other
+- **Repeatable** - Same result every time
+- **Self-validating** - Clear pass/fail (no manual verification)
+- **Timely** - Written with or before code (TDD)
+
+### Test Naming Convention
+```python
+# Format: test_<function>_<scenario>_<expected_result>
+
+def test_calculate_score_with_valid_metrics_returns_correct_score():
+    pass
+
+def test_calculate_score_with_invalid_input_raises_error():
+    pass
+
+def test_calculate_score_with_zero_values_returns_zero():
+    pass
+```
+
+### What to Test
+✅ **DO Test**:
+- Public interfaces/APIs
+- Business logic
+- Edge cases
+- Error handling
+- Data validation
+- Soft delete behavior
+- Authentication/Authorization
+- Critical calculations
+
+❌ **DON'T Test**:
+- Third-party libraries
+- Framework internals
+- Simple getters/setters
+- Constants
+- Private implementation details
+
+### Test Data Management
+```python
+# Use fixtures for reusable test data
+@pytest.fixture
+def sample_user():
+    """Create a sample user for testing"""
+    return User.objects.create(
+        user_code='u_test',
+        user_id='test@example.com',
+        login_type='email'
+    )
+
+@pytest.fixture
+def sample_team(sample_user):
+    """Create a sample team"""
+    return Team.objects.create(
+        team_code='t_test',
+        name='Test Team',
+        host=sample_user.user_code
+    )
+
+def test_team_has_correct_host(sample_team, sample_user):
+    assert sample_team.host == sample_user.user_code
+```
+
+---
+
+## 🚀 Running Tests
+
+### Local Development
+```bash
+# Python/Django Tests
+cd backend
+pytest                          # Run all tests
+pytest -v                       # Verbose output
+pytest tests/test_user.py       # Specific file
+pytest -k "test_user"          # Tests matching pattern
+pytest --cov=DB                 # With coverage
+pytest --cov=DB --cov-report=html  # HTML coverage report
+
+# JavaScript/React Tests
+cd frontend/agrounds_1.0.0
+npm test                        # Run all tests
+npm test -- --coverage          # With coverage
+npm test -- TeamCard.test.js    # Specific file
+npm test -- --watch             # Watch mode
+
+# E2E Tests (Cypress)
+npx cypress open                # Interactive mode
+npx cypress run                 # Headless mode
+npx cypress run --spec "cypress/e2e/auth.cy.js"  # Specific spec
+```
+
+### CI/CD Pipeline
+```yaml
+# Automated testing in CI/CD
+test:
+  - Run linters (black, pylint, eslint)
+  - Run unit tests (pytest, jest)
+  - Generate coverage report
+  - Fail if coverage < threshold
+  - Run integration tests
+  - Run E2E tests (critical paths only)
+```
+
+---
+
+## 📊 Coverage Reporting
+
+### Generate Coverage Reports
+```bash
+# Backend (Python)
+pytest --cov=DB --cov=user --cov=match \
+       --cov-report=html \
+       --cov-report=term-missing \
+       --cov-fail-under=80
+
+# Frontend (JavaScript)
+npm test -- --coverage --coverageReporters=html text
+
+# View HTML report
+open htmlcov/index.html  # Python
+open coverage/lcov-report/index.html  # JavaScript
+```
+
+### Coverage Thresholds (fail if not met)
+```python
+# pytest.ini or setup.cfg
+[tool:pytest]
+addopts = --cov-fail-under=80
+```
+
+```json
+// package.json
+{
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 75,
+        "functions": 75,
+        "lines": 75,
+        "statements": 75
+      }
+    }
+  }
+}
+```
+
+---
+
+## 🔍 Test Maintenance
+
+### Regular Test Health Checks
+- [ ] Remove obsolete tests
+- [ ] Update tests when requirements change
+- [ ] Fix flaky tests immediately
+- [ ] Keep test data fresh
+- [ ] Review test coverage monthly
+
+### Dealing with Flaky Tests
+```python
+# Identify flaky tests
+pytest --count=100 tests/test_analytics.py  # Run 100 times
+
+# Common causes:
+# 1. Race conditions → Add proper waits
+# 2. Random data → Use fixed seeds
+# 3. Time-dependent → Mock datetime
+# 4. External dependencies → Mock API calls
+
+# Mock datetime example
+from unittest.mock import patch
+from datetime import datetime
+
+@patch('module.datetime')
+def test_with_fixed_time(mock_datetime):
+    mock_datetime.now.return_value = datetime(2024, 1, 1, 12, 0, 0)
+    # Test code here
+```
+
+---
+
+## ✅ Testing Checklist
+
+### Before Committing
+- [ ] All tests pass locally
+- [ ] New code has tests
+- [ ] Coverage thresholds met
+- [ ] No flaky tests
+- [ ] Test names are descriptive
+- [ ] No commented-out tests
+- [ ] Mocks used appropriately
+- [ ] Tests are fast (< 100ms per unit test)
+
+### During Code Review
+- [ ] Tests cover edge cases
+- [ ] Tests are meaningful (not just for coverage)
+- [ ] AAA pattern followed
+- [ ] Test data is clear
+- [ ] Assertions are specific
+- [ ] Error cases tested
+- [ ] Integration points tested
+
+---
+
+## 🔗 Related Guidelines
+
+**Reference Together:**
+- `general/code-review.mdc` - Review process
+- `general/error-handling.mdc` - Error testing
+- `general/security.mdc` - Security testing
+- `database/patterns.mdc` - Database testing
+- `backend/api-development.mdc` - API testing
+- `frontend/components.mdc` - Component testing
+
+---
+
+**Remember: Tests are not just for catching bugs—they're living documentation of how your code should behave!**

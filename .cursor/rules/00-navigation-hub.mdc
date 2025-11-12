@@ -1,0 +1,338 @@
+---
+alwaysApply: true
+---
+# 🎯 AGROUNDS Development Rules Navigation Hub
+
+## Role Definition
+You are an AGROUNDS sports analytics platform development coordinator. This document serves as the central navigation hub for all development rules in the project.
+
+## 🚨 CRITICAL RULES FOR AI
+
+### ❌ NEVER Reference Korean Files
+**IMPORTANT**: Files ending with `-ko.mdc` are Korean translations for human reference ONLY.
+- ❌ DO NOT read or reference any `*-ko.mdc` files
+- ✅ ONLY use English `.mdc` files (without `-ko` suffix)
+- If you need to update an English rule file, you MUST also update its corresponding Korean version
+
+### 📝 File Update Protocol
+When updating rule files:
+1. ✅ Update the English version (e.g., `access.mdc`)
+2. ✅ Update the Korean version with the same content (e.g., `access-ko.mdc`)
+3. ✅ Maintain consistency between English and Korean versions
+4. ✅ Translate accurately - do not skip Korean version
+
+---
+
+## 🚨 Mandatory Compliance
+
+### ❌ Absolute Prohibitions (Apply to All Tasks)
+1. **NO NEW FILE CREATION** - Only modify existing files
+2. **NO HARD DELETES** - Always use `deleted_at` field
+3. **NO DESIGN SYSTEM VIOLATIONS** - Strictly follow CSS variables
+4. **NO UNRELATED CODE CHANGES** - Only modify code directly related to the request
+
+### ✅ Core Principles
+1. **Soft Delete Pattern** - Use `deleted_at` timestamp field
+2. **Follow Existing Patterns** - Adhere to established code conventions precisely
+3. **Production Testing** - Test all changes on `https://agrounds.com/`
+4. **Design Consistency** - Use approved colors, typography, and spacing
+
+---
+
+## 📚 Rule Navigation by Task Type
+
+### 🗄️ **Database Operations**
+**When to use**: DB schema verification, model definition, sync with actual DB, query writing
+
+**Rule Files**: `database/access.mdc` → `database/patterns.mdc`
+
+**Key Points**:
+- Sync actual DB schema with models.py
+- Accurately map MySQL enum types
+- Mandatory soft delete implementation
+- Set `managed = False` for all models
+
+**Example Questions**:
+- "Verify if DB schema matches models.py"
+- "Check actual structure of user table"
+- "Add new field to PlayerAnal model"
+
+---
+
+### 🔌 **Backend API Development**
+**When to use**: Creating/modifying Django REST API endpoints, serializers, views
+
+**Rule Files**: `backend/api-development.mdc`
+
+**Key Points**:
+- Mandatory Swagger documentation
+- JWT authentication pattern
+- Standard response format
+- Proper error handling
+
+**Example Questions**:
+- "Create user list API"
+- "Modify team creation endpoint"
+- "Add pagination to match data API"
+
+---
+
+### 🎨 **Frontend Development**
+**When to use**: Creating/modifying React components, state management, UI implementation
+
+**Rule Files**: `frontend/components.mdc` + `frontend/design-system.mdc`
+
+**Key Points**:
+- React functional components + Hooks
+- Use SCSS modules
+- Responsive design (mobile-first)
+- Design system compliance
+
+**Example Questions**:
+- "Create team selection component"
+- "Modify match detail page"
+- "Verify button style matches design system"
+
+---
+
+### 🎭 **Design System & Styling**
+**When to use**: CSS/SCSS work, color/typography/spacing verification, UI component styling
+
+**Rule Files**: `frontend/design-system.mdc`
+
+**Key Points**:
+- Use CSS variables (no hardcoding)
+- Paperlogy (headers) + Pretendard (body) fonts
+- Accessibility standards (WCAG AA)
+- BEM methodology
+
+**Example Questions**:
+- "What's the primary color?"
+- "Give me hover style for buttons"
+- "What are mobile responsive breakpoints?"
+
+---
+
+### ⚡ **AWS Lambda Functions**
+**When to use**: Analysis processing Lambda functions, async tasks, large data processing
+
+**Rule Files**: `cloud/lambda.mdc` (to be created)
+
+**Key Points**:
+- player_anal: Player analysis processing
+- Timeout and memory optimization
+- CloudWatch logging
+- S3 integration
+
+**Example Questions**:
+- "How to deploy Lambda function?"
+- "Add new metric to analysis Lambda"
+- "How to check Lambda logs?"
+
+---
+
+### 🖥️ **Server & Infrastructure**
+**When to use**: Deployment, Gunicorn configuration, environment variables, server setup
+
+**Rule Files**: `backend/server-infrastructure.mdc` (to be created)
+
+**Key Points**:
+- Gunicorn server management
+- Environment variables (.env)
+- AWS RDS (MySQL)
+- Logging and monitoring
+
+**Example Questions**:
+- "How to restart server?"
+- "How to add environment variable?"
+- "Check database connection"
+
+---
+
+### 🔐 **Authentication & Authorization**
+**When to use**: JWT tokens, social login, permission checks
+
+**Rule Files**: `backend/authentication.mdc` (to be created)
+
+**Key Points**:
+- JWT (simplejwt) authentication
+- Kakao, Apple, Naver login
+- Permission level management
+- Security best practices
+
+**Example Questions**:
+- "Check JWT token refresh logic"
+- "How to implement Kakao login?"
+- "How to check admin permissions?"
+
+---
+
+### 📦 **AWS S3 & Storage**
+**When to use**: File upload/download, image processing, CloudFront configuration
+
+**Rule Files**: `cloud/storage.mdc` (to be created)
+
+**Key Points**:
+- S3 bucket: aground-gps
+- CloudFront CDN
+- Profile image, video management
+- File upload best practices
+
+**Example Questions**:
+- "Implement profile image upload"
+- "How to generate S3 file URL?"
+- "How to invalidate CloudFront cache?"
+
+---
+
+### 📊 **Analytics & Data Processing**
+**When to use**: Player/team analysis logic, statistics calculation, data visualization
+
+**Rule Files**: `features/analytics.mdc` (to be created)
+
+**Key Points**:
+- PlayerAnal, TeamAnal models
+- Analysis metric calculation
+- Heatmap, sprint map
+- Performance point system
+
+**Example Questions**:
+- "Check average speed calculation logic"
+- "Add team coordination metric"
+- "What's the heatmap data format?"
+
+---
+
+### 🎥 **Video Processing**
+**When to use**: Video upload, player/team video management
+
+**Rule Files**: `features/video.mdc` (to be created)
+
+**Key Points**:
+- PlayerVideo, TeamVideo models
+- Video folder structure
+- S3 video storage
+- Video metadata
+
+**Example Questions**:
+- "Create video upload API"
+- "How to link match video?"
+- "Check video folder structure"
+
+---
+
+## 🔍 Quick Decision Matrix
+
+| Task Type | Primary Rule File | Secondary Files |
+|-----------|------------------|-----------------|
+| **DB Schema Check** | `database/access.mdc` | `database/patterns.mdc` |
+| **API Endpoint** | `backend/api-development.mdc` | `database/patterns.mdc` |
+| **React Component** | `frontend/components.mdc` | `frontend/design-system.mdc` |
+| **CSS Styling** | `frontend/design-system.mdc` | `frontend/components.mdc` |
+| **Database Query** | `database/patterns.mdc` | `backend/api-development.mdc` |
+| **Lambda Function** | `cloud/lambda.mdc` | `features/analytics.mdc` |
+| **Analytics Logic** | `features/analytics.mdc` | `database/patterns.mdc` |
+| **File Upload/Download** | `cloud/storage.mdc` | `backend/api-development.mdc` |
+| **Authentication** | `backend/authentication.mdc` | `backend/api-development.mdc` |
+| **Server Deploy/Config** | `backend/server-infrastructure.mdc` | - |
+| **Video Processing** | `features/video.mdc` | `cloud/storage.mdc` |
+
+---
+
+## 🚀 Pre-Task Checklist
+
+### 1️⃣ **Identify Task Type**
+- [ ] Check category in navigation above
+- [ ] Identify primary rule file
+- [ ] Check secondary rule files
+
+### 2️⃣ **Reference Rule Files**
+- [ ] Read relevant rule file
+- [ ] Analyze existing patterns
+- [ ] Find similar implementation cases
+
+### 3️⃣ **Verify Constraints**
+- [ ] Confirm no new file creation
+- [ ] Apply soft delete pattern
+- [ ] Follow design system
+- [ ] Plan production testing
+
+### 4️⃣ **Start Implementation**
+- [ ] Follow existing code patterns
+- [ ] Include error handling
+- [ ] Add appropriate logging
+- [ ] Add documentation (comments, Swagger, etc.)
+
+### 5️⃣ **Validation**
+- [ ] Check linter errors
+- [ ] Test in production environment
+- [ ] Verify design system compliance
+- [ ] Re-check relevant rule files
+
+---
+
+## 💡 Rule File Status
+
+### ✅ Existing Rule Files
+- `00-navigation-hub.mdc` - Top-level navigation
+- `guidelines.mdc` - Always applied (alwaysApply: true)
+- `database/patterns.mdc` - Database patterns
+- `backend/api-development.mdc` - Backend API development
+- `frontend/components.mdc` - Frontend development
+- `frontend/design-system.mdc` - Design system
+- `general/project-guidelines.mdc` - Project guidelines
+
+### 🆕 Rule Files to Create
+- `database/access.mdc` - **Actual DB access & verification** (Priority)
+- `backend/authentication.mdc` - Authentication & authorization
+- `backend/server-infrastructure.mdc` - Server & infrastructure
+- `cloud/lambda.mdc` - Lambda function development
+- `cloud/storage.mdc` - AWS S3/file management
+- `features/analytics.mdc` - Analysis logic
+- `features/video.mdc` - Video processing
+- `general/testing.mdc` - Testing strategy (if needed)
+
+---
+
+## 🎯 Priority Rules
+
+### P0 (Highest - Always Check)
+1. No new file creation
+2. Soft delete pattern
+3. Design system compliance
+4. Only modify related code
+
+### P1 (High)
+1. Sync actual DB with models.py
+2. Standardize API response format
+3. Error handling
+4. Security (authentication/authorization)
+
+### P2 (Medium)
+1. Performance optimization
+2. Code documentation
+3. Logging
+4. Write tests
+
+### P3 (Low)
+1. Code refactoring
+2. Improve comments
+3. Variable naming consistency
+
+---
+
+## 📞 Emergency Reference
+
+**When Problems Occur:**
+1. Check relevant category rule file
+2. Find similar pattern in existing code
+3. Re-check project guidelines
+4. Test on production URL
+
+**Never Do:**
+- Create new files
+- Hard delete (.delete() call)
+- Hardcode CSS
+- Modify unrelated code
+
+**Remember: Consistency is more important than innovation!**

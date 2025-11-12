@@ -1,0 +1,575 @@
+---
+# ⚠️ 이 파일은 AI가 읽지 않습니다 (Human Reference Only)
+# AI는 error-handling.mdc (영문판)만 참조합니다
+---
+
+# ⚠️ 에러 핸들링 표준
+
+## 역할 정의
+당신은 시스템 보안과 신뢰성을 유지하면서 사용자에게 명확한 피드백을 제공하는 견고한 에러 핸들링을 구현할 책임이 있습니다.
+
+---
+
+## 🚨 에러 핸들링 원칙
+
+### ❌ 금지 사항
+1. **무음 실패 금지** - 항상 에러를 처리하거나 로깅
+2. **일반적인 에러 메시지 금지** - 구체적이고 실행 가능하게
+3. **민감한 정보 노출 금지** - 절대 내부 세부사항을 사용자에게 노출하지 말 것
+4. **에러 삼키기 금지** - 이유 없이 catch하고 무시하지 말 것
+
+### ✅ 필수 요구사항
+1. **항상 TRY-CATCH 사용** - 외부 호출, DB 쿼리, API 요청에
+2. **모든 에러 로깅** - 컨텍스트와 스택 트레이스와 함께
+3. **사용자 친화적 메시지** - 명확하고 실행 가능한 피드백
+4. **Request ID 추적** - 디버깅과 지원을 위해
+
+---
+
+## 📊 HTTP 상태 코드
+
+### 클라이언트 에러 (4xx)
+| 코드 | 이름 | 사용 시기 | 예시 |
+|------|------|-----------|------|
+| **400** | Bad Request | 유효하지 않은 입력 데이터 | 필수 필드 누락 |
+| **401** | Unauthorized | 인증 필요 | JWT 토큰 없음 |
+| **403** | Forbidden | 권한 불충분 | 사용자가 팀 관리자 아님 |
+| **404** | Not Found | 리소스가 존재하지 않음 | 팀 코드 찾을 수 없음 |
+| **409** | Conflict | 리소스 충돌 | 중복된 이메일 |
+| **422** | Unprocessable Entity | 검증 실패 | 이메일 형식 유효하지 않음 |
+| **429** | Too Many Requests | 속도 제한 초과 | > 분당 100 요청 |
+
+### 서버 에러 (5xx)
+| 코드 | 이름 | 사용 시기 | 예시 |
+|------|------|-----------|------|
+| **500** | Internal Server Error | 예상치 못한 에러 | 잡히지 않은 예외 |
+| **502** | Bad Gateway | 업스트림 서비스 실패 | Lambda 함수 에러 |
+| **503** | Service Unavailable | 일시적으로 사용 불가 | 데이터베이스 유지보수 |
+| **504** | Gateway Timeout | 요청 타임아웃 | 느린 DB 쿼리 |
+
+---
+
+## 📝 에러 응답 구조
+
+### 표준 에러 응답 형식
+```python
+{
+    "error": {
+        "code": "VALIDATION_ERROR",           # 기계 판독 가능 코드
+        "message": "입력값이 올바르지 않습니다",  # 사용자 친화적 메시지
+        "details": {                           # 상세 정보 (선택사항)
+            "field": "email",
+            "issue": "이메일 형식이 올바르지 않습니다"
+        },
+        "timestamp": "2024-10-28T10:30:00Z",  # ISO 8601 형식
+        "request_id": "req_abc123def456",     # 추적용
+        "documentation_url": "https://docs.agrounds.com/errors/VALIDATION_ERROR"  # 도움말 링크 (선택사항)
+    }
+}
+```
+
+### 에러 코드 명명 규칙
+```
+<카테고리>_<구체적_에러>
+
+예시:
+- VALIDATION_ERROR
+- AUTH_TOKEN_EXPIRED
+- DB_CONNECTION_FAILED
+- PERMISSION_DENIED
+- RESOURCE_NOT_FOUND
+- RATE_LIMIT_EXCEEDED
+- EXTERNAL_SERVICE_ERROR
+```
+
+---
+
+## 🐍 백엔드 에러 핸들링 (Django)
+
+### View-Level 에러 핸들링
+```python
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.generics import get_object_or_404
+from django.db import IntegrityError
+import logging
+
+logger = logging.getLogger(__name__)
+
+class CreateTeamView(APIView):
+    """새 팀 생성"""
+    
+    def post(self, request):
+        """
+        팀 생성 엔드포인트
+        """
+        # 추적을 위한 request ID 생성
+        request_id = f"req_{uuid.uuid4().hex[:16]}"
+        
+        try:
+            # 1. 입력 검증
+            name = request.data.get('name')
+            local = request.data.get('local')
+            
+            if not name:
+                return Response({
+                    "error": {
+                        "code": "VALIDATION_ERROR",
+                        "message": "팀 이름은 필수입니다",
+                        "details": {"field": "name", "issue": "required"},
+                        "timestamp": timezone.now().isoformat(),
+                        "request_id": request_id
+                    }
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # 2. 비즈니스 로직
+            team_code = generate_team_code()
+            team = TeamInfo.objects.create(
+                team_code=team_code,
+                name=name,
+                local=local,
+                host=request.user.user_code
+            )
+            
+            # 3. 성공 응답
+            logger.info(f"Team created: {team_code}", extra={
+                "request_id": request_id,
+                "user_code": request.user.user_code,
+                "team_code": team_code
+            })
+            
+            return Response({
+                "team_code": team.team_code,
+                "name": team.name,
+                "created_at": team.created_at.isoformat()
+            }, status=status.HTTP_201_CREATED)
+            
+        except IntegrityError as e:
+            # 데이터베이스 제약 조건 위반
+            logger.error(f"Team creation failed - integrity error: {str(e)}", extra={
+                "request_id": request_id,
+                "user_code": request.user.user_code,
+                "error": str(e)
+            })
+            return Response({
+                "error": {
+                    "code": "DUPLICATE_TEAM",
+                    "message": "이미 존재하는 팀입니다",
+                    "timestamp": timezone.now().isoformat(),
+                    "request_id": request_id
+                }
+            }, status=status.HTTP_409_CONFLICT)
+            
+        except Exception as e:
+            # 예상치 못한 에러
+            logger.exception(f"Unexpected error in team creation", extra={
+                "request_id": request_id,
+                "user_code": request.user.user_code
+            })
+            return Response({
+                "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요",
+                    "timestamp": timezone.now().isoformat(),
+                    "request_id": request_id
+                }
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+```
+
+### Model-Level 검증
+```python
+from django.core.exceptions import ValidationError
+from django.db import models
+
+class TeamInfo(models.Model):
+    team_code = models.CharField(primary_key=True, max_length=45)
+    name = models.CharField(max_length=45)
+    local = models.CharField(max_length=45)
+    
+    def clean(self):
+        """모델 필드 검증"""
+        errors = {}
+        
+        # 팀 이름 검증
+        if not self.name or len(self.name.strip()) < 2:
+            errors['name'] = '팀 이름은 최소 2자 이상이어야 합니다'
+        
+        # 지역 검증
+        valid_locals = ['서울', '경기', '인천', '부산', '대구', '광주', '대전', '울산', '세종', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주']
+        if self.local not in valid_locals:
+            errors['local'] = f'지역은 다음 중 하나여야 합니다: {", ".join(valid_locals)}'
+        
+        if errors:
+            raise ValidationError(errors)
+    
+    def save(self, *args, **kwargs):
+        """검증 실행을 위해 save 오버라이드"""
+        self.full_clean()
+        super().save(*args, **kwargs)
+```
+
+### 데이터베이스 쿼리 에러 핸들링
+```python
+def get_team_members(team_code):
+    """
+    팀의 모든 멤버 가져오기
+    
+    Args:
+        team_code: 팀 식별자
+        
+    Returns:
+        사용자 객체 리스트
+        
+    Raises:
+        ValueError: team_code가 유효하지 않은 경우
+        DatabaseError: 데이터베이스 쿼리 실패 시
+    """
+    # 입력 검증
+    if not team_code or not team_code.startswith('t_'):
+        raise ValueError(f"Invalid team_code format: {team_code}")
+    
+    try:
+        # 단일 객체에 get_object_or_404 사용
+        team = get_object_or_404(
+            TeamInfo, 
+            team_code=team_code,
+            deleted_at__isnull=True
+        )
+        
+        # 에러 핸들링과 함께 쿼리
+        members = User.objects.filter(
+            playerteamcross__team_code=team_code,
+            playerteamcross__deleted_at__isnull=True,
+            deleted_at__isnull=True
+        ).select_related('userinfo')
+        
+        return list(members)
+        
+    except TeamInfo.DoesNotExist:
+        logger.warning(f"Team not found: {team_code}")
+        raise ValueError(f"Team not found: {team_code}")
+        
+    except DatabaseError as e:
+        logger.error(f"Database error in get_team_members: {str(e)}", extra={
+            "team_code": team_code
+        })
+        raise
+```
+
+---
+
+## ⚛️ 프론트엔드 에러 핸들링 (React)
+
+### API 호출 에러 핸들링
+```javascript
+import axios from 'axios';
+
+// Interceptor로 axios 설정
+const api = axios.create({
+  baseURL: 'https://agrounds.com/api',
+  timeout: 10000
+});
+
+// Request interceptor (인증 토큰 추가)
+api.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+);
+
+// Response interceptor (에러 전역 처리)
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response) {
+      // 서버가 에러 상태로 응답
+      const { status, data } = error.response;
+      
+      switch (status) {
+        case 401:
+          // Unauthorized - 로그인으로 리다이렉트
+          localStorage.removeItem('access_token');
+          window.location.href = '/login';
+          break;
+          
+        case 403:
+          // Forbidden - 권한 에러 표시
+          showNotification('권한이 없습니다', 'error');
+          break;
+          
+        case 404:
+          // Not found
+          showNotification('요청한 정보를 찾을 수 없습니다', 'error');
+          break;
+          
+        case 429:
+          // Rate limited
+          showNotification('요청이 너무 많습니다. 잠시 후 다시 시도해주세요', 'warning');
+          break;
+          
+        case 500:
+          // Server error
+          showNotification('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요', 'error');
+          break;
+          
+        default:
+          // 기타 에러
+          const message = data?.error?.message || '오류가 발생했습니다';
+          showNotification(message, 'error');
+      }
+    } else if (error.request) {
+      // 요청은 만들어졌지만 응답 없음
+      showNotification('네트워크 연결을 확인해주세요', 'error');
+    } else {
+      // 그 외 발생한 문제
+      showNotification('요청 처리 중 오류가 발생했습니다', 'error');
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+```
+
+### 컴포넌트 에러 핸들링
+```javascript
+import { useState, useEffect } from 'react';
+import api from './api';
+
+const TeamList = () => {
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+  
+  const fetchTeams = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await api.get('/team/list/');
+      setTeams(response.data);
+      
+    } catch (err) {
+      // 에러는 이미 interceptor에서 처리됨
+      // 하지만 컴포넌트 특화 에러 상태 설정 가능
+      setError({
+        message: err.response?.data?.error?.message || '팀 목록을 불러올 수 없습니다',
+        code: err.response?.data?.error?.code || 'UNKNOWN_ERROR'
+      });
+      
+      // 디버깅을 위한 로그
+      console.error('Failed to fetch teams:', err);
+      
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // 컴포넌트 에러를 위한 에러 바운더리
+  if (error) {
+    return (
+      <div className="error-container">
+        <h3>⚠️ 오류 발생</h3>
+        <p>{error.message}</p>
+        <button onClick={fetchTeams}>다시 시도</button>
+      </div>
+    );
+  }
+  
+  if (loading) {
+    return <div className="loading">로딩 중...</div>;
+  }
+  
+  return (
+    <div className="team-list">
+      {teams.map(team => (
+        <TeamCard key={team.team_code} team={team} />
+      ))}
+    </div>
+  );
+};
+```
+
+### Error Boundary (React)
+```javascript
+import React from 'react';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null, errorInfo: null };
+  }
+  
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  
+  componentDidCatch(error, errorInfo) {
+    // 에러 리포팅 서비스에 에러 로깅
+    console.error('Error caught by boundary:', error, errorInfo);
+    
+    // 에러 추적 서비스로 전송 가능
+    // logErrorToService(error, errorInfo);
+    
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    });
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="error-boundary">
+          <h2>⚠️ 문제가 발생했습니다</h2>
+          <p>페이지를 새로고침하거나 잠시 후 다시 시도해주세요</p>
+          <button onClick={() => window.location.reload()}>
+            새로고침
+          </button>
+          
+          {process.env.NODE_ENV === 'development' && (
+            <details style={{ whiteSpace: 'pre-wrap', marginTop: 20 }}>
+              <summary>에러 상세 정보</summary>
+              {this.state.error && this.state.error.toString()}
+              <br />
+              {this.state.errorInfo.componentStack}
+            </details>
+          )}
+        </div>
+      );
+    }
+    
+    return this.props.children;
+  }
+}
+
+// 사용법
+<ErrorBoundary>
+  <App />
+</ErrorBoundary>
+```
+
+---
+
+## 📊 로깅 레벨
+
+### 각 레벨 사용 시기
+| 레벨 | 사용 시기 | 예시 |
+|------|-----------|------|
+| **DEBUG** | 개발 디버깅 | SQL 쿼리, 변수 값 |
+| **INFO** | 일반 정보 | 사용자 로그인, API 호출 성공 |
+| **WARNING** | 잠재적 문제 | Deprecated API 사용, 느린 쿼리 |
+| **ERROR** | 에러 발생 | API 실패, 검증 에러 |
+| **CRITICAL** | 시스템 장애 | 데이터베이스 다운, 서비스 크래시 |
+
+### 로깅 모범 사례
+```python
+import logging
+import json
+
+logger = logging.getLogger(__name__)
+
+# ✅ 좋음 - 컨텍스트가 있는 구조화된 로깅
+logger.info("User logged in", extra={
+    "user_code": "u_123",
+    "ip_address": request.META.get('REMOTE_ADDR'),
+    "user_agent": request.META.get('HTTP_USER_AGENT'),
+    "timestamp": timezone.now().isoformat()
+})
+
+logger.error("Failed to create team", extra={
+    "user_code": request.user.user_code,
+    "team_name": team_name,
+    "error": str(e),
+    "request_id": request_id
+}, exc_info=True)  # 스택 트레이스 포함
+
+# ❌ 나쁨 - 일반적이고, 컨텍스트 없음
+logger.info("Login")
+logger.error("Error occurred")
+
+# ✅ 좋음 - 성능 메트릭 로깅
+logger.info("Query executed", extra={
+    "query": "SELECT * FROM player_anal",
+    "execution_time_ms": 150,
+    "rows_returned": 1000
+})
+
+# ❌ 나쁨 - 민감한 데이터 로깅
+logger.info(f"User password: {password}")  # 절대 금지!
+logger.error(f"Token: {jwt_token}")  # 절대 금지!
+
+# ✅ 좋음 - 민감한 데이터 마스킹
+logger.info(f"User email: {email[:3]}***@{email.split('@')[1]}")
+```
+
+### 로깅하지 말아야 할 것
+- ❌ 비밀번호
+- ❌ JWT 토큰
+- ❌ API 키
+- ❌ 신용카드 번호
+- ❌ 개인 식별 정보 (필요하고 암호화되지 않은 경우)
+- ❌ 세션 토큰
+- ❌ 완전한 사용자 객체 (민감한 데이터 포함 가능)
+
+---
+
+## ✅ 에러 핸들링 체크리스트
+
+### 백엔드 (Django)
+- [ ] 외부 호출 주위에 Try-catch 블록
+- [ ] 적절한 HTTP 상태 코드 사용
+- [ ] 에러 응답이 표준 형식을 따름
+- [ ] 컨텍스트와 함께 에러 로깅
+- [ ] Request ID 추적
+- [ ] 민감한 정보 노출 안 함
+- [ ] 사용자 친화적 에러 메시지
+- [ ] 데이터베이스 쿼리에 get_object_or_404 사용
+- [ ] 모델 검증 구현
+- [ ] 외부 API 호출에 타임아웃 설정
+
+### 프론트엔드 (React)
+- [ ] API 호출을 try-catch로 래핑
+- [ ] 로딩 상태 처리
+- [ ] 사용자에게 에러 상태 표시
+- [ ] 실패한 요청에 대한 재시도 메커니즘
+- [ ] Error boundary 구현
+- [ ] 네트워크 에러 처리
+- [ ] 폼 검증 에러 표시
+- [ ] 에러에 대한 Toast/notification
+- [ ] Graceful degradation
+- [ ] 콘솔에 에러 로깅 (개발 환경만)
+
+### 일반
+- [ ] 모든 에러 로깅
+- [ ] 에러 코드 문서화
+- [ ] 지원팀이 request ID로 디버깅 가능
+- [ ] 에러 메시지 번역 (i18n인 경우)
+- [ ] 프로덕션 에러가 스택 트레이스 노출 안 함
+- [ ] 에러 모니터링 설정 (Sentry 등)
+
+---
+
+## 🔗 관련 가이드라인
+
+**함께 참조:**
+- `general/testing-strategy.mdc` - 에러 케이스 테스트
+- `general/security.mdc` - 보안 에러 핸들링
+- `general/logging.mdc` - 로깅 전략
+- `backend/api-development.mdc` - API 에러 응답
+- `frontend/components.mdc` - 컴포넌트 에러 핸들링
+
+---
+
+**기억하세요: 좋은 에러 핸들링은 실패를 학습 기회로 바꾸고 사용자 신뢰를 향상시킵니다!**

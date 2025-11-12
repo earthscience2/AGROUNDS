@@ -1,0 +1,570 @@
+# ⚠️ Error Handling Standards
+
+## Role Definition
+You are responsible for implementing robust error handling that provides clear feedback to users while maintaining system security and reliability.
+
+---
+
+## 🚨 Error Handling Principles
+
+### ❌ Prohibited Actions
+1. **NO SILENT FAILURES** - Always handle or log errors
+2. **NO GENERIC ERROR MESSAGES** - Be specific and actionable
+3. **NO EXPOSING SENSITIVE INFO** - Never leak internal details to users
+4. **NO SWALLOWING ERRORS** - Don't catch and ignore without reason
+
+### ✅ Mandatory Requirements
+1. **ALWAYS USE TRY-CATCH** - For external calls, DB queries, API requests
+2. **LOG ALL ERRORS** - With context and stack traces
+3. **USER-FRIENDLY MESSAGES** - Clear, actionable feedback
+4. **TRACK REQUEST IDs** - For debugging and support
+
+---
+
+## 📊 HTTP Status Codes
+
+### Client Errors (4xx)
+| Code | Name | When to Use | Example |
+|------|------|-------------|---------|
+| **400** | Bad Request | Invalid input data | Missing required field |
+| **401** | Unauthorized | Authentication required | No JWT token |
+| **403** | Forbidden | Insufficient permissions | User not team admin |
+| **404** | Not Found | Resource doesn't exist | Team code not found |
+| **409** | Conflict | Resource conflict | Duplicate email |
+| **422** | Unprocessable Entity | Validation failed | Email format invalid |
+| **429** | Too Many Requests | Rate limit exceeded | > 100 req/min |
+
+### Server Errors (5xx)
+| Code | Name | When to Use | Example |
+|------|------|-------------|---------|
+| **500** | Internal Server Error | Unexpected error | Uncaught exception |
+| **502** | Bad Gateway | Upstream service failed | Lambda function error |
+| **503** | Service Unavailable | Temporary unavailable | Database maintenance |
+| **504** | Gateway Timeout | Request timeout | Slow DB query |
+
+---
+
+## 📝 Error Response Structure
+
+### Standard Error Response Format
+```python
+{
+    "error": {
+        "code": "VALIDATION_ERROR",           # Machine-readable code
+        "message": "입력값이 올바르지 않습니다",  # User-friendly message
+        "details": {                           # Detailed info (optional)
+            "field": "email",
+            "issue": "이메일 형식이 올바르지 않습니다"
+        },
+        "timestamp": "2024-10-28T10:30:00Z",  # ISO 8601 format
+        "request_id": "req_abc123def456",     # For tracking
+        "documentation_url": "https://docs.agrounds.com/errors/VALIDATION_ERROR"  # Help link (optional)
+    }
+}
+```
+
+### Error Code Naming Convention
+```
+<CATEGORY>_<SPECIFIC_ERROR>
+
+Examples:
+- VALIDATION_ERROR
+- AUTH_TOKEN_EXPIRED
+- DB_CONNECTION_FAILED
+- PERMISSION_DENIED
+- RESOURCE_NOT_FOUND
+- RATE_LIMIT_EXCEEDED
+- EXTERNAL_SERVICE_ERROR
+```
+
+---
+
+## 🐍 Backend Error Handling (Django)
+
+### View-Level Error Handling
+```python
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.generics import get_object_or_404
+from django.db import IntegrityError
+import logging
+
+logger = logging.getLogger(__name__)
+
+class CreateTeamView(APIView):
+    """Create a new team"""
+    
+    def post(self, request):
+        """
+        Create team endpoint
+        """
+        # Generate request ID for tracking
+        request_id = f"req_{uuid.uuid4().hex[:16]}"
+        
+        try:
+            # 1. Validate input
+            name = request.data.get('name')
+            local = request.data.get('local')
+            
+            if not name:
+                return Response({
+                    "error": {
+                        "code": "VALIDATION_ERROR",
+                        "message": "팀 이름은 필수입니다",
+                        "details": {"field": "name", "issue": "required"},
+                        "timestamp": timezone.now().isoformat(),
+                        "request_id": request_id
+                    }
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # 2. Business logic
+            team_code = generate_team_code()
+            team = TeamInfo.objects.create(
+                team_code=team_code,
+                name=name,
+                local=local,
+                host=request.user.user_code
+            )
+            
+            # 3. Success response
+            logger.info(f"Team created: {team_code}", extra={
+                "request_id": request_id,
+                "user_code": request.user.user_code,
+                "team_code": team_code
+            })
+            
+            return Response({
+                "team_code": team.team_code,
+                "name": team.name,
+                "created_at": team.created_at.isoformat()
+            }, status=status.HTTP_201_CREATED)
+            
+        except IntegrityError as e:
+            # Database constraint violation
+            logger.error(f"Team creation failed - integrity error: {str(e)}", extra={
+                "request_id": request_id,
+                "user_code": request.user.user_code,
+                "error": str(e)
+            })
+            return Response({
+                "error": {
+                    "code": "DUPLICATE_TEAM",
+                    "message": "이미 존재하는 팀입니다",
+                    "timestamp": timezone.now().isoformat(),
+                    "request_id": request_id
+                }
+            }, status=status.HTTP_409_CONFLICT)
+            
+        except Exception as e:
+            # Unexpected error
+            logger.exception(f"Unexpected error in team creation", extra={
+                "request_id": request_id,
+                "user_code": request.user.user_code
+            })
+            return Response({
+                "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요",
+                    "timestamp": timezone.now().isoformat(),
+                    "request_id": request_id
+                }
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+```
+
+### Model-Level Validation
+```python
+from django.core.exceptions import ValidationError
+from django.db import models
+
+class TeamInfo(models.Model):
+    team_code = models.CharField(primary_key=True, max_length=45)
+    name = models.CharField(max_length=45)
+    local = models.CharField(max_length=45)
+    
+    def clean(self):
+        """Validate model fields"""
+        errors = {}
+        
+        # Validate team name
+        if not self.name or len(self.name.strip()) < 2:
+            errors['name'] = '팀 이름은 최소 2자 이상이어야 합니다'
+        
+        # Validate local
+        valid_locals = ['서울', '경기', '인천', '부산', '대구', '광주', '대전', '울산', '세종', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주']
+        if self.local not in valid_locals:
+            errors['local'] = f'지역은 다음 중 하나여야 합니다: {", ".join(valid_locals)}'
+        
+        if errors:
+            raise ValidationError(errors)
+    
+    def save(self, *args, **kwargs):
+        """Override save to run validation"""
+        self.full_clean()
+        super().save(*args, **kwargs)
+```
+
+### Database Query Error Handling
+```python
+def get_team_members(team_code):
+    """
+    Get all members of a team
+    
+    Args:
+        team_code: Team identifier
+        
+    Returns:
+        List of user objects
+        
+    Raises:
+        ValueError: If team_code is invalid
+        DatabaseError: If database query fails
+    """
+    # Validate input
+    if not team_code or not team_code.startswith('t_'):
+        raise ValueError(f"Invalid team_code format: {team_code}")
+    
+    try:
+        # Use get_object_or_404 for single objects
+        team = get_object_or_404(
+            TeamInfo, 
+            team_code=team_code,
+            deleted_at__isnull=True
+        )
+        
+        # Query with error handling
+        members = User.objects.filter(
+            playerteamcross__team_code=team_code,
+            playerteamcross__deleted_at__isnull=True,
+            deleted_at__isnull=True
+        ).select_related('userinfo')
+        
+        return list(members)
+        
+    except TeamInfo.DoesNotExist:
+        logger.warning(f"Team not found: {team_code}")
+        raise ValueError(f"Team not found: {team_code}")
+        
+    except DatabaseError as e:
+        logger.error(f"Database error in get_team_members: {str(e)}", extra={
+            "team_code": team_code
+        })
+        raise
+```
+
+---
+
+## ⚛️ Frontend Error Handling (React)
+
+### API Call Error Handling
+```javascript
+import axios from 'axios';
+
+// Configure axios with interceptors
+const api = axios.create({
+  baseURL: 'https://agrounds.com/api',
+  timeout: 10000
+});
+
+// Request interceptor (add auth token)
+api.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+);
+
+// Response interceptor (handle errors globally)
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response) {
+      // Server responded with error status
+      const { status, data } = error.response;
+      
+      switch (status) {
+        case 401:
+          // Unauthorized - redirect to login
+          localStorage.removeItem('access_token');
+          window.location.href = '/login';
+          break;
+          
+        case 403:
+          // Forbidden - show permission error
+          showNotification('권한이 없습니다', 'error');
+          break;
+          
+        case 404:
+          // Not found
+          showNotification('요청한 정보를 찾을 수 없습니다', 'error');
+          break;
+          
+        case 429:
+          // Rate limited
+          showNotification('요청이 너무 많습니다. 잠시 후 다시 시도해주세요', 'warning');
+          break;
+          
+        case 500:
+          // Server error
+          showNotification('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요', 'error');
+          break;
+          
+        default:
+          // Other errors
+          const message = data?.error?.message || '오류가 발생했습니다';
+          showNotification(message, 'error');
+      }
+    } else if (error.request) {
+      // Request made but no response
+      showNotification('네트워크 연결을 확인해주세요', 'error');
+    } else {
+      // Something else happened
+      showNotification('요청 처리 중 오류가 발생했습니다', 'error');
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+```
+
+### Component Error Handling
+```javascript
+import { useState, useEffect } from 'react';
+import api from './api';
+
+const TeamList = () => {
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+  
+  const fetchTeams = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await api.get('/team/list/');
+      setTeams(response.data);
+      
+    } catch (err) {
+      // Error already handled by interceptor
+      // But we can set component-specific error state
+      setError({
+        message: err.response?.data?.error?.message || '팀 목록을 불러올 수 없습니다',
+        code: err.response?.data?.error?.code || 'UNKNOWN_ERROR'
+      });
+      
+      // Log for debugging
+      console.error('Failed to fetch teams:', err);
+      
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Error boundary for component errors
+  if (error) {
+    return (
+      <div className="error-container">
+        <h3>⚠️ 오류 발생</h3>
+        <p>{error.message}</p>
+        <button onClick={fetchTeams}>다시 시도</button>
+      </div>
+    );
+  }
+  
+  if (loading) {
+    return <div className="loading">로딩 중...</div>;
+  }
+  
+  return (
+    <div className="team-list">
+      {teams.map(team => (
+        <TeamCard key={team.team_code} team={team} />
+      ))}
+    </div>
+  );
+};
+```
+
+### Error Boundary (React)
+```javascript
+import React from 'react';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null, errorInfo: null };
+  }
+  
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  
+  componentDidCatch(error, errorInfo) {
+    // Log error to error reporting service
+    console.error('Error caught by boundary:', error, errorInfo);
+    
+    // You could send to error tracking service here
+    // logErrorToService(error, errorInfo);
+    
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    });
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="error-boundary">
+          <h2>⚠️ 문제가 발생했습니다</h2>
+          <p>페이지를 새로고침하거나 잠시 후 다시 시도해주세요</p>
+          <button onClick={() => window.location.reload()}>
+            새로고침
+          </button>
+          
+          {process.env.NODE_ENV === 'development' && (
+            <details style={{ whiteSpace: 'pre-wrap', marginTop: 20 }}>
+              <summary>에러 상세 정보</summary>
+              {this.state.error && this.state.error.toString()}
+              <br />
+              {this.state.errorInfo.componentStack}
+            </details>
+          )}
+        </div>
+      );
+    }
+    
+    return this.props.children;
+  }
+}
+
+// Usage
+<ErrorBoundary>
+  <App />
+</ErrorBoundary>
+```
+
+---
+
+## 📊 Logging Levels
+
+### When to Use Each Level
+| Level | When to Use | Example |
+|-------|-------------|---------|
+| **DEBUG** | Development debugging | SQL queries, variable values |
+| **INFO** | General information | User login, API call success |
+| **WARNING** | Potential issues | Deprecated API use, slow query |
+| **ERROR** | Error occurred | API failure, validation error |
+| **CRITICAL** | System failure | Database down, service crash |
+
+### Logging Best Practices
+```python
+import logging
+import json
+
+logger = logging.getLogger(__name__)
+
+# ✅ GOOD - Structured logging with context
+logger.info("User logged in", extra={
+    "user_code": "u_123",
+    "ip_address": request.META.get('REMOTE_ADDR'),
+    "user_agent": request.META.get('HTTP_USER_AGENT'),
+    "timestamp": timezone.now().isoformat()
+})
+
+logger.error("Failed to create team", extra={
+    "user_code": request.user.user_code,
+    "team_name": team_name,
+    "error": str(e),
+    "request_id": request_id
+}, exc_info=True)  # Include stack trace
+
+# ❌ BAD - Generic, no context
+logger.info("Login")
+logger.error("Error occurred")
+
+# ✅ GOOD - Log performance metrics
+logger.info("Query executed", extra={
+    "query": "SELECT * FROM player_anal",
+    "execution_time_ms": 150,
+    "rows_returned": 1000
+})
+
+# ❌ BAD - Logging sensitive data
+logger.info(f"User password: {password}")  # NEVER!
+logger.error(f"Token: {jwt_token}")  # NEVER!
+
+# ✅ GOOD - Mask sensitive data
+logger.info(f"User email: {email[:3]}***@{email.split('@')[1]}")
+```
+
+### What NOT to Log
+- ❌ Passwords
+- ❌ JWT tokens
+- ❌ API keys
+- ❌ Credit card numbers
+- ❌ Personal identifiable information (unless necessary and encrypted)
+- ❌ Session tokens
+- ❌ Complete user objects (may contain sensitive data)
+
+---
+
+## ✅ Error Handling Checklist
+
+### Backend (Django)
+- [ ] Try-catch blocks around external calls
+- [ ] Proper HTTP status codes used
+- [ ] Error responses follow standard format
+- [ ] Errors logged with context
+- [ ] Request ID tracked
+- [ ] Sensitive info not exposed
+- [ ] User-friendly error messages
+- [ ] Database queries use get_object_or_404
+- [ ] Model validation implemented
+- [ ] Timeouts set for external API calls
+
+### Frontend (React)
+- [ ] API calls wrapped in try-catch
+- [ ] Loading states handled
+- [ ] Error states displayed to user
+- [ ] Retry mechanism for failed requests
+- [ ] Error boundary implemented
+- [ ] Network errors handled
+- [ ] Form validation errors shown
+- [ ] Toast/notification for errors
+- [ ] Graceful degradation
+- [ ] Error logging to console (dev only)
+
+### General
+- [ ] All errors logged
+- [ ] Error codes documented
+- [ ] Support team can debug with request ID
+- [ ] Error messages translated (if i18n)
+- [ ] Production errors don't expose stack traces
+- [ ] Error monitoring set up (Sentry, etc.)
+
+---
+
+## 🔗 Related Guidelines
+
+**Reference Together:**
+- `general/testing-strategy.mdc` - Test error cases
+- `general/security.mdc` - Security error handling
+- `general/logging.mdc` - Logging strategy
+- `backend/api-development.mdc` - API error responses
+- `frontend/components.mdc` - Component error handling
+
+---
+
+**Remember: Good error handling turns failures into learning opportunities and improves user trust!**

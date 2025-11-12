@@ -1,0 +1,635 @@
+---
+# ⚠️ 이 파일은 AI가 읽지 않습니다 (Human Reference Only)
+# AI는 security.mdc (영문판)만 참조합니다
+---
+
+# 🔐 보안 모범 사례
+
+## 역할 정의
+당신은 사용자 데이터 보호, 공격 방지, 시스템 무결성 보장을 위한 보안 조치를 구현하고 유지할 책임이 있습니다.
+
+---
+
+## 🚨 보안 원칙
+
+### ❌ 절대 금지 사항
+1. **하드코딩된 자격증명 금지** - 항상 환경 변수 사용
+2. **로그에 민감한 데이터 금지** - 절대 비밀번호, 토큰, PII 로깅하지 말 것
+3. **SQL 문자열 연결 금지** - 항상 파라미터화된 쿼리 사용
+4. **검증되지 않은 입력 금지** - 모든 사용자 입력 검증 및 정화
+5. **평문 비밀번호 금지** - 항상 bcrypt/argon2로 해시
+
+### ✅ 필수 요구사항
+1. **모든 입력 검증** - 절대 사용자 입력을 신뢰하지 말 것
+2. **파라미터화된 쿼리 사용** - SQL injection 방지
+3. **Rate Limiting 구현** - 남용 방지
+4. **민감한 데이터 암호화** - 저장 및 전송 시
+5. **의존성 최신 상태 유지** - 취약점 패치
+
+---
+
+## 🛡️ OWASP Top 10 보호
+
+### 1. Injection 공격 (SQL, NoSQL, Command)
+
+#### SQL Injection 방지
+```python
+# ❌ 취약 - 문자열 연결
+user_email = request.data.get('email')
+query = f"SELECT * FROM user WHERE user_id = '{user_email}'"  # 위험!
+User.objects.raw(query)
+
+# ✅ 안전 - 파라미터화된 쿼리 (Django ORM)
+user_email = request.data.get('email')
+user = User.objects.filter(user_id=user_email).first()
+
+# ✅ 안전 - 파라미터화된 raw 쿼리
+user_email = request.data.get('email')
+User.objects.raw("SELECT * FROM user WHERE user_id = %s", [user_email])
+```
+
+#### Command Injection 방지
+```python
+# ❌ 취약 - 사용자 입력으로 쉘 명령어
+filename = request.data.get('filename')
+os.system(f"cat {filename}")  # 위험!
+
+# ✅ 안전 - subprocess를 리스트로 사용
+import subprocess
+filename = request.data.get('filename')
+# 먼저 파일명 검증
+if not is_valid_filename(filename):
+    raise ValueError("Invalid filename")
+subprocess.run(['cat', filename], check=True)
+```
+
+---
+
+### 2. 취약한 인증
+
+#### JWT 토큰 보안
+```python
+from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import timedelta
+
+# 설정
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),   # 짧은 수명
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),   # 주간 로테이션
+    'ROTATE_REFRESH_TOKENS': True,                  # 갱신 시 로테이션
+    'BLACKLIST_AFTER_ROTATION': True,               # 이전 토큰 블랙리스트
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': settings.SECRET_KEY,             # 환경에서
+}
+
+# 보안이 강화된 토큰 갱신
+def refresh_token_view(request):
+    """보안 체크와 함께 액세스 토큰 갱신"""
+    try:
+        refresh_token = request.data.get('refresh_token')
+        
+        # 토큰 검증
+        token = RefreshToken(refresh_token)
+        
+        # 토큰이 블랙리스트되었는지 확인
+        if token.is_blacklisted():
+            return Response({
+                "error": {"code": "TOKEN_BLACKLISTED", "message": "토큰이 무효화되었습니다"}
+            }, status=401)
+        
+        # 새 토큰 생성
+        new_access = str(token.access_token)
+        new_refresh = str(token)
+        
+        # 이전 refresh token 블랙리스트
+        token.blacklist()
+        
+        return Response({
+            "access": new_access,
+            "refresh": new_refresh
+        })
+        
+    except Exception as e:
+        logger.error(f"Token refresh failed: {str(e)}")
+        return Response({
+            "error": {"code": "INVALID_TOKEN", "message": "유효하지 않은 토큰입니다"}
+        }, status=401)
+```
+
+#### 비밀번호 보안
+```python
+from django.contrib.auth.hashers import make_password, check_password
+import re
+
+def validate_password_strength(password):
+    """
+    비밀번호가 보안 요구사항을 충족하는지 검증
+    
+    요구사항:
+    - 최소 8자
+    - 최소 1개 대문자
+    - 최소 1개 소문자
+    - 최소 1개 숫자
+    - 최소 1개 특수문자
+    """
+    if len(password) < 8:
+        raise ValidationError("비밀번호는 최소 8자 이상이어야 합니다")
+    
+    if not re.search(r'[A-Z]', password):
+        raise ValidationError("비밀번호는 대문자를 포함해야 합니다")
+    
+    if not re.search(r'[a-z]', password):
+        raise ValidationError("비밀번호는 소문자를 포함해야 합니다")
+    
+    if not re.search(r'[0-9]', password):
+        raise ValidationError("비밀번호는 숫자를 포함해야 합니다")
+    
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        raise ValidationError("비밀번호는 특수문자를 포함해야 합니다")
+    
+    return True
+
+# 저장 전 비밀번호 해시
+user.password = make_password(password)
+
+# 비밀번호 확인
+if check_password(plain_password, user.password):
+    # 비밀번호 일치
+    pass
+```
+
+#### 계정 잠금
+```python
+from django.core.cache import cache
+
+MAX_LOGIN_ATTEMPTS = 5
+LOCKOUT_DURATION = 15 * 60  # 15분
+
+def check_login_attempts(user_id):
+    """실패한 시도로 인해 계정이 잠겼는지 확인"""
+    cache_key = f"login_attempts_{user_id}"
+    attempts = cache.get(cache_key, 0)
+    
+    if attempts >= MAX_LOGIN_ATTEMPTS:
+        return False, "계정이 잠겼습니다. 15분 후 다시 시도해주세요"
+    
+    return True, None
+
+def record_failed_login(user_id):
+    """실패한 로그인 시도 기록"""
+    cache_key = f"login_attempts_{user_id}"
+    attempts = cache.get(cache_key, 0) + 1
+    cache.set(cache_key, attempts, LOCKOUT_DURATION)
+    
+    remaining = MAX_LOGIN_ATTEMPTS - attempts
+    return remaining
+
+def reset_login_attempts(user_id):
+    """성공적인 로그인 후 로그인 시도 초기화"""
+    cache_key = f"login_attempts_{user_id}"
+    cache.delete(cache_key)
+```
+
+---
+
+### 3. 민감한 데이터 노출
+
+#### 환경 변수
+```python
+# ❌ 절대 자격증명 하드코딩하지 말 것
+DATABASE_PASSWORD = "assist0907"  # 절대 금지!
+AWS_SECRET_KEY = "abc123secret"   # 절대 금지!
+
+# ✅ 환경 변수 사용
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
+DATABASE_PASSWORD = env('DB_PASSWORD')
+AWS_SECRET_KEY = env('AWS_SECRET_ACCESS_KEY')
+```
+
+```bash
+# .env 파일 (절대 git에 커밋하지 말 것)
+DB_PASSWORD=secure_password_here
+AWS_SECRET_ACCESS_KEY=secret_key_here
+JWT_SECRET_KEY=random_secret_key
+
+# .gitignore (반드시 포함)
+.env
+*.env
+.env.local
+```
+
+#### 데이터 암호화
+```python
+from cryptography.fernet import Fernet
+from django.conf import settings
+
+class DataEncryption:
+    """민감한 데이터 암호화/복호화"""
+    
+    def __init__(self):
+        self.key = settings.ENCRYPTION_KEY.encode()
+        self.cipher = Fernet(self.key)
+    
+    def encrypt(self, plain_text):
+        """민감한 데이터 암호화"""
+        if not plain_text:
+            return None
+        return self.cipher.encrypt(plain_text.encode()).decode()
+    
+    def decrypt(self, encrypted_text):
+        """민감한 데이터 복호화"""
+        if not encrypted_text:
+            return None
+        return self.cipher.decrypt(encrypted_text.encode()).decode()
+
+# 사용법
+encryptor = DataEncryption()
+
+# 저장 전 암호화
+user.ssn = encryptor.encrypt(ssn)
+user.save()
+
+# 필요시 복호화
+decrypted_ssn = encryptor.decrypt(user.ssn)
+```
+
+#### 로그에서 민감한 데이터 마스킹
+```python
+import re
+
+def mask_email(email):
+    """로깅을 위해 이메일 마스킹"""
+    if not email or '@' not in email:
+        return email
+    local, domain = email.split('@')
+    masked_local = local[:2] + '***' if len(local) > 2 else '***'
+    return f"{masked_local}@{domain}"
+
+def mask_phone(phone):
+    """전화번호 마스킹"""
+    if not phone or len(phone) < 4:
+        return '***'
+    return phone[:-4] + '****'
+
+# 마스킹된 데이터로 로깅
+logger.info(f"User created: {mask_email(email)}, phone: {mask_phone(phone)}")
+```
+
+---
+
+### 4. XML 외부 엔티티 (XXE)
+
+#### XML 파싱 보안
+```python
+import defusedxml.ElementTree as ET
+
+# ❌ 취약 - 표준 XML 파서
+import xml.etree.ElementTree as BadET
+tree = BadET.parse(xml_file)  # XXE에 취약
+
+# ✅ 안전 - Defused XML 파서
+tree = ET.parse(xml_file)  # XXE로부터 보호됨
+```
+
+---
+
+### 5. 취약한 접근 제어
+
+#### 권한 체크
+```python
+from rest_framework.permissions import BasePermission
+
+class IsTeamAdmin(BasePermission):
+    """사용자가 팀 관리자인지 확인"""
+    
+    def has_permission(self, request, view):
+        # 사용자는 인증되어야 함
+        if not request.user or not request.user.is_authenticated:
+            return False
+        return True
+    
+    def has_object_permission(self, request, view, obj):
+        # 사용자가 이 팀의 관리자인지 확인
+        team_code = obj.team_code if hasattr(obj, 'team_code') else obj
+        
+        is_admin = PlayerTeamCross.objects.filter(
+            user_code=request.user.user_code,
+            team_code=team_code,
+            role__in=['admin', 'owner'],
+            deleted_at__isnull=True
+        ).exists()
+        
+        return is_admin
+
+# View에서 사용
+class UpdateTeamView(APIView):
+    permission_classes = [IsAuthenticated, IsTeamAdmin]
+    
+    def put(self, request, team_code):
+        team = get_object_or_404(TeamInfo, team_code=team_code)
+        
+        # DRF가 자동으로 권한 체크
+        self.check_object_permissions(request, team)
+        
+        # 팀 업데이트
+        # ...
+```
+
+#### 행 레벨 보안
+```python
+def get_user_teams(user_code):
+    """사용자에게 보이는 팀 가져오기 (행 레벨 보안)"""
+    return TeamInfo.objects.filter(
+        Q(playerteamcross__user_code=user_code) |  # 사용자가 멤버
+        Q(public=True),                              # 또는 팀이 공개
+        deleted_at__isnull=True
+    ).distinct()
+
+def can_user_view_team(user_code, team_code):
+    """사용자가 팀 데이터를 볼 수 있는지 확인"""
+    return PlayerTeamCross.objects.filter(
+        user_code=user_code,
+        team_code=team_code,
+        deleted_at__isnull=True
+    ).exists()
+```
+
+---
+
+### 6. 보안 설정 오류
+
+#### Django 보안 설정
+```python
+# settings/prod.py - 프로덕션 보안 설정
+
+# HTTPS/SSL
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# HSTS (HTTP Strict Transport Security)
+SECURE_HSTS_SECONDS = 31536000  # 1년
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Content Security
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+
+# CSRF
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Strict'
+
+# Session
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_AGE = 3600  # 1시간
+
+# Debug
+DEBUG = False  # 프로덕션에서 절대 True 금지
+ALLOWED_HOSTS = ['agrounds.com', 'www.agrounds.com']
+
+# Security middleware
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    # ... 기타 미들웨어
+]
+```
+
+---
+
+### 7. Cross-Site Scripting (XSS)
+
+#### 입력 정화
+```python
+import bleach
+from django.utils.html import escape
+
+def sanitize_html_input(text):
+    """XSS 방지를 위해 HTML 정화"""
+    # 안전한 태그만 허용
+    allowed_tags = ['p', 'br', 'strong', 'em', 'u']
+    allowed_attributes = {}
+    
+    return bleach.clean(
+        text,
+        tags=allowed_tags,
+        attributes=allowed_attributes,
+        strip=True
+    )
+
+# 사용법
+user_bio = request.data.get('bio')
+sanitized_bio = sanitize_html_input(user_bio)
+
+# 또는 모든 HTML 이스케이프
+safe_text = escape(user_input)
+```
+
+#### 프론트엔드 XSS 방지 (React)
+```javascript
+// ✅ React가 자동으로 내용 이스케이프
+const UserProfile = ({ userName }) => {
+  return <div>{userName}</div>;  // 자동으로 이스케이프됨
+};
+
+// ❌ 위험 - dangerouslySetInnerHTML 사용
+const Bio = ({ htmlContent }) => {
+  return (
+    <div dangerouslySetInnerHTML={{ __html: htmlContent }} />  // XSS 위험!
+  );
+};
+
+// ✅ 안전 - 렌더링 전 정화
+import DOMPurify from 'dompurify';
+
+const SafeBio = ({ htmlContent }) => {
+  const sanitized = DOMPurify.sanitize(htmlContent);
+  return <div dangerouslySetInnerHTML={{ __html: sanitized }} />;
+};
+```
+
+---
+
+### 8. 안전하지 않은 역직렬화
+
+#### 안전한 역직렬화
+```python
+import json
+import pickle  # 위험!
+
+# ❌ 절대 신뢰할 수 없는 데이터에 pickle 사용 금지
+data = pickle.loads(user_input)  # 임의의 코드 실행 가능!
+
+# ✅ 데이터 직렬화에 JSON 사용
+try:
+    data = json.loads(user_input)
+except json.JSONDecodeError:
+    return Response({"error": "Invalid JSON"}, status=400)
+
+# ✅ 역직렬화된 데이터 검증
+from marshmallow import Schema, fields, validate
+
+class TeamSchema(Schema):
+    name = fields.Str(required=True, validate=validate.Length(min=2, max=45))
+    local = fields.Str(required=True)
+
+schema = TeamSchema()
+try:
+    validated_data = schema.load(json.loads(user_input))
+except ValidationError as e:
+    return Response({"error": e.messages}, status=400)
+```
+
+---
+
+### 9. 알려진 취약점이 있는 컴포넌트 사용
+
+#### 의존성 관리
+```bash
+# 취약점 확인
+pip-audit  # Python
+npm audit  # JavaScript
+
+# 의존성 업데이트
+pip install --upgrade package_name
+npm update package_name
+
+# 재현 가능한 빌드를 위한 Lock 파일
+requirements.txt  # Python
+package-lock.json  # JavaScript
+```
+
+```python
+# requirements.txt - 버전 고정
+Django==4.0.3
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+cryptography>=42.0.2  # 보안 패치를 위해 >= 사용
+```
+
+---
+
+### 10. 불충분한 로깅 & 모니터링
+
+#### 보안 이벤트 로깅
+```python
+import logging
+
+security_logger = logging.getLogger('security')
+
+# 보안 이벤트 로깅
+def log_security_event(event_type, user_code, details):
+    """보안 관련 이벤트 로깅"""
+    security_logger.warning(f"Security event: {event_type}", extra={
+        "event_type": event_type,
+        "user_code": user_code,
+        "details": details,
+        "timestamp": timezone.now().isoformat(),
+        "ip_address": details.get('ip_address'),
+        "user_agent": details.get('user_agent')
+    })
+
+# 예시
+log_security_event("FAILED_LOGIN", user_id, {
+    "ip_address": request.META.get('REMOTE_ADDR'),
+    "attempts": attempts
+})
+
+log_security_event("PERMISSION_DENIED", user_code, {
+    "resource": team_code,
+    "action": "delete_team"
+})
+
+log_security_event("SUSPICIOUS_ACTIVITY", user_code, {
+    "reason": "100 API calls in 1 minute",
+    "endpoint": "/api/user/list/"
+})
+```
+
+---
+
+## 🚦 Rate Limiting
+
+### Django Rate Limiting
+```python
+from django.core.cache import cache
+from rest_framework.throttling import BaseThrottle
+
+class CustomRateThrottle(BaseThrottle):
+    """커스텀 rate limiting"""
+    
+    def allow_request(self, request, view):
+        # 사용자 식별자 가져오기
+        if request.user and request.user.is_authenticated:
+            ident = request.user.user_code
+        else:
+            ident = self.get_ident(request)
+        
+        # Rate limit: 분당 100 요청
+        cache_key = f"throttle_{ident}"
+        requests = cache.get(cache_key, 0)
+        
+        if requests >= 100:
+            return False
+        
+        cache.set(cache_key, requests + 1, 60)  # 60초
+        return True
+
+# View에서 사용
+class TeamListView(APIView):
+    throttle_classes = [CustomRateThrottle]
+    
+    def get(self, request):
+        # ...
+```
+
+---
+
+## ✅ 보안 체크리스트
+
+### 코드 리뷰 보안 체크
+- [ ] 하드코딩된 자격증명 없음
+- [ ] 모든 입력 검증됨
+- [ ] 파라미터화된 쿼리 사용
+- [ ] 보호된 엔드포인트에 인증 필요
+- [ ] 권한 체크됨
+- [ ] Rate limiting 구현됨
+- [ ] HTTPS 강제
+- [ ] 보안 헤더 설정됨
+- [ ] 민감한 데이터 암호화됨
+- [ ] 에러 메시지가 정보 유출하지 않음
+- [ ] 의존성 최신 상태
+- [ ] 로깅이 민감한 데이터 노출하지 않음
+
+### 배포 보안
+- [ ] 환경 변수 설정됨
+- [ ] 프로덕션에서 DEBUG = False
+- [ ] Secret key 로테이션됨
+- [ ] 데이터베이스 자격증명 보안 처리
+- [ ] CORS 올바르게 설정
+- [ ] SSL/TLS 인증서 유효
+- [ ] 방화벽 규칙 설정
+- [ ] 보안 모니터링 활성화
+- [ ] 백업 및 복구 테스트됨
+- [ ] 사고 대응 계획 준비됨
+
+---
+
+## 🔗 관련 가이드라인
+
+**함께 참조:**
+- `general/error-handling.mdc` - 안전한 에러 핸들링
+- `general/testing-strategy.mdc` - 보안 테스팅
+- `backend/api-development.mdc` - API 보안
+- `database/patterns.mdc` - 데이터베이스 보안
+
+---
+
+**기억하세요: 보안은 기능이 아니라 기본 요구사항입니다. 처음부터 구축하세요!**

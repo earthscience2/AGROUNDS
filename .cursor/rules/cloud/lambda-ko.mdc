@@ -1,0 +1,818 @@
+---
+# ⚠️ 이 파일은 AI가 읽지 않습니다 (Human Reference Only)
+# AI는 lambda.mdc (영문판)만 참조합니다
+---
+
+# ⚡ AWS Lambda 개발 가이드라인
+
+## 역할 정의
+당신은 AGROUNDS의 AWS Lambda 함수를 개발하고 유지보수할 책임이 있으며, 특히 플레이어 분석과 같은 비동기 데이터 처리 작업에 집중합니다.
+
+---
+
+## 🚨 Lambda 개발 원칙
+
+### ❌ 금지 사항
+1. **동기 처리 금지** - Lambda는 비동기 작업에만 사용
+2. **상태 유지 금지** - Lambda는 무상태(stateless)
+3. **로컬 파일 영속성 금지** - /tmp만 사용, 실행 후 삭제됨
+4. **하드코딩된 자격증명 금지** - 항상 환경 변수 사용
+5. **무한 루프 금지** - 타임아웃 제한 준수
+
+### ✅ 필수 요구사항
+1. **/tmp 디렉토리 사용** - 임시 파일만
+2. **타임아웃 구현** - 적절한 타임아웃 제한 설정
+3. **모든 것 로깅** - CloudWatch 로깅 광범위하게 사용
+4. **우아한 에러 처리** - 적절한 에러 응답 반환
+5. **메모리 최적화** - 메모리 사용량 모니터링 및 최적화
+
+---
+
+## 📂 Lambda 함수 구조
+
+### AGROUNDS Lambda: player_anal
+
+**위치**: `/home/ubuntu/agrounds/mysite/lambda/player_anal/`
+
+**목적**: GPS 데이터 처리 및 플레이어 성능 분석 생성
+
+```
+lambda/player_anal/
+├── main.py              # Lambda 핸들러 (진입점)
+├── anal_cal.py          # 분석 계산
+├── summarize.py         # 데이터 요약
+├── gpt.py               # GPT API 통합
+├── deploy_lambda.py     # 배포 스크립트
+├── check_lambda_logs.py # 로그 모니터링
+└── README.md            # 문서
+```
+
+---
+
+## 🔄 처리 플로우
+
+```
+1. 트리거 (Django API)
+   → Lambda로 POST 요청
+
+2. GPS 분석 (30-60초)
+   → S3에서 GPS 데이터 다운로드
+   → anal_cal.player_anal() 실행
+   → 4개 쿼터 처리
+   → PlayerAnal 테이블에 저장
+
+3. AI 요약 (20-40초)
+   → 쿼터 데이터 요약 (summarize.py)
+   → GPT-4 API 호출 (gpt.py)
+   → 핵심 포인트 5개 추출
+   → PlayerAi 테이블에 저장
+
+총 소요 시간: 1-2분
+```
+
+---
+
+## 🎯 Lambda 핸들러 패턴
+
+### main.py 구조
+```python
+import os
+import json
+import traceback
+import boto3
+import pymysql
+from datetime import datetime
+
+# 상수
+DEFAULT_HZ = 10
+API_TIMEOUT_SECONDS = 10
+DEFAULT_PLAYER_TYPE = 'amateur'
+
+# AWS 클라이언트 초기화
+s3 = boto3.client('s3')
+
+def lambda_handler(event, context):
+    """
+    플레이어 분석을 위한 메인 Lambda 핸들러
+    
+    Args:
+        event: Lambda 이벤트 객체
+            {
+                "match_code": "m_123",
+                "ground_code": "g_456",
+                "s3_key": "uploads/gps_data.csv",
+                "player_type": "amateur"
+            }
+        context: Lambda 컨텍스트 객체
+        
+    Returns:
+        {
+            "statusCode": 200,
+            "body": json.dumps({"message": "Success", "match_code": "m_123"})
+        }
+    """
+    try:
+        # 1. 파라미터 추출
+        match_code = event.get('match_code')
+        ground_code = event.get('ground_code')
+        s3_key = event.get('s3_key')
+        
+        # 2. 필수 파라미터 검증
+        if not all([match_code, ground_code, s3_key]):
+            raise ValueError("Missing required parameters")
+        
+        # 3. S3에서 GPS 데이터 다운로드
+        local_file = download_from_s3(
+            bucket=os.environ['S3_BUCKET_NAME'],
+            key=s3_key,
+            local_name='gps_data.csv'
+        )
+        
+        # 4. 분석 처리
+        results = process_player_analysis(
+            match_code=match_code,
+            ground_code=ground_code,
+            gps_file=local_file
+        )
+        
+        # 5. 데이터베이스에 저장
+        save_analysis_results(match_code, results)
+        
+        # 6. AI 요약 생성
+        ai_summary = generate_ai_summary(match_code, results)
+        save_ai_summary(match_code, ai_summary)
+        
+        # 7. 경기 상태 업데이트
+        update_match_status(match_code, 'complete')
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'message': 'Analysis completed successfully',
+                'match_code': match_code,
+                'quarters_processed': len(results)
+            })
+        }
+        
+    except Exception as e:
+        # 에러 로깅
+        print(f"ERROR: {str(e)}")
+        print(traceback.format_exc())
+        
+        # 경기 상태를 실패로 업데이트
+        if match_code:
+            update_match_status(match_code, 'anal_fail')
+        
+        return {
+            'statusCode': 500,
+            'body': json.dumps({
+                'error': str(e),
+                'match_code': match_code
+            })
+        }
+    finally:
+        # /tmp 디렉토리 정리
+        cleanup_tmp_files()
+
+def download_from_s3(bucket, key, local_name):
+    """S3에서 /tmp로 파일 다운로드"""
+    path = f"/tmp/{local_name}"
+    s3.download_file(bucket, key, path)
+    return path
+
+def cleanup_tmp_files():
+    """/tmp 디렉토리 정리"""
+    import shutil
+    for filename in os.listdir('/tmp'):
+        file_path = os.path.join('/tmp', filename)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f"Failed to delete {file_path}: {e}")
+```
+
+---
+
+## ⚙️ Lambda 설정
+
+### 필수 환경 변수
+```bash
+# 데이터베이스 연결
+DB_HOST=agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com
+DB_USER=ground
+DB_PASSWORD=***  # 환경에서
+DB_NAME=agroundsDB
+
+# AWS S3
+S3_BUCKET_NAME=aground-gps
+AWS_REGION=ap-northeast-2
+
+# 외부 API
+GPT_API_KEY=sk-proj-***  # OpenAI API 키
+DJANGO_API_URL=https://agrounds.com
+
+# 처리 설정
+DEFAULT_HZ=10
+PLAYER_TYPE=amateur
+```
+
+### Lambda 설정 (권장)
+```
+함수 이름: Agrounds_player_anal
+런타임: Python 3.12
+핸들러: main.lambda_handler
+타임아웃: 300초 (5분)
+메모리: 1024 MB
+아키텍처: x86_64
+리전: ap-northeast-2 (서울)
+```
+
+### Lambda Layers
+```
+Layer 1: agrounds-openai
+  - openai
+  - tiktoken
+  - GPT 통합을 위한 의존성
+
+Layer 2: agrounds-data-processing (필요시)
+  - pandas
+  - numpy
+  - scipy
+```
+
+---
+
+## 🚀 배포 프로세스
+
+### 1. 스크립트로 배포
+```bash
+cd /home/ubuntu/agrounds/mysite/lambda/player_anal
+python3 deploy_lambda.py
+```
+
+**deploy_lambda.py가 하는 일**:
+1. ✅ main.py, anal_cal.py, summarize.py, gpt.py 패키징
+2. ✅ ZIP 파일 생성
+3. ✅ Lambda 함수 코드 업데이트
+4. ✅ 배포 검증
+
+### 2. 수동 배포 (대안)
+```bash
+# 배포 패키지 생성
+cd /home/ubuntu/agrounds/mysite/lambda/player_anal
+zip -r lambda_function.zip main.py anal_cal.py summarize.py gpt.py
+
+# Lambda에 업로드
+aws lambda update-function-code \
+    --function-name Agrounds_player_anal \
+    --zip-file fileb://lambda_function.zip \
+    --region ap-northeast-2
+```
+
+### 3. Lambda Layer 생성/업데이트 (최초 1회)
+```bash
+# Layer 패키지 생성
+mkdir -p python/lib/python3.12/site-packages
+pip install openai tiktoken -t python/lib/python3.12/site-packages
+zip -r openai_layer.zip python
+
+# Layer 배포
+aws lambda publish-layer-version \
+    --layer-name agrounds-openai \
+    --description 'OpenAI and tiktoken for player analysis' \
+    --zip-file fileb://openai_layer.zip \
+    --compatible-runtimes python3.12 \
+    --compatible-architectures x86_64 \
+    --region ap-northeast-2
+
+# 함수에 Layer 연결
+aws lambda update-function-configuration \
+    --function-name Agrounds_player_anal \
+    --layers arn:aws:lambda:ap-northeast-2:ACCOUNT_ID:layer:agrounds-openai:VERSION
+```
+
+---
+
+## 📊 데이터베이스 통합
+
+### PyMySQL 연결 패턴
+```python
+import pymysql
+import os
+
+def get_db_connection():
+    """데이터베이스 연결 생성"""
+    return pymysql.connect(
+        host=os.environ['DB_HOST'],
+        user=os.environ['DB_USER'],
+        password=os.environ['DB_PASSWORD'],
+        database=os.environ['DB_NAME'],
+        autocommit=False,
+        cursorclass=pymysql.cursors.DictCursor,
+        charset='utf8mb4'
+    )
+
+def execute_query(query, params=None):
+    """데이터베이스 쿼리 안전하게 실행"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cursor:
+            cursor.execute(query, params or ())
+            result = cursor.fetchall()
+        conn.commit()
+        return result
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+# PlayerAnal용 Upsert 패턴
+def upsert_player_anal(quarter_code, data):
+    """PlayerAnal 데이터 삽입 또는 업데이트"""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            # 테이블 컬럼 가져오기
+            cursor.execute("SHOW COLUMNS FROM player_anal")
+            valid_cols = {row['Field'] for row in cursor.fetchall()}
+            
+            # 유효한 컬럼만 필터링
+            filtered_data = {k: v for k, v in data.items() if k in valid_cols}
+            filtered_data['quarter_code'] = quarter_code
+            
+            # SQL 구축
+            cols = list(filtered_data.keys())
+            cols_sql = ", ".join(f"`{k}`" for k in cols)
+            vals_sql = ", ".join(["%s"] * len(cols))
+            upd_sql = ", ".join([f"`{k}`=VALUES(`{k}`)" for k in cols if k != 'quarter_code'])
+            
+            sql = f"""
+                INSERT INTO player_anal ({cols_sql}) 
+                VALUES ({vals_sql}) 
+                ON DUPLICATE KEY UPDATE {upd_sql}
+            """
+            
+            cursor.execute(sql, [filtered_data[k] for k in cols])
+        
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+```
+
+---
+
+## 🌐 S3 통합
+
+### S3에서 다운로드
+```python
+import boto3
+
+s3 = boto3.client('s3')
+
+def download_gps_data(bucket, key):
+    """S3에서 /tmp로 GPS 데이터 다운로드"""
+    local_path = f"/tmp/{os.path.basename(key)}"
+    
+    try:
+        s3.download_file(bucket, key, local_path)
+        print(f"Downloaded {key} to {local_path}")
+        return local_path
+    except Exception as e:
+        print(f"S3 download failed: {e}")
+        raise
+```
+
+### S3에 결과 업로드 (선택사항)
+```python
+def upload_results_to_s3(data, bucket, key):
+    """분석 결과를 S3에 업로드"""
+    try:
+        s3.put_object(
+            Bucket=bucket,
+            Key=key,
+            Body=json.dumps(data),
+            ContentType='application/json'
+        )
+        print(f"Uploaded results to s3://{bucket}/{key}")
+    except Exception as e:
+        print(f"S3 upload failed: {e}")
+        raise
+```
+
+---
+
+## 🤖 GPT 통합
+
+### gpt.py 패턴
+```python
+import openai
+import os
+
+def call_gpt_api(prompt, max_tokens=500):
+    """
+    분석 요약을 위해 GPT-4 API 호출
+    
+    Args:
+        prompt: 분석 프롬프트
+        max_tokens: 최대 응답 토큰
+        
+    Returns:
+        GPT 응답 텍스트
+    """
+    try:
+        openai.api_key = os.environ['GPT_API_KEY']
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a professional sports analyst."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=max_tokens,
+            temperature=0.7
+        )
+        
+        return response.choices[0].message.content
+        
+    except Exception as e:
+        print(f"GPT API call failed: {e}")
+        raise
+
+def generate_player_summary(quarter_data):
+    """플레이어 성능에 대한 AI 요약 생성"""
+    prompt = f"""
+    다음 선수 경기 데이터를 분석하고 핵심 인사이트 5가지를 추출하세요:
+    
+    - 총 이동거리: {quarter_data['T_D']} km
+    - 평균 속력: {quarter_data['T_AS']} km/h
+    - 최고 속력: {quarter_data['T_HS']} km/h
+    - 스프린트 횟수: {quarter_data['T_S']}회
+    
+    각 인사이트는 40자 이내로 작성하세요.
+    """
+    
+    return call_gpt_api(prompt, max_tokens=500)
+```
+
+---
+
+## 📊 CloudWatch 로깅
+
+### 로깅 모범 사례
+```python
+import json
+from datetime import datetime
+
+def log_info(message, **kwargs):
+    """CloudWatch용 구조화된 로깅"""
+    log_entry = {
+        'timestamp': datetime.utcnow().isoformat(),
+        'level': 'INFO',
+        'message': message,
+        **kwargs
+    }
+    print(json.dumps(log_entry))
+
+def log_error(message, error, **kwargs):
+    """컨텍스트와 함께 에러 로깅"""
+    log_entry = {
+        'timestamp': datetime.utcnow().isoformat(),
+        'level': 'ERROR',
+        'message': message,
+        'error': str(error),
+        'traceback': traceback.format_exc(),
+        **kwargs
+    }
+    print(json.dumps(log_entry))
+
+# Lambda에서 사용
+def lambda_handler(event, context):
+    log_info("Lambda execution started", event=event)
+    
+    try:
+        # 처리
+        log_info("Processing match", match_code=match_code)
+        
+    except Exception as e:
+        log_error("Processing failed", error=e, match_code=match_code)
+        raise
+```
+
+### Lambda 로그 확인
+```bash
+# check_lambda_logs.py 스크립트 사용
+cd /home/ubuntu/agrounds/mysite/lambda/player_anal
+python3 check_lambda_logs.py
+
+# 또는 AWS CLI 사용
+aws logs tail /aws/lambda/Agrounds_player_anal --follow
+
+# 에러만 필터링
+aws logs filter-events \
+    --log-group-name /aws/lambda/Agrounds_player_anal \
+    --filter-pattern "ERROR"
+```
+
+---
+
+## ⚡ 성능 최적화
+
+### 메모리 최적화
+```python
+# 대용량 데이터셋에 제너레이터 사용
+def process_large_dataset(data):
+    """메모리 줄이기 위해 제너레이터 사용"""
+    for chunk in pd.read_csv(data, chunksize=10000):
+        yield process_chunk(chunk)
+
+# 사용 후 변수 삭제
+import gc
+large_dataframe = process_data()
+# 데이터 사용
+result = calculate_metrics(large_dataframe)
+# 메모리에서 삭제
+del large_dataframe
+gc.collect()
+```
+
+### 타임아웃 관리
+```python
+import signal
+
+class TimeoutException(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("Lambda timeout approaching")
+
+def lambda_handler(event, context):
+    """타임아웃 보호가 있는 핸들러"""
+    # 타임아웃 알람 설정 (예: Lambda 타임아웃 10초 전)
+    remaining_time = context.get_remaining_time_in_millis() / 1000
+    alarm_time = int(remaining_time - 10)
+    
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(alarm_time)
+    
+    try:
+        # 처리
+        result = long_running_process()
+        
+    except TimeoutException:
+        # 타임아웃 우아하게 처리
+        print("WARNING: Approaching timeout, saving partial results")
+        save_partial_results()
+        raise
+        
+    finally:
+        signal.alarm(0)  # 알람 취소
+```
+
+### 병렬 처리
+```python
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def process_quarters_parallel(quarters):
+    """여러 쿼터를 병렬로 처리"""
+    results = {}
+    
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        # 작업 제출
+        future_to_quarter = {
+            executor.submit(process_quarter, q): q 
+            for q in quarters
+        }
+        
+        # 결과 수집
+        for future in as_completed(future_to_quarter):
+            quarter = future_to_quarter[future]
+            try:
+                results[quarter] = future.result()
+            except Exception as e:
+                print(f"Quarter {quarter} failed: {e}")
+    
+    return results
+```
+
+---
+
+## 🔍 에러 핸들링
+
+### Lambda 에러 응답 패턴
+```python
+def lambda_handler(event, context):
+    try:
+        # 처리
+        result = process_data(event)
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'success': True,
+                'data': result
+            })
+        }
+        
+    except ValueError as e:
+        # 클라이언트 에러 (유효하지 않은 입력)
+        return {
+            'statusCode': 400,
+            'body': json.dumps({
+                'success': False,
+                'error': 'INVALID_INPUT',
+                'message': str(e)
+            })
+        }
+        
+    except ConnectionError as e:
+        # 외부 서비스 에러
+        return {
+            'statusCode': 502,
+            'body': json.dumps({
+                'success': False,
+                'error': 'EXTERNAL_SERVICE_ERROR',
+                'message': 'Failed to connect to external service'
+            })
+        }
+        
+    except Exception as e:
+        # 예상치 못한 에러
+        print(f"ERROR: {str(e)}")
+        print(traceback.format_exc())
+        
+        return {
+            'statusCode': 500,
+            'body': json.dumps({
+                'success': False,
+                'error': 'INTERNAL_ERROR',
+                'message': 'Internal processing error'
+            })
+        }
+```
+
+---
+
+## 🧪 Lambda 함수 테스팅
+
+### 로컬 테스팅
+```python
+# test_lambda_local.py
+import json
+from main import lambda_handler
+
+def test_local():
+    """Lambda를 로컬에서 테스트"""
+    event = {
+        "match_code": "m_test123",
+        "ground_code": "g_test456",
+        "s3_key": "test/gps_data.csv",
+        "player_type": "amateur"
+    }
+    
+    # Context Mock
+    class MockContext:
+        def get_remaining_time_in_millis(self):
+            return 300000  # 5분
+    
+    context = MockContext()
+    
+    # 실행
+    result = lambda_handler(event, context)
+    
+    print(json.dumps(result, indent=2))
+    assert result['statusCode'] == 200
+
+if __name__ == '__main__':
+    test_local()
+```
+
+### AWS CLI로 Lambda 호출
+```bash
+# 테스트 이벤트 생성
+cat > test_event.json << EOF
+{
+  "match_code": "m_test123",
+  "ground_code": "g_test456",
+  "s3_key": "test/gps_data.csv"
+}
+EOF
+
+# Lambda 호출
+aws lambda invoke \
+    --function-name Agrounds_player_anal \
+    --payload file://test_event.json \
+    --region ap-northeast-2 \
+    response.json
+
+# 응답 확인
+cat response.json
+```
+
+---
+
+## 📊 모니터링 & 디버깅
+
+### CloudWatch 메트릭
+다음 메트릭 모니터링:
+- **Invocations** - 총 Lambda 실행 횟수
+- **Duration** - 실행 시간 (목표: < 120초)
+- **Errors** - 실패한 실행
+- **Throttles** - Rate limit 도달
+- **Concurrent Executions** - 병렬 실행
+
+### CloudWatch 알람
+다음에 대한 알람 설정:
+- 에러율 > 5%
+- 실행 시간 > 240초 (타임아웃의 80%)
+- Throttles > 0
+- 메모리 사용량 > 90%
+
+### 디버깅 팁
+```python
+# 상세 로깅 추가
+def process_quarter(quarter_data):
+    print(f"[DEBUG] Processing quarter: {quarter_data['quarter_code']}")
+    print(f"[DEBUG] Data points: {len(quarter_data['gps_points'])}")
+    
+    start_time = time.time()
+    result = calculate_metrics(quarter_data)
+    duration = time.time() - start_time
+    
+    print(f"[DEBUG] Processing completed in {duration:.2f}s")
+    return result
+
+# 메모리 사용량 로깅
+import psutil
+import os
+
+def log_memory_usage():
+    """현재 메모리 사용량 로깅"""
+    process = psutil.Process(os.getpid())
+    memory_mb = process.memory_info().rss / 1024 / 1024
+    print(f"[MEMORY] Current usage: {memory_mb:.2f} MB")
+```
+
+---
+
+## ✅ Lambda 개발 체크리스트
+
+### 배포 전
+- [ ] 환경 변수 설정됨
+- [ ] 타임아웃 적절히 설정 (player_anal은 300초)
+- [ ] 메모리 할당 (1024 MB 권장)
+- [ ] Lambda layers 연결됨
+- [ ] IAM 권한 부여 (S3, RDS, CloudWatch)
+- [ ] 에러 핸들링 구현됨
+- [ ] CloudWatch 로깅 추가됨
+- [ ] /tmp 정리 구현됨
+- [ ] 로컬 테스트 완료
+- [ ] 의존성을 layer에 (ZIP에 포함 안 함)
+
+### 배포 후
+- [ ] 실제 데이터로 테스트
+- [ ] CloudWatch 로그 확인
+- [ ] 데이터베이스 업데이트 검증
+- [ ] 실행 시간 모니터링
+- [ ] 메모리 사용량 모니터링
+- [ ] CloudWatch 알람 설정
+- [ ] 이슈 문서화
+- [ ] 필요시 README 업데이트
+
+### 코드 품질
+- [ ] 하드코딩된 자격증명 없음
+- [ ] 적절한 예외 처리
+- [ ] 구조화된 로깅 (JSON 형식)
+- [ ] 입력 검증
+- [ ] 출력 검증
+- [ ] 멱등성 작업 (재시도 안전)
+- [ ] 무한 루프 없음
+- [ ] finally 블록에서 리소스 정리
+
+---
+
+## 🔗 관련 가이드라인
+
+**함께 참조:**
+- `general/error-handling.mdc` - 에러 핸들링 패턴
+- `general/security.mdc` - 보안 모범 사례
+- `database/patterns.mdc` - 데이터베이스 작업
+- `backend/api-development.mdc` - Django API 통합
+
+**외부 리소스:**
+- [AWS Lambda Developer Guide](https://docs.aws.amazon.com/lambda/)
+- [Lambda Best Practices](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
+- [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/)
+
+---
+
+**기억하세요: Lambda 함수는 무상태, 멱등성, 빠른 실행에 최적화되어야 합니다!**

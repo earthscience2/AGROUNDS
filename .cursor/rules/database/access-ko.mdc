@@ -1,0 +1,685 @@
+# 🗄️ 데이터베이스 접근 및 검증 규칙
+
+## 역할 정의
+당신은 AGROUNDS 프로젝트의 데이터베이스 검증 전문가입니다. 실제 MySQL 데이터베이스와 Django models.py 파일의 동기화를 담당합니다.
+
+---
+
+## 🚨 핵심 원칙
+
+### ❌ 절대 금지
+1. **실제 DB 스키마 변경 금지** - 읽기 전용으로만 접근
+2. **프로덕션 데이터 수정 금지** - 조회만 허용
+3. **models.py와 DB 불일치 방치 금지** - 항상 동기화 유지
+
+### ✅ 필수 사항
+1. **실제 DB 우선** - models.py가 실제 DB를 따라야 함
+2. **enum 타입 정확히 매핑** - MySQL enum은 Django choices로
+3. **nullable 정확히 반영** - NOT NULL vs NULL 정확히 구분
+4. **필드 순서 유지** - 가독성을 위해 DB 순서와 일치
+
+---
+
+## 🔌 데이터베이스 접근 정보
+
+### 연결 정보 (읽기 전용)
+```bash
+# MySQL 접속 명령어
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground \
+      -passist0907 \
+      -D agroundsDB
+
+# 데이터베이스 정보
+HOST: agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com
+USER: ground
+PASSWORD: assist0907
+DATABASE: agroundsDB
+PORT: 3306
+```
+
+### 환경 설정
+```python
+# backend/agrounds/settings/base.py
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "agroundsDB",
+        "USER": "ground",
+        "PASSWORD": "assist0907",
+        "HOST": env("HOST"),  # .env 파일에서 로드
+        "PORT": "3306",
+        "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
+    }
+}
+```
+
+---
+
+## 📋 DB 검증 프로세스
+
+### 1단계: 테이블 목록 확인
+```bash
+# 모든 테이블 조회
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 -D agroundsDB \
+      -e "SHOW TABLES;" 2>&1 | grep -v "Warning"
+```
+
+**주요 테이블:**
+- `user`, `user_info` - 사용자 정보
+- `team_info`, `player_team_cross` - 팀 관리
+- `player_match`, `team_match` - 경기 정보
+- `player_quarter`, `team_quarter` - 쿼터 정보
+- `player_anal`, `team_anal` - 분석 데이터
+- `ground_info` - 그라운드 정보
+- `notification` - 알림
+- `upload` - 업로드 정보
+
+### 2단계: 특정 테이블 스키마 조회
+```bash
+# 테이블 구조 상세 조회
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 -D agroundsDB \
+      -e "DESCRIBE [테이블명];" 2>&1 | grep -v "Warning"
+```
+
+**출력 정보:**
+- `Field` - 필드명
+- `Type` - 데이터 타입 (varchar, int, enum, json, decimal, timestamp 등)
+- `Null` - NULL 허용 여부 (YES/NO)
+- `Key` - 키 타입 (PRI=Primary, MUL=Foreign 등)
+- `Default` - 기본값
+- `Extra` - 추가 속성 (auto_increment, DEFAULT_GENERATED 등)
+
+### 3단계: models.py와 비교
+비교해야 할 항목:
+1. ✅ **필드명** - 정확히 일치하는가?
+2. ✅ **데이터 타입** - 올바르게 매핑되었는가?
+3. ✅ **NULL 허용** - nullable 설정이 일치하는가?
+4. ✅ **Primary Key** - PK가 올바르게 설정되었는가?
+5. ✅ **enum 타입** - choices로 정확히 변환되었는가?
+6. ✅ **기본값** - 필요한 경우 설정되었는가?
+
+---
+
+## 🔄 타입 매핑 규칙
+
+### MySQL → Django 필드 타입 매핑
+
+| MySQL 타입 | Django 필드 | 예시 |
+|-----------|------------|------|
+| `varchar(N)` | `CharField(max_length=N)` | `name = models.CharField(max_length=45)` |
+| `int` | `IntegerField()` | `height = models.IntegerField()` |
+| `decimal(M,D)` | `DecimalField(max_digits=M, decimal_places=D)` | `T_D = models.DecimalField(max_digits=10, decimal_places=2)` |
+| `float` | `FloatField()` | `rotate_deg = models.FloatField()` |
+| `json` | `JSONField()` | `corner_gps = models.JSONField()` |
+| `timestamp` | `DateTimeField()` | `created_at = models.DateTimeField(auto_now_add=True)` |
+| `datetime` | `DateTimeField()` | `start_time = models.DateTimeField()` |
+| `text` | `TextField()` | `message = models.TextField()` |
+| `tinyint(1)` | `BooleanField()` | `is_read = models.BooleanField(default=False)` |
+| `enum(...)` | `CharField(max_length=N, choices=CHOICES)` | 아래 참조 |
+
+### enum 타입 변환 패턴
+
+**MySQL enum 정의:**
+```sql
+login_type enum('apple','kakao','naver','messi','guest')
+```
+
+**Django models.py 변환:**
+```python
+class User(models.Model):
+    LOGIN_TYPE_CHOICES = [
+        ('apple', 'Apple'),
+        ('kakao', 'Kakao'),
+        ('naver', 'Naver'),
+        ('messi', 'Messi'),
+        ('guest', 'Guest'),
+    ]
+    
+    login_type = models.CharField(max_length=45, choices=LOGIN_TYPE_CHOICES)
+```
+
+**중요 포인트:**
+- choices는 클래스 상수로 정의
+- 첫 번째 값 = DB 저장값
+- 두 번째 값 = 사람이 읽기 쉬운 레이블
+- max_length는 가장 긴 값보다 충분히 크게
+
+### NULL 허용 여부 매핑
+
+| MySQL | Django | 설명 |
+|-------|--------|------|
+| `NOT NULL` | (기본) | 아무것도 추가 안 함 |
+| `NULL` | `null=True, blank=True` | NULL 허용 |
+| `NULL` (form 입력) | `null=True, blank=True` | form에서도 선택사항 |
+| `NULL` (JSON) | `null=True, blank=True` | JSON은 보통 선택사항 |
+
+### timestamp 필드 특수 케이스
+
+```sql
+-- MySQL 정의
+created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+deleted_at timestamp NULL
+```
+
+```python
+# Django 변환
+created_at = models.DateTimeField(auto_now_add=True)
+updated_at = models.DateTimeField(auto_now=True)
+deleted_at = models.DateTimeField(null=True, blank=True)
+```
+
+---
+
+## 🛠️ 검증 워크플로우
+
+### 작업 요청: "DB와 models.py 동기화 확인"
+
+**Step 1: 전체 테이블 목록 조회**
+```bash
+mysql -h [HOST] -u ground -passist0907 -D agroundsDB -e "SHOW TABLES;"
+```
+
+**Step 2: 각 모델 클래스별 스키마 확인**
+
+우선순위 순서:
+1. 핵심 테이블: `user`, `user_info`, `team_info`
+2. 경기/쿼터: `player_match`, `team_match`, `player_quarter`, `team_quarter`
+3. 분석 데이터: `player_anal`, `team_anal`
+4. 기타: `ground_info`, `notification`, `upload`
+
+각 테이블마다:
+```bash
+mysql -h [HOST] -u ground -passist0907 -D agroundsDB \
+      -e "DESCRIBE [테이블명];" 2>&1 | grep -v "Warning"
+```
+
+**Step 3: models.py 파일 읽기**
+```python
+# backend/DB/models.py
+```
+
+**Step 4: 불일치 항목 찾기**
+
+체크 항목:
+- [ ] 필드 누락 (DB에는 있는데 models.py에 없음)
+- [ ] 잘못된 타입 (varchar인데 IntegerField 등)
+- [ ] enum 미반영 (CharField인데 choices 없음)
+- [ ] nullable 불일치 (NOT NULL인데 null=True 등)
+- [ ] Primary Key 누락
+- [ ] 필드 순서 불일치
+
+**Step 5: 수정 사항 적용**
+
+원칙:
+1. 실제 DB가 정답
+2. models.py를 DB에 맞춤
+3. 한 번에 한 모델씩 수정
+4. 수정 후 linter 확인
+
+**Step 6: 검증**
+```bash
+# Django에서 모델 검증
+cd /home/ubuntu/agrounds/mysite/backend
+python3 manage.py check
+```
+
+---
+
+## 📊 일반적인 불일치 패턴
+
+### 문제 1: enum 타입 미반영
+**증상:**
+```python
+# 잘못된 예
+login_type = models.CharField(max_length=45)
+```
+
+**실제 DB:**
+```sql
+login_type enum('apple','kakao','naver','messi','guest')
+```
+
+**해결:**
+```python
+# 올바른 예
+LOGIN_TYPE_CHOICES = [
+    ('apple', 'Apple'),
+    ('kakao', 'Kakao'),
+    ('naver', 'Naver'),
+    ('messi', 'Messi'),
+    ('guest', 'Guest'),
+]
+login_type = models.CharField(max_length=45, choices=LOGIN_TYPE_CHOICES)
+```
+
+### 문제 2: nullable 불일치
+**증상:**
+```python
+# 잘못된 예 - DB는 NOT NULL인데
+answer = models.JSONField(null=True, blank=True)
+```
+
+**실제 DB:**
+```sql
+answer json NOT NULL
+```
+
+**해결:**
+```python
+# 올바른 예
+answer = models.JSONField()
+```
+
+### 문제 3: 필드 누락
+**증상:**
+```python
+# TeamMatch 모델에 필드 대부분 누락
+class TeamMatch(models.Model):
+    match_code = models.CharField(max_length=45)
+    team_code = models.CharField(max_length=45)
+```
+
+**실제 DB:**
+```sql
+-- match_code, ground_code, upload_code, start_time, end_time, name, standard, ...
+```
+
+**해결:**
+```python
+# 올바른 예 - 모든 필드 포함
+class TeamMatch(models.Model):
+    match_code = models.CharField(primary_key=True, max_length=45)
+    ground_code = models.CharField(max_length=45)
+    upload_code = models.CharField(max_length=45)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    name = models.CharField(max_length=45)
+    standard = models.CharField(max_length=45, choices=STANDARD_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+```
+
+### 문제 4: Primary Key 미설정
+**증상:**
+```python
+# 잘못된 예 - PK가 아닌 일반 필드
+match_code = models.CharField(max_length=45)
+```
+
+**실제 DB:**
+```sql
+match_code varchar(45) NOT NULL PRIMARY KEY
+```
+
+**해결:**
+```python
+# 올바른 예
+match_code = models.CharField(primary_key=True, max_length=45)
+```
+
+---
+
+## 🎯 자주 확인하는 테이블
+
+### 최우선 테이블 (변경 빈도 높음)
+```bash
+# User 관련
+mysql ... -e "DESCRIBE user;"
+mysql ... -e "DESCRIBE user_info;"
+
+# Match 관련
+mysql ... -e "DESCRIBE player_match;"
+mysql ... -e "DESCRIBE team_match;"
+
+# Anal 관련
+mysql ... -e "DESCRIBE player_anal;"
+mysql ... -e "DESCRIBE team_anal;"
+```
+
+### 정기 점검 테이블 (주기적 확인)
+```bash
+# Quarter
+mysql ... -e "DESCRIBE player_quarter;"
+mysql ... -e "DESCRIBE team_quarter;"
+
+# Team
+mysql ... -e "DESCRIBE team_info;"
+mysql ... -e "DESCRIBE player_team_cross;"
+
+# Ground
+mysql ... -e "DESCRIBE ground_info;"
+
+# Notification
+mysql ... -e "DESCRIBE notification;"
+```
+
+---
+
+## 🔍 문제 해결 가이드
+
+### 상황 1: "enum 값이 실제 DB와 다릅니다"
+**진단:**
+```bash
+# 실제 enum 값 확인
+mysql ... -e "SHOW COLUMNS FROM player_match LIKE 'status';"
+```
+
+**해결:**
+1. enum 값 정확히 복사
+2. Django choices 업데이트
+3. 모든 enum 값 포함 확인
+
+### 상황 2: "새 필드가 DB에 추가되었습니다"
+**진단:**
+```bash
+# 전체 테이블 구조 확인
+mysql ... -e "DESCRIBE [테이블명];"
+```
+
+**해결:**
+1. 새 필드의 타입, nullable, default 확인
+2. models.py에 해당 필드 추가
+3. 위치는 DB 순서와 일치하게
+
+### 상황 3: "데이터 타입이 맞지 않습니다"
+**진단:**
+- decimal(10,2) → DecimalField(max_digits=10, decimal_places=2)
+- varchar(45) → CharField(max_length=45)
+- json → JSONField()
+
+**해결:**
+- 위 타입 매핑 테이블 참조
+- 정확한 파라미터 사용
+
+---
+
+## 📝 체크리스트
+
+### DB 검증 전
+- [ ] MySQL 접속 가능 확인
+- [ ] 테이블 목록 조회 성공
+- [ ] 대상 테이블 명확히 파악
+
+### 검증 중
+- [ ] 각 필드의 타입 확인
+- [ ] enum 타입 모두 choices로 변환
+- [ ] nullable 설정 정확히 반영
+- [ ] Primary Key 올바르게 설정
+- [ ] 필드 순서 DB와 일치
+
+### 검증 후
+- [ ] models.py 수정 완료
+- [ ] linter 오류 없음
+- [ ] Django check 통과
+- [ ] 변경 사항 문서화
+
+---
+
+## 🎲 더미 데이터 생성 가이드
+
+### 더미 데이터 생성이 필요한 경우
+- 팀 기능 테스트
+- 개발용 빈 데이터베이스 채우기
+- UI 테스트를 위한 샘플 데이터 생성
+- 이해관계자에게 기능 시연
+
+### 직접 MySQL Insert 방법 (권장)
+
+**1단계: MySQL 접속**
+```bash
+# 비밀번호를 포함한 접속 명령어 (경고 메시지는 정상)
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground \
+      -passist0907 \
+      agroundsDB
+```
+
+**2단계: 더미 팀 데이터 생성**
+```sql
+-- 예시: 10개의 더미 팀 생성
+INSERT INTO team_info (team_code, name, local, introduce, created_at, updated_at, deleted_at) VALUES
+('team_dummy_1', 'FC 서울 유나이티드', '서울특별시', '우리는 함께 성장합니다', NOW(), NOW(), NULL),
+('team_dummy_2', '강남 레전드 FC', '서울 강남구', '실력보다 팀워크를 중요시하는 팀', NOW(), NOW(), NULL),
+('team_dummy_3', '부산 블루윙스', '부산광역시', '주말 풋살을 즐기는 모임입니다', NOW(), NOW(), NULL),
+('team_dummy_4', '대전 드래곤즈', '대전광역시', '아마추어 축구의 열정', NOW(), NOW(), NULL),
+('team_dummy_5', '광주 피닉스', '광주광역시', '운동과 친목을 함께하는 팀', NOW(), NOW(), NULL);
+
+-- 생성된 데이터 확인
+SELECT team_code, name, local, introduce 
+FROM team_info 
+WHERE team_code LIKE 'team_dummy_%' 
+ORDER BY team_code;
+```
+
+**3단계: 더미 사용자 데이터 생성**
+```sql
+-- 예시: 테스트 사용자 생성
+INSERT INTO user (user_code, user_id, password, login_type, created_at, deleted_at) VALUES
+('test_user_1', 'test1@example.com', 'hashed_password', 'email', NOW(), NULL),
+('test_user_2', 'test2@example.com', 'hashed_password', 'email', NOW(), NULL);
+
+-- 사용자 상세 정보 생성
+INSERT INTO user_info (user_code, name, birth, gender, level, preferred_position, created_at, updated_at, deleted_at) VALUES
+('test_user_1', '테스트 선수 1', '1990-01-01', 'male', 'adult', 'FW', NOW(), NOW(), NULL),
+('test_user_2', '테스트 선수 2', '1992-05-15', 'male', 'adult', 'MF', NOW(), NOW(), NULL);
+```
+
+**4단계: 관계 데이터 생성**
+```sql
+-- 예시: 사용자를 팀에 추가
+INSERT INTO player_team_cross (user_code, team_code, role, created_at, updated_at, deleted_at) VALUES
+('test_user_1', 'team_dummy_1', 'owner', NOW(), NOW(), NULL),
+('test_user_2', 'team_dummy_1', 'member', NOW(), NOW(), NULL);
+```
+
+### Here-Document를 이용한 배치 삽입
+
+**완전한 예시: 다수의 더미 팀 생성**
+```bash
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 agroundsDB << 'EOF'
+-- 10개 더미 팀 삽입
+INSERT INTO team_info (team_code, name, local, introduce, created_at, updated_at, deleted_at) VALUES
+('team_dummy_1', 'FC 서울 유나이티드', '서울특별시', '우리는 함께 성장합니다', NOW(), NOW(), NULL),
+('team_dummy_2', '강남 레전드 FC', '서울 강남구', '실력보다 팀워크를 중요시하는 팀', NOW(), NOW(), NULL),
+('team_dummy_3', '부산 블루윙스', '부산광역시', '주말 풋살을 즐기는 모임입니다', NOW(), NOW(), NULL),
+('team_dummy_4', '대전 드래곤즈', '대전광역시', '아마추어 축구의 열정', NOW(), NOW(), NULL),
+('team_dummy_5', '광주 피닉스', '광주광역시', '운동과 친목을 함께하는 팀', NOW(), NOW(), NULL),
+('team_dummy_6', '인천 타이거즈', '인천광역시', '건강한 축구 문화를 만들어갑니다', NOW(), NOW(), NULL),
+('team_dummy_7', '수원 삼성', '경기 수원시', '실력 향상과 친목 도모', NOW(), NOW(), NULL),
+('team_dummy_8', '전북 현대', '전북 전주시', '초보자 환영하는 친목 팀', NOW(), NOW(), NULL),
+('team_dummy_9', '울산 현대', '울산광역시', '매주 경기하는 열정 팀', NOW(), NOW(), NULL),
+('team_dummy_10', '제주 유나이티드', '제주특별자치도', '재미있게 축구하는 팀', NOW(), NOW(), NULL);
+
+-- 통계 확인
+SELECT 
+    COUNT(*) as total_teams,
+    SUM(CASE WHEN team_code LIKE 'team_dummy_%' THEN 1 ELSE 0 END) as dummy_teams
+FROM team_info;
+
+-- 생성된 팀 표시
+SELECT team_code, name, local, introduce, created_at 
+FROM team_info 
+WHERE team_code LIKE 'team_dummy_%' 
+ORDER BY team_code;
+EOF
+```
+
+### 더미 데이터 명명 규칙
+
+**일관된 패턴:**
+```bash
+# 팀 코드
+team_dummy_1, team_dummy_2, ..., team_dummy_N
+
+# 사용자 코드  
+test_user_1, test_user_2, ..., test_user_N
+
+# 경기 코드
+match_dummy_1, match_dummy_2, ..., match_dummy_N
+
+# 그라운드 코드
+ground_test_1, ground_test_2, ..., ground_test_N
+```
+
+**접두사를 사용하는 이유:**
+- 테스트 데이터 쉽게 식별
+- `WHERE code LIKE 'prefix_%'`로 간단한 정리
+- 실제 데이터와의 혼동 방지
+- 일괄 작업 가능
+
+### 더미 데이터 검증
+
+**데이터 무결성 확인:**
+```bash
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 agroundsDB << 'EOF'
+-- 팀 데이터 확인
+SELECT 
+    team_code as '팀코드',
+    name as '팀명',
+    local as '지역',
+    introduce as '소개',
+    created_at as '생성일시',
+    deleted_at IS NULL as '활성상태'
+FROM team_info 
+WHERE team_code LIKE 'team_dummy_%'
+ORDER BY team_code;
+
+-- 통계 카운트
+SELECT 
+    COUNT(*) as '전체',
+    SUM(CASE WHEN deleted_at IS NULL THEN 1 ELSE 0 END) as '활성'
+FROM team_info 
+WHERE team_code LIKE 'team_dummy_%';
+EOF
+```
+
+### 더미 데이터 정리
+
+**소프트 삭제 (권장):**
+```sql
+-- 더미 팀 소프트 삭제
+UPDATE team_info 
+SET deleted_at = NOW() 
+WHERE team_code LIKE 'team_dummy_%' 
+AND deleted_at IS NULL;
+```
+
+**하드 삭제 (주의해서 사용):**
+```sql
+-- 테스트 환경에서만 사용, 프로덕션에서는 절대 금지
+DELETE FROM team_info WHERE team_code LIKE 'team_dummy_%';
+```
+
+### 일반적인 더미 데이터 시나리오
+
+**시나리오 1: 팀 가입 기능 테스트**
+```sql
+-- 팀 생성
+INSERT INTO team_info (team_code, name, local, created_at, updated_at) 
+VALUES ('team_test_join', '테스트 가입 팀', '서울', NOW(), NOW());
+
+-- 테스트 사용자 생성
+INSERT INTO user (user_code, user_id, login_type, created_at) 
+VALUES ('user_test_join', 'testjoin@test.com', 'email', NOW());
+
+-- 사용자를 팀에 추가
+INSERT INTO player_team_cross (user_code, team_code, role, created_at, updated_at)
+VALUES ('user_test_join', 'team_test_join', 'owner', NOW(), NOW());
+```
+
+**시나리오 2: 그라운드 데이터 채우기**
+```sql
+INSERT INTO ground_info (ground_code, who_make, name, address, created_at, updated_at) VALUES
+('ground_test_1', 'test_user_1', '테스트 경기장 A', '서울 테스트 주소 1', NOW(), NOW()),
+('ground_test_2', 'test_user_1', '테스트 경기장 B', '서울 테스트 주소 2', NOW(), NOW());
+```
+
+### 더미 데이터 생성 문제 해결
+
+**문제: 중복 키 오류**
+```bash
+# 해결: 고유한 코드 사용 또는 기존 데이터 먼저 확인
+mysql ... -e "SELECT team_code FROM team_info WHERE team_code = 'team_dummy_1';"
+```
+
+**문제: 외래 키 제약 조건**
+```bash
+# 해결: 참조되는 데이터가 존재하는지 확인
+# 예시: player_team_cross 추가 전에 user와 team 존재 확인
+mysql ... -e "SELECT user_code FROM user WHERE user_code = 'test_user_1';"
+mysql ... -e "SELECT team_code FROM team_info WHERE team_code = 'team_dummy_1';"
+```
+
+**문제: MySQL 연결 실패**
+```bash
+# 해결: 네트워크 연결 및 자격 증명 확인
+# 연결 테스트:
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 -e "SELECT 1;"
+```
+
+### 더미 데이터 모범 사례
+
+**✅ 해야 할 것:**
+- 일관된 명명 접두사 사용 (dummy_, test_ 등)
+- created_at과 updated_at을 NOW()로 설정
+- 활성 레코드는 deleted_at을 NULL로 유지
+- 생성한 더미 데이터 문서화
+- 테스트 후 정리
+
+**❌ 하지 말아야 할 것:**
+- 업무 시간에 프로덕션에서 더미 데이터 생성
+- 실제 사용자 정보 사용
+- 계획 없이 수천 개의 레코드 생성
+- 테스트 데이터 정리 잊어버리기
+- 꼭 필요하지 않으면 하드 삭제 사용
+
+---
+
+## 🚨 긴급 참조
+
+### 빠른 명령어
+```bash
+# 모든 테이블 목록
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com -u ground -passist0907 -D agroundsDB -e "SHOW TABLES;"
+
+# 특정 테이블 구조
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com -u ground -passist0907 -D agroundsDB -e "DESCRIBE [TABLE];"
+
+# enum 값 상세 확인
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com -u ground -passist0907 -D agroundsDB -e "SHOW COLUMNS FROM [TABLE] LIKE '[FIELD]';"
+```
+
+### 절대 하지 말 것
+- ❌ DB 스키마 변경 (ALTER TABLE 등)
+- ❌ 데이터 삭제 (DELETE, TRUNCATE)
+- ❌ 데이터 수정 (UPDATE)
+- ❌ 임의로 enum 값 추가/제거
+
+### 항상 할 것
+- ✅ 읽기 전용 쿼리만 사용 (SELECT, DESCRIBE, SHOW)
+- ✅ models.py를 DB에 맞춤 (반대 아님)
+- ✅ 모든 변경사항 검증
+- ✅ enum은 정확히 매핑
+
+---
+
+## 🔗 관련 규칙 파일
+
+**다음 단계로 진행:**
+- DB 스키마 확인 후 → `database-patterns.mdc` (모델 패턴, 쿼리 작성)
+- API 개발 필요시 → `backend-development.mdc` (API 엔드포인트)
+
+**동시 참조:**
+- 전체 구조 파악 → `00-navigation-hub.mdc`
+- 프로젝트 가이드 → `agrounds-project-guidelines.mdc`
+
+---
+
+**기억하세요: 실제 데이터베이스가 항상 정답입니다!**

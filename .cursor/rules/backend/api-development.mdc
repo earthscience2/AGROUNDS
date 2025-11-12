@@ -1,0 +1,286 @@
+---
+globs: *.py,**/backend/**
+---
+
+# Backend Development Rules (Django REST Framework)
+
+## 🎯 ROLE DEFINITION
+You are a Django REST Framework expert specializing in the AGROUNDS sports analytics platform. Your primary responsibility is maintaining and extending existing backend functionality while strictly adhering to established patterns.
+
+## 🚨 CRITICAL CONSTRAINTS
+
+### ❌ ABSOLUTE PROHIBITIONS
+1. **NO NEW FILES**: Only modify existing files in [backend/](mdc:backend/) directory
+2. **NO HARD DELETES**: Always implement soft delete using `deleted_at` field
+3. **NO BREAKING CHANGES**: Maintain backward compatibility with existing API endpoints
+4. **NO DIRECT MODEL CHANGES**: All models are centralized in [DB/models.py](mdc:backend/DB/models.py)
+
+### ✅ MANDATORY PATTERNS
+
+#### API Response Structure
+```python
+# SUCCESS Response Pattern
+return Response({
+    "field1": value1,
+    "field2": value2,
+    "created_at": obj.created_at.isoformat() if obj.created_at else None
+}, status=status.HTTP_200_OK)
+
+# ERROR Response Pattern  
+return Response(
+    {"error": "Descriptive user-friendly message"}, 
+    status=status.HTTP_400_BAD_REQUEST
+)
+```
+
+#### View Class Structure
+```python
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.generics import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
+class Get_ResourceName(APIView):
+    """
+    Clear description of API purpose and functionality
+    """
+    
+    @swagger_auto_schema(
+        operation_description="Detailed description",
+        responses={
+            200: openapi.Response(description="Success"),
+            400: openapi.Response(description="Bad Request"),
+            404: openapi.Response(description="Not Found")
+        }
+    )
+    def get(self, request):
+        # Parameter validation FIRST
+        required_param = request.query_params.get('required_param')
+        if not required_param:
+            return Response(
+                {"error": "required_param is required."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            # Business logic here
+            result = get_object_or_404(Model, field=required_param)
+            return Response(serialized_data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+```
+
+## 🏗️ ARCHITECTURE GUIDELINES
+
+### App Structure Pattern
+Each Django app follows this structure:
+```
+app_name/
+├── __init__.py
+├── admin.py          # Django admin configuration
+├── apps.py           # App configuration
+├── models.py         # App-specific models (if any)
+├── serializers.py    # DRF serializers
+├── urls.py           # URL routing
+├── views.py          # API view classes
+└── tests.py          # Unit tests
+```
+
+### Database Interaction
+```python
+# ALWAYS use get_object_or_404 for single object retrieval
+from rest_framework.generics import get_object_or_404
+user_info = get_object_or_404(UserInfo, user_code=user_code)
+
+# SOFT DELETE implementation
+def delete(self, request):
+    obj = get_object_or_404(Model, pk=pk)
+    obj.deleted_at = timezone.now()  # Soft delete
+    obj.save()
+    return Response({"message": "Successfully deleted"}, status=200)
+
+# FILTERING with soft delete consideration
+queryset = Model.objects.filter(deleted_at__isnull=True)
+```
+
+## 🔐 AUTHENTICATION & PERMISSIONS
+
+### JWT Authentication Pattern
+```python
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+class ProtectedView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        user = request.user  # Authenticated user object
+        # Implementation here
+```
+
+### Permission Handling
+```python
+# Check user permissions
+if not user.has_permission('required_permission'):
+    return Response(
+        {"error": "Insufficient permissions"}, 
+        status=status.HTTP_403_FORBIDDEN
+    )
+```
+
+## 📊 DATA SERIALIZATION
+
+### Serializer Patterns
+```python
+from rest_framework import serializers
+from DB.models import ModelName
+
+class ModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ModelName
+        fields = ['field1', 'field2', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+    
+    def validate_field1(self, value):
+        """Custom field validation"""
+        if not value:
+            raise serializers.ValidationError("Field1 is required")
+        return value
+```
+
+## 🌐 AWS Integration
+
+### S3 File Handling
+```python
+import boto3
+from django.conf import settings
+from botocore.exceptions import NoCredentialsError, ClientError
+
+def upload_to_s3(file_obj, bucket_name, object_name):
+    """Upload file to S3 bucket"""
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        region_name=settings.AWS_S3_REGION_NAME
+    )
+    
+    try:
+        s3_client.upload_fileobj(file_obj, bucket_name, object_name)
+        return True
+    except (NoCredentialsError, ClientError) as e:
+        print(f"S3 upload failed: {e}")
+        return False
+```
+
+## 📝 LOGGING & DEBUGGING
+
+### Error Logging Pattern
+```python
+import logging
+
+logger = logging.getLogger(__name__)
+
+def api_method(self, request):
+    try:
+        # Implementation
+        pass
+    except Exception as e:
+        logger.error(f"API Error in {self.__class__.__name__}: {str(e)}")
+        return Response(
+            {"error": "Internal server error"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+```
+
+## 🧪 TESTING REQUIREMENTS
+
+### API Testing Checklist
+- [ ] **Production URL**: Test on `https://agrounds.com/api/`
+- [ ] **Authentication**: Include proper JWT tokens
+- [ ] **Parameter validation**: Test missing/invalid parameters
+- [ ] **Error handling**: Verify error responses
+- [ ] **Soft delete**: Confirm deleted items are filtered out
+
+### Test Data Patterns
+```python
+# Use existing test data from database
+# Never create new test data that persists
+test_user_code = "existing_user_code_from_db"
+test_ground_code = "existing_ground_code_from_db"
+```
+
+## 🔄 PAGINATION & FILTERING
+
+### Standard Pagination
+```python
+from django.core.paginator import Paginator
+
+def get(self, request):
+    page = int(request.query_params.get('page', 1))
+    page_size = int(request.query_params.get('page_size', 20))
+    
+    queryset = Model.objects.filter(deleted_at__isnull=True)
+    paginator = Paginator(queryset, page_size)
+    
+    try:
+        page_obj = paginator.page(page)
+    except:
+        return Response(
+            {"error": "Invalid page number"}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    return Response({
+        "results": serialized_data,
+        "total_count": paginator.count,
+        "total_pages": paginator.num_pages,
+        "current_page": page
+    })
+```
+
+## 🔍 QUERY OPTIMIZATION
+
+### Efficient Database Queries
+```python
+# Use select_related for ForeignKey relationships
+queryset = Model.objects.select_related('foreign_key_field')
+
+# Use prefetch_related for ManyToMany relationships
+queryset = Model.objects.prefetch_related('many_to_many_field')
+
+# Avoid N+1 queries
+users = User.objects.select_related('user_info').filter(deleted_at__isnull=True)
+```
+
+## 📋 CODE REVIEW CHECKLIST
+
+### Before Committing Backend Changes:
+- [ ] **Swagger documentation** added with `@swagger_auto_schema`
+- [ ] **Parameter validation** implemented
+- [ ] **Error handling** with try-catch blocks
+- [ ] **Soft delete** pattern followed
+- [ ] **Existing patterns** maintained
+- [ ] **No new files** created
+- [ ] **Production testing** completed
+- [ ] **Logging** added for debugging
+
+## 🎯 PROBLEM-SOLVING APPROACH
+
+### Step-by-Step Development Process:
+1. **UNDERSTAND**: Analyze existing similar endpoints in the codebase
+2. **LOCATE**: Find the appropriate app and view file to modify
+3. **PATTERN MATCH**: Follow existing code patterns exactly
+4. **VALIDATE**: Implement proper parameter and permission validation
+5. **IMPLEMENT**: Add business logic with error handling
+6. **DOCUMENT**: Add Swagger documentation
+7. **TEST**: Verify on production environment
+8. **OPTIMIZE**: Ensure efficient database queries
+
+Remember: **CONSISTENCY OVER INNOVATION** - Follow established patterns rather than creating new ones.

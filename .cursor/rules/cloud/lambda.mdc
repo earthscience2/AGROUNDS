@@ -1,0 +1,813 @@
+# ⚡ AWS Lambda Development Guidelines
+
+## Role Definition
+You are responsible for developing and maintaining AWS Lambda functions for AGROUNDS, specifically focusing on asynchronous data processing tasks like player analysis.
+
+---
+
+## 🚨 Lambda Development Principles
+
+### ❌ Prohibited Actions
+1. **NO SYNCHRONOUS PROCESSING** - Use Lambda for async tasks only
+2. **NO STATEFUL OPERATIONS** - Lambda is stateless
+3. **NO LOCAL FILE PERSISTENCE** - Use /tmp only, cleared after execution
+4. **NO HARDCODED CREDENTIALS** - Always use environment variables
+5. **NO INFINITE LOOPS** - Respect timeout limits
+
+### ✅ Mandatory Requirements
+1. **USE /tmp DIRECTORY** - For temporary files only
+2. **IMPLEMENT TIMEOUTS** - Set appropriate timeout limits
+3. **LOG EVERYTHING** - Use CloudWatch logging extensively
+4. **HANDLE ERRORS GRACEFULLY** - Return proper error responses
+5. **OPTIMIZE MEMORY** - Monitor and optimize memory usage
+
+---
+
+## 📂 Lambda Function Structure
+
+### AGROUNDS Lambda: player_anal
+
+**Location**: `/home/ubuntu/agrounds/mysite/lambda/player_anal/`
+
+**Purpose**: Process GPS data and generate player performance analytics
+
+```
+lambda/player_anal/
+├── main.py              # Lambda handler (entry point)
+├── anal_cal.py          # Analysis calculations
+├── summarize.py         # Data summarization
+├── gpt.py               # GPT API integration
+├── deploy_lambda.py     # Deployment script
+├── check_lambda_logs.py # Log monitoring
+└── README.md            # Documentation
+```
+
+---
+
+## 🔄 Processing Flow
+
+```
+1. Trigger (Django API)
+   → POST request to Lambda
+
+2. GPS Analysis (30-60 seconds)
+   → Download GPS data from S3
+   → Execute anal_cal.player_anal()
+   → Process 4 quarters
+   → Save to PlayerAnal table
+
+3. AI Summary (20-40 seconds)
+   → Summarize quarter data (summarize.py)
+   → Call GPT-4 API (gpt.py)
+   → Extract 5 key points
+   → Save to PlayerAi table
+
+Total Time: 1-2 minutes
+```
+
+---
+
+## 🎯 Lambda Handler Pattern
+
+### main.py Structure
+```python
+import os
+import json
+import traceback
+import boto3
+import pymysql
+from datetime import datetime
+
+# Constants
+DEFAULT_HZ = 10
+API_TIMEOUT_SECONDS = 10
+DEFAULT_PLAYER_TYPE = 'amateur'
+
+# Initialize AWS clients
+s3 = boto3.client('s3')
+
+def lambda_handler(event, context):
+    """
+    Main Lambda handler for player analysis
+    
+    Args:
+        event: Lambda event object
+            {
+                "match_code": "m_123",
+                "ground_code": "g_456",
+                "s3_key": "uploads/gps_data.csv",
+                "player_type": "amateur"
+            }
+        context: Lambda context object
+        
+    Returns:
+        {
+            "statusCode": 200,
+            "body": json.dumps({"message": "Success", "match_code": "m_123"})
+        }
+    """
+    try:
+        # 1. Extract parameters
+        match_code = event.get('match_code')
+        ground_code = event.get('ground_code')
+        s3_key = event.get('s3_key')
+        
+        # 2. Validate required parameters
+        if not all([match_code, ground_code, s3_key]):
+            raise ValueError("Missing required parameters")
+        
+        # 3. Download GPS data from S3
+        local_file = download_from_s3(
+            bucket=os.environ['S3_BUCKET_NAME'],
+            key=s3_key,
+            local_name='gps_data.csv'
+        )
+        
+        # 4. Process analysis
+        results = process_player_analysis(
+            match_code=match_code,
+            ground_code=ground_code,
+            gps_file=local_file
+        )
+        
+        # 5. Save to database
+        save_analysis_results(match_code, results)
+        
+        # 6. Generate AI summary
+        ai_summary = generate_ai_summary(match_code, results)
+        save_ai_summary(match_code, ai_summary)
+        
+        # 7. Update match status
+        update_match_status(match_code, 'complete')
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'message': 'Analysis completed successfully',
+                'match_code': match_code,
+                'quarters_processed': len(results)
+            })
+        }
+        
+    except Exception as e:
+        # Log error
+        print(f"ERROR: {str(e)}")
+        print(traceback.format_exc())
+        
+        # Update match status to failed
+        if match_code:
+            update_match_status(match_code, 'anal_fail')
+        
+        return {
+            'statusCode': 500,
+            'body': json.dumps({
+                'error': str(e),
+                'match_code': match_code
+            })
+        }
+    finally:
+        # Cleanup /tmp directory
+        cleanup_tmp_files()
+
+def download_from_s3(bucket, key, local_name):
+    """Download file from S3 to /tmp"""
+    path = f"/tmp/{local_name}"
+    s3.download_file(bucket, key, path)
+    return path
+
+def cleanup_tmp_files():
+    """Clean up /tmp directory"""
+    import shutil
+    for filename in os.listdir('/tmp'):
+        file_path = os.path.join('/tmp', filename)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f"Failed to delete {file_path}: {e}")
+```
+
+---
+
+## ⚙️ Lambda Configuration
+
+### Required Environment Variables
+```bash
+# Database Connection
+DB_HOST=agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com
+DB_USER=ground
+DB_PASSWORD=***  # From environment
+DB_NAME=agroundsDB
+
+# AWS S3
+S3_BUCKET_NAME=aground-gps
+AWS_REGION=ap-northeast-2
+
+# External APIs
+GPT_API_KEY=sk-proj-***  # OpenAI API key
+DJANGO_API_URL=https://agrounds.com
+
+# Processing Settings
+DEFAULT_HZ=10
+PLAYER_TYPE=amateur
+```
+
+### Lambda Settings (Recommended)
+```
+Function Name: Agrounds_player_anal
+Runtime: Python 3.12
+Handler: main.lambda_handler
+Timeout: 300 seconds (5 minutes)
+Memory: 1024 MB
+Architecture: x86_64
+Region: ap-northeast-2 (Seoul)
+```
+
+### Lambda Layers
+```
+Layer 1: agrounds-openai
+  - openai
+  - tiktoken
+  - Dependencies for GPT integration
+
+Layer 2: agrounds-data-processing (if needed)
+  - pandas
+  - numpy
+  - scipy
+```
+
+---
+
+## 🚀 Deployment Process
+
+### 1. Deploy Using Script
+```bash
+cd /home/ubuntu/agrounds/mysite/lambda/player_anal
+python3 deploy_lambda.py
+```
+
+**What deploy_lambda.py does**:
+1. ✅ Packages main.py, anal_cal.py, summarize.py, gpt.py
+2. ✅ Creates ZIP file
+3. ✅ Updates Lambda function code
+4. ✅ Verifies deployment
+
+### 2. Manual Deployment (Alternative)
+```bash
+# Create deployment package
+cd /home/ubuntu/agrounds/mysite/lambda/player_anal
+zip -r lambda_function.zip main.py anal_cal.py summarize.py gpt.py
+
+# Upload to Lambda
+aws lambda update-function-code \
+    --function-name Agrounds_player_anal \
+    --zip-file fileb://lambda_function.zip \
+    --region ap-northeast-2
+```
+
+### 3. Create/Update Lambda Layer (One-time)
+```bash
+# Create layer package
+mkdir -p python/lib/python3.12/site-packages
+pip install openai tiktoken -t python/lib/python3.12/site-packages
+zip -r openai_layer.zip python
+
+# Publish layer
+aws lambda publish-layer-version \
+    --layer-name agrounds-openai \
+    --description 'OpenAI and tiktoken for player analysis' \
+    --zip-file fileb://openai_layer.zip \
+    --compatible-runtimes python3.12 \
+    --compatible-architectures x86_64 \
+    --region ap-northeast-2
+
+# Attach layer to function
+aws lambda update-function-configuration \
+    --function-name Agrounds_player_anal \
+    --layers arn:aws:lambda:ap-northeast-2:ACCOUNT_ID:layer:agrounds-openai:VERSION
+```
+
+---
+
+## 📊 Database Integration
+
+### PyMySQL Connection Pattern
+```python
+import pymysql
+import os
+
+def get_db_connection():
+    """Create database connection"""
+    return pymysql.connect(
+        host=os.environ['DB_HOST'],
+        user=os.environ['DB_USER'],
+        password=os.environ['DB_PASSWORD'],
+        database=os.environ['DB_NAME'],
+        autocommit=False,
+        cursorclass=pymysql.cursors.DictCursor,
+        charset='utf8mb4'
+    )
+
+def execute_query(query, params=None):
+    """Execute database query safely"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cursor:
+            cursor.execute(query, params or ())
+            result = cursor.fetchall()
+        conn.commit()
+        return result
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        raise
+    finally:
+        if conn:
+            conn.close()
+
+# Upsert pattern for PlayerAnal
+def upsert_player_anal(quarter_code, data):
+    """Insert or update PlayerAnal data"""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            # Get table columns
+            cursor.execute("SHOW COLUMNS FROM player_anal")
+            valid_cols = {row['Field'] for row in cursor.fetchall()}
+            
+            # Filter data to valid columns
+            filtered_data = {k: v for k, v in data.items() if k in valid_cols}
+            filtered_data['quarter_code'] = quarter_code
+            
+            # Build SQL
+            cols = list(filtered_data.keys())
+            cols_sql = ", ".join(f"`{k}`" for k in cols)
+            vals_sql = ", ".join(["%s"] * len(cols))
+            upd_sql = ", ".join([f"`{k}`=VALUES(`{k}`)" for k in cols if k != 'quarter_code'])
+            
+            sql = f"""
+                INSERT INTO player_anal ({cols_sql}) 
+                VALUES ({vals_sql}) 
+                ON DUPLICATE KEY UPDATE {upd_sql}
+            """
+            
+            cursor.execute(sql, [filtered_data[k] for k in cols])
+        
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+```
+
+---
+
+## 🌐 S3 Integration
+
+### Download from S3
+```python
+import boto3
+
+s3 = boto3.client('s3')
+
+def download_gps_data(bucket, key):
+    """Download GPS data from S3 to /tmp"""
+    local_path = f"/tmp/{os.path.basename(key)}"
+    
+    try:
+        s3.download_file(bucket, key, local_path)
+        print(f"Downloaded {key} to {local_path}")
+        return local_path
+    except Exception as e:
+        print(f"S3 download failed: {e}")
+        raise
+```
+
+### Upload Results to S3 (Optional)
+```python
+def upload_results_to_s3(data, bucket, key):
+    """Upload analysis results to S3"""
+    try:
+        s3.put_object(
+            Bucket=bucket,
+            Key=key,
+            Body=json.dumps(data),
+            ContentType='application/json'
+        )
+        print(f"Uploaded results to s3://{bucket}/{key}")
+    except Exception as e:
+        print(f"S3 upload failed: {e}")
+        raise
+```
+
+---
+
+## 🤖 GPT Integration
+
+### gpt.py Pattern
+```python
+import openai
+import os
+
+def call_gpt_api(prompt, max_tokens=500):
+    """
+    Call GPT-4 API for analysis summary
+    
+    Args:
+        prompt: Analysis prompt
+        max_tokens: Maximum response tokens
+        
+    Returns:
+        GPT response text
+    """
+    try:
+        openai.api_key = os.environ['GPT_API_KEY']
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a professional sports analyst."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=max_tokens,
+            temperature=0.7
+        )
+        
+        return response.choices[0].message.content
+        
+    except Exception as e:
+        print(f"GPT API call failed: {e}")
+        raise
+
+def generate_player_summary(quarter_data):
+    """Generate AI summary for player performance"""
+    prompt = f"""
+    다음 선수 경기 데이터를 분석하고 핵심 인사이트 5가지를 추출하세요:
+    
+    - 총 이동거리: {quarter_data['T_D']} km
+    - 평균 속력: {quarter_data['T_AS']} km/h
+    - 최고 속력: {quarter_data['T_HS']} km/h
+    - 스프린트 횟수: {quarter_data['T_S']}회
+    
+    각 인사이트는 40자 이내로 작성하세요.
+    """
+    
+    return call_gpt_api(prompt, max_tokens=500)
+```
+
+---
+
+## 📊 CloudWatch Logging
+
+### Logging Best Practices
+```python
+import json
+from datetime import datetime
+
+def log_info(message, **kwargs):
+    """Structured logging for CloudWatch"""
+    log_entry = {
+        'timestamp': datetime.utcnow().isoformat(),
+        'level': 'INFO',
+        'message': message,
+        **kwargs
+    }
+    print(json.dumps(log_entry))
+
+def log_error(message, error, **kwargs):
+    """Error logging with context"""
+    log_entry = {
+        'timestamp': datetime.utcnow().isoformat(),
+        'level': 'ERROR',
+        'message': message,
+        'error': str(error),
+        'traceback': traceback.format_exc(),
+        **kwargs
+    }
+    print(json.dumps(log_entry))
+
+# Usage in Lambda
+def lambda_handler(event, context):
+    log_info("Lambda execution started", event=event)
+    
+    try:
+        # Processing
+        log_info("Processing match", match_code=match_code)
+        
+    except Exception as e:
+        log_error("Processing failed", error=e, match_code=match_code)
+        raise
+```
+
+### Check Lambda Logs
+```bash
+# Use check_lambda_logs.py script
+cd /home/ubuntu/agrounds/mysite/lambda/player_anal
+python3 check_lambda_logs.py
+
+# Or use AWS CLI
+aws logs tail /aws/lambda/Agrounds_player_anal --follow
+
+# Filter by error
+aws logs filter-events \
+    --log-group-name /aws/lambda/Agrounds_player_anal \
+    --filter-pattern "ERROR"
+```
+
+---
+
+## ⚡ Performance Optimization
+
+### Memory Optimization
+```python
+# Use generators for large datasets
+def process_large_dataset(data):
+    """Use generator to reduce memory"""
+    for chunk in pd.read_csv(data, chunksize=10000):
+        yield process_chunk(chunk)
+
+# Clear variables after use
+import gc
+large_dataframe = process_data()
+# Use data
+result = calculate_metrics(large_dataframe)
+# Clear from memory
+del large_dataframe
+gc.collect()
+```
+
+### Timeout Management
+```python
+import signal
+
+class TimeoutException(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("Lambda timeout approaching")
+
+def lambda_handler(event, context):
+    """Handler with timeout protection"""
+    # Set timeout alarm (e.g., 10 seconds before Lambda timeout)
+    remaining_time = context.get_remaining_time_in_millis() / 1000
+    alarm_time = int(remaining_time - 10)
+    
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(alarm_time)
+    
+    try:
+        # Processing
+        result = long_running_process()
+        
+    except TimeoutException:
+        # Handle timeout gracefully
+        print("WARNING: Approaching timeout, saving partial results")
+        save_partial_results()
+        raise
+        
+    finally:
+        signal.alarm(0)  # Cancel alarm
+```
+
+### Concurrent Processing
+```python
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def process_quarters_parallel(quarters):
+    """Process multiple quarters in parallel"""
+    results = {}
+    
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        # Submit tasks
+        future_to_quarter = {
+            executor.submit(process_quarter, q): q 
+            for q in quarters
+        }
+        
+        # Collect results
+        for future in as_completed(future_to_quarter):
+            quarter = future_to_quarter[future]
+            try:
+                results[quarter] = future.result()
+            except Exception as e:
+                print(f"Quarter {quarter} failed: {e}")
+    
+    return results
+```
+
+---
+
+## 🔍 Error Handling
+
+### Lambda Error Response Pattern
+```python
+def lambda_handler(event, context):
+    try:
+        # Processing
+        result = process_data(event)
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'success': True,
+                'data': result
+            })
+        }
+        
+    except ValueError as e:
+        # Client error (invalid input)
+        return {
+            'statusCode': 400,
+            'body': json.dumps({
+                'success': False,
+                'error': 'INVALID_INPUT',
+                'message': str(e)
+            })
+        }
+        
+    except ConnectionError as e:
+        # External service error
+        return {
+            'statusCode': 502,
+            'body': json.dumps({
+                'success': False,
+                'error': 'EXTERNAL_SERVICE_ERROR',
+                'message': 'Failed to connect to external service'
+            })
+        }
+        
+    except Exception as e:
+        # Unexpected error
+        print(f"ERROR: {str(e)}")
+        print(traceback.format_exc())
+        
+        return {
+            'statusCode': 500,
+            'body': json.dumps({
+                'success': False,
+                'error': 'INTERNAL_ERROR',
+                'message': 'Internal processing error'
+            })
+        }
+```
+
+---
+
+## 🧪 Testing Lambda Functions
+
+### Local Testing
+```python
+# test_lambda_local.py
+import json
+from main import lambda_handler
+
+def test_local():
+    """Test Lambda locally"""
+    event = {
+        "match_code": "m_test123",
+        "ground_code": "g_test456",
+        "s3_key": "test/gps_data.csv",
+        "player_type": "amateur"
+    }
+    
+    # Mock context
+    class MockContext:
+        def get_remaining_time_in_millis(self):
+            return 300000  # 5 minutes
+    
+    context = MockContext()
+    
+    # Execute
+    result = lambda_handler(event, context)
+    
+    print(json.dumps(result, indent=2))
+    assert result['statusCode'] == 200
+
+if __name__ == '__main__':
+    test_local()
+```
+
+### Invoke Lambda via AWS CLI
+```bash
+# Create test event
+cat > test_event.json << EOF
+{
+  "match_code": "m_test123",
+  "ground_code": "g_test456",
+  "s3_key": "test/gps_data.csv"
+}
+EOF
+
+# Invoke Lambda
+aws lambda invoke \
+    --function-name Agrounds_player_anal \
+    --payload file://test_event.json \
+    --region ap-northeast-2 \
+    response.json
+
+# Check response
+cat response.json
+```
+
+---
+
+## 📊 Monitoring & Debugging
+
+### CloudWatch Metrics
+Monitor these metrics:
+- **Invocations** - Total Lambda executions
+- **Duration** - Execution time (target: < 120 seconds)
+- **Errors** - Failed executions
+- **Throttles** - Rate limit hits
+- **Concurrent Executions** - Parallel executions
+
+### CloudWatch Alarms
+Set up alarms for:
+- Error rate > 5%
+- Duration > 240 seconds (80% of timeout)
+- Throttles > 0
+- Memory usage > 90%
+
+### Debugging Tips
+```python
+# Add detailed logging
+def process_quarter(quarter_data):
+    print(f"[DEBUG] Processing quarter: {quarter_data['quarter_code']}")
+    print(f"[DEBUG] Data points: {len(quarter_data['gps_points'])}")
+    
+    start_time = time.time()
+    result = calculate_metrics(quarter_data)
+    duration = time.time() - start_time
+    
+    print(f"[DEBUG] Processing completed in {duration:.2f}s")
+    return result
+
+# Log memory usage
+import psutil
+import os
+
+def log_memory_usage():
+    """Log current memory usage"""
+    process = psutil.Process(os.getpid())
+    memory_mb = process.memory_info().rss / 1024 / 1024
+    print(f"[MEMORY] Current usage: {memory_mb:.2f} MB")
+```
+
+---
+
+## ✅ Lambda Development Checklist
+
+### Before Deploying
+- [ ] Environment variables configured
+- [ ] Timeout set appropriately (300s for player_anal)
+- [ ] Memory allocated (1024 MB recommended)
+- [ ] Lambda layers attached
+- [ ] IAM permissions granted (S3, RDS, CloudWatch)
+- [ ] Error handling implemented
+- [ ] CloudWatch logging added
+- [ ] /tmp cleanup implemented
+- [ ] Tested locally
+- [ ] Dependencies in layer (not in ZIP)
+
+### After Deploying
+- [ ] Test with real data
+- [ ] Check CloudWatch logs
+- [ ] Verify database updates
+- [ ] Monitor execution time
+- [ ] Monitor memory usage
+- [ ] Set up CloudWatch alarms
+- [ ] Document any issues
+- [ ] Update README if needed
+
+### Code Quality
+- [ ] No hardcoded credentials
+- [ ] Proper exception handling
+- [ ] Structured logging (JSON format)
+- [ ] Input validation
+- [ ] Output validation
+- [ ] Idempotent operations (safe to retry)
+- [ ] No infinite loops
+- [ ] Resource cleanup in finally blocks
+
+---
+
+## 🔗 Related Guidelines
+
+**Reference Together:**
+- `general/error-handling.mdc` - Error handling patterns
+- `general/security.mdc` - Security best practices
+- `database/patterns.mdc` - Database operations
+- `backend/api-development.mdc` - Django API integration
+
+**External Resources:**
+- [AWS Lambda Developer Guide](https://docs.aws.amazon.com/lambda/)
+- [Lambda Best Practices](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
+- [CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/)
+
+---
+
+**Remember: Lambda functions should be stateless, idempotent, and optimized for quick execution!**

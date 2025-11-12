@@ -1,0 +1,1051 @@
+---
+globs: *.scss,*.css,**/design/**
+description: Design system guidelines and CSS standards
+---
+
+# AGROUNDS Design System Rules
+
+## 🎨 DESIGN SYSTEM AUTHORITY
+You are the guardian of the AGROUNDS design system. Your primary responsibility is ensuring visual consistency, accessibility, and brand integrity across all user interfaces.
+
+## 🚨 DESIGN SYSTEM VIOLATIONS - ZERO TOLERANCE
+
+### ❌ FORBIDDEN ACTIONS
+1. **NEVER HARDCODE COLORS** - Always use CSS variables from design system
+2. **NEVER CREATE NEW COLOR VALUES** - Use only approved color palette
+3. **NEVER IGNORE TYPOGRAPHY HIERARCHY** - Follow established font classes
+4. **NEVER BREAK SPACING SYSTEM** - Use only defined spacing variables
+5. **NEVER COMPROMISE ACCESSIBILITY** - Maintain WCAG AA standards
+
+## 🎯 DESIGN SYSTEM FOUNDATION
+
+### Color Palette (IMMUTABLE)
+```scss
+:root {
+  /* Primary Colors - Brand Identity */
+  --primary: #079669;           /* Main brand green */
+  --primary-hover: #068A5B;     /* Hover state */
+  --success: #079669;           /* Success messages */
+  
+  /* Neutral Colors - Text & Backgrounds */
+  --text-primary: #262626;      /* Main text color */
+  --text-secondary: #6B7078;    /* Secondary text */
+  --text-disabled: #8A8F98;     /* Disabled states */
+  --bg-primary: #F2F4F6;        /* Page background */
+  --bg-surface: #FFFFFF;        /* Card/component background */
+  --border: #E2E8F0;            /* Border color */
+  
+  /* Semantic Colors - Status & Feedback */
+  --info: #3b82f6;              /* Information */
+  --warning: #f59e0b;           /* Warning states */
+  --error: #ef4444;             /* Error states */
+  --chart-blue: #3b82f6;        /* Data visualization */
+  --chart-purple: #8b5cf6;      /* Data visualization */
+}
+```
+
+### Typography System (MANDATORY CLASSES)
+```scss
+/* Font Definitions - CDN Loaded */
+:root {
+  --font-brand: 'Paperlogy-8ExtraBold', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-text: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Typography Hierarchy - ALWAYS USE THESE CLASSES */
+.text-display { 
+  font-family: var(--font-brand); 
+  font-size: 48px; 
+  font-weight: 800; 
+  line-height: 1.1; 
+}
+
+.text-h1 { 
+  font-family: var(--font-brand); 
+  font-size: 32px; 
+  font-weight: 800; 
+  line-height: 1.2; 
+}
+
+.text-h2 { 
+  font-family: var(--font-brand); 
+  font-size: 24px; 
+  font-weight: 800; 
+  line-height: 1.3; 
+}
+
+.text-h3 { 
+  font-family: var(--font-text); 
+  font-size: 20px; 
+  font-weight: 600; 
+  line-height: 1.4; 
+}
+
+.text-h4 { 
+  font-family: var(--font-text); 
+  font-size: 18px; 
+  font-weight: 600; 
+  line-height: 1.4; 
+}
+
+.text-body-lg { 
+  font-family: var(--font-text); 
+  font-size: 16px; 
+  font-weight: 400; 
+  line-height: 1.5; 
+}
+
+.text-body { 
+  font-family: var(--font-text); 
+  font-size: 14px; 
+  font-weight: 400; 
+  line-height: 1.5; 
+}
+
+.text-body-sm { 
+  font-family: var(--font-text); 
+  font-size: 12px; 
+  font-weight: 400; 
+  line-height: 1.4; 
+}
+
+.text-caption { 
+  font-family: var(--font-text); 
+  font-size: 11px; 
+  font-weight: 400; 
+  line-height: 1.3; 
+}
+```
+
+### Spacing System (EXACT VALUES)
+```scss
+:root {
+  --spacing-xs: 4px;    /* Minimal spacing */
+  --spacing-sm: 8px;    /* Small spacing */
+  --spacing-md: 12px;   /* Medium spacing */
+  --spacing-lg: 16px;   /* Large spacing */
+  --spacing-xl: 20px;   /* Extra large spacing */
+  --spacing-2xl: 24px;  /* Section spacing */
+  --spacing-3xl: 32px;  /* Component spacing */
+  --spacing-4xl: 40px;  /* Page spacing */
+}
+```
+
+## 🧩 COMPONENT DESIGN PATTERNS
+
+### Button System
+```scss
+/* Primary Button - Main Actions */
+.btn-primary {
+  background: var(--primary);
+  color: var(--bg-surface);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;  /* Accessibility requirement */
+  
+  &:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    background: #068556;
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    background: var(--text-disabled);
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  &.small {
+    padding: 8px 16px;
+    font-size: 12px;
+    min-height: 32px;
+  }
+}
+
+/* Secondary Button - Secondary Actions */
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  
+  &:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #F0FDF4;
+  }
+  
+  &:active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--bg-surface);
+  }
+  
+  &:disabled {
+    border-color: var(--border);
+    color: var(--text-disabled);
+    cursor: not-allowed;
+  }
+}
+```
+
+### Form Elements
+```scss
+/* Text Input */
+.text-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  
+  &:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+  }
+  
+  &.error {
+    border-color: var(--error);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+  
+  &::placeholder {
+    color: var(--text-disabled);
+  }
+  
+  &:disabled {
+    background: #F8FAFC;
+    color: var(--text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+/* Search Input */
+.search-input {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  
+  input {
+    width: 100%;
+    padding: 12px 16px 12px 40px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    
+    &:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(7, 150, 105, 0.1);
+    }
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--text-disabled);
+    pointer-events: none;
+  }
+}
+```
+
+### Card Components
+```scss
+/* Standard Card */
+.card {
+  background: var(--bg-surface);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+  }
+  
+  .card-content {
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+}
+
+/* Stats Card */
+.stats-card {
+  background: var(--bg-surface);
+  border-radius: 16px;
+  padding: var(--spacing-lg);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+```
+
+## 📐 LAYOUT SYSTEM
+
+### Grid System
+```scss
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  
+  @media (max-width: 768px) {
+    padding: 0 var(--spacing-md);
+  }
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  
+  &.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+    
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/* Flex Layout */
+.flex {
+  display: flex;
+  gap: var(--spacing-md);
+  
+  &.flex-column {
+    flex-direction: column;
+  }
+  
+  &.flex-center {
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &.flex-between {
+    justify-content: space-between;
+  }
+}
+```
+
+## 📱 RESPONSIVE DESIGN RULES
+
+### Breakpoints (EXACT VALUES)
+```scss
+/* Mobile First Approach */
+$mobile: 768px;
+$tablet: 1024px;
+$desktop: 1200px;
+
+/* Usage Pattern */
+.responsive-component {
+  // Mobile styles (default)
+  padding: var(--spacing-md);
+  font-size: 14px;
+  
+  // Tablet
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    padding: var(--spacing-lg);
+    font-size: 16px;
+  }
+  
+  // Desktop
+  @media (min-width: #{$tablet + 1px}) {
+    padding: var(--spacing-xl);
+    font-size: 18px;
+  }
+}
+```
+
+## ♿ ACCESSIBILITY STANDARDS
+
+### Color Contrast Requirements
+```scss
+/* Ensure WCAG AA compliance (4.5:1 ratio) */
+.text-on-light {
+  color: var(--text-primary);  /* #262626 on #FFFFFF = 9.74:1 ✅ */
+}
+
+.text-secondary-light {
+  color: var(--text-secondary);  /* #6B7078 on #FFFFFF = 4.54:1 ✅ */
+}
+
+.button-primary {
+  background: var(--primary);   /* #079669 */
+  color: var(--bg-surface);     /* #FFFFFF on #079669 = 4.52:1 ✅ */
+}
+```
+
+### Focus States (MANDATORY)
+```scss
+.interactive-element {
+  &:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+```
+
+### Touch Targets
+```scss
+/* Minimum 44px × 44px touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  
+  @media (max-width: 768px) {
+    min-height: 48px;  /* Larger on mobile */
+    min-width: 48px;
+  }
+}
+```
+
+## 🎭 ANIMATION & TRANSITIONS
+
+### Standard Transitions
+```scss
+:root {
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform var(--transition-normal);
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Loading States */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+```
+
+## 🔍 DESIGN SYSTEM VALIDATION
+
+### CSS Variable Validation
+```scss
+/* NEVER do this - Hardcoded values */
+.bad-example {
+  color: #262626;           /* ❌ Use var(--text-primary) */
+  background: #079669;      /* ❌ Use var(--primary) */
+  padding: 16px;            /* ❌ Use var(--spacing-lg) */
+  font-size: 24px;          /* ❌ Use .text-h2 class */
+}
+
+/* ALWAYS do this - Design system values */
+.good-example {
+  color: var(--text-primary);      /* ✅ */
+  background: var(--primary);       /* ✅ */
+  padding: var(--spacing-lg);       /* ✅ */
+  @extend .text-h2;                 /* ✅ */
+}
+```
+
+## 📋 DESIGN SYSTEM CHECKLIST
+
+### Before Implementing Any UI:
+- [ ] **Colors**: Only CSS variables used, no hardcoded values
+- [ ] **Typography**: Appropriate typography class applied
+- [ ] **Spacing**: Design system spacing variables used
+- [ ] **Accessibility**: WCAG AA contrast ratios maintained
+- [ ] **Touch targets**: Minimum 44px × 44px for interactive elements
+- [ ] **Focus states**: Visible focus indicators implemented
+- [ ] **Responsive**: Mobile-first responsive design
+- [ ] **Consistency**: Matches existing component patterns
+
+### Design System Audit Questions:
+1. Does this component use only approved colors?
+2. Are typography classes correctly applied?
+3. Is spacing consistent with the design system?
+4. Are accessibility requirements met?
+5. Is the component responsive across all breakpoints?
+6. Do hover and focus states follow established patterns?
+
+Remember: **DESIGN SYSTEM INTEGRITY IS NON-NEGOTIABLE** - Every deviation weakens the entire system.
+
+---
+
+## 🪟 MODAL SYSTEM DESIGN RULES
+
+### Modal Component Standards
+모달 시스템은 AGROUNDS 플랫폼에서 사용자 입력 및 선택을 위한 핵심 인터페이스입니다. 
+모든 모달은 접근성 기준을 준수하고 일관된 사용자 경험을 제공해야 합니다.
+
+### Modal Types & Usage
+
+#### 1. 텍스트 입력 모달 (Text Input Modal)
+**사용 목적**: 사용자로부터 텍스트 입력을 받기 위함
+**예시**: 닉네임 변경, 이메일 수정, 비밀번호 변경, 한 줄 소개 작성
+
+```scss
+.text-modal {
+  // 모달 컨테이너
+  background: var(--bg-surface);
+  border-radius: 16px;
+  max-width: 400px;
+  max-height: 80vh;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  
+  // 헤더
+  .modal-header {
+    padding: var(--spacing-xl);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-surface);
+    
+    .modal-title {
+      font-family: var(--font-text);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-align: center;
+    }
+    
+    .modal-close {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      min-width: 44px;
+      min-height: 44px;
+      font-size: 28px;
+      color: var(--text-disabled);
+      
+      &:hover {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+      }
+    }
+  }
+  
+  // 본문
+  .modal-body {
+    padding: var(--spacing-xl);
+    max-height: 60vh;
+    overflow-y: auto;
+    background: var(--bg-surface);
+    
+    input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  
+  // 푸터
+  .modal-footer {
+    padding: var(--spacing-xl);
+    border-top: 1px solid var(--border);
+    gap: var(--spacing-sm);
+    background: var(--bg-surface);
+    
+    .cancel-btn {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 12px;
+      min-height: 44px;
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      border: 2px solid var(--border);
+      
+      &:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: #F0FDF4;
+      }
+    }
+    
+    .save-btn {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 12px;
+      min-height: 44px;
+      background: var(--primary);
+      color: var(--bg-surface);
+      
+      &:hover:not(:disabled) {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+      }
+      
+      &:disabled {
+        background: var(--text-disabled);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+  }
+}
+```
+
+#### 2. 옵션 선택 모달 (Option Selection Modal)
+**사용 목적**: 여러 옵션 중 하나를 선택
+**예시**: 포지션 선택(FW, MF, DF, GK), 주발 선택(왼발, 오른발, 양발), 팀 색상 선택
+
+```scss
+.option-modal {
+  // 기본 구조는 text-modal과 동일
+  
+  .option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    
+    .option-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      min-height: 44px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      &:first-child {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+      
+      &:last-child {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+      
+      &:hover {
+        background: var(--bg-primary);
+      }
+      
+      &:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: -2px;
+      }
+      
+      .option-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        
+        .option-color {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+        
+        .option-label {
+          font-family: var(--font-text);
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--text-primary);
+        }
+      }
+      
+      .check-icon {
+        width: 20px;
+        height: 20px;
+        opacity: 0.8;
+        color: var(--primary);
+      }
+    }
+  }
+}
+```
+
+#### 3. 지역 선택 모달 (Region Selection Modal)
+**사용 목적**: 계층적 지역 선택 (시/도 → 시/군/구)
+**예시**: 사용자 거주 지역 설정, 경기장 위치 선택, 팀 활동 지역 설정
+
+```scss
+.region-modal {
+  // 기본 구조는 text-modal과 동일
+  
+  .region-body {
+    height: 360px;
+    max-height: 50vh;
+    overflow: hidden;
+    background: var(--bg-surface);
+    
+    .region-columns {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      
+      .region-column {
+        flex: 1;
+        overflow-y: auto;
+        border-right: 1px solid var(--border);
+        background: var(--bg-surface);
+        
+        &:last-child {
+          border-right: none;
+        }
+        
+        .region-item {
+          display: flex;
+          align-items: center;
+          padding: var(--spacing-md) var(--spacing-lg);
+          cursor: pointer;
+          border-left: 3px solid transparent;
+          border-bottom: 1px solid var(--border);
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--text-primary);
+          min-height: 44px;
+          transition: all 0.2s ease;
+          
+          &:last-child {
+            border-bottom: none;
+          }
+          
+          &.selected {
+            background: rgba(7, 150, 105, 0.08);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+          }
+          
+          &:hover:not(.selected) {
+            background: var(--bg-primary);
+          }
+          
+          &:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: -2px;
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Modal Overlay Standards
+
+```scss
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);  // 반투명 배경
+  z-index: 2000;                    // 최상위 레이어
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  overflow: hidden;
+}
+```
+
+### Modal Accessibility Requirements
+
+#### 필수 접근성 요구사항
+1. **최소 터치 영역**: 44px × 44px (WCAG 기준)
+2. **포커스 인디케이터**: 2px solid outline, primary 색상
+3. **키보드 네비게이션**: Tab, Enter, Escape 키 지원
+4. **색상 대비**: WCAG AA 준수 (4.5:1 이상)
+5. **배경 스크롤 방지**: 모달 열림 시 body overflow: hidden
+
+#### 접근성 코드 패턴
+```scss
+// 포커스 상태 (모든 인터랙티브 요소에 필수)
+.interactive-element {
+  &:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+
+// 최소 터치 영역 (모든 버튼에 필수)
+.button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+// 색상 대비 검증
+.text-on-background {
+  color: var(--text-primary);  // #262626 on #FFFFFF = 12.6:1 ✅
+  background: var(--bg-surface);
+}
+```
+
+### Modal Responsive Design
+
+```scss
+// 데스크톱 (기본)
+.text-modal,
+.option-modal,
+.region-modal {
+  width: calc(100% - 32px);
+  max-width: 400px;
+  padding: var(--spacing-xl);
+}
+
+// 태블릿 (≤768px)
+@media (max-width: 768px) {
+  .text-modal,
+  .option-modal,
+  .region-modal {
+    width: calc(100% - 24px);
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+      padding: var(--spacing-lg);
+    }
+  }
+}
+
+// 모바일 (≤480px)
+@media (max-width: 480px) {
+  .text-modal,
+  .option-modal,
+  .region-modal {
+    width: calc(100% - 16px);
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+      padding: var(--spacing-md);
+    }
+  }
+}
+
+// 소형 (≤320px)
+@media (max-width: 320px) {
+  .text-modal,
+  .option-modal,
+  .region-modal {
+    width: calc(100% - 12px);
+  }
+}
+```
+
+### Modal Interaction Patterns
+
+#### 열림/닫힘 동작
+```javascript
+// 모달 열기
+const openModal = () => {
+  // 배경 스크롤 방지
+  document.body.style.overflow = 'hidden';
+  setModalOpen(true);
+};
+
+// 모달 닫기
+const closeModal = () => {
+  // 배경 스크롤 복구
+  document.body.style.overflow = 'auto';
+  setModalOpen(false);
+};
+
+// ESC 키로 닫기
+useEffect(() => {
+  const handleEscape = (e) => {
+    if (e.key === 'Escape' && modalOpen) {
+      closeModal();
+    }
+  };
+  
+  document.addEventListener('keydown', handleEscape);
+  return () => document.removeEventListener('keydown', handleEscape);
+}, [modalOpen]);
+
+// 오버레이 클릭으로 닫기
+const handleOverlayClick = (e) => {
+  if (e.target === e.currentTarget) {
+    closeModal();
+  }
+};
+```
+
+#### 버튼 상태 관리
+```javascript
+// 저장 버튼 비활성화 조건
+const isSaveDisabled = !inputValue || inputValue.trim().length === 0;
+
+<button 
+  className="save-btn" 
+  onClick={handleSave}
+  disabled={isSaveDisabled}
+>
+  저장
+</button>
+```
+
+### Modal Component Structure Template
+
+```jsx
+{/* 모달 오버레이 */}
+<div className="modal-overlay" onClick={handleOverlayClick}>
+  <div className="text-modal">
+    {/* 헤더 */}
+    <div className="modal-header">
+      <h3 className="modal-title">제목</h3>
+      <button className="modal-close" onClick={closeModal}>
+        ×
+      </button>
+    </div>
+    
+    {/* 본문 */}
+    <div className="modal-body">
+      {/* 내용 */}
+    </div>
+    
+    {/* 푸터 */}
+    <div className="modal-footer">
+      <button className="cancel-btn" onClick={closeModal}>
+        취소
+      </button>
+      <button 
+        className="save-btn" 
+        onClick={handleSave}
+        disabled={!isValid}
+      >
+        저장
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+### Modal Design Checklist
+
+모달 구현 전 확인사항:
+- [ ] 흰색 배경 (var(--bg-surface)) 사용
+- [ ] 16px border-radius 적용
+- [ ] 10px-30px 그림자 효과
+- [ ] 헤더에 1px border-bottom 구분선
+- [ ] 푸터에 1px border-top 구분선
+- [ ] 타이틀 중앙 정렬 (text-align: center)
+- [ ] 닫기 버튼 우측 상단 절대 위치
+- [ ] 닫기 버튼 48px × 48px (44px 최소값 이상)
+- [ ] 취소/저장 버튼 min-height: 44px
+- [ ] 취소 버튼: 흰색 배경 + 2px 테두리
+- [ ] 저장 버튼: primary 배경 + 흰색 텍스트
+- [ ] 오버레이: rgba(0, 0, 0, 0.5)
+- [ ] z-index: 2000
+- [ ] 반응형 패딩 적용
+- [ ] 포커스 인디케이터 구현
+- [ ] ESC 키로 닫기 기능
+- [ ] 오버레이 클릭으로 닫기 기능
+
+### Common Modal Mistakes to Avoid
+
+❌ **절대 하지 말 것:**
+1. 하드코딩된 색상 사용
+2. 44px 미만의 터치 영역
+3. 포커스 인디케이터 누락
+4. 비일관적인 버튼 스타일
+5. 반응형 디자인 미적용
+6. 배경 스크롤 방지 누락
+7. ESC 키 핸들링 누락
+8. 구분선(border) 누락
+
+✅ **항상 해야 할 것:**
+1. CSS 변수만 사용
+2. 디자인 시스템 준수
+3. 접근성 기준 준수
+4. 일관된 패딩/간격
+5. 호버/포커스 상태 구현
+6. 키보드 네비게이션 지원
+7. 명확한 시각적 구분
+8. 반응형 동작 테스트
+
+---
+
+**참고 구현**: `frontend/agrounds_1.0.0/src/pages/mypage/js/InfoFix.js`
+**참고 스타일**: `frontend/agrounds_1.0.0/src/pages/mypage/css/InfoFix.scss`
+**디자인 문서**: `frontend/agrounds_1.0.0/src/pages/admin/js/Admin_DesignSystem.js` (모달 시스템 섹션)

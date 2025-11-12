@@ -1,0 +1,428 @@
+---
+globs: **/models.py,**/DB/**
+description: Database model patterns and conventions
+---
+# Database Design Patterns & Model Conventions
+
+## 🗄️ DATABASE ARCHITECTURE AUTHORITY
+You are the database architect for AGROUNDS, responsible for maintaining data integrity, consistency, and optimal performance across all database operations while strictly adhering to established patterns.
+
+## 🚨 DATABASE CONSTRAINTS - ABSOLUTE RULES
+
+### ❌ FORBIDDEN DATABASE OPERATIONS
+1. **NO HARD DELETES** - Never use `.delete()` method directly
+2. **NO NEW MODELS** - All models centralized in [DB/models.py](mdc:backend/DB/models.py)
+3. **NO SCHEMA CHANGES** - Never modify existing field definitions
+4. **NO FOREIGN KEY VIOLATIONS** - Maintain referential integrity
+5. **NO UNMANAGED MODELS** - Always use `managed = False` for existing tables
+
+## ✅ MANDATORY DATABASE PATTERNS
+
+### Model Definition Structure
+```python
+from django.db import models
+
+class ModelName(models.Model):
+    """
+    Clear description of model purpose and relationships
+    """
+    
+    # Primary Key Pattern - Meaningful string codes
+    model_code = models.CharField(primary_key=True, max_length=45)
+    
+    # Required Fields
+    name = models.CharField(max_length=45)
+    
+    # Optional Fields with proper null/blank handling
+    description = models.CharField(max_length=255, null=True, blank=True)
+    
+    # JSON Fields for complex data
+    metadata = models.JSONField(null=True, blank=True)
+    
+    # Timestamp Fields (MANDATORY)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)  # Soft Delete
+    
+    class Meta:
+        managed = False  # ALWAYS False for existing tables
+        db_table = "model_name"  # snake_case table names
+```
+
+## 🔄 SOFT DELETE IMPLEMENTATION
+
+### Soft Delete Pattern (MANDATORY)
+```python
+# NEVER do this - Hard delete
+obj.delete()  # ❌ FORBIDDEN
+
+# ALWAYS do this - Soft delete
+from django.utils import timezone
+
+def soft_delete(self):
+    """Soft delete implementation"""
+    self.deleted_at = timezone.now()
+    self.save()
+    
+# In views, ALWAYS filter out soft deleted records
+active_records = Model.objects.filter(deleted_at__isnull=True)
+
+# For restoration (if needed)
+def restore(self):
+    """Restore soft deleted record"""
+    self.deleted_at = None
+    self.save()
+```
+
+### QuerySet Patterns
+```python
+# Base QuerySet - Always exclude soft deleted
+def get_active_queryset(model_class):
+    return model_class.objects.filter(deleted_at__isnull=True)
+
+# Usage in views
+active_users = get_active_queryset(User)
+active_grounds = get_active_queryset(GroundInfo)
+
+# Complex filtering with soft delete consideration
+recent_matches = PlayerMatch.objects.filter(
+    deleted_at__isnull=True,
+    created_at__gte=start_date
+).order_by('-created_at')
+```
+
+## 🏗️ ESTABLISHED MODEL PATTERNS
+
+### User Management Models
+```python
+# User Basic Information
+class User(models.Model):
+    user_code = models.CharField(primary_key=True, max_length=45)
+    user_id = models.CharField(max_length=45)
+    password = models.CharField(max_length=200)
+    login_type = models.CharField(max_length=45)  # 'email', 'kakao', 'apple'
+    created_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        managed = False
+        db_table = "user"
+
+# User Detailed Information
+class UserInfo(models.Model):
+    user_code = models.CharField(primary_key=True, max_length=45)
+    birth = models.CharField(max_length=45)
+    name = models.CharField(max_length=45)
+    gender = models.CharField(max_length=45)
+    marketing_agree = models.JSONField()  # Complex consent data
+    user_type = models.CharField(max_length=45)
+    level = models.CharField(max_length=45)
+    height = models.IntegerField()
+    weight = models.IntegerField()
+    preferred_position = models.CharField(max_length=45)
+    activity_area = models.CharField(max_length=45)
+    ai_type = models.CharField(max_length=45)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        managed = False
+        db_table = "user_info"
+```
+
+### Team Management Models
+```python
+class TeamInfo(models.Model):
+    team_code = models.CharField(primary_key=True, max_length=45)
+    host = models.CharField(max_length=45)  # Team leader user_code
+    name = models.CharField(max_length=45)
+    local = models.CharField(max_length=45)  # Team location
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        managed = False
+        db_table = "team_info"
+
+# Many-to-Many Relationship Pattern
+class PlayerTeamCross(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_code = models.CharField(max_length=45)
+    team_code = models.CharField(max_length=45)
+    role = models.CharField(max_length=45)  # 'member', 'admin', 'owner'
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        managed = False
+        db_table = "player_team_cross"
+```
+
+### Ground & Match Models
+```python
+class GroundInfo(models.Model):
+    ground_code = models.CharField(primary_key=True, max_length=45)
+    who_make = models.CharField(max_length=45)  # Creator user_code
+    name = models.CharField(max_length=45)
+    address = models.CharField(max_length=45)
+    
+    # GPS & Geometric Data (JSON Fields)
+    corner_gps = models.JSONField()  # GPS coordinates
+    corner_utm = models.JSONField()   # UTM coordinates
+    center = models.JSONField()       # Center point
+    rotated_corners = models.JSONField()  # Rotated coordinates
+    
+    # Dimensions
+    long_side_length = models.FloatField()
+    short_side_length = models.FloatField()
+    rotate_deg = models.FloatField()
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ground_info'
+
+class PlayerMatch(models.Model):
+    match_code = models.CharField(primary_key=True, max_length=45)
+    ground_code = models.CharField(max_length=45)  # Reference to GroundInfo
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    name = models.CharField(max_length=45)
+    standard = models.CharField(max_length=45)  # Match type/standard
+    created_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        managed = False
+        db_table = "player_match"
+```
+
+### Analytics Models (Complex Data)
+```python
+class PlayerAnal(models.Model):
+    """
+    Comprehensive player analytics data for each quarter
+    Contains Total, Attack, and Defense statistics
+    """
+    quarter_code = models.CharField(primary_key=True, max_length=45)
+    
+    # Total Statistics (T_ prefix)
+    T_D = models.DecimalField(max_digits=8, decimal_places=2)  # Total distance (km)
+    T_T = models.IntegerField()  # Total time (minutes)
+    T_DPM = models.DecimalField(max_digits=6, decimal_places=2)  # Distance per minute
+    T_AS = models.DecimalField(max_digits=5, decimal_places=2)  # Average speed
+    T_HS = models.DecimalField(max_digits=5, decimal_places=2)  # High speed
+    T_HS_T = models.DateTimeField()  # High speed timestamp
+    
+    # Attack Statistics (A_ prefix)
+    A_D = models.DecimalField(max_digits=8, decimal_places=2)  # Attack distance
+    A_T = models.IntegerField()  # Attack time
+    A_TPT = models.DecimalField(max_digits=5, decimal_places=2)  # Time percentage
+    
+    # Defense Statistics (D_ prefix)  
+    D_D = models.DecimalField(max_digits=8, decimal_places=2)  # Defense distance
+    D_T = models.IntegerField()  # Defense time
+    D_TPT = models.DecimalField(max_digits=5, decimal_places=2)  # Time percentage
+    
+    # Complex Data Fields (JSON/Text for lists)
+    T_AS_L = models.TextField()  # Average speed list (serialized)
+    T_HMAP = models.JSONField()  # Heatmap data
+    T_SMAP = models.JSONField()  # Sprint map data
+    
+    # Performance Scores
+    point_total = models.IntegerField()
+    point_attack = models.IntegerField()
+    point_defense = models.IntegerField()
+    point_stamina = models.IntegerField()
+    
+    # Data Quality Metrics
+    noise_time = models.DecimalField(max_digits=5, decimal_places=2)
+    noise_gps = models.DecimalField(max_digits=5, decimal_places=2)
+    noise_reliability = models.DecimalField(max_digits=5, decimal_places=2)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        managed = False
+        db_table = "player_anal"
+```
+
+## 🔗 RELATIONSHIP PATTERNS
+
+### Cross-Reference Tables
+```python
+# Pattern for Many-to-Many relationships
+class EntityCrossTable(models.Model):
+    id = models.AutoField(primary_key=True)
+    entity1_code = models.CharField(max_length=45)
+    entity2_code = models.CharField(max_length=45)
+    
+    # Additional relationship data
+    role = models.CharField(max_length=45, null=True, blank=True)
+    status = models.CharField(max_length=45, default='active')
+    
+    # Standard timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        managed = False
+        db_table = "entity_cross_table"
+```
+
+### Hierarchical Data Pattern
+```python
+# Parent-Child relationships
+class HierarchicalModel(models.Model):
+    code = models.CharField(primary_key=True, max_length=45)
+    parent_code = models.CharField(max_length=45, null=True, blank=True)
+    name = models.CharField(max_length=45)
+    level = models.IntegerField(default=0)  # Depth in hierarchy
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        managed = False
+        db_table = "hierarchical_model"
+```
+
+## 📊 DATA INTEGRITY PATTERNS
+
+### Validation Patterns
+```python
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
+def validate_user_code_format(value):
+    """Validate user code format: u_[timestamp][random]"""
+    if not value.startswith('u_'):
+        raise ValidationError('User code must start with u_')
+    if len(value) < 10:
+        raise ValidationError('User code too short')
+
+def validate_not_future_date(value):
+    """Ensure date is not in the future"""
+    if value > timezone.now():
+        raise ValidationError('Date cannot be in the future')
+
+# Usage in models
+class ValidatedModel(models.Model):
+    user_code = models.CharField(
+        max_length=45, 
+        validators=[validate_user_code_format]
+    )
+    event_date = models.DateTimeField(
+        validators=[validate_not_future_date]
+    )
+```
+
+### Data Consistency Checks
+```python
+# Check referential integrity
+def validate_user_exists(user_code):
+    """Ensure user exists and is not soft deleted"""
+    if not User.objects.filter(
+        user_code=user_code, 
+        deleted_at__isnull=True
+    ).exists():
+        raise ValidationError(f'User {user_code} does not exist')
+
+def validate_ground_ownership(user_code, ground_code):
+    """Ensure user owns or has access to ground"""
+    ground = GroundInfo.objects.filter(
+        ground_code=ground_code,
+        deleted_at__isnull=True
+    ).first()
+    
+    if not ground:
+        raise ValidationError('Ground does not exist')
+    
+    if ground.who_make != user_code:
+        raise ValidationError('User does not own this ground')
+```
+
+## 🔍 QUERY OPTIMIZATION PATTERNS
+
+### Efficient Queries
+```python
+# Use select_related for ForeignKey relationships
+def get_user_with_info(user_code):
+    return User.objects.select_related('userinfo').get(
+        user_code=user_code,
+        deleted_at__isnull=True
+    )
+
+# Use prefetch_related for reverse ForeignKey and ManyToMany
+def get_team_with_members(team_code):
+    return TeamInfo.objects.prefetch_related(
+        'playerteamcross_set__user'
+    ).get(
+        team_code=team_code,
+        deleted_at__isnull=True
+    )
+
+# Bulk operations for performance
+def bulk_soft_delete(model_class, filter_kwargs):
+    """Efficiently soft delete multiple records"""
+    model_class.objects.filter(**filter_kwargs).update(
+        deleted_at=timezone.now()
+    )
+```
+
+### Complex Analytical Queries
+```python
+from django.db.models import Count, Avg, Max, Q
+from django.db.models.functions import TruncDate
+
+# Aggregate statistics
+def get_user_match_stats(user_code):
+    return PlayerMatchCross.objects.filter(
+        user_code=user_code,
+        deleted_at__isnull=True
+    ).aggregate(
+        total_matches=Count('match_code'),
+        avg_performance=Avg('playermatch__playeranal__point_total'),
+        best_performance=Max('playermatch__playeranal__point_total')
+    )
+
+# Time-based aggregations
+def get_daily_match_counts(start_date, end_date):
+    return PlayerMatch.objects.filter(
+        start_time__date__range=[start_date, end_date],
+        deleted_at__isnull=True
+    ).annotate(
+        date=TruncDate('start_time')
+    ).values('date').annotate(
+        match_count=Count('match_code')
+    ).order_by('date')
+```
+
+## 📋 DATABASE OPERATION CHECKLIST
+
+### Before Any Database Operation:
+- [ ] **Soft Delete Check**: Using `deleted_at` field properly
+- [ ] **Referential Integrity**: All foreign key references valid
+- [ ] **Timestamp Fields**: `created_at`, `updated_at` properly managed
+- [ ] **Query Optimization**: Using select_related/prefetch_related appropriately
+- [ ] **Data Validation**: Input validation implemented
+- [ ] **Transaction Safety**: Using database transactions for complex operations
+- [ ] **Performance Impact**: Query execution plan reviewed
+- [ ] **Existing Patterns**: Following established model conventions
+
+### Data Migration Considerations:
+- [ ] **Backward Compatibility**: Changes don't break existing code
+- [ ] **Data Preservation**: No data loss during operations
+- [ ] **Index Impact**: Consider index usage and performance
+- [ ] **Constraint Validation**: All constraints still satisfied
+
+Remember: **DATA INTEGRITY IS PARAMOUNT** - Every database operation must maintain consistency and follow established patterns.

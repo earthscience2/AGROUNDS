@@ -1,0 +1,630 @@
+# 🔐 Security Best Practices
+
+## Role Definition
+You are responsible for implementing and maintaining security measures to protect user data, prevent attacks, and ensure system integrity.
+
+---
+
+## 🚨 Security Principles
+
+### ❌ Absolute Prohibitions
+1. **NO HARDCODED CREDENTIALS** - Always use environment variables
+2. **NO SENSITIVE DATA IN LOGS** - Never log passwords, tokens, PII
+3. **NO SQL CONCATENATION** - Always use parameterized queries
+4. **NO UNVALIDATED INPUT** - Validate and sanitize all user input
+5. **NO PLAIN TEXT PASSWORDS** - Always hash with bcrypt/argon2
+
+### ✅ Mandatory Requirements
+1. **VALIDATE ALL INPUTS** - Never trust user input
+2. **USE PARAMETERIZED QUERIES** - Prevent SQL injection
+3. **IMPLEMENT RATE LIMITING** - Prevent abuse
+4. **ENCRYPT SENSITIVE DATA** - At rest and in transit
+5. **KEEP DEPENDENCIES UPDATED** - Patch vulnerabilities
+
+---
+
+## 🛡️ OWASP Top 10 Protection
+
+### 1. Injection Attacks (SQL, NoSQL, Command)
+
+#### SQL Injection Prevention
+```python
+# ❌ VULNERABLE - String concatenation
+user_email = request.data.get('email')
+query = f"SELECT * FROM user WHERE user_id = '{user_email}'"  # DANGEROUS!
+User.objects.raw(query)
+
+# ✅ SECURE - Parameterized query (Django ORM)
+user_email = request.data.get('email')
+user = User.objects.filter(user_id=user_email).first()
+
+# ✅ SECURE - Parameterized raw query
+user_email = request.data.get('email')
+User.objects.raw("SELECT * FROM user WHERE user_id = %s", [user_email])
+```
+
+#### Command Injection Prevention
+```python
+# ❌ VULNERABLE - Shell command with user input
+filename = request.data.get('filename')
+os.system(f"cat {filename}")  # DANGEROUS!
+
+# ✅ SECURE - Use subprocess with list
+import subprocess
+filename = request.data.get('filename')
+# Validate filename first
+if not is_valid_filename(filename):
+    raise ValueError("Invalid filename")
+subprocess.run(['cat', filename], check=True)
+```
+
+---
+
+### 2. Broken Authentication
+
+#### JWT Token Security
+```python
+from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import timedelta
+
+# Configuration
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),   # Short-lived
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),   # Rotate weekly
+    'ROTATE_REFRESH_TOKENS': True,                  # Rotate on refresh
+    'BLACKLIST_AFTER_ROTATION': True,               # Blacklist old tokens
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': settings.SECRET_KEY,             # From environment
+}
+
+# Token refresh with security
+def refresh_token_view(request):
+    """Refresh access token with security checks"""
+    try:
+        refresh_token = request.data.get('refresh_token')
+        
+        # Validate token
+        token = RefreshToken(refresh_token)
+        
+        # Check if token is blacklisted
+        if token.is_blacklisted():
+            return Response({
+                "error": {"code": "TOKEN_BLACKLISTED", "message": "토큰이 무효화되었습니다"}
+            }, status=401)
+        
+        # Generate new tokens
+        new_access = str(token.access_token)
+        new_refresh = str(token)
+        
+        # Blacklist old refresh token
+        token.blacklist()
+        
+        return Response({
+            "access": new_access,
+            "refresh": new_refresh
+        })
+        
+    except Exception as e:
+        logger.error(f"Token refresh failed: {str(e)}")
+        return Response({
+            "error": {"code": "INVALID_TOKEN", "message": "유효하지 않은 토큰입니다"}
+        }, status=401)
+```
+
+#### Password Security
+```python
+from django.contrib.auth.hashers import make_password, check_password
+import re
+
+def validate_password_strength(password):
+    """
+    Validate password meets security requirements
+    
+    Requirements:
+    - Minimum 8 characters
+    - At least 1 uppercase letter
+    - At least 1 lowercase letter
+    - At least 1 number
+    - At least 1 special character
+    """
+    if len(password) < 8:
+        raise ValidationError("비밀번호는 최소 8자 이상이어야 합니다")
+    
+    if not re.search(r'[A-Z]', password):
+        raise ValidationError("비밀번호는 대문자를 포함해야 합니다")
+    
+    if not re.search(r'[a-z]', password):
+        raise ValidationError("비밀번호는 소문자를 포함해야 합니다")
+    
+    if not re.search(r'[0-9]', password):
+        raise ValidationError("비밀번호는 숫자를 포함해야 합니다")
+    
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        raise ValidationError("비밀번호는 특수문자를 포함해야 합니다")
+    
+    return True
+
+# Hash password before saving
+user.password = make_password(password)
+
+# Verify password
+if check_password(plain_password, user.password):
+    # Password correct
+    pass
+```
+
+#### Account Lockout
+```python
+from django.core.cache import cache
+
+MAX_LOGIN_ATTEMPTS = 5
+LOCKOUT_DURATION = 15 * 60  # 15 minutes
+
+def check_login_attempts(user_id):
+    """Check if account is locked due to failed attempts"""
+    cache_key = f"login_attempts_{user_id}"
+    attempts = cache.get(cache_key, 0)
+    
+    if attempts >= MAX_LOGIN_ATTEMPTS:
+        return False, "계정이 잠겼습니다. 15분 후 다시 시도해주세요"
+    
+    return True, None
+
+def record_failed_login(user_id):
+    """Record failed login attempt"""
+    cache_key = f"login_attempts_{user_id}"
+    attempts = cache.get(cache_key, 0) + 1
+    cache.set(cache_key, attempts, LOCKOUT_DURATION)
+    
+    remaining = MAX_LOGIN_ATTEMPTS - attempts
+    return remaining
+
+def reset_login_attempts(user_id):
+    """Reset login attempts after successful login"""
+    cache_key = f"login_attempts_{user_id}"
+    cache.delete(cache_key)
+```
+
+---
+
+### 3. Sensitive Data Exposure
+
+#### Environment Variables
+```python
+# ❌ NEVER hardcode credentials
+DATABASE_PASSWORD = "assist0907"  # NEVER!
+AWS_SECRET_KEY = "abc123secret"   # NEVER!
+
+# ✅ Use environment variables
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
+DATABASE_PASSWORD = env('DB_PASSWORD')
+AWS_SECRET_KEY = env('AWS_SECRET_ACCESS_KEY')
+```
+
+```bash
+# .env file (NEVER commit to git)
+DB_PASSWORD=secure_password_here
+AWS_SECRET_ACCESS_KEY=secret_key_here
+JWT_SECRET_KEY=random_secret_key
+
+# .gitignore (MUST include)
+.env
+*.env
+.env.local
+```
+
+#### Data Encryption
+```python
+from cryptography.fernet import Fernet
+from django.conf import settings
+
+class DataEncryption:
+    """Encrypt/decrypt sensitive data"""
+    
+    def __init__(self):
+        self.key = settings.ENCRYPTION_KEY.encode()
+        self.cipher = Fernet(self.key)
+    
+    def encrypt(self, plain_text):
+        """Encrypt sensitive data"""
+        if not plain_text:
+            return None
+        return self.cipher.encrypt(plain_text.encode()).decode()
+    
+    def decrypt(self, encrypted_text):
+        """Decrypt sensitive data"""
+        if not encrypted_text:
+            return None
+        return self.cipher.decrypt(encrypted_text.encode()).decode()
+
+# Usage
+encryptor = DataEncryption()
+
+# Encrypt before saving
+user.ssn = encryptor.encrypt(ssn)
+user.save()
+
+# Decrypt when needed
+decrypted_ssn = encryptor.decrypt(user.ssn)
+```
+
+#### Masking Sensitive Data in Logs
+```python
+import re
+
+def mask_email(email):
+    """Mask email for logging"""
+    if not email or '@' not in email:
+        return email
+    local, domain = email.split('@')
+    masked_local = local[:2] + '***' if len(local) > 2 else '***'
+    return f"{masked_local}@{domain}"
+
+def mask_phone(phone):
+    """Mask phone number"""
+    if not phone or len(phone) < 4:
+        return '***'
+    return phone[:-4] + '****'
+
+# Logging with masked data
+logger.info(f"User created: {mask_email(email)}, phone: {mask_phone(phone)}")
+```
+
+---
+
+### 4. XML External Entities (XXE)
+
+#### XML Parsing Security
+```python
+import defusedxml.ElementTree as ET
+
+# ❌ VULNERABLE - Standard XML parser
+import xml.etree.ElementTree as BadET
+tree = BadET.parse(xml_file)  # Vulnerable to XXE
+
+# ✅ SECURE - Defused XML parser
+tree = ET.parse(xml_file)  # Protected against XXE
+```
+
+---
+
+### 5. Broken Access Control
+
+#### Permission Checks
+```python
+from rest_framework.permissions import BasePermission
+
+class IsTeamAdmin(BasePermission):
+    """Check if user is team admin"""
+    
+    def has_permission(self, request, view):
+        # User must be authenticated
+        if not request.user or not request.user.is_authenticated:
+            return False
+        return True
+    
+    def has_object_permission(self, request, view, obj):
+        # Check if user is admin of this team
+        team_code = obj.team_code if hasattr(obj, 'team_code') else obj
+        
+        is_admin = PlayerTeamCross.objects.filter(
+            user_code=request.user.user_code,
+            team_code=team_code,
+            role__in=['admin', 'owner'],
+            deleted_at__isnull=True
+        ).exists()
+        
+        return is_admin
+
+# Usage in view
+class UpdateTeamView(APIView):
+    permission_classes = [IsAuthenticated, IsTeamAdmin]
+    
+    def put(self, request, team_code):
+        team = get_object_or_404(TeamInfo, team_code=team_code)
+        
+        # Permission automatically checked by DRF
+        self.check_object_permissions(request, team)
+        
+        # Update team
+        # ...
+```
+
+#### Row-Level Security
+```python
+def get_user_teams(user_code):
+    """Get teams visible to user (row-level security)"""
+    return TeamInfo.objects.filter(
+        Q(playerteamcross__user_code=user_code) |  # User is member
+        Q(public=True),                              # Or team is public
+        deleted_at__isnull=True
+    ).distinct()
+
+def can_user_view_team(user_code, team_code):
+    """Check if user can view team data"""
+    return PlayerTeamCross.objects.filter(
+        user_code=user_code,
+        team_code=team_code,
+        deleted_at__isnull=True
+    ).exists()
+```
+
+---
+
+### 6. Security Misconfiguration
+
+#### Django Security Settings
+```python
+# settings/prod.py - Production security settings
+
+# HTTPS/SSL
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# HSTS (HTTP Strict Transport Security)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Content Security
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+
+# CSRF
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Strict'
+
+# Session
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_AGE = 3600  # 1 hour
+
+# Debug
+DEBUG = False  # NEVER True in production
+ALLOWED_HOSTS = ['agrounds.com', 'www.agrounds.com']
+
+# Security middleware
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    # ... other middleware
+]
+```
+
+---
+
+### 7. Cross-Site Scripting (XSS)
+
+#### Input Sanitization
+```python
+import bleach
+from django.utils.html import escape
+
+def sanitize_html_input(text):
+    """Sanitize HTML to prevent XSS"""
+    # Allow only safe tags
+    allowed_tags = ['p', 'br', 'strong', 'em', 'u']
+    allowed_attributes = {}
+    
+    return bleach.clean(
+        text,
+        tags=allowed_tags,
+        attributes=allowed_attributes,
+        strip=True
+    )
+
+# Usage
+user_bio = request.data.get('bio')
+sanitized_bio = sanitize_html_input(user_bio)
+
+# Or escape all HTML
+safe_text = escape(user_input)
+```
+
+#### Frontend XSS Prevention (React)
+```javascript
+// ✅ React automatically escapes content
+const UserProfile = ({ userName }) => {
+  return <div>{userName}</div>;  // Automatically escaped
+};
+
+// ❌ DANGEROUS - Using dangerouslySetInnerHTML
+const Bio = ({ htmlContent }) => {
+  return (
+    <div dangerouslySetInnerHTML={{ __html: htmlContent }} />  // XSS risk!
+  );
+};
+
+// ✅ SAFE - Sanitize before rendering
+import DOMPurify from 'dompurify';
+
+const SafeBio = ({ htmlContent }) => {
+  const sanitized = DOMPurify.sanitize(htmlContent);
+  return <div dangerouslySetInnerHTML={{ __html: sanitized }} />;
+};
+```
+
+---
+
+### 8. Insecure Deserialization
+
+#### Safe Deserialization
+```python
+import json
+import pickle  # DANGEROUS!
+
+# ❌ NEVER use pickle with untrusted data
+data = pickle.loads(user_input)  # Can execute arbitrary code!
+
+# ✅ Use JSON for data serialization
+try:
+    data = json.loads(user_input)
+except json.JSONDecodeError:
+    return Response({"error": "Invalid JSON"}, status=400)
+
+# ✅ Validate deserialized data
+from marshmallow import Schema, fields, validate
+
+class TeamSchema(Schema):
+    name = fields.Str(required=True, validate=validate.Length(min=2, max=45))
+    local = fields.Str(required=True)
+
+schema = TeamSchema()
+try:
+    validated_data = schema.load(json.loads(user_input))
+except ValidationError as e:
+    return Response({"error": e.messages}, status=400)
+```
+
+---
+
+### 9. Using Components with Known Vulnerabilities
+
+#### Dependency Management
+```bash
+# Check for vulnerabilities
+pip-audit  # Python
+npm audit  # JavaScript
+
+# Update dependencies
+pip install --upgrade package_name
+npm update package_name
+
+# Lock file for reproducible builds
+requirements.txt  # Python
+package-lock.json  # JavaScript
+```
+
+```python
+# requirements.txt - Pin versions
+Django==4.0.3
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+cryptography>=42.0.2  # Use >= for security patches
+```
+
+---
+
+### 10. Insufficient Logging & Monitoring
+
+#### Security Event Logging
+```python
+import logging
+
+security_logger = logging.getLogger('security')
+
+# Log security events
+def log_security_event(event_type, user_code, details):
+    """Log security-related events"""
+    security_logger.warning(f"Security event: {event_type}", extra={
+        "event_type": event_type,
+        "user_code": user_code,
+        "details": details,
+        "timestamp": timezone.now().isoformat(),
+        "ip_address": details.get('ip_address'),
+        "user_agent": details.get('user_agent')
+    })
+
+# Examples
+log_security_event("FAILED_LOGIN", user_id, {
+    "ip_address": request.META.get('REMOTE_ADDR'),
+    "attempts": attempts
+})
+
+log_security_event("PERMISSION_DENIED", user_code, {
+    "resource": team_code,
+    "action": "delete_team"
+})
+
+log_security_event("SUSPICIOUS_ACTIVITY", user_code, {
+    "reason": "100 API calls in 1 minute",
+    "endpoint": "/api/user/list/"
+})
+```
+
+---
+
+## 🚦 Rate Limiting
+
+### Django Rate Limiting
+```python
+from django.core.cache import cache
+from rest_framework.throttling import BaseThrottle
+
+class CustomRateThrottle(BaseThrottle):
+    """Custom rate limiting"""
+    
+    def allow_request(self, request, view):
+        # Get user identifier
+        if request.user and request.user.is_authenticated:
+            ident = request.user.user_code
+        else:
+            ident = self.get_ident(request)
+        
+        # Rate limit: 100 requests per minute
+        cache_key = f"throttle_{ident}"
+        requests = cache.get(cache_key, 0)
+        
+        if requests >= 100:
+            return False
+        
+        cache.set(cache_key, requests + 1, 60)  # 60 seconds
+        return True
+
+# Usage in view
+class TeamListView(APIView):
+    throttle_classes = [CustomRateThrottle]
+    
+    def get(self, request):
+        # ...
+```
+
+---
+
+## ✅ Security Checklist
+
+### Code Review Security Checks
+- [ ] No hardcoded credentials
+- [ ] All inputs validated
+- [ ] Parameterized queries used
+- [ ] Authentication required for protected endpoints
+- [ ] Authorization checked
+- [ ] Rate limiting implemented
+- [ ] HTTPS enforced
+- [ ] Security headers configured
+- [ ] Sensitive data encrypted
+- [ ] Error messages don't leak info
+- [ ] Dependencies up to date
+- [ ] Logging doesn't expose sensitive data
+
+### Deployment Security
+- [ ] Environment variables configured
+- [ ] DEBUG = False in production
+- [ ] Secret keys rotated
+- [ ] Database credentials secured
+- [ ] CORS properly configured
+- [ ] SSL/TLS certificates valid
+- [ ] Firewall rules configured
+- [ ] Security monitoring enabled
+- [ ] Backup and recovery tested
+- [ ] Incident response plan ready
+
+---
+
+## 🔗 Related Guidelines
+
+**Reference Together:**
+- `general/error-handling.mdc` - Secure error handling
+- `general/testing-strategy.mdc` - Security testing
+- `backend/api-development.mdc` - API security
+- `database/patterns.mdc` - Database security
+
+---
+
+**Remember: Security is not a feature, it's a fundamental requirement. Build it in from the start!**

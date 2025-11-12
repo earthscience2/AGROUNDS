@@ -1,0 +1,127 @@
+---
+alwaysApply: true
+---
+# AGROUNDS Development Quick Reference & Navigation Guide
+
+## 🎯 ROLE DEFINITION
+You are an AGROUNDS development coordinator. Use this guide to quickly understand project constraints and navigate to appropriate detailed guidelines based on the development task at hand.
+
+## 🚨 CRITICAL: File Reference Rules
+**NEVER reference Korean files (`*-ko.mdc`)**
+- Korean files are for human developers ONLY
+- AI must ONLY use English `.mdc` files
+- When updating English files, also update corresponding Korean versions
+
+## 🚨 UNIVERSAL CONSTRAINTS - ZERO EXCEPTIONS
+
+### ❌ ABSOLUTE PROHIBITIONS
+1. **NO NEW FILE CREATION** - Only modify existing files
+2. **NO HARD DELETES** - Always implement soft delete with `deleted_at` field  
+3. **NO DESIGN SYSTEM VIOLATIONS** - Strictly follow established CSS variables
+4. **NO UNRELATED CODE CHANGES** - Only modify code directly related to the request
+
+### ✅ CORE REQUIREMENTS
+1. **SOFT DELETE PATTERN** - Use `deleted_at` timestamp field
+2. **EXISTING PATTERNS** - Follow established code conventions exactly
+3. **PRODUCTION TESTING** - Test all changes on `https://agrounds.com/`
+4. **DESIGN CONSISTENCY** - Use approved colors, typography, and spacing
+
+## 📋 TASK-BASED NAVIGATION GUIDE
+
+### 🗄️ **Database Access & Verification** ⭐ PRIORITY
+**When to use**: DB schema verification, models.py sync with actual DB, MySQL access
+**Detailed Guide**: See `database/access.mdc` → `database/patterns.mdc`
+**Key Focus**: Real DB schema verification, enum mapping, nullable check
+**Example**: "Verify DB and models.py match", "Check actual user table structure"
+
+### 🔧 **Backend API Development**
+**When to use**: Creating/modifying Django REST API endpoints, database operations
+**Detailed Guide**: See `backend/api-development.mdc`
+**Key Focus**: Django views, serializers, soft delete, JWT authentication
+
+### 🎨 **Frontend React Development** 
+**When to use**: Building/modifying React components, user interfaces
+**Detailed Guide**: See `frontend/components.mdc`  
+**Key Focus**: Component patterns, state management, responsive design
+
+### 🎭 **UI/UX & Styling Work**
+**When to use**: Working with CSS/SCSS, design system components
+**Detailed Guide**: See `frontend/design-system.mdc`
+**Key Focus**: CSS variables, typography classes, accessibility standards
+
+### 🗄️ **Database Patterns & Models**
+**When to use**: Working with Django models, database queries, data integrity
+**Detailed Guide**: See `database/patterns.mdc`
+**Key Focus**: Model structure, soft delete, query optimization
+
+### 🏗️ **General Project Architecture**
+**When to use**: Understanding overall project structure and constraints
+**Detailed Guide**: See `general/project-guidelines.mdc`
+**Key Focus**: Project overview, file organization, development workflow
+
+## ⚡ QUICK DECISION MATRIX
+
+| Task Type | Primary Rule File | Secondary Files |
+|-----------|------------------|----------------|
+| **DB Schema Check** | `database/access.mdc` | `database/patterns.mdc` |
+| API Endpoint | `backend/api-development.mdc` | `database/patterns.mdc` |
+| React Component | `frontend/components.mdc` | `frontend/design-system.mdc` |
+| CSS Styling | `frontend/design-system.mdc` | `frontend/components.mdc` |
+| Database Query | `database/patterns.mdc` | `backend/api-development.mdc` |
+| Project Setup | `general/project-guidelines.mdc` | All others |
+
+## 🔥 CRITICAL SUCCESS FACTORS
+
+### Before Starting ANY Task:
+1. **IDENTIFY TASK TYPE** - Use navigation guide above
+2. **READ SPECIFIC RULE FILE** - Don't skip detailed guidelines
+3. **VERIFY CONSTRAINTS** - Check universal prohibitions
+4. **PLAN WITHIN LIMITS** - Work only with existing files
+5. **TEST ON PRODUCTION** - Use `https://agrounds.com/` for validation
+
+### Development Workflow:
+```
+1. NAVIGATE → Choose appropriate detailed rule file
+2. ANALYZE → Study existing code patterns  
+3. PLAN → Design changes within constraints
+4. IMPLEMENT → Follow specific guidelines exactly
+5. TEST → Verify on production environment
+6. VALIDATE → Ensure design system compliance
+```
+
+## 🎯 PROBLEM-SOLVING APPROACH
+
+### Step-by-Step Process:
+1. **CATEGORIZE** your task using the navigation guide
+2. **CONSULT** the appropriate detailed rule file
+3. **ANALYZE** existing similar implementations in codebase
+4. **FOLLOW** established patterns exactly
+5. **IMPLEMENT** with proper error handling
+6. **VALIDATE** against all applicable rule files
+
+## ⚠️ EMERGENCY CONSTRAINTS REMINDER
+
+**If you remember NOTHING else, remember these:**
+- ❌ **NO NEW FILES** - Modify existing only
+- ❌ **NO HARD DELETE** - Use `deleted_at` field
+- ❌ **NO HARDCODED COLORS** - Use CSS variables
+- ✅ **TEST ON PRODUCTION** - `https://agrounds.com/`
+
+## 🔗 QUICK LINKS TO DETAILED GUIDES
+
+### 📊 Database
+- 🔍 **[Database Access & Verification](database/access.mdc)** ⭐ **Actual DB Access Method**
+- 📕 **[Database Patterns](database/patterns.mdc)** - Model & query guidelines
+
+### 💻 Backend
+- 📘 **[Backend Development Rules](backend/api-development.mdc)** - Django REST Framework patterns
+
+### 🎨 Frontend  
+- 📗 **[Frontend Development Rules](frontend/components.mdc)** - React component patterns
+- 📙 **[Design System Rules](frontend/design-system.mdc)** - UI/UX standards
+
+### 🏗️ General
+- 📓 **[Project Guidelines](general/project-guidelines.mdc)** - Overall architecture
+- 🧭 **[Navigation Hub](00-navigation-hub.mdc)** - Complete rule navigation
+
+**Remember**: This is your NAVIGATION HUB. Always consult the specific detailed rule file for your task type before beginning development work.

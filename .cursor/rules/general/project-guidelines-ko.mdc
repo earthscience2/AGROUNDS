@@ -1,0 +1,224 @@
+---
+alwaysApply: true
+---
+
+# AGROUNDS Project Development Guidelines
+
+## 🚨 CRITICAL RULES - MUST FOLLOW
+
+### ❌ ABSOLUTELY FORBIDDEN
+1. **NEVER CREATE NEW FILES** - Only modify existing files in the codebase
+2. **NEVER DELETE EXISTING FILES** - Maintain all current project structure
+3. **NEVER IGNORE SOFT DELETE PATTERN** - Always use `deleted_at` field instead of hard deletion
+4. **NEVER BREAK DESIGN SYSTEM** - Must follow established colors, typography, and spacing
+5. **NEVER MODIFY UNRELATED CODE** - Only change code directly related to the specific request
+
+### ✅ MANDATORY REQUIREMENTS
+1. **ALWAYS USE SOFT DELETE** - Implement `deleted_at` field for all deletion operations
+2. **ALWAYS FOLLOW EXISTING PATTERNS** - Match current code style and architecture
+3. **ALWAYS TEST ON PRODUCTION URL** - Use `https://agrounds.com/` for API testing
+4. **ALWAYS MAINTAIN DESIGN CONSISTENCY** - Use established CSS variables and component styles
+5. **ALWAYS IMPLEMENT ERROR HANDLING** - Proper try-catch blocks and user-friendly error messages
+
+## 🏗️ ARCHITECTURE PATTERNS
+
+### Backend (Django REST Framework)
+- **API Structure**: Follow RESTful conventions with consistent response formats
+- **Authentication**: JWT-based using `rest_framework_simplejwt`
+- **Database**: Centralized models in [DB/models.py](mdc:backend/DB/models.py)
+- **Apps Organization**: Feature-based Django apps (user, ground, match, anal, video, upload)
+
+### Frontend (React)
+- **Component Structure**: Functional components with hooks
+- **Styling**: SCSS modules with BEM methodology
+- **State Management**: React hooks (useState, useEffect)
+- **Routing**: React Router DOM for navigation
+
+## 🎨 DESIGN SYSTEM COMPLIANCE
+
+### Color Palette (STRICTLY ENFORCE)
+```scss
+--primary: #079669;           // Main brand color
+--primary-hover: #068A5B;     // Hover states
+--text-primary: #262626;      // Main text
+--text-secondary: #6B7078;    // Secondary text
+--bg-surface: #FFFFFF;        // Card backgrounds
+--error: #ef4444;             // Error states
+```
+
+### Typography System
+- **Brand Font**: 'Paperlogy-8ExtraBold' (CDN loaded) - For headers and titles
+- **Text Font**: 'Pretendard' (CDN loaded) - For body text and descriptions
+- **Classes**: `.text-display`, `.text-h1`, `.text-h2`, `.text-body`, `.text-caption`
+
+### Spacing System
+```scss
+--spacing-xs: 4px;    --spacing-sm: 8px;    --spacing-md: 12px;
+--spacing-lg: 16px;   --spacing-xl: 20px;   --spacing-2xl: 24px;
+```
+
+## 💻 CODING CONVENTIONS
+
+### Backend Python (Django)
+```python
+# Class naming: PascalCase
+class Get_UserInfo_Simple(APIView):
+    """Clear docstring describing API purpose"""
+    
+    def get(self, request):
+        # Variable naming: snake_case
+        user_code = request.query_params.get('user_code')
+        
+        # Consistent error responses
+        if not user_code:
+            return Response(
+                {"error": "user_code parameter is required."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+```
+
+### Frontend JavaScript (React)
+```javascript
+// Component naming: PascalCase
+const GroundSelection = () => {
+  // State variables: camelCase
+  const [selectedGround, setSelectedGround] = useState(null);
+  
+  // Function naming: camelCase with descriptive names
+  const handleBackNavigation = () => {
+    navigate('/app/anal/data-select');
+  };
+  
+  // Consistent error handling
+  try {
+    const response = await apiCall();
+  } catch (error) {
+    console.error('API call failed:', error);
+    setErrorMessage('User-friendly error message');
+  }
+};
+```
+
+## 🗄️ DATABASE PATTERNS
+
+### Model Structure
+```python
+# Primary keys: Meaningful string codes
+user_code = models.CharField(primary_key=True, max_length=45)
+ground_code = models.CharField(primary_key=True, max_length=45)
+
+# Timestamp fields (ALWAYS INCLUDE)
+created_at = models.DateTimeField(auto_now_add=True)
+updated_at = models.DateTimeField(auto_now=True)
+deleted_at = models.DateTimeField(null=True, blank=True)  # Soft delete
+
+# Table naming: snake_case
+class Meta:
+    db_table = "user_info"
+```
+
+## 🔌 API DESIGN PATTERNS
+
+### URL Structure
+```
+/api/{app_name}/{action}/     # GET /api/ground/list/
+/api/{app_name}/{action}/     # POST /api/user/create/
+```
+
+### Response Format
+```json
+// Success Response
+{
+  "data": {...},
+  "message": "Operation successful"
+}
+
+// Error Response
+{
+  "error": "Descriptive error message",
+  "details": "Additional context if needed"
+}
+```
+
+## 📱 RESPONSIVE DESIGN RULES
+
+### Breakpoints
+- **Mobile**: max-width 768px (Mobile-first approach)
+- **Tablet**: 769px - 1199px
+- **Desktop**: 1200px and above
+
+### Accessibility Requirements
+- **Minimum touch target**: 44px × 44px
+- **Color contrast**: WCAG AA compliance (4.5:1 ratio)
+- **Focus states**: Visible focus indicators for all interactive elements
+
+## 🧪 TESTING & VALIDATION
+
+### API Testing
+- **Base URL**: `https://agrounds.com/api/`
+- **Authentication**: Include JWT token in Authorization header
+- **Error Scenarios**: Test both success and failure cases
+
+### Frontend Testing
+- **Cross-browser**: Chrome, Safari, Firefox compatibility
+- **Mobile responsiveness**: Test on various screen sizes
+- **Performance**: Optimize images and minimize bundle size
+
+## 📂 FILE ORGANIZATION
+
+### Asset Management
+```
+src/assets/
+├── common/     # Shared icons and images
+├── card/       # Card-specific images
+├── ground/     # Ground-related images
+├── logo/       # Brand logos
+├── position/   # Position-specific graphics
+└── web/        # Web-optimized images
+```
+
+### Component Structure
+```
+src/components/
+├── [ComponentName].js      # Component logic
+├── [ComponentName].scss    # Component styles
+└── css/                    # Shared component styles
+```
+
+## 🔍 CODE REVIEW CHECKLIST
+
+### Before Submitting Changes
+- [ ] **No new files created** (only existing files modified)
+- [ ] **Soft delete implemented** (no hard deletions)
+- [ ] **Design system followed** (colors, typography, spacing)
+- [ ] **Error handling included** (try-catch blocks, user feedback)
+- [ ] **Responsive design tested** (mobile, tablet, desktop)
+- [ ] **API endpoints tested** on production URL
+- [ ] **Code comments added** for complex logic
+- [ ] **Consistent naming conventions** followed
+
+## 🚀 PERFORMANCE OPTIMIZATION
+
+### Frontend
+- **Image optimization**: Use WebP format when possible
+- **Font loading**: CDN-loaded fonts (Paperlogy, Pretendard)
+- **CSS optimization**: Use CSS variables for consistent theming
+- **Bundle optimization**: Import only necessary dependencies
+
+### Backend
+- **Database queries**: Optimize with proper indexing
+- **API responses**: Paginate large datasets
+- **Caching**: Implement where appropriate
+- **Error logging**: Comprehensive logging for debugging
+
+## 📋 STEP-BY-STEP APPROACH
+
+### For Every Development Task:
+1. **ANALYZE** existing code patterns and structure
+2. **PLAN** changes within existing file constraints
+3. **IMPLEMENT** following established conventions
+4. **TEST** on production environment
+5. **VALIDATE** design system compliance
+6. **DOCUMENT** any complex logic added
+
+Remember: **CONSISTENCY IS KEY** - Follow existing patterns rather than introducing new ones.

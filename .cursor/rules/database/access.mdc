@@ -1,0 +1,685 @@
+# 🗄️ Database Access & Verification Rules
+
+## Role Definition
+You are the AGROUNDS project database verification expert. You are responsible for synchronizing the actual MySQL database with Django models.py files.
+
+---
+
+## 🚨 Core Principles
+
+### ❌ Absolute Prohibitions
+1. **NO ACTUAL DB SCHEMA CHANGES** - Read-only access only
+2. **NO PRODUCTION DATA MODIFICATIONS** - Query only
+3. **NO IGNORING DB-MODELS MISMATCHES** - Always maintain sync
+
+### ✅ Mandatory Requirements
+1. **ACTUAL DB FIRST** - models.py must follow the actual DB
+2. **ACCURATE ENUM MAPPING** - MySQL enum → Django choices
+3. **ACCURATE NULLABLE REFLECTION** - Distinguish NOT NULL vs NULL precisely
+4. **MAINTAIN FIELD ORDER** - Match DB order for readability
+
+---
+
+## 🔌 Database Access Information
+
+### Connection Info (Read-Only)
+```bash
+# MySQL Connection Command
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground \
+      -passist0907 \
+      -D agroundsDB
+
+# Database Information
+HOST: agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com
+USER: ground
+PASSWORD: assist0907
+DATABASE: agroundsDB
+PORT: 3306
+```
+
+### Environment Configuration
+```python
+# backend/agrounds/settings/base.py
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "agroundsDB",
+        "USER": "ground",
+        "PASSWORD": "assist0907",
+        "HOST": env("HOST"),  # Loaded from .env
+        "PORT": "3306",
+        "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
+    }
+}
+```
+
+---
+
+## 📋 DB Verification Process
+
+### Step 1: Check Table List
+```bash
+# Query all tables
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 -D agroundsDB \
+      -e "SHOW TABLES;" 2>&1 | grep -v "Warning"
+```
+
+**Key Tables:**
+- `user`, `user_info` - User information
+- `team_info`, `player_team_cross` - Team management
+- `player_match`, `team_match` - Match information
+- `player_quarter`, `team_quarter` - Quarter information
+- `player_anal`, `team_anal` - Analysis data
+- `ground_info` - Ground information
+- `notification` - Notifications
+- `upload` - Upload information
+
+### Step 2: Query Specific Table Schema
+```bash
+# Query detailed table structure
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 -D agroundsDB \
+      -e "DESCRIBE [table_name];" 2>&1 | grep -v "Warning"
+```
+
+**Output Information:**
+- `Field` - Field name
+- `Type` - Data type (varchar, int, enum, json, decimal, timestamp, etc.)
+- `Null` - NULL allowed (YES/NO)
+- `Key` - Key type (PRI=Primary, MUL=Foreign, etc.)
+- `Default` - Default value
+- `Extra` - Additional attributes (auto_increment, DEFAULT_GENERATED, etc.)
+
+### Step 3: Compare with models.py
+Items to compare:
+1. ✅ **Field Names** - Exact match?
+2. ✅ **Data Types** - Correctly mapped?
+3. ✅ **NULL Allowed** - Nullable setting match?
+4. ✅ **Primary Key** - PK correctly set?
+5. ✅ **enum Types** - Accurately converted to choices?
+6. ✅ **Default Values** - Set when needed?
+
+---
+
+## 🔄 Type Mapping Rules
+
+### MySQL → Django Field Type Mapping
+
+| MySQL Type | Django Field | Example |
+|-----------|------------|---------|
+| `varchar(N)` | `CharField(max_length=N)` | `name = models.CharField(max_length=45)` |
+| `int` | `IntegerField()` | `height = models.IntegerField()` |
+| `decimal(M,D)` | `DecimalField(max_digits=M, decimal_places=D)` | `T_D = models.DecimalField(max_digits=10, decimal_places=2)` |
+| `float` | `FloatField()` | `rotate_deg = models.FloatField()` |
+| `json` | `JSONField()` | `corner_gps = models.JSONField()` |
+| `timestamp` | `DateTimeField()` | `created_at = models.DateTimeField(auto_now_add=True)` |
+| `datetime` | `DateTimeField()` | `start_time = models.DateTimeField()` |
+| `text` | `TextField()` | `message = models.TextField()` |
+| `tinyint(1)` | `BooleanField()` | `is_read = models.BooleanField(default=False)` |
+| `enum(...)` | `CharField(max_length=N, choices=CHOICES)` | See below |
+
+### enum Type Conversion Pattern
+
+**MySQL enum Definition:**
+```sql
+login_type enum('apple','kakao','naver','messi','guest')
+```
+
+**Django models.py Conversion:**
+```python
+class User(models.Model):
+    LOGIN_TYPE_CHOICES = [
+        ('apple', 'Apple'),
+        ('kakao', 'Kakao'),
+        ('naver', 'Naver'),
+        ('messi', 'Messi'),
+        ('guest', 'Guest'),
+    ]
+    
+    login_type = models.CharField(max_length=45, choices=LOGIN_TYPE_CHOICES)
+```
+
+**Important Points:**
+- Choices defined as class constants
+- First value = DB stored value
+- Second value = Human-readable label
+- max_length must be large enough for longest value
+
+### NULL Allowed Mapping
+
+| MySQL | Django | Description |
+|-------|--------|-------------|
+| `NOT NULL` | (default) | No additional parameters |
+| `NULL` | `null=True, blank=True` | NULL allowed |
+| `NULL` (form input) | `null=True, blank=True` | Optional in forms |
+| `NULL` (JSON) | `null=True, blank=True` | JSON usually optional |
+
+### timestamp Field Special Cases
+
+```sql
+-- MySQL Definition
+created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+deleted_at timestamp NULL
+```
+
+```python
+# Django Conversion
+created_at = models.DateTimeField(auto_now_add=True)
+updated_at = models.DateTimeField(auto_now=True)
+deleted_at = models.DateTimeField(null=True, blank=True)
+```
+
+---
+
+## 🛠️ Verification Workflow
+
+### Task Request: "Verify DB and models.py sync"
+
+**Step 1: Query All Tables**
+```bash
+mysql -h [HOST] -u ground -passist0907 -D agroundsDB -e "SHOW TABLES;"
+```
+
+**Step 2: Check Schema for Each Model Class**
+
+Priority order:
+1. Core tables: `user`, `user_info`, `team_info`
+2. Match/Quarter: `player_match`, `team_match`, `player_quarter`, `team_quarter`
+3. Analysis data: `player_anal`, `team_anal`
+4. Others: `ground_info`, `notification`, `upload`
+
+For each table:
+```bash
+mysql -h [HOST] -u ground -passist0907 -D agroundsDB \
+      -e "DESCRIBE [table_name];" 2>&1 | grep -v "Warning"
+```
+
+**Step 3: Read models.py File**
+```python
+# backend/DB/models.py
+```
+
+**Step 4: Find Mismatches**
+
+Check items:
+- [ ] Missing fields (in DB but not in models.py)
+- [ ] Wrong types (varchar but IntegerField, etc.)
+- [ ] enum Not Reflected (CharField but no choices)
+- [ ] nullable Mismatch (NOT NULL but null=True, etc.)
+- [ ] Missing Primary Key
+- [ ] Field order mismatch
+
+**Step 5: Apply Fixes**
+
+Principles:
+1. Actual DB is the truth
+2. Adapt models.py to DB
+3. Modify one model at a time
+4. Check linter after modification
+
+**Step 6: Validation**
+```bash
+# Validate models in Django
+cd /home/ubuntu/agrounds/mysite/backend
+python3 manage.py check
+```
+
+---
+
+## 📊 Common Mismatch Patterns
+
+### Issue 1: enum Type Not Reflected
+**Symptom:**
+```python
+# Wrong example
+login_type = models.CharField(max_length=45)
+```
+
+**Actual DB:**
+```sql
+login_type enum('apple','kakao','naver','messi','guest')
+```
+
+**Solution:**
+```python
+# Correct example
+LOGIN_TYPE_CHOICES = [
+    ('apple', 'Apple'),
+    ('kakao', 'Kakao'),
+    ('naver', 'Naver'),
+    ('messi', 'Messi'),
+    ('guest', 'Guest'),
+]
+login_type = models.CharField(max_length=45, choices=LOGIN_TYPE_CHOICES)
+```
+
+### Issue 2: nullable Mismatch
+**Symptom:**
+```python
+# Wrong example - DB is NOT NULL but
+answer = models.JSONField(null=True, blank=True)
+```
+
+**Actual DB:**
+```sql
+answer json NOT NULL
+```
+
+**Solution:**
+```python
+# Correct example
+answer = models.JSONField()
+```
+
+### Issue 3: Missing Fields
+**Symptom:**
+```python
+# Most fields missing in TeamMatch model
+class TeamMatch(models.Model):
+    match_code = models.CharField(max_length=45)
+    team_code = models.CharField(max_length=45)
+```
+
+**Actual DB:**
+```sql
+-- match_code, ground_code, upload_code, start_time, end_time, name, standard, ...
+```
+
+**Solution:**
+```python
+# Correct example - Include all fields
+class TeamMatch(models.Model):
+    match_code = models.CharField(primary_key=True, max_length=45)
+    ground_code = models.CharField(max_length=45)
+    upload_code = models.CharField(max_length=45)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    name = models.CharField(max_length=45)
+    standard = models.CharField(max_length=45, choices=STANDARD_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+```
+
+### Issue 4: Primary Key Not Set
+**Symptom:**
+```python
+# Wrong example - Not PK but regular field
+match_code = models.CharField(max_length=45)
+```
+
+**Actual DB:**
+```sql
+match_code varchar(45) NOT NULL PRIMARY KEY
+```
+
+**Solution:**
+```python
+# Correct example
+match_code = models.CharField(primary_key=True, max_length=45)
+```
+
+---
+
+## 🎯 Frequently Checked Tables
+
+### Priority Tables (High Change Frequency)
+```bash
+# User related
+mysql ... -e "DESCRIBE user;"
+mysql ... -e "DESCRIBE user_info;"
+
+# Match related
+mysql ... -e "DESCRIBE player_match;"
+mysql ... -e "DESCRIBE team_match;"
+
+# Anal related
+mysql ... -e "DESCRIBE player_anal;"
+mysql ... -e "DESCRIBE team_anal;"
+```
+
+### Regular Check Tables (Periodic Check)
+```bash
+# Quarter
+mysql ... -e "DESCRIBE player_quarter;"
+mysql ... -e "DESCRIBE team_quarter;"
+
+# Team
+mysql ... -e "DESCRIBE team_info;"
+mysql ... -e "DESCRIBE player_team_cross;"
+
+# Ground
+mysql ... -e "DESCRIBE ground_info;"
+
+# Notification
+mysql ... -e "DESCRIBE notification;"
+```
+
+---
+
+## 🔍 Troubleshooting Guide
+
+### Situation 1: "enum values differ from actual DB"
+**Diagnosis:**
+```bash
+# Check actual enum values
+mysql ... -e "SHOW COLUMNS FROM player_match LIKE 'status';"
+```
+
+**Solution:**
+1. Copy enum values exactly
+2. Update Django choices
+3. Ensure all enum values included
+
+### Situation 2: "New field added to DB"
+**Diagnosis:**
+```bash
+# Check full table structure
+mysql ... -e "DESCRIBE [table_name];"
+```
+
+**Solution:**
+1. Check new field's type, nullable, default
+2. Add field to models.py
+3. Position to match DB order
+
+### Situation 3: "Data type mismatch"
+**Diagnosis:**
+- decimal(10,2) → DecimalField(max_digits=10, decimal_places=2)
+- varchar(45) → CharField(max_length=45)
+- json → JSONField()
+
+**Solution:**
+- Refer to type mapping table above
+- Use accurate parameters
+
+---
+
+## 📝 Checklist
+
+### Before DB Verification
+- [ ] MySQL connection available
+- [ ] Table list query successful
+- [ ] Target tables clearly identified
+
+### During Verification
+- [ ] Check each field's type
+- [ ] Convert all enum types to choices
+- [ ] Accurately reflect nullable settings
+- [ ] Correctly set Primary Key
+- [ ] Match field order with DB
+
+### After Verification
+- [ ] models.py modification complete
+- [ ] No linter errors
+- [ ] Django check passed
+- [ ] Document changes
+
+---
+
+## 🎲 Dummy Data Creation Guide
+
+### When to Create Dummy Data
+- Testing team features
+- Populating empty database for development
+- Creating sample data for UI testing
+- Demonstrating features to stakeholders
+
+### Direct MySQL Insert Method (Recommended)
+
+**Step 1: Connect to MySQL**
+```bash
+# Standard connection with password inline (warning expected)
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground \
+      -passist0907 \
+      agroundsDB
+```
+
+**Step 2: Create Dummy Team Data**
+```sql
+-- Example: Creating 10 dummy teams
+INSERT INTO team_info (team_code, name, local, introduce, created_at, updated_at, deleted_at) VALUES
+('team_dummy_1', 'FC Seoul United', 'Seoul', 'We grow together', NOW(), NOW(), NULL),
+('team_dummy_2', 'Gangnam Legend FC', 'Seoul Gangnam', 'Teamwork over skill', NOW(), NOW(), NULL),
+('team_dummy_3', 'Busan Blue Wings', 'Busan', 'Weekend futsal club', NOW(), NOW(), NULL),
+('team_dummy_4', 'Daejeon Dragons', 'Daejeon', 'Amateur soccer passion', NOW(), NOW(), NULL),
+('team_dummy_5', 'Gwangju Phoenix', 'Gwangju', 'Sports and friendship', NOW(), NOW(), NULL);
+
+-- Verify created data
+SELECT team_code, name, local, introduce 
+FROM team_info 
+WHERE team_code LIKE 'team_dummy_%' 
+ORDER BY team_code;
+```
+
+**Step 3: Create Dummy User Data**
+```sql
+-- Example: Creating test users
+INSERT INTO user (user_code, user_id, password, login_type, created_at, deleted_at) VALUES
+('test_user_1', 'test1@example.com', 'hashed_password', 'email', NOW(), NULL),
+('test_user_2', 'test2@example.com', 'hashed_password', 'email', NOW(), NULL);
+
+-- Create user info
+INSERT INTO user_info (user_code, name, birth, gender, level, preferred_position, created_at, updated_at, deleted_at) VALUES
+('test_user_1', 'Test Player 1', '1990-01-01', 'male', 'adult', 'FW', NOW(), NOW(), NULL),
+('test_user_2', 'Test Player 2', '1992-05-15', 'male', 'adult', 'MF', NOW(), NOW(), NULL);
+```
+
+**Step 4: Create Cross-Reference Data**
+```sql
+-- Example: Adding users to teams
+INSERT INTO player_team_cross (user_code, team_code, role, created_at, updated_at, deleted_at) VALUES
+('test_user_1', 'team_dummy_1', 'owner', NOW(), NOW(), NULL),
+('test_user_2', 'team_dummy_1', 'member', NOW(), NOW(), NULL);
+```
+
+### Using Here-Document for Batch Inserts
+
+**Complete Example: Creating Multiple Dummy Teams**
+```bash
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 agroundsDB << 'EOF'
+-- Insert 10 dummy teams
+INSERT INTO team_info (team_code, name, local, introduce, created_at, updated_at, deleted_at) VALUES
+('team_dummy_1', 'FC Seoul United', 'Seoul', 'We grow together', NOW(), NOW(), NULL),
+('team_dummy_2', 'Gangnam Legend FC', 'Seoul Gangnam', 'Teamwork over skill', NOW(), NOW(), NULL),
+('team_dummy_3', 'Busan Blue Wings', 'Busan', 'Weekend futsal club', NOW(), NOW(), NULL),
+('team_dummy_4', 'Daejeon Dragons', 'Daejeon', 'Amateur soccer passion', NOW(), NOW(), NULL),
+('team_dummy_5', 'Gwangju Phoenix', 'Gwangju', 'Sports and friendship', NOW(), NOW(), NULL),
+('team_dummy_6', 'Incheon Tigers', 'Incheon', 'Healthy soccer culture', NOW(), NOW(), NULL),
+('team_dummy_7', 'Suwon Samsung', 'Suwon', 'Skill improvement', NOW(), NOW(), NULL),
+('team_dummy_8', 'Jeonbuk Hyundai', 'Jeonju', 'Beginners welcome', NOW(), NOW(), NULL),
+('team_dummy_9', 'Ulsan Hyundai', 'Ulsan', 'Weekly matches', NOW(), NOW(), NULL),
+('team_dummy_10', 'Jeju United', 'Jeju', 'Fun soccer team', NOW(), NOW(), NULL);
+
+-- Show statistics
+SELECT 
+    COUNT(*) as total_teams,
+    SUM(CASE WHEN team_code LIKE 'team_dummy_%' THEN 1 ELSE 0 END) as dummy_teams
+FROM team_info;
+
+-- Display created teams
+SELECT team_code, name, local, introduce, created_at 
+FROM team_info 
+WHERE team_code LIKE 'team_dummy_%' 
+ORDER BY team_code;
+EOF
+```
+
+### Dummy Data Naming Conventions
+
+**Consistent Patterns:**
+```bash
+# Team codes
+team_dummy_1, team_dummy_2, ..., team_dummy_N
+
+# User codes  
+test_user_1, test_user_2, ..., test_user_N
+
+# Match codes
+match_dummy_1, match_dummy_2, ..., match_dummy_N
+
+# Ground codes
+ground_test_1, ground_test_2, ..., ground_test_N
+```
+
+**Why Use Prefixes:**
+- Easy identification of test data
+- Simple cleanup with `WHERE code LIKE 'prefix_%'`
+- Prevents confusion with real data
+- Enables bulk operations
+
+### Verifying Dummy Data
+
+**Check Data Integrity:**
+```bash
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 agroundsDB << 'EOF'
+-- Check team data
+SELECT 
+    team_code,
+    name,
+    local,
+    introduce,
+    created_at,
+    deleted_at IS NULL as is_active
+FROM team_info 
+WHERE team_code LIKE 'team_dummy_%'
+ORDER BY team_code;
+
+-- Count statistics
+SELECT 
+    COUNT(*) as total,
+    SUM(CASE WHEN deleted_at IS NULL THEN 1 ELSE 0 END) as active
+FROM team_info 
+WHERE team_code LIKE 'team_dummy_%';
+EOF
+```
+
+### Cleaning Up Dummy Data
+
+**Soft Delete (Recommended):**
+```sql
+-- Soft delete dummy teams
+UPDATE team_info 
+SET deleted_at = NOW() 
+WHERE team_code LIKE 'team_dummy_%' 
+AND deleted_at IS NULL;
+```
+
+**Hard Delete (Use with Caution):**
+```sql
+-- Only for test environments, NEVER in production
+DELETE FROM team_info WHERE team_code LIKE 'team_dummy_%';
+```
+
+### Common Dummy Data Scenarios
+
+**Scenario 1: Testing Team Join Feature**
+```sql
+-- Create team
+INSERT INTO team_info (team_code, name, local, created_at, updated_at) 
+VALUES ('team_test_join', 'Test Join Team', 'Seoul', NOW(), NOW());
+
+-- Create test user
+INSERT INTO user (user_code, user_id, login_type, created_at) 
+VALUES ('user_test_join', 'testjoin@test.com', 'email', NOW());
+
+-- Add user to team
+INSERT INTO player_team_cross (user_code, team_code, role, created_at, updated_at)
+VALUES ('user_test_join', 'team_test_join', 'owner', NOW(), NOW());
+```
+
+**Scenario 2: Populating Ground Data**
+```sql
+INSERT INTO ground_info (ground_code, who_make, name, address, created_at, updated_at) VALUES
+('ground_test_1', 'test_user_1', 'Test Stadium A', 'Seoul Test Address 1', NOW(), NOW()),
+('ground_test_2', 'test_user_1', 'Test Stadium B', 'Seoul Test Address 2', NOW(), NOW());
+```
+
+### Troubleshooting Dummy Data Creation
+
+**Issue: Duplicate Key Error**
+```bash
+# Solution: Use unique codes or check existing data first
+mysql ... -e "SELECT team_code FROM team_info WHERE team_code = 'team_dummy_1';"
+```
+
+**Issue: Foreign Key Constraint**
+```bash
+# Solution: Ensure referenced data exists
+# Example: Before adding player_team_cross, ensure user and team exist
+mysql ... -e "SELECT user_code FROM user WHERE user_code = 'test_user_1';"
+mysql ... -e "SELECT team_code FROM team_info WHERE team_code = 'team_dummy_1';"
+```
+
+**Issue: MySQL Connection Failed**
+```bash
+# Solution: Check network connectivity and credentials
+# Test connection:
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com \
+      -u ground -passist0907 -e "SELECT 1;"
+```
+
+### Best Practices for Dummy Data
+
+**✅ Do:**
+- Use consistent naming prefixes (dummy_, test_, etc.)
+- Set created_at and updated_at to NOW()
+- Leave deleted_at as NULL for active records
+- Document what dummy data was created
+- Clean up after testing
+
+**❌ Don't:**
+- Create dummy data in production during business hours
+- Use real user information
+- Create thousands of records without planning
+- Forget to clean up test data
+- Hard delete unless absolutely necessary
+
+---
+
+## 🚨 Emergency Reference
+
+### Quick Commands
+```bash
+# All table list
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com -u ground -passist0907 -D agroundsDB -e "SHOW TABLES;"
+
+# Specific table structure
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com -u ground -passist0907 -D agroundsDB -e "DESCRIBE [TABLE];"
+
+# enum value detail check
+mysql -h agroundrds.c4mjyhzyjllp.ap-northeast-2.rds.amazonaws.com -u ground -passist0907 -D agroundsDB -e "SHOW COLUMNS FROM [TABLE] LIKE '[FIELD]';"
+```
+
+### Never Do
+- ❌ Change DB schema (ALTER TABLE, etc.)
+- ❌ Delete data (DELETE, TRUNCATE)
+- ❌ Modify data (UPDATE)
+- ❌ Arbitrarily add/remove enum values
+
+### Always Do
+- ✅ Use read-only queries only (SELECT, DESCRIBE, SHOW)
+- ✅ Adapt models.py to DB (not opposite)
+- ✅ Validate all changes
+- ✅ Map enum accurately
+
+---
+
+## 🔗 Related Rule Files
+
+**Next Steps:**
+- After DB schema check → `database/patterns.mdc` (Model patterns, query writing)
+- If API development needed → `backend/api-development.mdc` (API endpoints)
+
+**Reference Together:**
+- Understand overall structure → `00-navigation-hub.mdc`
+- Project guide → `general/project-guidelines.mdc`
+
+---
+
+**Remember: The actual database is always the truth!**

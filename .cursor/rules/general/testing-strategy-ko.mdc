@@ -1,0 +1,646 @@
+---
+# ⚠️ 이 파일은 AI가 읽지 않습니다 (Human Reference Only)
+# AI는 testing-strategy.mdc (영문판)만 참조합니다
+---
+
+# 🧪 테스팅 전략
+
+## 역할 정의
+당신은 포괄적인 테스팅을 통해 코드 신뢰성을 보장할 책임이 있습니다. 모든 코드는 병합되기 전에 적절한 테스트 커버리지를 가져야 합니다.
+
+---
+
+## 🚨 테스팅 요구사항
+
+### ❌ 금지 사항
+1. **테스트 없는 코드 금지** - 모든 새 코드는 테스트를 가져야 함
+2. **테스트 건너뛰기 금지** - --no-verify로 커밋하지 말 것
+3. **불안정한 테스트 금지** - 테스트는 일관되게 통과해야 함
+4. **주석 처리된 테스트 금지** - 수정하거나 제거할 것, 주석 처리하지 말 것
+
+### ✅ 필수 요구사항
+1. **테스트 먼저 작성** - 가능하면 TDD
+2. **엣지 케이스 테스트** - Happy path만이 아님
+3. **테스트를 빠르게 유지** - 단위 테스트당 < 100ms
+4. **커버리지 유지** - 최소 기준치를 충족해야 함
+
+---
+
+## 📊 테스트 피라미드
+
+```
+        /\
+       /E2E\      10% - End-to-End 테스트
+      /------\
+     /  통합   \   20% - 통합 테스트
+    /----------\
+   /   단위     \ 70% - 단위 테스트
+  /--------------\
+```
+
+### 테스트 분포
+- **70% 단위 테스트** - 빠르고, 독립적이며, 개별 함수 테스트
+- **20% 통합 테스트** - 컴포넌트 간 상호작용 테스트
+- **10% E2E 테스트** - 완전한 사용자 플로우 테스트
+
+---
+
+## 🎯 커버리지 목표
+
+### 최소 커버리지 요구사항
+| 컴포넌트 | 최소 | 목표 |
+|----------|------|------|
+| **백엔드** | 80% | 90% |
+| **프론트엔드** | 75% | 85% |
+| **핵심 경로** | 100% | 100% |
+| **유틸리티 함수** | 90% | 95% |
+
+### 핵심 경로 (100% 커버리지 필수)
+- 인증 & 권한 부여
+- 결제 처리 (해당되는 경우)
+- 데이터 영속성 (models.py)
+- 보안 관련 코드
+- 분석 계산
+
+---
+
+## 🔬 단위 테스트
+
+### 단위 테스트 작성 시기
+- 모든 함수/메서드에 대해
+- 모든 클래스에 대해
+- 엣지 케이스 및 에러 핸들링에 대해
+- 비즈니스 로직에 대해
+- 유틸리티 함수에 대해
+
+### 단위 테스트 구조 (AAA 패턴)
+```python
+# Arrange-Act-Assert (준비-실행-검증)
+
+def test_calculate_player_score_normal_case():
+    # Arrange - 테스트 데이터 설정
+    quarter_code = "q_123"
+    metrics = {
+        'T_D': 8.5,
+        'T_AS': 12.3,
+        'T_HS': 25.0
+    }
+    
+    # Act - 함수 실행
+    result = calculate_player_score(quarter_code, metrics)
+    
+    # Assert - 결과 검증
+    assert result == 85
+    assert isinstance(result, int)
+    assert 0 <= result <= 100
+```
+
+### Python (Django) 단위 테스트 예시
+```python
+import pytest
+from django.test import TestCase
+from DB.models import User, UserInfo
+from datetime import datetime
+
+class UserModelTest(TestCase):
+    """User 모델 기능 테스트"""
+    
+    def setUp(self):
+        """테스트 데이터 설정"""
+        self.user = User.objects.create(
+            user_code='u_test123',
+            user_id='test@example.com',
+            password='hashed_password',
+            login_type='email'
+        )
+    
+    def test_user_creation(self):
+        """사용자가 올바르게 생성되는지 테스트"""
+        self.assertEqual(self.user.user_code, 'u_test123')
+        self.assertEqual(self.user.login_type, 'email')
+        self.assertIsNone(self.user.deleted_at)
+    
+    def test_soft_delete(self):
+        """Soft delete가 올바르게 작동하는지 테스트"""
+        # Act
+        self.user.deleted_at = datetime.now()
+        self.user.save()
+        
+        # Assert
+        self.assertIsNotNone(self.user.deleted_at)
+        # 사용자가 여전히 데이터베이스에 있는지 확인
+        user = User.objects.get(user_code='u_test123')
+        self.assertIsNotNone(user)
+    
+    def test_user_with_invalid_login_type(self):
+        """유효하지 않은 login_type에 대한 검증 테스트"""
+        with pytest.raises(ValidationError):
+            User.objects.create(
+                user_code='u_test456',
+                user_id='test2@example.com',
+                password='password',
+                login_type='invalid_type'
+            )
+    
+    def tearDown(self):
+        """테스트 후 정리"""
+        User.objects.all().delete()
+```
+
+### JavaScript (React) 단위 테스트 예시
+```javascript
+import { render, screen, fireEvent } from '@testing-library/react';
+import { TeamCard } from './TeamCard';
+
+describe('TeamCard Component', () => {
+  const mockTeam = {
+    team_code: 't_123',
+    name: 'FC Seoul',
+    members: 15,
+    local: 'Seoul'
+  };
+  
+  it('팀 이름을 올바르게 렌더링', () => {
+    // Arrange & Act
+    render(<TeamCard team={mockTeam} />);
+    
+    // Assert
+    expect(screen.getByText('FC Seoul')).toBeInTheDocument();
+  });
+  
+  it('클릭 시 onSelect 호출', () => {
+    // Arrange
+    const mockOnSelect = jest.fn();
+    render(<TeamCard team={mockTeam} onSelect={mockOnSelect} />);
+    
+    // Act
+    fireEvent.click(screen.getByRole('button'));
+    
+    // Assert
+    expect(mockOnSelect).toHaveBeenCalledWith('t_123');
+    expect(mockOnSelect).toHaveBeenCalledTimes(1);
+  });
+  
+  it('멤버 수 표시', () => {
+    // Arrange & Act
+    render(<TeamCard team={mockTeam} />);
+    
+    // Assert
+    expect(screen.getByText('15명')).toBeInTheDocument();
+  });
+  
+  it('팀 데이터 없을 때 우아하게 처리', () => {
+    // Arrange & Act
+    render(<TeamCard team={null} />);
+    
+    // Assert
+    expect(screen.getByText('팀 정보 없음')).toBeInTheDocument();
+  });
+});
+```
+
+---
+
+## 🔗 통합 테스트
+
+### 통합 테스트 작성 시기
+- API 엔드포인트 테스팅
+- 데이터베이스 상호작용
+- 외부 서비스 통합
+- 컴포넌트 간 상호작용
+- 인증 플로우
+
+### Django API 통합 테스트 예시
+```python
+from rest_framework.test import APITestCase
+from rest_framework import status
+from DB.models import User, Team
+
+class TeamAPITest(APITestCase):
+    """Team API 엔드포인트 테스트"""
+    
+    def setUp(self):
+        """테스트 데이터 설정"""
+        self.user = User.objects.create(
+            user_code='u_test123',
+            user_id='test@example.com',
+            login_type='email'
+        )
+        # JWT 토큰 획득
+        response = self.client.post('/api/login/', {
+            'user_id': 'test@example.com',
+            'password': 'password123'
+        })
+        self.token = response.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+    
+    def test_create_team_success(self):
+        """유효한 데이터로 팀 생성 테스트"""
+        # Arrange
+        team_data = {
+            'name': 'Test Team',
+            'local': 'Seoul',
+            'introduce': 'Test team description'
+        }
+        
+        # Act
+        response = self.client.post('/api/team/create/', team_data)
+        
+        # Assert
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn('team_code', response.data)
+        self.assertEqual(response.data['name'], 'Test Team')
+        
+        # 데이터베이스에서 확인
+        team = Team.objects.get(team_code=response.data['team_code'])
+        self.assertEqual(team.name, 'Test Team')
+        self.assertIsNone(team.deleted_at)
+    
+    def test_create_team_without_auth(self):
+        """팀 생성에 인증이 필요한지 테스트"""
+        # Arrange
+        self.client.credentials()  # 인증 제거
+        team_data = {'name': 'Test Team', 'local': 'Seoul'}
+        
+        # Act
+        response = self.client.post('/api/team/create/', team_data)
+        
+        # Assert
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+    
+    def test_get_team_list_filtered_by_deleted(self):
+        """Soft-delete된 팀이 반환되지 않는지 테스트"""
+        # Arrange
+        Team.objects.create(team_code='t_1', name='Active Team')
+        Team.objects.create(
+            team_code='t_2', 
+            name='Deleted Team',
+            deleted_at=datetime.now()
+        )
+        
+        # Act
+        response = self.client.get('/api/team/list/')
+        
+        # Assert
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['name'], 'Active Team')
+```
+
+### React 통합 테스트 예시
+```javascript
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { TeamSelection } from './TeamSelection';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+
+// Mock API 서버
+const server = setupServer(
+  rest.get('/api/team/list/', (req, res, ctx) => {
+    return res(ctx.json([
+      { team_code: 't_1', name: 'FC Seoul', members: 15 },
+      { team_code: 't_2', name: 'Suwon FC', members: 12 }
+    ]));
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+describe('TeamSelection Integration', () => {
+  it('API에서 팀을 로드하고 표시', async () => {
+    // Act
+    render(<TeamSelection />);
+    
+    // Assert
+    await waitFor(() => {
+      expect(screen.getByText('FC Seoul')).toBeInTheDocument();
+      expect(screen.getByText('Suwon FC')).toBeInTheDocument();
+    });
+  });
+  
+  it('API 에러를 우아하게 처리', async () => {
+    // Arrange
+    server.use(
+      rest.get('/api/team/list/', (req, res, ctx) => {
+        return res(ctx.status(500));
+      })
+    );
+    
+    // Act
+    render(<TeamSelection />);
+    
+    // Assert
+    await waitFor(() => {
+      expect(screen.getByText('팀 목록을 불러올 수 없습니다')).toBeInTheDocument();
+    });
+  });
+});
+```
+
+---
+
+## 🌐 E2E 테스트
+
+### E2E 테스트 작성 시기
+- 핵심 사용자 여정
+- 다중 페이지 워크플로우
+- 결제 플로우
+- 인증 플로우
+- 주요 비즈니스 기능
+
+### Cypress E2E 테스트 예시
+```javascript
+describe('사용자 인증 플로우', () => {
+  beforeEach(() => {
+    cy.visit('https://agrounds.com/login');
+  });
+  
+  it('유효한 자격증명으로 로그인 허용', () => {
+    // Arrange
+    const email = 'test@example.com';
+    const password = 'password123';
+    
+    // Act
+    cy.get('input[name="email"]').type(email);
+    cy.get('input[name="password"]').type(password);
+    cy.get('button[type="submit"]').click();
+    
+    // Assert
+    cy.url().should('include', '/dashboard');
+    cy.get('[data-testid="user-name"]').should('contain', 'Test User');
+    cy.get('[data-testid="logout-button"]').should('be.visible');
+  });
+  
+  it('유효하지 않은 자격증명에 대해 에러 표시', () => {
+    // Act
+    cy.get('input[name="email"]').type('invalid@example.com');
+    cy.get('input[name="password"]').type('wrongpassword');
+    cy.get('button[type="submit"]').click();
+    
+    // Assert
+    cy.get('[data-testid="error-message"]')
+      .should('contain', '이메일 또는 비밀번호가 올바르지 않습니다');
+    cy.url().should('include', '/login');
+  });
+  
+  it('보호된 페이지 접근 시 로그인으로 리다이렉트', () => {
+    // Act
+    cy.visit('https://agrounds.com/dashboard');
+    
+    // Assert
+    cy.url().should('include', '/login');
+  });
+});
+
+describe('팀 분석 플로우', () => {
+  beforeEach(() => {
+    // 먼저 로그인
+    cy.login('test@example.com', 'password123');
+  });
+  
+  it('경기 업로드 후 팀 분석 표시', () => {
+    // 업로드로 이동
+    cy.visit('/app/upload');
+    
+    // GPS 파일 업로드
+    cy.get('input[type="file"]').attachFile('test_gps_data.csv');
+    cy.get('button[data-testid="upload-submit"]').click();
+    
+    // 처리 대기
+    cy.get('[data-testid="processing-complete"]', { timeout: 30000 })
+      .should('be.visible');
+    
+    // 분석으로 이동
+    cy.visit('/app/anal/team');
+    
+    // 분석 표시 확인
+    cy.get('[data-testid="team-score"]').should('exist');
+    cy.get('[data-testid="coordination-metric"]').should('contain', 'T_CO');
+  });
+});
+```
+
+---
+
+## 📝 테스트 작성 모범 사례
+
+### 좋은 테스트의 특징 (F.I.R.S.T.)
+- **Fast (빠름)** - 테스트가 빠르게 실행됨 (단위 테스트당 < 100ms)
+- **Independent (독립적)** - 테스트가 서로 의존하지 않음
+- **Repeatable (반복 가능)** - 매번 동일한 결과
+- **Self-validating (자체 검증)** - 명확한 통과/실패 (수동 검증 없음)
+- **Timely (적시)** - 코드와 함께 또는 전에 작성 (TDD)
+
+### 테스트 명명 규칙
+```python
+# 형식: test_<함수>_<시나리오>_<예상결과>
+
+def test_calculate_score_with_valid_metrics_returns_correct_score():
+    pass
+
+def test_calculate_score_with_invalid_input_raises_error():
+    pass
+
+def test_calculate_score_with_zero_values_returns_zero():
+    pass
+```
+
+### 무엇을 테스트할 것인가
+✅ **테스트해야 할 것**:
+- Public 인터페이스/API
+- 비즈니스 로직
+- 엣지 케이스
+- 에러 핸들링
+- 데이터 검증
+- Soft delete 동작
+- 인증/권한 부여
+- 핵심 계산
+
+❌ **테스트하지 말아야 할 것**:
+- 서드파티 라이브러리
+- 프레임워크 내부
+- 단순 getter/setter
+- 상수
+- Private 구현 세부사항
+
+### 테스트 데이터 관리
+```python
+# 재사용 가능한 테스트 데이터에 fixtures 사용
+@pytest.fixture
+def sample_user():
+    """테스팅용 샘플 사용자 생성"""
+    return User.objects.create(
+        user_code='u_test',
+        user_id='test@example.com',
+        login_type='email'
+    )
+
+@pytest.fixture
+def sample_team(sample_user):
+    """샘플 팀 생성"""
+    return Team.objects.create(
+        team_code='t_test',
+        name='Test Team',
+        host=sample_user.user_code
+    )
+
+def test_team_has_correct_host(sample_team, sample_user):
+    assert sample_team.host == sample_user.user_code
+```
+
+---
+
+## 🚀 테스트 실행
+
+### 로컬 개발
+```bash
+# Python/Django 테스트
+cd backend
+pytest                          # 모든 테스트 실행
+pytest -v                       # 자세한 출력
+pytest tests/test_user.py       # 특정 파일
+pytest -k "test_user"          # 패턴에 일치하는 테스트
+pytest --cov=DB                 # 커버리지와 함께
+pytest --cov=DB --cov-report=html  # HTML 커버리지 리포트
+
+# JavaScript/React 테스트
+cd frontend/agrounds_1.0.0
+npm test                        # 모든 테스트 실행
+npm test -- --coverage          # 커버리지와 함께
+npm test -- TeamCard.test.js    # 특정 파일
+npm test -- --watch             # Watch 모드
+
+# E2E 테스트 (Cypress)
+npx cypress open                # 인터랙티브 모드
+npx cypress run                 # Headless 모드
+npx cypress run --spec "cypress/e2e/auth.cy.js"  # 특정 스펙
+```
+
+### CI/CD 파이프라인
+```yaml
+# CI/CD에서 자동화된 테스팅
+test:
+  - 린터 실행 (black, pylint, eslint)
+  - 단위 테스트 실행 (pytest, jest)
+  - 커버리지 리포트 생성
+  - 커버리지 < 기준치면 실패
+  - 통합 테스트 실행
+  - E2E 테스트 실행 (핵심 경로만)
+```
+
+---
+
+## 📊 커버리지 리포팅
+
+### 커버리지 리포트 생성
+```bash
+# 백엔드 (Python)
+pytest --cov=DB --cov=user --cov=match \
+       --cov-report=html \
+       --cov-report=term-missing \
+       --cov-fail-under=80
+
+# 프론트엔드 (JavaScript)
+npm test -- --coverage --coverageReporters=html text
+
+# HTML 리포트 보기
+open htmlcov/index.html  # Python
+open coverage/lcov-report/index.html  # JavaScript
+```
+
+### 커버리지 기준치 (충족하지 못하면 실패)
+```python
+# pytest.ini 또는 setup.cfg
+[tool:pytest]
+addopts = --cov-fail-under=80
+```
+
+```json
+// package.json
+{
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 75,
+        "functions": 75,
+        "lines": 75,
+        "statements": 75
+      }
+    }
+  }
+}
+```
+
+---
+
+## 🔍 테스트 유지보수
+
+### 정기적인 테스트 건강 체크
+- [ ] 더 이상 사용되지 않는 테스트 제거
+- [ ] 요구사항 변경 시 테스트 업데이트
+- [ ] Flaky 테스트 즉시 수정
+- [ ] 테스트 데이터 최신 상태 유지
+- [ ] 월별 테스트 커버리지 리뷰
+
+### Flaky 테스트 처리
+```python
+# Flaky 테스트 식별
+pytest --count=100 tests/test_analytics.py  # 100번 실행
+
+# 일반적인 원인:
+# 1. 경합 조건 → 적절한 대기 추가
+# 2. 랜덤 데이터 → 고정된 seed 사용
+# 3. 시간 의존 → datetime Mock
+# 4. 외부 의존성 → API 호출 Mock
+
+# datetime Mock 예시
+from unittest.mock import patch
+from datetime import datetime
+
+@patch('module.datetime')
+def test_with_fixed_time(mock_datetime):
+    mock_datetime.now.return_value = datetime(2024, 1, 1, 12, 0, 0)
+    # 테스트 코드
+```
+
+---
+
+## ✅ 테스팅 체크리스트
+
+### 커밋 전
+- [ ] 모든 테스트가 로컬에서 통과
+- [ ] 새 코드에 테스트 있음
+- [ ] 커버리지 기준치 충족
+- [ ] Flaky 테스트 없음
+- [ ] 테스트 이름이 설명적임
+- [ ] 주석 처리된 테스트 없음
+- [ ] Mock이 적절히 사용됨
+- [ ] 테스트가 빠름 (단위 테스트당 < 100ms)
+
+### 코드 리뷰 중
+- [ ] 테스트가 엣지 케이스 커버
+- [ ] 테스트가 의미 있음 (단순 커버리지용이 아님)
+- [ ] AAA 패턴 준수
+- [ ] 테스트 데이터가 명확함
+- [ ] Assertion이 구체적임
+- [ ] 에러 케이스 테스트됨
+- [ ] 통합 지점 테스트됨
+
+---
+
+## 🔗 관련 가이드라인
+
+**함께 참조:**
+- `general/code-review.mdc` - 리뷰 프로세스
+- `general/error-handling.mdc` - 에러 테스팅
+- `general/security.mdc` - 보안 테스팅
+- `database/patterns.mdc` - 데이터베이스 테스팅
+- `backend/api-development.mdc` - API 테스팅
+- `frontend/components.mdc` - 컴포넌트 테스팅
+
+---
+
+**기억하세요: 테스트는 단순히 버그를 잡기 위한 것이 아니라—코드가 어떻게 동작해야 하는지에 대한 살아있는 문서입니다!**
